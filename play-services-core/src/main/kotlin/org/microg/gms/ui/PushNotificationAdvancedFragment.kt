@@ -5,7 +5,11 @@
 package org.microg.gms.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -25,6 +29,8 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_gcm_advanced)
     }
 
+    private val OVERLAY_REQ_CODE = 123
+
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         confirmNewApps = preferenceScreen.findPreference(GcmPrefs.PREF_CONFIRM_NEW_APPS) ?: confirmNewApps
@@ -37,7 +43,25 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
             val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 if (newValue is Boolean) {
-                    setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = newValue))
+                    var confirmNewAppsBool = newValue
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        if (confirmNewAppsBool) {
+                            if (!Settings.canDrawOverlays(appContext)) {   // Android M Or Over
+                                val intent = Intent(
+                                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + appContext.packageName)
+                                )
+                                startActivityForResult(intent, OVERLAY_REQ_CODE)
+                            }
+                            if (!Settings.canDrawOverlays(appContext)) {
+                                confirmNewAppsBool = false
+                            }
+                        }
+                    }
+                    setGcmServiceConfiguration(
+                        appContext,
+                        getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = confirmNewAppsBool)
+                    )
                 }
                 updateContent()
             }
@@ -85,9 +109,46 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Ensure confirm new apps toggle does not get turned off after allowing overlay permission
+        if (Build.VERSION.SDK_INT >= 23 && requestCode == OVERLAY_REQ_CODE) {
+            val appContext = requireContext().applicationContext
+                // Check if the permission was granted
+            if (Settings.canDrawOverlays(appContext)) {
+                lifecycleScope.launchWhenResumed {
+                    setGcmServiceConfiguration(
+                        appContext,
+                        getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = true)
+                    )
+                    updateContent()
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         updateContent()
+        updateUIBasedOnOverlayPermissionStatus()
+    }
+    private fun updateUIBasedOnOverlayPermissionStatus() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            val appContext = requireContext().applicationContext
+            val isOverlayEnabled = Settings.canDrawOverlays(appContext)
+
+            // turn off confirm new apps toggle if overlay permission was turned off
+            if (!isOverlayEnabled) {
+                lifecycleScope.launchWhenResumed {
+                    setGcmServiceConfiguration(
+                        appContext,
+                        getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = false)
+                    )
+                    updateContent()
+                }
+
+            }
+        }
     }
 
     private fun updateContent() {

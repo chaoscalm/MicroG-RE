@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.ResultReceiver;
 import android.text.Html;
 import android.text.Spannable;
@@ -15,8 +16,10 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.style.StyleSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.R;
@@ -60,8 +63,7 @@ public class AskPushPermission extends FragmentActivity {
             return;
         }
 
-        setContentView(R.layout.ask_gcm);
-
+        // Create and show the AlertDialog
         try {
             PackageManager pm = getPackageManager();
             final ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
@@ -70,31 +72,34 @@ public class AskPushPermission extends FragmentActivity {
             SpannableString s = new SpannableString(raw);
             s.setSpan(new StyleSpan(Typeface.BOLD), raw.indexOf(label), raw.indexOf(label) + label.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-            ((TextView) findViewById(R.id.permission_message)).setText(s);
-            findViewById(R.id.permission_allow_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, true);
-                    answered = true;
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(EXTRA_EXPLICIT, true);
-                    resultReceiver.send(Activity.RESULT_OK, bundle);
-                    finish();
-                }
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setCancelable(false); // Disable canceling the dialog by tapping outside or pressing the back button
+            alertDialogBuilder.setMessage(s);
+            alertDialogBuilder.setPositiveButton(R.string.allow, (dialog, which) -> {
+                if (answered) return;
+                database.noteAppKnown(packageName, true);
+                answered = true;
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(EXTRA_EXPLICIT, true);
+                resultReceiver.send(Activity.RESULT_OK, bundle);
+                finish();
             });
-            findViewById(R.id.permission_deny_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, false);
-                    answered = true;
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(EXTRA_EXPLICIT, true);
-                    resultReceiver.send(Activity.RESULT_CANCELED, bundle);
-                    finish();
-                }
+            alertDialogBuilder.setNegativeButton(R.string.deny, (dialog, which) -> {
+                if (answered) return;
+                database.noteAppKnown(packageName, false);
+                answered = true;
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(EXTRA_EXPLICIT, true);
+                resultReceiver.send(Activity.RESULT_CANCELED, bundle);
+                finish();
             });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+            } else {
+                alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            }
+            alertDialog.show();
         } catch (PackageManager.NameNotFoundException e) {
             finish();
         }

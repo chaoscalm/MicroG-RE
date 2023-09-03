@@ -84,7 +84,8 @@
         android:allowBackup="true"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/ic_core_service_app"
+        android:icon="@mipmap/ic_app"
+        android:roundIcon="@mipmap/ic_app"
         android:label="@string/gms_app_name"
         android:multiArch="true"
         android:theme="@style/AppTheme">
@@ -309,11 +310,11 @@
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_microg_settings"
+            android:icon="@mipmap/ic_app_settings"
             android:label="@string/gms_settings_name"
             android:exported="true"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_app_settings"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -327,17 +328,17 @@
 
         <activity
             android:name="org.microg.gms.ui.SettingsDashboardActivity"
-            android:icon="@mipmap/ic_microg_settings"
+            android:icon="@mipmap/ic_app_settings"
             android:label="Legacy microG Settings"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_app_settings"
             android:taskAffinity="org.microg.gms.settings" />
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:exported="true"
-            android:icon="@drawable/microg_light_color_24"
+            android:icon="@drawable/ic_app_settings_foreground_mono"
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.SettingsActivity"
@@ -361,7 +362,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+            android:theme="@style/Theme.Material3.DayNight.Dialog.Alert" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"

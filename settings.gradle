@@ -4,6 +4,8 @@ def sublude(name) {
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
+include ':safe-parcel-processor'
+
 include ':play-services-basement'
 
 include ':play-services-tasks'

@@ -17,6 +17,7 @@
 package com.google.android.gms.cast.framework;
 
 import androidx.annotation.NonNull;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 

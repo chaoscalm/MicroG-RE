@@ -41,7 +41,11 @@ class NotifyService : LifecycleService() {
 
     @TargetApi(26)
     private fun createNotificationChannel(): String {
-        val channel = NotificationChannel("exposure-notifications", "Exposure Notifications", NotificationManager.IMPORTANCE_HIGH)
+        val channel = NotificationChannel(
+            "exposure-notifications",
+            "Exposure Notifications",
+            NotificationManager.IMPORTANCE_HIGH
+        )
         channel.setSound(null, null)
         channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         channel.setShowBadge(true)
@@ -55,13 +59,19 @@ class NotifyService : LifecycleService() {
 
     @TargetApi(21)
     private fun updateNotification() {
-        val location = !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
-        val bluetooth = BluetoothAdapter.getDefaultAdapter()?.state.let { it != BluetoothAdapter.STATE_ON && it != BluetoothAdapter.STATE_TURNING_ON }
-        val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
+        val location =
+            !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        val bluetooth =
+            BluetoothAdapter.getDefaultAdapter()?.state.let { it != BluetoothAdapter.STATE_ON && it != BluetoothAdapter.STATE_TURNING_ON }
+        val nearbyPermissions =
+            arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
         val permissionNeedsHandling = Build.VERSION.SDK_INT >= 31 && nearbyPermissions.any {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
-        Log.d( TAG,"notify: location: $location, bluetooth: $bluetooth, permissionNeedsHandling: $permissionNeedsHandling")
+        Log.d(
+            TAG,
+            "notify: location: $location, bluetooth: $bluetooth, permissionNeedsHandling: $permissionNeedsHandling"
+        )
 
         val text: String = when {
             permissionNeedsHandling -> getString(R.string.exposure_notify_off_nearby)
@@ -81,8 +91,10 @@ class NotifyService : LifecycleService() {
         }.apply {
             val typedValue = TypedValue()
             try {
-                var resolved = theme.resolveAttribute(androidx.appcompat.R.attr.colorError, typedValue, true)
-                if (!resolved && Build.VERSION.SDK_INT >= 26) resolved = theme.resolveAttribute(android.R.attr.colorError, typedValue, true)
+                var resolved =
+                    theme.resolveAttribute(androidx.appcompat.R.attr.colorError, typedValue, true)
+                if (!resolved && Build.VERSION.SDK_INT >= 26) resolved =
+                    theme.resolveAttribute(android.R.attr.colorError, typedValue, true)
                 color = if (resolved) {
                     ContextCompat.getColor(this@NotifyService, typedValue.resourceId)
                 } else {
@@ -97,9 +109,21 @@ class NotifyService : LifecycleService() {
             setContentText(text)
             setStyle(NotificationCompat.BigTextStyle())
             try {
-                val intent = Intent(ExposureNotificationClient.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply { `package` = packageName }
+                val intent =
+                    Intent(ExposureNotificationClient.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply {
+                        `package` = packageName
+                    }
                 intent.resolveActivity(packageManager)
-                setContentIntent(PendingIntent.getActivity(this@NotifyService, notificationId, Intent(ExposureNotificationClient.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply { `package` = packageName }, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE))
+                setContentIntent(
+                    PendingIntent.getActivity(
+                        this@NotifyService,
+                        notificationId,
+                        Intent(ExposureNotificationClient.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply {
+                            `package` = packageName
+                        },
+                        FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+                    )
+                )
             } catch (e: Exception) {
                 // Ignore
             }

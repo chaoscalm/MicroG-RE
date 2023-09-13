@@ -38,6 +38,7 @@ public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
     }
 
     private static CameraUpdateFactoryImpl instance;
+
     public static CameraUpdateFactoryImpl get() {
         if (instance == null) {
             instance = new CameraUpdateFactoryImpl();

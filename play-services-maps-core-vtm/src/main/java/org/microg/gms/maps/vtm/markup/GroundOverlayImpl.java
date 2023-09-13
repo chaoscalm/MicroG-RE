@@ -17,6 +17,7 @@
 package org.microg.gms.maps.vtm.markup;
 
 import android.os.RemoteException;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,7 +35,7 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     private float bearing;
 
     public GroundOverlayImpl(GroundOverlayOptions options) {
-        
+
     }
 
     @Override

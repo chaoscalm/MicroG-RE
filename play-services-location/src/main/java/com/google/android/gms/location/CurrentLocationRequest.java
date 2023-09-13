@@ -9,10 +9,13 @@
 package com.google.android.gms.location;
 
 import android.os.WorkSource;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.location.internal.ClientIdentity;
 import com.google.android.gms.tasks.CancellationToken;
+
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.location.GranularityUtil;
@@ -165,7 +168,8 @@ public class CurrentLocationRequest extends AutoSafeParcelable {
          * The default value is {@link Long#MAX_VALUE}.
          */
         public CurrentLocationRequest.Builder setDurationMillis(long durationMillis) {
-            if (durationMillis <= 0) throw new IllegalArgumentException("durationMillis must be greater than 0");
+            if (durationMillis <= 0)
+                throw new IllegalArgumentException("durationMillis must be greater than 0");
             this.durationMillis = durationMillis;
             return this;
         }
@@ -192,7 +196,8 @@ public class CurrentLocationRequest extends AutoSafeParcelable {
          * The default value is 1 minute. Do not rely on the default value always being 1 minute as this may change without notice.
          */
         public CurrentLocationRequest.Builder setMaxUpdateAgeMillis(long maxUpdateAgeMillis) {
-            if (maxUpdateAgeMillis < 0) throw new IllegalArgumentException("maxUpdateAgeMillis must be greater than or equal to 0");
+            if (maxUpdateAgeMillis < 0)
+                throw new IllegalArgumentException("maxUpdateAgeMillis must be greater than or equal to 0");
             this.maxUpdateAgeMillis = maxUpdateAgeMillis;
             return this;
         }

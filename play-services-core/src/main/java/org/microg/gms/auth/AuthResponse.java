@@ -103,7 +103,8 @@ public class AuthResponse {
         if (email != null) sb.append(", email='").append(email).append('\'');
         if (services != null) sb.append(", services='").append(services).append('\'');
         if (isGooglePlusUpgrade) sb.append(", isGooglePlusUpgrade=").append(isGooglePlusUpgrade);
-        if (picasaUserName != null) sb.append(", picasaUserName='").append(picasaUserName).append('\'');
+        if (picasaUserName != null)
+            sb.append(", picasaUserName='").append(picasaUserName).append('\'');
         if (ropText != null) sb.append(", ropText='").append(ropText).append('\'');
         if (ropRevision != 0) sb.append(", ropRevision=").append(ropRevision);
         if (firstName != null) sb.append(", firstName='").append(firstName).append('\'');
@@ -111,10 +112,13 @@ public class AuthResponse {
         if (issueAdvice != null) sb.append(", issueAdvice='").append(issueAdvice).append('\'');
         if (accountId != null) sb.append(", accountId='").append(accountId).append('\'');
         if (expiry != -1) sb.append(", expiry=").append(expiry);
-        if (!storeConsentRemotely) sb.append(", storeConsentRemotely=").append(storeConsentRemotely);
+        if (!storeConsentRemotely)
+            sb.append(", storeConsentRemotely=").append(storeConsentRemotely);
         if (permission != null) sb.append(", permission='").append(permission).append('\'');
-        if (scopeConsentDetails != null) sb.append(", scopeConsentDetails='").append(scopeConsentDetails).append('\'');
-        if (consentDataBase64 != null) sb.append(", consentDataBase64='").append(consentDataBase64).append('\'');
+        if (scopeConsentDetails != null)
+            sb.append(", scopeConsentDetails='").append(scopeConsentDetails).append('\'');
+        if (consentDataBase64 != null)
+            sb.append(", consentDataBase64='").append(consentDataBase64).append('\'');
         sb.append('}');
         return sb.toString();
     }

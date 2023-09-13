@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,28 +15,28 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1">
 
-<!--        <org.microg.gms.maps.vtm.BackendMapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        <!--        <org.microg.gms.maps.vtm.BackendMapView
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:paddingBottom="41dip"
-            android:src="@drawable/maps_default_marker"/>-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingBottom="41dip"
+                    android:src="@drawable/maps_default_marker"/>-->
     </RelativeLayout>
 
     <LinearLayout
@@ -57,7 +56,7 @@
             android:layout_marginLeft="16.0dip"
             android:layout_marginRight="16.0dip"
             android:layout_marginStart="16.0dip"
-            android:src="@drawable/ic_map_marker"/>
+            android:src="@drawable/ic_map_marker" />
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -73,7 +72,7 @@
                 android:maxLines="1"
                 android:text="@string/place_picker_select_title"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="?attr/colorAccent"/>
+                android:textColor="?attr/colorAccent" />
 
             <TextView
                 android:id="@+id/place_picker_info"
@@ -84,14 +83,14 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="(0.0000000, 0.0000000)"
-                android:textAppearance="?android:textAppearanceSmall"/>
+                android:textAppearance="?android:textAppearanceSmall" />
         </FrameLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#7f7f7f7f"/>
+        android:background="#7f7f7f7f" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -112,7 +111,7 @@
             android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#ff7f7f7f"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -126,7 +125,7 @@
                 android:padding="16.0dip"
                 android:text="Can't load nearby places."
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="#ff7f7f7f"/>
+                android:textColor="#ff7f7f7f" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -71,7 +71,8 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
 
         BrowserPublicKeyCredentialRequestOptions that = (BrowserPublicKeyCredentialRequestOptions) o;
 
-        if (delegate != null ? !delegate.equals(that.delegate) : that.delegate != null) return false;
+        if (delegate != null ? !delegate.equals(that.delegate) : that.delegate != null)
+            return false;
         if (origin != null ? !origin.equals(that.origin) : that.origin != null) return false;
         return Arrays.equals(clientDataHash, that.clientDataHash);
     }

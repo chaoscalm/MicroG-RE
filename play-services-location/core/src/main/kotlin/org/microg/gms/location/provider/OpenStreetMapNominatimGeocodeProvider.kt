@@ -29,11 +29,17 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
     private val formatter = runCatching { Formatter() }.getOrNull()
     private val addressCache = LruCache<CacheKey, Address>(CACHE_SIZE)
 
-    override fun onGetFromLocation(latitude: Double, longitude: Double, maxResults: Int, params: GeocoderParams, addresses: MutableList<Address>): String? {
+    override fun onGetFromLocation(
+        latitude: Double,
+        longitude: Double,
+        maxResults: Int,
+        params: GeocoderParams,
+        addresses: MutableList<Address>
+    ): String? {
         val clientIdentity = params.clientIdentity ?: return "null client package"
         val locale = params.locale ?: return "null locale"
         val cacheKey = CacheKey(clientIdentity, locale, latitude, longitude)
-        addressCache[cacheKey]?.let {address ->
+        addressCache[cacheKey]?.let { address ->
             addresses.add(address)
             return null
         }
@@ -55,7 +61,8 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
             result.set(it.message)
             latch.countDown()
         }) {
-            override fun getHeaders(): Map<String, String> = mapOf("User-Agent" to "microG/${context.versionName}")
+            override fun getHeaders(): Map<String, String> =
+                mapOf("User-Agent" to "microG/${context.versionName}")
         })
         latch.await(5, TimeUnit.SECONDS)
         val address = returnedAddress.get()
@@ -88,7 +95,10 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
             .appendQueryParameter("q", locationName)
             .appendQueryParameter("limit", maxResults.toString())
         if (lowerLeftLatitude != upperRightLatitude && lowerLeftLongitude != upperRightLongitude) {
-            uri.appendQueryParameter("viewbox", "$lowerLeftLongitude,$upperRightLatitude,$upperRightLongitude,$lowerLeftLatitude")
+            uri.appendQueryParameter(
+                "viewbox",
+                "$lowerLeftLongitude,$upperRightLatitude,$upperRightLongitude,$lowerLeftLatitude"
+            )
         }
         val result = AtomicReference<String?>("timeout reached")
         val latch = CountDownLatch(1)
@@ -102,7 +112,8 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
             result.set(it.message)
             latch.countDown()
         }) {
-            override fun getHeaders(): Map<String, String> = mapOf("User-Agent" to "microG/${context.versionName}")
+            override fun getHeaders(): Map<String, String> =
+                mapOf("User-Agent" to "microG/${context.versionName}")
         })
         latch.await(5, TimeUnit.SECONDS)
         return result.get()
@@ -170,8 +181,25 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
 
         private val WIRE_IGNORED = setOf<String>("ISO3166-2-lvl4")
 
-        private data class CacheKey(val uid: Int, val packageName: String?, val locale: Locale, val latitude: Int, val longitude: Int) {
-            constructor(clientIdentity: ClientIdentity, locale: Locale, latitude: Double, longitude: Double) : this(clientIdentity.uid, clientIdentity.packageName.takeIf { clientIdentity.uid != 0 }, locale, (latitude * 100000.0).toInt(), (longitude * 100000.0).toInt())
+        private data class CacheKey(
+            val uid: Int,
+            val packageName: String?,
+            val locale: Locale,
+            val latitude: Int,
+            val longitude: Int
+        ) {
+            constructor(
+                clientIdentity: ClientIdentity,
+                locale: Locale,
+                latitude: Double,
+                longitude: Double
+            ) : this(
+                clientIdentity.uid,
+                clientIdentity.packageName.takeIf { clientIdentity.uid != 0 },
+                locale,
+                (latitude * 100000.0).toInt(),
+                (longitude * 100000.0).toInt()
+            )
         }
     }
 }

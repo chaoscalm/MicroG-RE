@@ -14,7 +14,8 @@ import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
 //import com.google.android.gms.location.places.PlaceReport;
-class ReportingServiceInstance(private val context: Context, private val packageName: String) : IReportingService.Stub() {
+class ReportingServiceInstance(private val context: Context, private val packageName: String) :
+    IReportingService.Stub() {
 
     override fun getReportingState(account: Account): ReportingState {
         Log.d(TAG, "getReportingState")
@@ -60,5 +61,12 @@ class ReportingServiceInstance(private val context: Context, private val package
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

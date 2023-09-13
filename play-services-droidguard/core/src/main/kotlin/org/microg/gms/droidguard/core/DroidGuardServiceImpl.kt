@@ -12,13 +12,25 @@ import com.google.android.gms.droidguard.internal.IDroidGuardCallbacks
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import com.google.android.gms.droidguard.internal.IDroidGuardService
 
-class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, private val packageName: String) : IDroidGuardService.Stub() {
-    override fun guard(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?) {
+class DroidGuardServiceImpl(
+    private val service: DroidGuardChimeraService,
+    private val packageName: String
+) : IDroidGuardService.Stub() {
+    override fun guard(
+        callbacks: IDroidGuardCallbacks?,
+        flow: String?,
+        map: MutableMap<Any?, Any?>?
+    ) {
         Log.d(TAG, "guard()")
         guardWithRequest(callbacks, flow, map, null)
     }
 
-    override fun guardWithRequest(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?, request: DroidGuardResultsRequest?) {
+    override fun guardWithRequest(
+        callbacks: IDroidGuardCallbacks?,
+        flow: String?,
+        map: MutableMap<Any?, Any?>?,
+        request: DroidGuardResultsRequest?
+    ) {
         Log.d(TAG, "guardWithRequest()")
         TODO("Not yet implemented")
     }

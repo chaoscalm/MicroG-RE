@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;

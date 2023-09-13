@@ -2,8 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_basic">
+    <PreferenceCategory android:title="@string/pref_safetynet_recent_cat_basic">
         <Preference
             android:key="pref_request_type"
             android:title="@string/pref_safetynet_recent_request_type"
@@ -15,8 +14,7 @@
             tools:summary="1970/01/01 1:00 AM" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_response">
+    <PreferenceCategory android:title="@string/pref_safetynet_recent_cat_response">
         <Preference
             android:key="pref_status"
             android:title="@string/pref_safetynet_recent_response_status"

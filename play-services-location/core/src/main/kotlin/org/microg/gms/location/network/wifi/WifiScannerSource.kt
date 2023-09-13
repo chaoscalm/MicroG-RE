@@ -19,7 +19,8 @@ import androidx.core.content.ContextCompat
 import org.microg.gms.location.network.TAG
 
 @SuppressLint("WrongConstant")
-class WifiScannerSource(private val context: Context, private val callback: WifiDetailsCallback) : WifiDetailsSource {
+class WifiScannerSource(private val context: Context, private val callback: WifiDetailsCallback) :
+    WifiDetailsSource {
     override fun startScan(workSource: WorkSource?) {
         val scanner = context.getSystemService("wifiscanner") as WifiScanner
         scanner.startScan(WifiScanner.ScanSettings(), object : WifiScanner.ScanListener {
@@ -36,7 +37,8 @@ class WifiScannerSource(private val context: Context, private val callback: Wifi
             }
 
             override fun onResults(results: Array<out WifiScanner.ScanData>) {
-                callback.onWifiDetailsAvailable(results.flatMap { it.results.toList() }.map(ScanResult::toWifiDetails))
+                callback.onWifiDetailsAvailable(results.flatMap { it.results.toList() }
+                    .map(ScanResult::toWifiDetails))
             }
 
             override fun onFullResult(fullScanResult: ScanResult) {
@@ -47,7 +49,10 @@ class WifiScannerSource(private val context: Context, private val callback: Wifi
 
     companion object {
         fun isSupported(context: Context): Boolean {
-            return SDK_INT >= 26 && (context.getSystemService("wifiscanner") as? WifiScanner) != null && ContextCompat.checkSelfPermission(context, Manifest.permission.LOCATION_HARDWARE) == PERMISSION_GRANTED
+            return SDK_INT >= 26 && (context.getSystemService("wifiscanner") as? WifiScanner) != null && ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.LOCATION_HARDWARE
+            ) == PERMISSION_GRANTED
         }
     }
 }

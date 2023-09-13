@@ -28,11 +28,11 @@ public class CardInfo extends AutoSafeParcelable {
     public int cardColor;
     @Field(11)
     public int overlayTextColor;
-//    @Field(12)
+    //    @Field(12)
 //    public IssuerInfo issuerInfo;
     @Field(13)
     public String tokenLastDigits;
-//    @Field(15)
+    //    @Field(15)
 //    public TransactionInfo transactionInfo;
     @Field(16)
     public String ssuerTokenId;
@@ -44,17 +44,17 @@ public class CardInfo extends AutoSafeParcelable {
     public int paymentProtocol;
     @Field(21)
     public int tokenType;
-//    @Field(22)
+    //    @Field(22)
 //    public InStoreCvmConfig inStoreCvmConfig;
 //    @Field(23)
 //    public InAppCvmConfig inAppCvmConfig;
     @Field(24)
     public String tokenDisplayName;
-//    @Field(25)
+    //    @Field(25)
 //    public OnlineAccountCardLinkInfo[] onlineAccountCardLinkInfos;
     @Field(26)
     public boolean allowAidSelection;
-//    @Field(27)
+    //    @Field(27)
 //    public List badges;
     @Field(28)
     public boolean upgradeAvailable;
@@ -72,7 +72,7 @@ public class CardInfo extends AutoSafeParcelable {
     public String devicePaymentMethodId;
     @Field(35)
     public String cloudPaymentMethodId;
-//    @Field(36)
+    //    @Field(36)
 //    public CardRewardsInfo cardRewardsInfo;
     @Field(37)
     public int tapStrategy;

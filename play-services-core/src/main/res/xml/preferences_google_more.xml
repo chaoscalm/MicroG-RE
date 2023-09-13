@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +20,12 @@
         android:enabled="false"
         android:key="network_google_enabled"
         android:summary="If disabled, all connections to Google servers usually done by microG will be denied. This overrides service specific settings."
-        android:title="Allow connecting to Google servers"/>
+        android:title="Allow connecting to Google servers" />
     <SwitchPreference
         android:defaultValue="false"
         android:dependency="network_google_enabled"
         android:enabled="false"
         android:key="network_google_use_tor"
         android:summary="Requires Orbot to be installed\nNot yet supported"
-        android:title="Connect to Google via Tor network"/>
+        android:title="Connect to Google via Tor network" />
 </PreferenceScreen>

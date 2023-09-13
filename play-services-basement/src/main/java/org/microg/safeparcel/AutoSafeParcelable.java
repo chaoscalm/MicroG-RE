@@ -8,6 +8,7 @@ package org.microg.safeparcel;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 

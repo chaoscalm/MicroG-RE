@@ -6,6 +6,7 @@
 package com.google.android.gms.common.internal;
 
 import androidx.annotation.NonNull;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Objects;

@@ -58,7 +58,8 @@ public class UvmEntries extends AutoSafeParcelable {
         }
 
         public Builder addAll(List<UvmEntry> uvmEntryList) {
-            if (this.uvmEntryList.size() + uvmEntryList.size() > 3) throw new IllegalStateException();
+            if (this.uvmEntryList.size() + uvmEntryList.size() > 3)
+                throw new IllegalStateException();
             this.uvmEntryList.addAll(uvmEntryList);
             return this;
         }

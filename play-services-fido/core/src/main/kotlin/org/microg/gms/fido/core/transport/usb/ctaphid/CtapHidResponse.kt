@@ -26,7 +26,10 @@ open class CtapHidResponse(commandId: Byte, data: ByteArray) : CtapHidMessage(co
         )
 
         fun parse(message: CtapHidMessage): CtapHidResponse =
-            responseTypes[message.commandId]?.invoke(message) ?: CtapHidResponse(message.commandId, message.data)
+            responseTypes[message.commandId]?.invoke(message) ?: CtapHidResponse(
+                message.commandId,
+                message.data
+            )
     }
 }
 
@@ -44,9 +47,16 @@ class CtapHidPingResponse(data: ByteArray) : CtapHidResponse(COMMAND_ID, data) {
 }
 
 class CtapHidMessageResponse(val statusCode: Short, val payload: ByteArray) :
-    CtapHidResponse(COMMAND_ID, byteArrayOf((statusCode.toInt() shr 8).toByte(), statusCode.toByte()) + payload) {
+    CtapHidResponse(
+        COMMAND_ID,
+        byteArrayOf((statusCode.toInt() shr 8).toByte(), statusCode.toByte()) + payload
+    ) {
     override fun toString(): String =
-        "CtapHidMessageResponse(statusCode=0x${statusCode.toString(16)}, payload=${payload.toBase64(Base64.NO_WRAP)})"
+        "CtapHidMessageResponse(statusCode=0x${statusCode.toString(16)}, payload=${
+            payload.toBase64(
+                Base64.NO_WRAP
+            )
+        })"
 
     companion object {
         const val COMMAND_ID: Byte = 0x03
@@ -80,11 +90,12 @@ class CtapHidInitResponse(
 }.array()) {
     val deviceVersion: String = "$majorDeviceVersion.$minorDeviceVersion.$buildDeviceVersion"
 
-    override fun toString(): String = "CtapHidInitResponse(nonce=0x${nonce.toBase64(Base64.NO_WRAP)}, " +
-            "channelId=0x${channelId.toString(16)}, " +
-            "protocolVersion=0x${protocolVersion.toString(16)}, " +
-            "version=$deviceVersion, " +
-            "capabilities=0x${capabilities.toString(16)})"
+    override fun toString(): String =
+        "CtapHidInitResponse(nonce=0x${nonce.toBase64(Base64.NO_WRAP)}, " +
+                "channelId=0x${channelId.toString(16)}, " +
+                "protocolVersion=0x${protocolVersion.toString(16)}, " +
+                "version=$deviceVersion, " +
+                "capabilities=0x${capabilities.toString(16)})"
 
     companion object {
         const val COMMAND_ID: Byte = 0x06
@@ -128,19 +139,27 @@ class CtapHidWinkResponse : CtapHidResponse(COMMAND_ID, ByteArray(0)) {
 class CtapHidCborResponse(val statusCode: Byte, val payload: ByteArray) :
     CtapHidResponse(COMMAND_ID, byteArrayOf(statusCode) + payload) {
     override fun toString(): String =
-        "CtapHidCborResponse(statusCode=0x${statusCode.toString(16)}, payload=${payload.toBase64(Base64.NO_WRAP)})"
+        "CtapHidCborResponse(statusCode=0x${statusCode.toString(16)}, payload=${
+            payload.toBase64(
+                Base64.NO_WRAP
+            )
+        })"
 
     companion object {
         const val COMMAND_ID: Byte = 0x10
 
         fun parse(message: CtapHidMessage): CtapHidCborResponse {
             require(message.commandId == COMMAND_ID)
-            return CtapHidCborResponse(message.data[0], message.data.sliceArray(1 until message.data.size))
+            return CtapHidCborResponse(
+                message.data[0],
+                message.data.sliceArray(1 until message.data.size)
+            )
         }
     }
 }
 
-class CtapHidErrorResponse(val errorCode: Byte) : CtapHidResponse(COMMAND_ID, byteArrayOf(errorCode)) {
+class CtapHidErrorResponse(val errorCode: Byte) :
+    CtapHidResponse(COMMAND_ID, byteArrayOf(errorCode)) {
     override fun toString(): String = "CtapHidErrorResponse(errorCode=0x${errorCode.toString(16)})"
 
     companion object {

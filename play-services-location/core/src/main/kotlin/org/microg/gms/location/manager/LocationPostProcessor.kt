@@ -48,25 +48,50 @@ class LocationPostProcessor {
                     newLocation.removeBearing()
                     newLocation.removeSpeed()
                     newLocation.removeAltitude()
-                    if (LocationCompat.hasBearingAccuracy(newLocation)) LocationCompat.setBearingAccuracyDegrees(newLocation, 0f)
-                    if (LocationCompat.hasSpeedAccuracy(newLocation)) LocationCompat.setSpeedAccuracyMetersPerSecond(newLocation, 0f)
-                    if (LocationCompat.hasVerticalAccuracy(newLocation)) LocationCompat.setVerticalAccuracyMeters(newLocation, 0f)
+                    if (LocationCompat.hasBearingAccuracy(newLocation)) LocationCompat.setBearingAccuracyDegrees(
+                        newLocation,
+                        0f
+                    )
+                    if (LocationCompat.hasSpeedAccuracy(newLocation)) LocationCompat.setSpeedAccuracyMetersPerSecond(
+                        newLocation,
+                        0f
+                    )
+                    if (LocationCompat.hasVerticalAccuracy(newLocation)) LocationCompat.setVerticalAccuracyMeters(
+                        newLocation,
+                        0f
+                    )
                     newLocation.extras = null
                     newLocation.accuracy = max(newLocation.accuracy, COARSE_ACCURACY_METERS)
                     updateOffsetMetersIfNeeded()
-                    val latitudeAccuracy = metersToLongitudeAtEquator(COARSE_ACCURACY_METERS.toDouble())
-                    val longitudeAccuracy = metersToLongitudeAtLatitude(COARSE_ACCURACY_METERS.toDouble(), location.latitude)
-                    val offsetLatitude = coerceLatitude(location.latitude) + metersToLongitudeAtEquator(latitudeOffsetMeters)
-                    newLocation.latitude = coerceLatitude(round(offsetLatitude / latitudeAccuracy) * latitudeAccuracy)
-                    val offsetLongitude = coerceLongitude(location.longitude) + metersToLongitudeAtLatitude(longitudeOffsetMeters, newLocation.latitude)
-                    newLocation.longitude = coerceLongitude(round(offsetLongitude / longitudeAccuracy) * longitudeAccuracy)
+                    val latitudeAccuracy =
+                        metersToLongitudeAtEquator(COARSE_ACCURACY_METERS.toDouble())
+                    val longitudeAccuracy = metersToLongitudeAtLatitude(
+                        COARSE_ACCURACY_METERS.toDouble(),
+                        location.latitude
+                    )
+                    val offsetLatitude =
+                        coerceLatitude(location.latitude) + metersToLongitudeAtEquator(
+                            latitudeOffsetMeters
+                        )
+                    newLocation.latitude =
+                        coerceLatitude(round(offsetLatitude / latitudeAccuracy) * latitudeAccuracy)
+                    val offsetLongitude =
+                        coerceLongitude(location.longitude) + metersToLongitudeAtLatitude(
+                            longitudeOffsetMeters,
+                            newLocation.latitude
+                        )
+                    newLocation.longitude =
+                        coerceLongitude(round(offsetLongitude / longitudeAccuracy) * longitudeAccuracy)
                     coarseLocationBefore = location
                     coarseLocationAfter = newLocation
                     newLocation
                 }
             }
 
-            location.hasAnyNonAllowedExtra(extrasAllowList) -> Location(location).stripExtras(extrasAllowList)
+            location.hasAnyNonAllowedExtra(extrasAllowList) -> Location(location).stripExtras(
+                extrasAllowList
+            )
+
             else -> location
         }
     }
@@ -122,16 +147,19 @@ class LocationPostProcessor {
             return this
         }
 
-        private fun metersToLongitudeAtEquator(meters: Double): Double = meters / EQUATOR_METERS_PER_LONGITUDE
+        private fun metersToLongitudeAtEquator(meters: Double): Double =
+            meters / EQUATOR_METERS_PER_LONGITUDE
 
-        private fun metersToLongitudeAtLatitude(meters: Double, latitude: Double): Double = metersToLongitudeAtEquator(meters) / cos(Math.toRadians(latitude))
+        private fun metersToLongitudeAtLatitude(meters: Double, latitude: Double): Double =
+            metersToLongitudeAtEquator(meters) / cos(Math.toRadians(latitude))
 
         /**
          * Coerce latitude value to be between -89.99999° and 89.99999°.
          *
          * Sorry to those, who actually are at the geographical north/south pole, but at exactly 90°, our math wouldn't work out anymore.
          */
-        private fun coerceLatitude(latitude: Double): Double = latitude.coerceIn(-89.99999, 89.99999)
+        private fun coerceLatitude(latitude: Double): Double =
+            latitude.coerceIn(-89.99999, 89.99999)
 
         /**
          * Coerce longitude value to be between -180.00° and 180.00°.

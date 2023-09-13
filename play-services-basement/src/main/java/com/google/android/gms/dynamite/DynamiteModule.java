@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Field;
@@ -132,7 +133,8 @@ public class DynamiteModule {
     @NonNull
     public static DynamiteModule load(@NonNull Context context, @NonNull VersionPolicy policy, @NonNull String moduleId) throws LoadingException {
         Context applicationContext = context.getApplicationContext();
-        if (applicationContext == null) throw new LoadingException("null application Context", null);
+        if (applicationContext == null)
+            throw new LoadingException("null application Context", null);
         try {
             VersionPolicy.SelectionResult result = policy.selectModule(context, moduleId, VersionPolicy.IVersions.Default);
             Log.i(TAG, "Considering local module " + moduleId + ":" + result.localVersion + " and remote module " + moduleId + ":" + result.remoteVersion);
@@ -158,7 +160,8 @@ public class DynamiteModule {
     public IBinder instantiate(@NonNull String className) throws LoadingException {
         try {
             return (IBinder) this.moduleContext.getClassLoader().loadClass(className).newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | RuntimeException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException |
+                 RuntimeException e) {
             throw new LoadingException("Failed to instantiate module class: " + className, e);
         }
     }

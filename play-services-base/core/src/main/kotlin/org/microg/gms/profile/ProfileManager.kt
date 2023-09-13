@@ -27,14 +27,29 @@ object ProfileManager {
 
     private var activeProfile: String? = null
 
-    private fun getUserProfileFile(context: Context): File = File(context.filesDir, "device_profile.xml")
-    private fun getSystemProfileFile(context: Context): File = File("/system/etc/microg_device_profile.xml")
-    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null)
+    private fun getUserProfileFile(context: Context): File =
+        File(context.filesDir, "device_profile.xml")
 
-    fun getConfiguredProfile(context: Context): String = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.PROFILE)) { it.getString(0) } ?: PROFILE_AUTO
+    private fun getSystemProfileFile(context: Context): File =
+        File("/system/etc/microg_device_profile.xml")
+
+    private fun getProfileResId(context: Context, profile: String) =
+        context.resources.getIdentifier(
+            "${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null
+        )
+
+    fun getConfiguredProfile(context: Context): String = SettingsContract.getSettings(
+        context,
+        Profile.getContentUri(context),
+        arrayOf(Profile.PROFILE)
+    ) { it.getString(0) } ?: PROFILE_AUTO
 
     fun getAutoProfile(context: Context): String {
-        if (hasProfile(context, PROFILE_SYSTEM) && isAutoProfile(context, PROFILE_SYSTEM)) return PROFILE_SYSTEM
+        if (hasProfile(context, PROFILE_SYSTEM) && isAutoProfile(
+                context,
+                PROFILE_SYSTEM
+            )
+        ) return PROFILE_SYSTEM
         val profile = "${android.os.Build.PRODUCT}_${android.os.Build.VERSION.SDK_INT}"
         if (hasProfile(context, profile) && isAutoProfile(context, profile)) return profile
         return PROFILE_NATIVE
@@ -48,7 +63,8 @@ object ProfileManager {
         else -> getProfileResId(context, profile) != 0
     }
 
-    private fun getProfileXml(context: Context, profile: String): XmlResourceParser? = kotlin.runCatching {
+    private fun getProfileXml(context: Context, profile: String): XmlResourceParser? =
+        kotlin.runCatching {
             when (profile) {
                 PROFILE_AUTO -> getProfileXml(context, getAutoProfile(context))
                 PROFILE_NATIVE, PROFILE_REAL -> null
@@ -60,7 +76,7 @@ object ProfileManager {
                     context.resources.getXml(profileResId)
                 }
             }
-    }.getOrNull()
+        }.getOrNull()
 
     fun isAutoProfile(context: Context, profile: String): Boolean = kotlin.runCatching {
         when (profile) {
@@ -76,7 +92,11 @@ object ProfileManager {
                             when (next) {
                                 XmlPullParser.START_TAG -> when (parser.name) {
                                     "profile" -> {
-                                        return@runCatching parser.getAttributeBooleanValue(null, "auto", false)
+                                        return@runCatching parser.getAttributeBooleanValue(
+                                            null,
+                                            "auto",
+                                            false
+                                        )
                                     }
                                 }
                             }
@@ -93,7 +113,11 @@ object ProfileManager {
         }
     }.getOrDefault(false)
 
-    private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
+    private fun getProfileData(
+        context: Context,
+        profile: String,
+        realData: Map<String, String>
+    ): Map<String, String> {
         try {
             if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return realData
             val profileResId = getProfileResId(context, profile)
@@ -128,22 +152,40 @@ object ProfileManager {
         }
     }
 
-    private fun getProfile(context: Context) = getConfiguredProfile(context).let { if (it != PROFILE_AUTO) it else getAutoProfile(context) }
-    private fun getSerialFromSettings(context: Context): String? = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.SERIAL)) { it.getString(0) }
-    private fun saveSerial(context: Context, serial: String) = SettingsContract.setSettings(context, Profile.getContentUri(context)) { put(Profile.SERIAL, serial) }
+    private fun getProfile(context: Context) =
+        getConfiguredProfile(context).let { if (it != PROFILE_AUTO) it else getAutoProfile(context) }
 
-    private fun randomSerial(template: String, prefixLength: Int = (template.length / 2).coerceAtMost(6)): String {
+    private fun getSerialFromSettings(context: Context): String? = SettingsContract.getSettings(
+        context,
+        Profile.getContentUri(context),
+        arrayOf(Profile.SERIAL)
+    ) { it.getString(0) }
+
+    private fun saveSerial(context: Context, serial: String) =
+        SettingsContract.setSettings(context, Profile.getContentUri(context)) {
+            put(
+                Profile.SERIAL,
+                serial
+            )
+        }
+
+    private fun randomSerial(
+        template: String,
+        prefixLength: Int = (template.length / 2).coerceAtMost(6)
+    ): String {
         val serial = StringBuilder()
         template.forEachIndexed { index, c ->
-            serial.append(when {
-                index < prefixLength -> c
-                c.isDigit() -> '0' + Random.nextInt(10)
-                c.isLowerCase() && c <= 'f' -> 'a' + Random.nextInt(6)
-                c.isLowerCase() -> 'a' + Random.nextInt(26)
-                c.isUpperCase() && c <= 'F' -> 'A' + Random.nextInt(6)
-                c.isUpperCase() -> 'A' + Random.nextInt(26)
-                else -> c
-            })
+            serial.append(
+                when {
+                    index < prefixLength -> c
+                    c.isDigit() -> '0' + Random.nextInt(10)
+                    c.isLowerCase() && c <= 'f' -> 'a' + Random.nextInt(6)
+                    c.isLowerCase() -> 'a' + Random.nextInt(26)
+                    c.isUpperCase() && c <= 'F' -> 'A' + Random.nextInt(6)
+                    c.isUpperCase() -> 'A' + Random.nextInt(26)
+                    else -> c
+                }
+            )
         }
         return serial.toString()
     }
@@ -191,7 +233,11 @@ object ProfileManager {
     }
 
     @SuppressLint("MissingPermission")
-    fun getSerial(context: Context, profile: String = getProfile(context), local: Boolean = false): String {
+    fun getSerial(
+        context: Context,
+        profile: String = getProfile(context),
+        local: Boolean = false
+    ): String {
         if (!local) getSerialFromSettings(context)?.let { return it }
         val serialTemplate = getProfileSerialTemplate(context, profile)
         val serial = when {
@@ -203,31 +249,31 @@ object ProfileManager {
     }
 
     private fun getRealData(): Map<String, String> = mutableMapOf(
-            "Build.BOARD" to android.os.Build.BOARD,
-            "Build.BOOTLOADER" to android.os.Build.BOOTLOADER,
-            "Build.BRAND" to android.os.Build.BRAND,
-            "Build.CPU_ABI" to android.os.Build.CPU_ABI,
-            "Build.CPU_ABI2" to android.os.Build.CPU_ABI2,
-            "Build.DEVICE" to android.os.Build.DEVICE,
-            "Build.DISPLAY" to android.os.Build.DISPLAY,
-            "Build.FINGERPRINT" to android.os.Build.FINGERPRINT,
-            "Build.HARDWARE" to android.os.Build.HARDWARE,
-            "Build.HOST" to android.os.Build.HOST,
-            "Build.ID" to android.os.Build.ID,
-            "Build.MANUFACTURER" to android.os.Build.MANUFACTURER,
-            "Build.MODEL" to android.os.Build.MODEL,
-            "Build.PRODUCT" to android.os.Build.PRODUCT,
-            "Build.RADIO" to android.os.Build.RADIO,
-            "Build.SERIAL" to android.os.Build.SERIAL,
-            "Build.TAGS" to android.os.Build.TAGS,
-            "Build.TIME" to android.os.Build.TIME.toString(),
-            "Build.TYPE" to android.os.Build.TYPE,
-            "Build.USER" to android.os.Build.USER,
-            "Build.VERSION.CODENAME" to android.os.Build.VERSION.CODENAME,
-            "Build.VERSION.INCREMENTAL" to android.os.Build.VERSION.INCREMENTAL,
-            "Build.VERSION.RELEASE" to android.os.Build.VERSION.RELEASE,
-            "Build.VERSION.SDK" to android.os.Build.VERSION.SDK,
-            "Build.VERSION.SDK_INT" to android.os.Build.VERSION.SDK_INT.toString()
+        "Build.BOARD" to android.os.Build.BOARD,
+        "Build.BOOTLOADER" to android.os.Build.BOOTLOADER,
+        "Build.BRAND" to android.os.Build.BRAND,
+        "Build.CPU_ABI" to android.os.Build.CPU_ABI,
+        "Build.CPU_ABI2" to android.os.Build.CPU_ABI2,
+        "Build.DEVICE" to android.os.Build.DEVICE,
+        "Build.DISPLAY" to android.os.Build.DISPLAY,
+        "Build.FINGERPRINT" to android.os.Build.FINGERPRINT,
+        "Build.HARDWARE" to android.os.Build.HARDWARE,
+        "Build.HOST" to android.os.Build.HOST,
+        "Build.ID" to android.os.Build.ID,
+        "Build.MANUFACTURER" to android.os.Build.MANUFACTURER,
+        "Build.MODEL" to android.os.Build.MODEL,
+        "Build.PRODUCT" to android.os.Build.PRODUCT,
+        "Build.RADIO" to android.os.Build.RADIO,
+        "Build.SERIAL" to android.os.Build.SERIAL,
+        "Build.TAGS" to android.os.Build.TAGS,
+        "Build.TIME" to android.os.Build.TIME.toString(),
+        "Build.TYPE" to android.os.Build.TYPE,
+        "Build.USER" to android.os.Build.USER,
+        "Build.VERSION.CODENAME" to android.os.Build.VERSION.CODENAME,
+        "Build.VERSION.INCREMENTAL" to android.os.Build.VERSION.INCREMENTAL,
+        "Build.VERSION.RELEASE" to android.os.Build.VERSION.RELEASE,
+        "Build.VERSION.SDK" to android.os.Build.VERSION.SDK,
+        "Build.VERSION.SDK_INT" to android.os.Build.VERSION.SDK_INT.toString()
     ).apply {
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             put("Build.SUPPORTED_ABIS", android.os.Build.SUPPORTED_ABIS.joinToString(","))
@@ -238,9 +284,14 @@ object ProfileManager {
     }
 
     private fun applyProfileData(profileData: Map<String, String>) {
-        fun applyStringField(key: String, valueSetter: (String) -> Unit) = profileData[key]?.let { valueSetter(it) }
-        fun applyIntField(key: String, valueSetter: (Int) -> Unit) = profileData[key]?.toIntOrNull()?.let { valueSetter(it) }
-        fun applyLongField(key: String, valueSetter: (Long) -> Unit) = profileData[key]?.toLongOrNull()?.let { valueSetter(it) }
+        fun applyStringField(key: String, valueSetter: (String) -> Unit) =
+            profileData[key]?.let { valueSetter(it) }
+
+        fun applyIntField(key: String, valueSetter: (Int) -> Unit) =
+            profileData[key]?.toIntOrNull()?.let { valueSetter(it) }
+
+        fun applyLongField(key: String, valueSetter: (Long) -> Unit) =
+            profileData[key]?.toLongOrNull()?.let { valueSetter(it) }
 
         applyStringField("Build.BOARD") { Build.BOARD = it }
         applyStringField("Build.BOOTLOADER") { Build.BOOTLOADER = it }
@@ -268,7 +319,8 @@ object ProfileManager {
         applyStringField("Build.VERSION.SDK") { Build.VERSION.SDK = it }
         applyIntField("Build.VERSION.SDK_INT") { Build.VERSION.SDK_INT = it }
         if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Build.SUPPORTED_ABIS = profileData["Build.SUPPORTED_ABIS"]?.split(",")?.toTypedArray() ?: emptyArray()
+            Build.SUPPORTED_ABIS =
+                profileData["Build.SUPPORTED_ABIS"]?.split(",")?.toTypedArray() ?: emptyArray()
         } else {
             Build.SUPPORTED_ABIS = emptyArray()
         }
@@ -279,7 +331,11 @@ object ProfileManager {
         }
     }
 
-    private fun applyProfile(context: Context, profile: String, serial: String = getSerial(context, profile)) {
+    private fun applyProfile(
+        context: Context,
+        profile: String,
+        serial: String = getSerial(context, profile)
+    ) {
         val profileData = getProfileData(context, profile, getRealData())
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             for ((key, value) in profileData) {
@@ -292,7 +348,8 @@ object ProfileManager {
         activeProfile = profile
     }
 
-    fun getProfileName(context: Context, profile: String): String? = getProfileName { getProfileXml(context, profile) }
+    fun getProfileName(context: Context, profile: String): String? =
+        getProfileName { getProfileXml(context, profile) }
 
     private fun getProfileName(parserCreator: () -> XmlResourceParser?): String? {
         val parser = parserCreator()

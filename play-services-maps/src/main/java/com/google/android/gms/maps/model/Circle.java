@@ -9,9 +9,12 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.internal.ICircleDelegate;
+
 import org.microg.gms.common.Hide;
 
 import java.util.List;

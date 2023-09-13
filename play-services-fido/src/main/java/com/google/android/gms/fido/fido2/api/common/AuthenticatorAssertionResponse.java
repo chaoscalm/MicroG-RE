@@ -31,7 +31,8 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     @Field(6)
     private byte[] userHandle;
 
-    private AuthenticatorAssertionResponse() {}
+    private AuthenticatorAssertionResponse() {
+    }
 
     public AuthenticatorAssertionResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle) {
         this.keyHandle = keyHandle;

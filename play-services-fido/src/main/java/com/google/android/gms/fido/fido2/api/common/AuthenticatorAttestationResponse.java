@@ -26,7 +26,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     @Field(4)
     private byte[] attestationObject;
 
-    private AuthenticatorAttestationResponse() {}
+    private AuthenticatorAttestationResponse() {
+    }
 
     @PublicApi(exclude = true)
     public AuthenticatorAttestationResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] attestationObject) {

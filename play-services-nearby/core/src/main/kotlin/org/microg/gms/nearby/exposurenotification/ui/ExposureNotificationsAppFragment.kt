@@ -24,7 +24,11 @@ class ExposureNotificationsAppFragment : Fragment(R.layout.exposure_notification
     val packageName: String?
         get() = arguments?.getString("package")
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = ExposureNotificationsAppFragmentBinding.inflate(inflater, container, false)
         binding.callbacks = object : ExposureNotificationsAppFragmentCallbacks {
             override fun onAppClicked() {
@@ -47,7 +51,7 @@ class ExposureNotificationsAppFragment : Fragment(R.layout.exposure_notification
             val applicationInfo = pm.getApplicationInfoIfExists(packageName)
             binding.appName = applicationInfo?.loadLabel(pm)?.toString() ?: packageName
             binding.appIcon = applicationInfo?.loadIcon(pm)
-                    ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
+                ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
         }
     }
 }

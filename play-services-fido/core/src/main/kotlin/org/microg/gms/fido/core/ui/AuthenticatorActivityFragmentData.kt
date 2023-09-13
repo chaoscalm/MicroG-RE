@@ -19,8 +19,12 @@ class AuthenticatorActivityFragmentData(val arguments: Bundle = Bundle()) {
         set(value) = arguments.putBoolean(KEY_IS_FIRST, value)
 
     var supportedTransports: Set<Transport>
-        get() = arguments.getStringArrayList(KEY_SUPPORTED_TRANSPORTS)?.map { Transport.valueOf(it) }?.toSet().orEmpty()
-        set(value) = arguments.putStringArrayList(KEY_SUPPORTED_TRANSPORTS, ArrayList(value.map { it.name }))
+        get() = arguments.getStringArrayList(KEY_SUPPORTED_TRANSPORTS)
+            ?.map { Transport.valueOf(it) }?.toSet().orEmpty()
+        set(value) = arguments.putStringArrayList(
+            KEY_SUPPORTED_TRANSPORTS,
+            ArrayList(value.map { it.name })
+        )
 
     val implementedTransports: Set<Transport>
         get() = AuthenticatorActivity.IMPLEMENTED_TRANSPORTS
@@ -42,4 +46,5 @@ class AuthenticatorActivityFragmentData(val arguments: Bundle = Bundle()) {
     }
 }
 
-fun Bundle?.withIsFirst(isFirst: Boolean) = Bundle(this ?: Bundle.EMPTY).apply { putBoolean(KEY_IS_FIRST, isFirst) }
+fun Bundle?.withIsFirst(isFirst: Boolean) =
+    Bundle(this ?: Bundle.EMPTY).apply { putBoolean(KEY_IS_FIRST, isFirst) }

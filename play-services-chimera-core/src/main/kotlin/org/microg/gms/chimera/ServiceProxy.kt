@@ -13,7 +13,8 @@ import com.google.android.chimera.Service
 import java.io.FileDescriptor
 import java.io.PrintWriter
 
-abstract class ServiceProxy(private val loader: ServiceLoader) : android.app.Service(), ProxyCallbacks {
+abstract class ServiceProxy(private val loader: ServiceLoader) : android.app.Service(),
+    ProxyCallbacks {
     private var actualService: Service? = null
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)

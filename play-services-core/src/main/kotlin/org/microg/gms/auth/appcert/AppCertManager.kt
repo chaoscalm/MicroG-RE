@@ -77,26 +77,39 @@ class AppCertManager(private val context: Context) {
 //                } catch (e: Exception) {
 //                    null
 //                }
-                val token = completeRegisterRequest(context, GcmDatabase(context), RegisterRequest().build(context)
+                val token = completeRegisterRequest(
+                    context, GcmDatabase(context), RegisterRequest().build(context)
                         .checkin(lastCheckinInfo)
-                        .app("com.google.android.gms", Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
+                        .app(
+                            "com.google.android.gms",
+                            Constants.GMS_PACKAGE_SIGNATURE_SHA1,
+                            BuildConfig.VERSION_CODE
+                        )
                         .sender(REGISTER_SENDER)
                         .extraParam("subscription", REGISTER_SUBSCIPTION)
                         .extraParam("X-subscription", REGISTER_SUBSCIPTION)
                         .extraParam("subtype", REGISTER_SUBTYPE)
                         .extraParam("X-subtype", REGISTER_SUBTYPE)
-                        .extraParam("scope", REGISTER_SCOPE))
-                        .getString(GcmConstants.EXTRA_REGISTRATION_ID)
+                        .extraParam("scope", REGISTER_SCOPE)
+                )
+                    .getString(GcmConstants.EXTRA_REGISTRATION_ID)
                 val request = DeviceKeyRequest(
 //                        droidGuardResult = droidGuardResult,
-                        androidId = lastCheckinInfo.androidId,
-                        sessionId = sessionId,
-                        versionInfo = DeviceKeyRequest.VersionInfo(Build.VERSION.SDK_INT, BuildConfig.VERSION_CODE),
-                        token = token
+                    androidId = lastCheckinInfo.androidId,
+                    sessionId = sessionId,
+                    versionInfo = DeviceKeyRequest.VersionInfo(
+                        Build.VERSION.SDK_INT,
+                        BuildConfig.VERSION_CODE
+                    ),
+                    token = token
                 )
                 Log.d(TAG, "Request: ${request.toString().chunked(128).joinToString("\n")}")
                 val deferredResponse = CompletableDeferred<ByteArray?>()
-                queue.add(object : Request<ByteArray?>(Method.POST, "https://android.googleapis.com/auth/devicekey", null) {
+                queue.add(object : Request<ByteArray?>(
+                    Method.POST,
+                    "https://android.googleapis.com/auth/devicekey",
+                    null
+                ) {
                     override fun getBody(): ByteArray = request.encode()
 
                     override fun getBodyContentType(): String = "application/octet-stream"
@@ -111,7 +124,10 @@ class AppCertManager(private val context: Context) {
 
                     override fun deliverError(error: VolleyError) {
                         if (error.networkResponse != null) {
-                            Log.d(TAG, "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}")
+                            Log.d(
+                                TAG,
+                                "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}"
+                            )
                         } else {
                             Log.d(TAG, "Error: ${error.message}")
                         }
@@ -125,10 +141,10 @@ class AppCertManager(private val context: Context) {
 
                     override fun getHeaders(): Map<String, String> {
                         return mapOf(
-                                "User-Agent" to "GoogleAuth/1.4 (${Build.DEVICE} ${Build.ID}); gzip",
-                                "content-type" to "application/octet-stream",
-                                "app" to "com.google.android.gms",
-                                "device" to androidId.toString(16)
+                            "User-Agent" to "GoogleAuth/1.4 (${Build.DEVICE} ${Build.ID}); gzip",
+                            "content-type" to "application/octet-stream",
+                            "app" to "com.google.android.gms",
+                            "device" to androidId.toString(16)
                         )
                     }
                 })
@@ -148,7 +164,10 @@ class AppCertManager(private val context: Context) {
 
     suspend fun getSpatulaHeader(packageName: String): String? {
         val deviceKey = deviceKey ?: if (fetchDeviceKey()) deviceKey else null
-        val packageCertificateHash = Base64.encodeToString(PackageUtils.firstSignatureDigestBytes(context, packageName), Base64.NO_WRAP)
+        val packageCertificateHash = Base64.encodeToString(
+            PackageUtils.firstSignatureDigestBytes(context, packageName),
+            Base64.NO_WRAP
+        )
         val proto = if (deviceKey != null) {
             val macSecret = deviceKey.macSecret?.toByteArray()
             if (macSecret == null) {
@@ -159,18 +178,22 @@ class AppCertManager(private val context: Context) {
             mac.init(SecretKeySpec(macSecret, "HMACSHA256"))
             val hmac = mac.doFinal("$packageName$packageCertificateHash".toByteArray())
             SpatulaHeaderProto(
-                    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
-                    hmac = of(*hmac),
-                    deviceId = deviceKey.deviceId,
-                    keyId = deviceKey.keyId,
-                    keyCert = deviceKey.keyCert ?: of()
+                packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
+                hmac = of(*hmac),
+                deviceId = deviceKey.deviceId,
+                keyId = deviceKey.keyId,
+                keyCert = deviceKey.keyCert ?: of()
             )
         } else {
             Log.d(TAG, "Using fallback spatula header based on Android ID")
-            val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
+            val androidId = getSettings(
+                context,
+                CheckIn.getContentUri(context),
+                arrayOf(CheckIn.ANDROID_ID)
+            ) { cursor: Cursor -> cursor.getLong(0) }
             SpatulaHeaderProto(
-                    packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
-                    deviceId = androidId
+                packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
+                deviceId = androidId
             )
             return null // TODO
         }

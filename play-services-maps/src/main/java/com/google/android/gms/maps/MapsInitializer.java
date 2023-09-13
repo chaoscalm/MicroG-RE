@@ -13,13 +13,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.internal.ICreator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
+
 import org.microg.gms.maps.MapsContextLoader;
 
 /**

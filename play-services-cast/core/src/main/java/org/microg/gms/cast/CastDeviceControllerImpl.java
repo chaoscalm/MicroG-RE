@@ -54,11 +54,10 @@ import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
 import su.litvak.chromecast.api.v2.AppEvent;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
-    ChromeCastConnectionEventListener,
-    ChromeCastSpontaneousEventListener,
-    ChromeCastRawMessageListener,
-    ICastDeviceControllerListener
-{
+        ChromeCastConnectionEventListener,
+        ChromeCastSpontaneousEventListener,
+        ChromeCastRawMessageListener,
+        ICastDeviceControllerListener {
     private static final String TAG = "GmsCastDeviceController";
 
     private Context context;
@@ -80,7 +79,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.castDevice = CastDevice.getFromBundle(extras);
         this.notificationEnabled = extras.getBoolean("com.google.android.gms.cast.EXTRA_CAST_FRAMEWORK_NOTIFICATION_ENABLED");
         this.castFlags = extras.getLong("com.google.android.gms.cast.EXTRA_CAST_FLAGS");
-        BinderWrapper listenerWrapper = (BinderWrapper)extras.get("listener");
+        BinderWrapper listenerWrapper = (BinderWrapper) extras.get("listener");
         if (listenerWrapper != null) {
             this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
         }
@@ -109,7 +108,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
         metadata.images = new ArrayList<WebImage>();
         metadata.namespaces = new ArrayList<String>();
-        for(Namespace namespace : app.namespaces) {
+        for (Namespace namespace : app.namespaces) {
             metadata.namespaces.add(namespace.name);
         }
         metadata.senderAppIdentifier = this.context.getPackageName();
@@ -122,7 +121,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             case MEDIA_STATUS:
                 break;
             case STATUS:
-                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
+                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status) event.getData();
                 Application app = status.getRunningApp();
                 ApplicationMetadata metadata = this.createMetadataFromApplication(app);
                 if (app != null) {

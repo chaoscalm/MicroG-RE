@@ -13,7 +13,8 @@ public class GetExposureSummaryParams extends AutoSafeParcelable {
     @Field(3)
     public String token;
 
-    private GetExposureSummaryParams() {}
+    private GetExposureSummaryParams() {
+    }
 
     public GetExposureSummaryParams(IExposureSummaryCallback callback, String token) {
         this.callback = callback;

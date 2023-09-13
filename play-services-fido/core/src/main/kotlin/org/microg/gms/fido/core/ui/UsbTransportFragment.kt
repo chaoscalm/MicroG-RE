@@ -31,7 +31,11 @@ class UsbTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
     private lateinit var binding: FidoUsbTransportFragmentBinding
     private var job: Job? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FidoUsbTransportFragmentBinding.inflate(inflater, container, false)
         binding.data = data
         binding.onBackClick = View.OnClickListener {
@@ -43,8 +47,12 @@ class UsbTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
             }
         }
         if (Build.VERSION.SDK_INT >= 23) {
-            for (imageView in listOfNotNull(binding.fidoUsbWaitConnectAnimation, binding.fidoUsbWaitConfirmAnimation)) {
-                (imageView.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(object : Animatable2.AnimationCallback() {
+            for (imageView in listOfNotNull(
+                binding.fidoUsbWaitConnectAnimation,
+                binding.fidoUsbWaitConfirmAnimation
+            )) {
+                (imageView.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(object :
+                    Animatable2.AnimationCallback() {
                     override fun onAnimationEnd(drawable: Drawable?) {
                         lifecycleScope.launchWhenStarted {
                             delay(250)
@@ -65,7 +73,8 @@ class UsbTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
         binding.status = status
         if (Build.VERSION.SDK_INT >= 21) {
             binding.deviceName =
-                extras?.getParcelable<UsbDevice>(UsbManager.EXTRA_DEVICE)?.productName ?: "your security key"
+                extras?.getParcelable<UsbDevice>(UsbManager.EXTRA_DEVICE)?.productName
+                    ?: "your security key"
         } else {
             binding.deviceName = "your security key"
         }

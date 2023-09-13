@@ -10,6 +10,7 @@ package com.google.android.gms.location;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParcelUtil;

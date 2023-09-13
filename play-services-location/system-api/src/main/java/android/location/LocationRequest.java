@@ -140,7 +140,7 @@ public final class LocationRequest implements Parcelable {
      * @hide
      */
     public static LocationRequest createFromDeprecatedProvider(String provider, long minTime,
-            float minDistance, boolean singleShot) {
+                                                               float minDistance, boolean singleShot) {
         return null;
     }
 
@@ -148,7 +148,7 @@ public final class LocationRequest implements Parcelable {
      * @hide
      */
     public static LocationRequest createFromDeprecatedCriteria(Criteria criteria, long minTime,
-            float minDistance, boolean singleShot) {
+                                                               float minDistance, boolean singleShot) {
         return null;
     }
 

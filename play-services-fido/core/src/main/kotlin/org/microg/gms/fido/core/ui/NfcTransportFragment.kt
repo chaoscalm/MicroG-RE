@@ -27,7 +27,11 @@ class NfcTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
     private lateinit var binding: FidoNfcTransportFragmentBinding
     private var job: Job? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FidoNfcTransportFragmentBinding.inflate(inflater, container, false)
         binding.data = data
         binding.onBackClick = View.OnClickListener {
@@ -39,17 +43,18 @@ class NfcTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
             }
         }
         if (Build.VERSION.SDK_INT >= 23) {
-            (binding.fidoNfcWaitConnectAnimation.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(object :
-                Animatable2.AnimationCallback() {
-                override fun onAnimationEnd(drawable: Drawable?) {
-                    lifecycleScope.launchWhenStarted {
-                        delay(250)
-                        (drawable as? AnimatedVectorDrawable)?.reset()
-                        delay(500)
-                        (drawable as? AnimatedVectorDrawable)?.start()
+            (binding.fidoNfcWaitConnectAnimation.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(
+                object :
+                    Animatable2.AnimationCallback() {
+                    override fun onAnimationEnd(drawable: Drawable?) {
+                        lifecycleScope.launchWhenStarted {
+                            delay(250)
+                            (drawable as? AnimatedVectorDrawable)?.reset()
+                            delay(500)
+                            (drawable as? AnimatedVectorDrawable)?.start()
+                        }
                     }
-                }
-            })
+                })
             (binding.fidoNfcWaitConnectAnimation.drawable as? AnimatedVectorDrawable)?.start()
         }
         return binding.root

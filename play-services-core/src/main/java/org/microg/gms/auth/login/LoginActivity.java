@@ -39,8 +39,10 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
 import androidx.webkit.WebViewFeature;
 import androidx.webkit.WebSettingsCompat;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -248,8 +250,7 @@ public class LoginActivity extends AssistantActivity {
                 WebSettingsCompat.setForceDark(webView.getSettings(),
                         systemIsDark ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
             }
-        }
-        else {
+        } else {
             if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
                 WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.getSettings(), true);
             }

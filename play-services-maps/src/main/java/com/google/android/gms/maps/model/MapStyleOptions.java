@@ -17,6 +17,7 @@
 package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
+
 import com.google.android.gms.dynamic.ObjectWrapper;
 
 import org.microg.gms.common.PublicApi;
@@ -34,7 +35,7 @@ public class MapStyleOptions extends AutoSafeParcelable {
     public MapStyleOptions() {
     }
 
-    public MapStyleOptions (String json) {
+    public MapStyleOptions(String json) {
         this.json = json;
     }
 

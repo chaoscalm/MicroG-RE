@@ -123,50 +123,63 @@ class AdvertiserService : LifecycleService() {
         try {
             val aemBytes = when (version) {
                 VERSION_1_0 -> byteArrayOf(
-                        version, // Version and flags
-                        currentDeviceInfo.txPowerCorrection, // TX power
-                        0x00, // Reserved
-                        0x00  // Reserved
+                    version, // Version and flags
+                    currentDeviceInfo.txPowerCorrection, // TX power
+                    0x00, // Reserved
+                    0x00  // Reserved
                 )
+
                 VERSION_1_1 -> byteArrayOf(
-                        (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
-                        currentDeviceInfo.txPowerCorrection, // TX power
-                        0x00, // Reserved
-                        0x00  // Reserved
+                    (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
+                    currentDeviceInfo.txPowerCorrection, // TX power
+                    0x00, // Reserved
+                    0x00  // Reserved
                 )
+
                 else -> return
             }
             var nextSend = nextKeyMillis.coerceAtLeast(10000)
             val payload = ExposureDatabase.with(this@AdvertiserService) { database ->
                 database.generateCurrentPayload(aemBytes)
             }
-            val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
+            val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID)
+                .addServiceData(SERVICE_UUID, payload).build()
             Log.i(TAG, "Starting advertiser")
             if (Build.VERSION.SDK_INT >= 26) {
                 setCallback = SetCallback()
                 val params = AdvertisingSetParameters.Builder()
-                        .setInterval(AdvertisingSetParameters.INTERVAL_MEDIUM)
-                        .setLegacyMode(true)
-                        .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
-                        .setConnectable(false)
-                        .build()
+                    .setInterval(AdvertisingSetParameters.INTERVAL_MEDIUM)
+                    .setLegacyMode(true)
+                    .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
+                    .setConnectable(false)
+                    .build()
                 try {
-                    advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
+                    advertiser.startAdvertisingSet(
+                        params,
+                        data,
+                        null,
+                        null,
+                        null,
+                        setCallback as AdvertisingSetCallback
+                    )
                 } catch (e: SecurityException) {
-                    Log.e(TAG, "Couldn't start advertising: Need android.permission.BLUETOOTH_ADVERTISE permission.", )
+                    Log.e(
+                        TAG,
+                        "Couldn't start advertising: Need android.permission.BLUETOOTH_ADVERTISE permission.",
+                    )
                 }
             } else {
                 nextSend = nextSend.coerceAtMost(180000)
                 val settings = Builder()
-                        .setTimeout(nextSend.toInt())
-                        .setAdvertiseMode(ADVERTISE_MODE_BALANCED)
-                        .setTxPowerLevel(ADVERTISE_TX_POWER_LOW)
-                        .setConnectable(false)
-                        .build()
+                    .setTimeout(nextSend.toInt())
+                    .setAdvertiseMode(ADVERTISE_MODE_BALANCED)
+                    .setTxPowerLevel(ADVERTISE_TX_POWER_LOW)
+                    .setConnectable(false)
+                    .build()
                 try {
                     advertiser.startAdvertising(settings, data, callback)
                 } catch (e: SecurityException) {
-                    Log.e(TAG, "Couldn't start advertising.", )
+                    Log.e(TAG, "Couldn't start advertising.")
                 }
             }
             synchronized(this) { advertising = true }
@@ -184,27 +197,47 @@ class AdvertiserService : LifecycleService() {
             val startTime = lastStartTime
             val bytes = sendingBytes
             val (uuid, aem) = ByteBuffer.wrap(bytes).let { UUID(it.long, it.long) to it.int }
-            writer?.println("""
+            writer?.println(
+                """
                 Last advertising:
                     Since: ${Date(startTime)}
                     RPI: $uuid
                     Version: 0x${version.toString(16)}
                     TX Power: ${currentDeviceInfo.txPowerCorrection}
-                    AEM: 0x${aem.toLong().let { if (it < 0) 0x100000000L + it else it }.toString(16)}
-                """.trimIndent())
+                    AEM: 0x${
+                    aem.toLong().let { if (it < 0) 0x100000000L + it else it }.toString(16)
+                }
+                """.trimIndent()
+            )
         } catch (e: Exception) {
             writer?.println("Last advertising: ${e.message ?: e.toString()}")
         }
     }
 
     private fun scheduleRestartAdvertising(nextSend: Long) {
-        val intent = Intent(this, AdvertiserService::class.java).apply { action = ACTION_RESTART_ADVERTISING }
-        val pendingIntent = PendingIntent.getService(this, ACTION_RESTART_ADVERTISING.hashCode(), intent, FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+        val intent = Intent(this, AdvertiserService::class.java).apply {
+            action = ACTION_RESTART_ADVERTISING
+        }
+        val pendingIntent = PendingIntent.getService(
+            this,
+            ACTION_RESTART_ADVERTISING.hashCode(),
+            intent,
+            FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
         when {
             Build.VERSION.SDK_INT >= 23 ->
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextSend, pendingIntent)
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + nextSend,
+                    pendingIntent
+                )
+
             else ->
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextSend, pendingIntent)
+                alarmManager.setExact(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + nextSend,
+                    pendingIntent
+                )
         }
     }
 
@@ -219,13 +252,19 @@ class AdvertiserService : LifecycleService() {
             try {
                 advertiser?.stopAdvertisingSet(setCallback as AdvertisingSetCallback)
             } catch (e: SecurityException) {
-                Log.i(TAG, "Tried calling stopAdvertisingSet without android.permission.BLUETOOTH_ADVERTISE permission.", )
+                Log.i(
+                    TAG,
+                    "Tried calling stopAdvertisingSet without android.permission.BLUETOOTH_ADVERTISE permission.",
+                )
             }
         } else {
             try {
                 advertiser?.stopAdvertising(callback)
             } catch (e: SecurityException) {
-                Log.i(TAG, "stopAdvertising() failed with a SecurityException. Maybe some permissions are missing?", )
+                Log.i(
+                    TAG,
+                    "stopAdvertising() failed with a SecurityException. Maybe some permissions are missing?",
+                )
             }
         }
         handler.postDelayed(startLaterRunnable, 1000)
@@ -233,7 +272,11 @@ class AdvertiserService : LifecycleService() {
 
     @TargetApi(26)
     inner class SetCallback : AdvertisingSetCallback() {
-        override fun onAdvertisingSetStarted(advertisingSet: AdvertisingSet?, txPower: Int, status: Int) {
+        override fun onAdvertisingSetStarted(
+            advertisingSet: AdvertisingSet?,
+            txPower: Int,
+            status: Int
+        ) {
             Log.d(TAG, "Advertising active, status=$status")
         }
 
@@ -249,7 +292,8 @@ class AdvertiserService : LifecycleService() {
 
 
     companion object {
-        private const val ACTION_RESTART_ADVERTISING = "org.microg.gms.nearby.exposurenotification.RESTART_ADVERTISING"
+        private const val ACTION_RESTART_ADVERTISING =
+            "org.microg.gms.nearby.exposurenotification.RESTART_ADVERTISING"
 
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).enabled

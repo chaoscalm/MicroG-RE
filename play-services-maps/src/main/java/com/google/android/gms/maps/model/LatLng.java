@@ -99,6 +99,6 @@ public final class LatLng extends AutoSafeParcelable {
     public String toString() {
         return "lat/lng: (" + latitude + "," + longitude + ")";
     }
-    
+
     public static Creator<LatLng> CREATOR = new AutoCreator<LatLng>(LatLng.class);
 }

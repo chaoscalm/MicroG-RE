@@ -43,29 +43,36 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        appHeadingPreference = preferenceScreen.findPreference("pref_push_app_heading") ?: appHeadingPreference
-        wakeForDelivery = preferenceScreen.findPreference("pref_push_app_wake_for_delivery") ?: wakeForDelivery
-        allowRegister = preferenceScreen.findPreference("pref_push_app_allow_register") ?: allowRegister
+        appHeadingPreference =
+            preferenceScreen.findPreference("pref_push_app_heading") ?: appHeadingPreference
+        wakeForDelivery =
+            preferenceScreen.findPreference("pref_push_app_wake_for_delivery") ?: wakeForDelivery
+        allowRegister =
+            preferenceScreen.findPreference("pref_push_app_allow_register") ?: allowRegister
         unregister = preferenceScreen.findPreference("pref_push_app_unregister") ?: unregister
-        unregisterCat = preferenceScreen.findPreference("prefcat_push_app_unregister") ?: unregisterCat
+        unregisterCat =
+            preferenceScreen.findPreference("prefcat_push_app_unregister") ?: unregisterCat
         status = preferenceScreen.findPreference("pref_push_app_status") ?: status
-        wakeForDelivery.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            database.setAppWakeForDelivery(packageName, newValue as Boolean)
-            database.close()
-            true
-        }
-        allowRegister.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            val enabled = newValue as? Boolean ?: return@OnPreferenceChangeListener false
-            if (!enabled) {
-                val registrations = packageName?.let { database.getRegistrationsByApp(it) } ?: emptyList()
-                if (registrations.isNotEmpty()) {
-                    showUnregisterConfirm(R.string.gcm_unregister_after_deny_message)
-                }
+        wakeForDelivery.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                database.setAppWakeForDelivery(packageName, newValue as Boolean)
+                database.close()
+                true
             }
-            database.setAppAllowRegister(packageName, enabled)
-            database.close()
-            true
-        }
+        allowRegister.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val enabled = newValue as? Boolean ?: return@OnPreferenceChangeListener false
+                if (!enabled) {
+                    val registrations =
+                        packageName?.let { database.getRegistrationsByApp(it) } ?: emptyList()
+                    if (registrations.isNotEmpty()) {
+                        showUnregisterConfirm(R.string.gcm_unregister_after_deny_message)
+                    }
+                }
+                database.setAppAllowRegister(packageName, enabled)
+                database.close()
+                true
+            }
         unregister.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             showUnregisterConfirm(R.string.gcm_unregister_confirm_message)
             true
@@ -77,18 +84,28 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
         val pm = requireContext().packageManager
         val applicationInfo = pm.getApplicationInfoIfExists(packageName)
         AlertDialog.Builder(requireContext())
-                .setTitle(getString(R.string.gcm_unregister_confirm_title, applicationInfo?.loadLabel(pm)
-                        ?: packageName))
-                .setMessage(unregisterConfirmDesc)
-                .setPositiveButton(android.R.string.yes) { _, _ -> unregister() }
-                .setNegativeButton(android.R.string.no) { _, _ -> }.show()
+            .setTitle(
+                getString(
+                    R.string.gcm_unregister_confirm_title, applicationInfo?.loadLabel(pm)
+                        ?: packageName
+                )
+            )
+            .setMessage(unregisterConfirmDesc)
+            .setPositiveButton(android.R.string.yes) { _, _ -> unregister() }
+            .setNegativeButton(android.R.string.no) { _, _ -> }.show()
     }
 
     private fun unregister() {
         lifecycleScope.launchWhenResumed {
             withContext(Dispatchers.IO) {
                 for (registration in database.getRegistrationsByApp(packageName)) {
-                    PushRegisterManager.unregister(context, registration.packageName, registration.signature, null, null)
+                    PushRegisterManager.unregister(
+                        context,
+                        registration.packageName,
+                        registration.signature,
+                        null,
+                        null
+                    )
                 }
             }
             updateDetails()
@@ -106,16 +123,34 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
             val app = packageName?.let { database.getApp(it) }
             wakeForDelivery.isChecked = app?.wakeForDelivery ?: true
             allowRegister.isChecked = app?.allowRegister ?: true
-            val registrations = packageName?.let { database.getRegistrationsByApp(it) } ?: emptyList()
+            val registrations =
+                packageName?.let { database.getRegistrationsByApp(it) } ?: emptyList()
             unregisterCat.isVisible = registrations.isNotEmpty()
 
             val sb = StringBuilder()
             if ((app?.totalMessageCount ?: 0L) == 0L) {
                 sb.append(getString(R.string.gcm_no_message_yet))
             } else {
-                sb.append(getString(R.string.gcm_messages_counter, app?.totalMessageCount, app?.totalMessageBytes))
+                sb.append(
+                    getString(
+                        R.string.gcm_messages_counter,
+                        app?.totalMessageCount,
+                        app?.totalMessageBytes
+                    )
+                )
                 if (app?.lastMessageTimestamp != 0L) {
-                    sb.append("\n").append(getString(R.string.gcm_last_message_at, DateUtils.getRelativeDateTimeString(context, app?.lastMessageTimestamp ?: 0L, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME)))
+                    sb.append("\n").append(
+                        getString(
+                            R.string.gcm_last_message_at,
+                            DateUtils.getRelativeDateTimeString(
+                                context,
+                                app?.lastMessageTimestamp ?: 0L,
+                                DateUtils.MINUTE_IN_MILLIS,
+                                DateUtils.WEEK_IN_MILLIS,
+                                DateUtils.FORMAT_SHOW_TIME
+                            )
+                        )
+                    )
                 }
             }
             for (registration in registrations) {
@@ -123,7 +158,18 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
                 if (registration.timestamp == 0L) {
                     sb.append(getString(R.string.gcm_registered))
                 } else {
-                    sb.append(getString(R.string.gcm_registered_since, DateUtils.getRelativeDateTimeString(context, registration.timestamp, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME)))
+                    sb.append(
+                        getString(
+                            R.string.gcm_registered_since,
+                            DateUtils.getRelativeDateTimeString(
+                                context,
+                                registration.timestamp,
+                                DateUtils.MINUTE_IN_MILLIS,
+                                DateUtils.WEEK_IN_MILLIS,
+                                DateUtils.FORMAT_SHOW_TIME
+                            )
+                        )
+                    )
                 }
             }
             status.summary = sb.toString()

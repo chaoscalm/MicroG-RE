@@ -65,7 +65,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request, final LocationListener listener) {
+                                                        final LocationRequest request, final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -86,8 +86,8 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request, final LocationListener listener,
-                                                final Looper looper) {
+                                                        final LocationRequest request, final LocationListener listener,
+                                                        final Looper looper) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -98,7 +98,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request, final PendingIntent callbackIntent) {
+                                                        final LocationRequest request, final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -109,7 +109,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> removeLocationUpdates(GoogleApiClient client,
-                                               final LocationListener listener) {
+                                                       final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -130,7 +130,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> removeLocationUpdates(GoogleApiClient client,
-                                               final PendingIntent callbackIntent) {
+                                                       final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {

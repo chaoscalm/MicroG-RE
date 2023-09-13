@@ -61,7 +61,11 @@ import kotlin.coroutines.suspendCoroutine
 private const val TAG = "RecaptchaWeb"
 
 @RequiresApi(19)
-class RecaptchaWebImpl(private val context: Context, private val packageName: String, override val lifecycle: Lifecycle) : RecaptchaImpl, LifecycleOwner {
+class RecaptchaWebImpl(
+    private val context: Context,
+    private val packageName: String,
+    override val lifecycle: Lifecycle
+) : RecaptchaImpl, LifecycleOwner {
     private var webView: WebView? = null
     private var lastRequestToken: String? = null
     private var initFinished = AtomicBoolean(true)
@@ -80,15 +84,28 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
             initContinuation = continuation
             webView = WebView(context).apply {
                 settings.javaScriptEnabled = true
-                addJavascriptInterface(RNJavaScriptInterface(this@RecaptchaWebImpl, CodeInterpreter(this@RecaptchaWebImpl)), "RN")
+                addJavascriptInterface(
+                    RNJavaScriptInterface(
+                        this@RecaptchaWebImpl,
+                        CodeInterpreter(this@RecaptchaWebImpl)
+                    ), "RN"
+                )
                 webViewClient = object : WebViewClientCompat() {
-                    fun String.isRecaptchaUrl() = startsWith("https://www.recaptcha.net/") || startsWith("https://www.gstatic.com/recaptcha/")
+                    fun String.isRecaptchaUrl() =
+                        startsWith("https://www.recaptcha.net/") || startsWith("https://www.gstatic.com/recaptcha/")
 
-                    override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
+                    override fun shouldInterceptRequest(
+                        view: WebView,
+                        url: String
+                    ): WebResourceResponse? {
                         if (url.isRecaptchaUrl()) {
                             return null
                         }
-                        return WebResourceResponse("text/plain", "UTF-8", ByteArrayInputStream(byteArrayOf()))
+                        return WebResourceResponse(
+                            "text/plain",
+                            "UTF-8",
+                            ByteArrayInputStream(byteArrayOf())
+                        )
                     }
 
                     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -114,7 +131,8 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 if (!initFinished.getAndSet(true)) {
                     try {
                         continuation.resumeWithException(RuntimeException("Timeout reached"))
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -130,7 +148,11 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
         for (key in params.action.additionalArgs.keySet()) {
             additionalArgs[key] = params.action.additionalArgs.getString(key)!!
         }
-        val request = RecaptchaExecuteRequest(token = lastRequestToken, action = params.action.toString(), additionalArgs = additionalArgs).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
+        val request = RecaptchaExecuteRequest(
+            token = lastRequestToken,
+            action = params.action.toString(),
+            additionalArgs = additionalArgs
+        ).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
         val token = suspendCoroutine { continuation ->
             executeFinished.set(false)
             executeContinuation = continuation
@@ -140,7 +162,8 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 if (!executeFinished.getAndSet(true)) {
                     try {
                         continuation.resumeWithException(RuntimeException("Timeout reached"))
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -148,7 +171,9 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
     }
 
     override suspend fun close(handle: RecaptchaHandle): Boolean {
-        if (handle.clientPackageName != null && handle.clientPackageName != packageName) throw IllegalArgumentException("invalid handle")
+        if (handle.clientPackageName != null && handle.clientPackageName != packageName) throw IllegalArgumentException(
+            "invalid handle"
+        )
         val closed = webView != null
         webView?.stopLoading()
         webView?.loadUrl("about:blank")
@@ -172,15 +197,22 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
     companion object {
         private const val MWV_URL = "https://www.recaptcha.net/recaptcha/api3/mwv"
         private const val DEBUG = true
+
         object FakeApplication : Application() {
             var context: Context
                 get() = baseContext
-                set(value) { try { attachBaseContext(value.applicationContext) } catch (_: Exception) { } }
+                set(value) {
+                    try {
+                        attachBaseContext(value.applicationContext)
+                    } catch (_: Exception) {
+                    }
+                }
             var packageNameOverride: String = ""
             override fun getPackageName(): String {
                 return packageNameOverride
             }
         }
+
         var codeDecryptKeyPrefix = emptyList<Int>()
             private set
 
@@ -222,7 +254,7 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
             @Keep
             fun getErrorCode(): Int = -1
-            
+
             companion object {
                 @Keep
                 @JvmStatic
@@ -239,6 +271,7 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 fun createFakeIntegrityManager(context: Context): FakeHandler {
                     return FakeHandler()
                 }
+
                 @Keep
                 @JvmStatic
                 fun createFakeIntegrityTokenRequestBuilder(): FakeHandler {
@@ -289,19 +322,67 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 }
             }
 
-            private fun getMethod(cls: Class<*>, name: String, params: kotlin.Array<Class<*>?>): Method? = when {
-                cls == FakeHandler::class.java && name == "acx" -> FakeHandler::class.java.getMethod("setDecryptKeyPrefix", *params)
-                cls == FakeHandler::class.java && name == "currentApplication" -> FakeHandler::class.java.getMethod("getFakeApplication", *params)
-                cls == FakeHandler::class.java && name == "create" -> FakeHandler::class.java.getMethod("createFakeIntegrityManager", *params)
-                cls == FakeHandler::class.java && name == "builder" -> FakeHandler::class.java.getMethod("createFakeIntegrityTokenRequestBuilder", *params)
+            private fun getMethod(
+                cls: Class<*>,
+                name: String,
+                params: kotlin.Array<Class<*>?>
+            ): Method? = when {
+                cls == FakeHandler::class.java && name == "acx" -> FakeHandler::class.java.getMethod(
+                    "setDecryptKeyPrefix",
+                    *params
+                )
+
+                cls == FakeHandler::class.java && name == "currentApplication" -> FakeHandler::class.java.getMethod(
+                    "getFakeApplication",
+                    *params
+                )
+
+                cls == FakeHandler::class.java && name == "create" -> FakeHandler::class.java.getMethod(
+                    "createFakeIntegrityManager",
+                    *params
+                )
+
+                cls == FakeHandler::class.java && name == "builder" -> FakeHandler::class.java.getMethod(
+                    "createFakeIntegrityTokenRequestBuilder",
+                    *params
+                )
+
                 cls == FakeHandler::class.java -> cls.getMethod(name, *params)
-                cls == FakeApplication.javaClass && name == "getContentResolver" -> cls.getMethod(name, *params)
-                cls == FakeApplication.javaClass && name == "getSystemService" -> cls.getMethod(name, *params)
-                cls == FakeApplication.javaClass && name == "registerReceiver" -> cls.getMethod(name, *params)
-                cls == PackageManager::class.java && name == "checkPermission" -> cls.getMethod(name, *params)
-                cls == Context::class.java && name == "checkSelfPermission" -> cls.getMethod(name, *params)
-                cls == AudioManager::class.java && name == "getStreamVolume" -> cls.getMethod(name, *params)
-                cls == Settings.System::class.java && name == "getInt" -> cls.getMethod(name, *params)
+                cls == FakeApplication.javaClass && name == "getContentResolver" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == FakeApplication.javaClass && name == "getSystemService" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == FakeApplication.javaClass && name == "registerReceiver" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == PackageManager::class.java && name == "checkPermission" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == Context::class.java && name == "checkSelfPermission" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == AudioManager::class.java && name == "getStreamVolume" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
+                cls == Settings.System::class.java && name == "getInt" -> cls.getMethod(
+                    name,
+                    *params
+                )
+
                 cls == DateFormat::class.java -> cls.getMethod(name, *params)
                 cls == Locale::class.java -> cls.getMethod(name, *params)
                 cls == Intent::class.java -> cls.getMethod(name, *params)
@@ -319,10 +400,22 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
             private fun getField(cls: Class<*>, name: String): Field? = when {
                 cls == Build::class.java -> cls.getField(name)
                 cls == Build.VERSION::class.java -> cls.getField(name)
-                cls == Settings.System::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(name)
-                cls == BatteryManager::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(name)
-                cls == AudioManager::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(name)
-                cls == StandardCharsets::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(name)
+                cls == Settings.System::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(
+                    name
+                )
+
+                cls == BatteryManager::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(
+                    name
+                )
+
+                cls == AudioManager::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(
+                    name
+                )
+
+                cls == StandardCharsets::class.java && cls.getField(name).modifiers.and(Modifier.STATIC) > 0 -> cls.getField(
+                    name
+                )
+
                 else -> {
                     Log.w(TAG, "Not providing field $name in ${cls.display()}", Exception())
                     if (DEBUG) cls.getField(name) else null
@@ -336,7 +429,9 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
             private infix fun Any?.xor(other: Any?): Any? = when {
                 this is String && other is Int -> map { it.code xor other }.toIntArray()
-                this is String && other is Byte -> encodeToByteArray().map { (it.toInt() xor other.toInt()).toByte() }.toByteArray()
+                this is String && other is Byte -> encodeToByteArray().map { (it.toInt() xor other.toInt()).toByte() }
+                    .toByteArray()
+
                 this is Long && other is Long -> this xor other
                 else -> throw UnsupportedOperationException("xor ${this?.javaClass} ^ ${other?.javaClass}")
             }
@@ -354,10 +449,13 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 else -> this
             }
 
-            private fun String.deXor(): String = map { Char(it.code xor xorSecret.toInt()) }.toCharArray().concatToString()
+            private fun String.deXor(): String =
+                map { Char(it.code xor xorSecret.toInt()) }.toCharArray().concatToString()
 
             private fun Any?.deXor(): Any? = when {
-                this is RecaptchaWebCode.Arg && this.asObject() is String -> this.asObject()!!.deXor()
+                this is RecaptchaWebCode.Arg && this.asObject() is String -> this.asObject()!!
+                    .deXor()
+
                 this is String -> this.deXor()
                 else -> this
             }
@@ -385,7 +483,15 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 is Long -> "${this}l"
                 is Double -> "${this}d"
                 is Float -> "${this}f"
-                is String -> if (any { !it.isLetterOrDigit() && it !in listOf('.', '=', '-', '_') }) "<string with complex chars>" else "\"${this}\""
+                is String -> if (any {
+                        !it.isLetterOrDigit() && it !in listOf(
+                            '.',
+                            '=',
+                            '-',
+                            '_'
+                        )
+                    }) "<string with complex chars>" else "\"${this}\""
+
                 is Class<*> -> name
                 is Constructor<*> -> "{new ${declaringClass.name}(${parameterTypes.joinToString { it.name }})}"
                 is Method -> "{${declaringClass.name}.$name(${parameterTypes.joinToString { it.name }})}"
@@ -415,7 +521,7 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 else -> null
             }
 
-            private fun Any.asListValue(): RecaptchaWebList.Value = when(this) {
+            private fun Any.asListValue(): RecaptchaWebList.Value = when (this) {
                 is Int -> RecaptchaWebList.Value(i = this)
                 is Short -> RecaptchaWebList.Value(sht = this.toInt())
                 is Byte -> RecaptchaWebList.Value(bt = ByteString.of(this))
@@ -439,7 +545,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         2 -> {
                             // d[i] = a0 .. a1
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = \"${op.args[0].display()}${op.args[1].display()}\"")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = \"${op.args[0].display()}${op.args[1].display()}\""
+                            )
                             dict[op.arg1!!] = "${op.args[0].asObject()}${op.args[1].asObject()}"
                         }
 
@@ -452,7 +561,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         4 -> {
                             // d[i] = Class(a0).getConstructor(a1 ...)
-                            val constructor = op.args[0].asClass()!!.getConstructor(*op.args.subList(1, op.args.size).map { it.asClass() }.toTypedArray())
+                            val constructor = op.args[0].asClass()!!.getConstructor(
+                                *op.args.subList(1, op.args.size).map { it.asClass() }
+                                    .toTypedArray()
+                            )
                             if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${constructor.display()}")
                             dict[op.arg1!!] = constructor
                         }
@@ -461,7 +573,11 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                             // d[i] = Class(a0).getMethod(a1, a2 ...)
                             val methodName = (op.args[1].asObject().deXor() as String)
                             val cls = op.args[0].getClass()
-                            val method = getMethod(cls, methodName, op.args.subList(2, op.args.size).map { it.asClass() }.toTypedArray())
+                            val method = getMethod(
+                                cls,
+                                methodName,
+                                op.args.subList(2, op.args.size).map { it.asClass() }.toTypedArray()
+                            )
                             if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${method.display()}")
                             dict[op.arg1!!] = method
                         }
@@ -484,7 +600,12 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                                 })"
                             )
                             dict[op.arg1!!] =
-                                (op.args[0].asObject() as Constructor<*>).newInstance(*op.args.subList(1, op.args.size).map { it.asObject() }.toTypedArray())
+                                (op.args[0].asObject() as Constructor<*>).newInstance(
+                                    *op.args.subList(
+                                        1,
+                                        op.args.size
+                                    ).map { it.asObject() }.toTypedArray()
+                                )
                         }
 
                         8 -> {
@@ -497,7 +618,8 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                             )
                             dict[op.arg1!!] = (op.args[0].asObject() as Method).invoke(
                                 op.args[1].asObject(),
-                                *op.args.subList(2, op.args.size).map { it.asObject() }.toTypedArray()
+                                *op.args.subList(2, op.args.size).map { it.asObject() }
+                                    .toTypedArray()
                             )
                         }
 
@@ -513,25 +635,42 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                                 })"
                             )
                             dict[op.arg1!!] =
-                                (op.args[0].asObject() as Method).invoke(null, *op.args.subList(1, op.args.size).map { it.asObject() }.toTypedArray())
+                                (op.args[0].asObject() as Method).invoke(
+                                    null,
+                                    *op.args.subList(1, op.args.size).map { it.asObject() }
+                                        .toTypedArray()
+                                )
                         }
 
                         10 -> {
                             // d[i] = Field(a0).get(a1)
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = (${op.args[1].display()}).${(op.args[0].asObject() as Field).name}")
-                            dict[op.arg1!!] = (op.args[0].asObject() as Field).get(op.args[1].asObject())
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = (${op.args[1].display()}).${(op.args[0].asObject() as Field).name}"
+                            )
+                            dict[op.arg1!!] =
+                                (op.args[0].asObject() as Field).get(op.args[1].asObject())
                         }
 
                         11 -> {
                             // d[i] = Field(a0).get(null)
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${(op.args[0].asObject() as Field).declaringClass.name}.${(op.args[0].asObject() as Field).name}")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = ${(op.args[0].asObject() as Field).declaringClass.name}.${(op.args[0].asObject() as Field).name}"
+                            )
                             dict[op.arg1!!] = (op.args[0].asObject() as Field).get(null)
                         }
 
                         12 -> {
                             // Field(a0).set(a1, a2)
-                            if (DEBUG) Log.d(TAG, "(${op.args[1].display()}).${(op.args[0].asObject() as Field).name} = ${op.args[2].display()}")
-                            (op.args[0].asObject() as Field).set(op.args[1].asObject(), op.args[2].asObject())
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "(${op.args[1].display()}).${(op.args[0].asObject() as Field).name} = ${op.args[2].display()}"
+                            )
+                            (op.args[0].asObject() as Field).set(
+                                op.args[1].asObject(),
+                                op.args[2].asObject()
+                            )
                         }
 
                         13 -> {
@@ -550,8 +689,14 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         17 -> {
                             // d[i] = new a0[a1]
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = new ${op.args[0].asClass()!!.name}[${op.args[1].display()}]")
-                            dict[op.arg1!!] = Array.newInstance(op.args[0].asClass(), op.args[1].asObject() as Int)
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = new ${op.args[0].asClass()!!.name}[${op.args[1].display()}]"
+                            )
+                            dict[op.arg1!!] = Array.newInstance(
+                                op.args[0].asClass(),
+                                op.args[1].asObject() as Int
+                            )
                         }
 
                         18 -> {
@@ -560,13 +705,23 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                             val methodName = (op.args[2].asObject() as String).deXor()
                             val cls = op.args[1].asObject().deXor()?.asClass()
                             val returnValue = op.args[3].asObject()
-                            val argsTarget = (if (op.args.size == 5) op.args[4].asObject() as? Int else null) ?: -1
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = new ${cls?.name}() { * ${methodName}(*) { js:$callbackName(*); return ${returnValue.display()}; } }")
+                            val argsTarget =
+                                (if (op.args.size == 5) op.args[4].asObject() as? Int else null)
+                                    ?: -1
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = new ${cls?.name}() { * ${methodName}(*) { js:$callbackName(*); return ${returnValue.display()}; } }"
+                            )
                             dict[op.arg1!!] =
-                                Proxy.newProxyInstance(cls!!.classLoader, arrayOf(cls)) { obj: Any, method: Method, args: kotlin.Array<Any>? ->
+                                Proxy.newProxyInstance(
+                                    cls!!.classLoader,
+                                    arrayOf(cls)
+                                ) { obj: Any, method: Method, args: kotlin.Array<Any>? ->
                                     if (method.name == methodName) {
                                         if (argsTarget != -1) dict[argsTarget] = args
-                                        val encoded = RecaptchaWebList(args.orEmpty().map { it.asListValue() }).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
+                                        val encoded = RecaptchaWebList(
+                                            args.orEmpty().map { it.asListValue() }).encode()
+                                            .toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
                                         impl.eval("${callbackName}(\"$encoded\")")
                                         returnValue
                                     } else {
@@ -592,7 +747,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                             val returnValue = if (op.args.size == 5) op.args[4].asObject() else null
                             val cls = op.args[2].asObject().deXor()?.asClass()
                             dict[op.arg1!!] = limitedQueue
-                            dict[op.args[0].asObject() as Int] = Proxy.newProxyInstance(cls!!.classLoader, arrayOf(cls)) { obj: Any, method: Method, args: kotlin.Array<Any>? ->
+                            dict[op.args[0].asObject() as Int] = Proxy.newProxyInstance(
+                                cls!!.classLoader,
+                                arrayOf(cls)
+                            ) { obj: Any, method: Method, args: kotlin.Array<Any>? ->
                                 if (method.name == methodName) {
                                     limitedQueue.add(args?.asList().orEmpty())
                                     returnValue
@@ -604,7 +762,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         20 -> {
                             // unset(d, a0 ...)
-                            if (DEBUG) Log.d(TAG, "d[${op.args.joinToString { it.index.toString() }}] = @@@")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.args.joinToString { it.index.toString() }}] = @@@"
+                            )
                             for (arg in op.args) {
                                 dict.remove(arg.index)
                             }
@@ -622,20 +783,32 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         30 -> {
                             // d[i] = encode(a0 ...)
-                            val res = RecaptchaWebList(op.args.map { it.asObject()!!.asListValue() }).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
+                            val res = RecaptchaWebList(op.args.map {
+                                it.asObject()!!.asListValue()
+                            }).encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
                             if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${res.display()}")
                             dict[op.arg1!!] = res
                         }
 
                         31 -> {
                             // a0[a1] = a2
-                            if (DEBUG) Log.d(TAG, "d[${op.args[0].index}][${op.args[1].display()}] = ${op.args[2].display()}")
-                            Array.set(op.args[0].asObject()!!, op.args[1].asObject() as Int, op.args[2].asObject())
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.args[0].index}][${op.args[1].display()}] = ${op.args[2].display()}"
+                            )
+                            Array.set(
+                                op.args[0].asObject()!!,
+                                op.args[1].asObject() as Int,
+                                op.args[2].asObject()
+                            )
                         }
 
                         32 -> {
                             // d[i] = a0[a1]
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${op.args[0].display()}[${op.args[1].display()}]")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = ${op.args[0].display()}[${op.args[1].display()}]"
+                            )
                             val arr = op.args[0].asObject()
                             val idx = op.args[1].asObject() as Int
                             val res = when (arr) {
@@ -648,20 +821,28 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
                         34 -> {
                             // d[i] = a0 % a1
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${op.args[0].display()} % ${op.args[1].display()}")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = ${op.args[0].display()} % ${op.args[1].display()}"
+                            )
                             dict[op.arg1!!] = op.args[0].asObject() % op.args[1].asObject()
                         }
 
                         35 -> {
                             // d[i] = a0 ^ a1
-                            if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${op.args[0].display()} ^ ${op.args[1].display()}")
+                            if (DEBUG) Log.d(
+                                TAG,
+                                "d[${op.arg1}] = ${op.args[0].display()} ^ ${op.args[1].display()}"
+                            )
                             dict[op.arg1!!] = op.args[0].asObject() xor op.args[1].asObject()
                         }
 
                         37 -> {
                             // d[i] = String(a1[*a0])
                             val str = op.args[1].asObject() as String
-                            val res = (op.args[0].asObject() as IntArray).map { str[it] }.toCharArray().concatToString()
+                            val res =
+                                (op.args[0].asObject() as IntArray).map { str[it] }.toCharArray()
+                                    .concatToString()
                             if (DEBUG) Log.d(TAG, "d[${op.arg1}] = ${res.display()}")
                             dict[op.arg1!!] = res
                         }
@@ -679,18 +860,27 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                         }
 
                         else -> {
-                            Log.w(TAG, "Op ${op.encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)} not implemented (code=${op.code})")
+                            Log.w(
+                                TAG,
+                                "Op ${
+                                    op.encode().toBase64(Base64.URL_SAFE, Base64.NO_WRAP)
+                                } not implemented (code=${op.code})"
+                            )
                         }
                     }
                 }
             }
         }
 
-        private class RNJavaScriptInterface(private val impl: RecaptchaWebImpl, private val interpreter: CodeInterpreter) {
+        private class RNJavaScriptInterface(
+            private val impl: RecaptchaWebImpl,
+            private val interpreter: CodeInterpreter
+        ) {
 
             @JavascriptInterface
             fun zzoed(input: String) {
-                val result = RecaptchaWebResult.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
+                val result =
+                    RecaptchaWebResult.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
                 if (DEBUG) Log.d(TAG, "zzoed: $result")
                 if (!impl.executeFinished.getAndSet(true) && impl.lastRequestToken == result.requestToken) {
                     if (result.code == 1 && result.token != null) {
@@ -703,7 +893,8 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
             @JavascriptInterface
             fun zzoid(input: String) {
-                val status = RecaptchaWebStatusCode.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
+                val status =
+                    RecaptchaWebStatusCode.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
                 if (DEBUG) Log.d(TAG, "zzoid: $status")
                 if (!impl.initFinished.getAndSet(true)) {
                     if (status.code == 1) {
@@ -716,16 +907,27 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
             @JavascriptInterface
             fun zzrp(input: String) {
-                val callback = RecaptchaWebEncryptedCallback.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
+                val callback = RecaptchaWebEncryptedCallback.ADAPTER.decode(
+                    Base64.decode(
+                        input,
+                        Base64.URL_SAFE
+                    )
+                )
                 var key = (codeDecryptKeyPrefix + callback.key).reduce { a, b -> a xor b }
                 fun next(): Int {
                     key = ((key * 4391) + 277) % 32779
                     return key % 255
                 }
 
-                val decrypted = callback.data_?.map { Char(it.code xor next()) }?.toCharArray()?.concatToString()
+                val decrypted = callback.data_?.map { Char(it.code xor next()) }?.toCharArray()
+                    ?.concatToString()
                 if (DEBUG) Log.d(TAG, "zzrp: $decrypted")
-                val code = RecaptchaWebCode.ADAPTER.decode(Base64.decode(decrypted, Base64.URL_SAFE + Base64.NO_PADDING))
+                val code = RecaptchaWebCode.ADAPTER.decode(
+                    Base64.decode(
+                        decrypted,
+                        Base64.URL_SAFE + Base64.NO_PADDING
+                    )
+                )
                 interpreter.execute(code)
             }
         }

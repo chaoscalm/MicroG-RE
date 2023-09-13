@@ -45,15 +45,20 @@ class LastLocationCapsule(private val context: Context) {
             GRANULARITY_FINE -> lastCoarseLocation
             else -> return null
         } ?: return null
-        val cliff = if (effectiveGranularity == GRANULARITY_COARSE) max(maxUpdateAgeMillis, TIME_COARSE_CLIFF) else maxUpdateAgeMillis
-        val elapsedRealtimeDiff = SystemClock.elapsedRealtime() - LocationCompat.getElapsedRealtimeMillis(location)
+        val cliff = if (effectiveGranularity == GRANULARITY_COARSE) max(
+            maxUpdateAgeMillis,
+            TIME_COARSE_CLIFF
+        ) else maxUpdateAgeMillis
+        val elapsedRealtimeDiff =
+            SystemClock.elapsedRealtime() - LocationCompat.getElapsedRealtimeMillis(location)
         if (elapsedRealtimeDiff > cliff) return null
         if (elapsedRealtimeDiff <= maxUpdateAgeMillis) return location
         // Location is too old according to maxUpdateAgeMillis, but still in scope due to time coarsing. Adjust time
         val locationUpdated = Location(location)
         val timeAdjustment = elapsedRealtimeDiff - maxUpdateAgeMillis
         if (SDK_INT >= 17) {
-            locationUpdated.elapsedRealtimeNanos = location.elapsedRealtimeNanos + TimeUnit.MILLISECONDS.toNanos(timeAdjustment)
+            locationUpdated.elapsedRealtimeNanos =
+                location.elapsedRealtimeNanos + TimeUnit.MILLISECONDS.toNanos(timeAdjustment)
         }
         locationUpdated.time = location.time + timeAdjustment
         return locationUpdated
@@ -70,7 +75,8 @@ class LastLocationCapsule(private val context: Context) {
     fun updateCoarseLocation(location: Location) {
         if (lastCoarseLocation != null && lastCoarseLocation!!.elapsedMillis + EXTENSION_CLIFF > location.elapsedMillis) {
             if (!location.hasSpeed()) {
-                location.speed = lastCoarseLocation!!.distanceTo(location) / ((location.elapsedMillis - lastCoarseLocation!!.elapsedMillis) / 1000)
+                location.speed =
+                    lastCoarseLocation!!.distanceTo(location) / ((location.elapsedMillis - lastCoarseLocation!!.elapsedMillis) / 1000)
                 LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed)
             }
             if (!location.hasBearing() && location.speed > 0.5f) {
@@ -79,35 +85,45 @@ class LastLocationCapsule(private val context: Context) {
             }
         }
         lastCoarseLocation = newest(lastCoarseLocation, location)
-        lastCoarseLocationTimeCoarsed = newest(lastCoarseLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
+        lastCoarseLocationTimeCoarsed =
+            newest(lastCoarseLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
     }
 
     fun updateFineLocation(location: Location) {
         lastFineLocation = newest(lastFineLocation, location)
-        lastFineLocationTimeCoarsed = newest(lastFineLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
+        lastFineLocationTimeCoarsed =
+            newest(lastFineLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
         updateCoarseLocation(location)
     }
 
     private fun newest(oldLocation: Location?, newLocation: Location, cliff: Long = 0): Location {
         if (oldLocation == null) return newLocation
         if (LocationCompat.isMock(oldLocation) && !LocationCompat.isMock(newLocation)) return newLocation
-        if (LocationCompat.getElapsedRealtimeNanos(newLocation) >= LocationCompat.getElapsedRealtimeNanos(oldLocation) + TimeUnit.MILLISECONDS.toNanos(cliff)) return newLocation
+        if (LocationCompat.getElapsedRealtimeNanos(newLocation) >= LocationCompat.getElapsedRealtimeNanos(
+                oldLocation
+            ) + TimeUnit.MILLISECONDS.toNanos(cliff)
+        ) return newLocation
         return oldLocation
     }
 
     fun start() {
         fun Location.adjustRealtime() = apply {
             if (SDK_INT >= 17) {
-                elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos() - TimeUnit.MILLISECONDS.toNanos((System.currentTimeMillis() - time))
+                elapsedRealtimeNanos =
+                    SystemClock.elapsedRealtimeNanos() - TimeUnit.MILLISECONDS.toNanos((System.currentTimeMillis() - time))
             }
         }
         try {
             if (file.exists()) {
-                val capsule = SafeParcelUtil.fromByteArray(file.readBytes(), LastLocationCapsuleParcelable.CREATOR)
+                val capsule = SafeParcelUtil.fromByteArray(
+                    file.readBytes(),
+                    LastLocationCapsuleParcelable.CREATOR
+                )
                 lastFineLocation = capsule.lastFineLocation?.adjustRealtime()
                 lastCoarseLocation = capsule.lastCoarseLocation?.adjustRealtime()
                 lastFineLocationTimeCoarsed = capsule.lastFineLocationTimeCoarsed?.adjustRealtime()
-                lastCoarseLocationTimeCoarsed = capsule.lastCoarseLocationTimeCoarsed?.adjustRealtime()
+                lastCoarseLocationTimeCoarsed =
+                    capsule.lastCoarseLocationTimeCoarsed?.adjustRealtime()
             }
         } catch (e: Exception) {
             Log.w(TAG, e)
@@ -115,8 +131,10 @@ class LastLocationCapsule(private val context: Context) {
         }
         val locationManager = context.getSystemService<LocationManager>() ?: return
         try {
-            locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)?.let { updateCoarseLocation(it) }
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)?.let { updateFineLocation(it) }
+            locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                ?.let { updateCoarseLocation(it) }
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                ?.let { updateFineLocation(it) }
         } catch (e: SecurityException) {
             // Ignore
         }
@@ -125,7 +143,16 @@ class LastLocationCapsule(private val context: Context) {
     fun stop() {
         try {
             if (file.exists()) file.delete()
-            file.writeBytes(SafeParcelUtil.asByteArray(LastLocationCapsuleParcelable(lastFineLocation, lastCoarseLocation, lastFineLocationTimeCoarsed, lastCoarseLocationTimeCoarsed)))
+            file.writeBytes(
+                SafeParcelUtil.asByteArray(
+                    LastLocationCapsuleParcelable(
+                        lastFineLocation,
+                        lastCoarseLocation,
+                        lastFineLocationTimeCoarsed,
+                        lastCoarseLocationTimeCoarsed
+                    )
+                )
+            )
         } catch (e: Exception) {
             Log.w(TAG, e)
             // Ignore

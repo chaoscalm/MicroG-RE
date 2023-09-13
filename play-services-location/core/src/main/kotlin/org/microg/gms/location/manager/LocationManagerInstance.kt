@@ -41,15 +41,30 @@ class LocationManagerInstance(
 
     // region Geofences
 
-    override fun addGeofences(geofencingRequest: GeofencingRequest?, pendingIntent: PendingIntent?, callbacks: IGeofencerCallbacks?) {
+    override fun addGeofences(
+        geofencingRequest: GeofencingRequest?,
+        pendingIntent: PendingIntent?,
+        callbacks: IGeofencerCallbacks?
+    ) {
         Log.d(TAG, "Not yet implemented: addGeofences by ${getClientIdentity().packageName}")
     }
 
-    override fun removeGeofencesByIntent(pendingIntent: PendingIntent?, callbacks: IGeofencerCallbacks?, packageName: String?) {
-        Log.d(TAG, "Not yet implemented: removeGeofencesByIntent by ${getClientIdentity().packageName}")
+    override fun removeGeofencesByIntent(
+        pendingIntent: PendingIntent?,
+        callbacks: IGeofencerCallbacks?,
+        packageName: String?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: removeGeofencesByIntent by ${getClientIdentity().packageName}"
+        )
     }
 
-    override fun removeGeofencesById(geofenceRequestIds: Array<out String>?, callbacks: IGeofencerCallbacks?, packageName: String?) {
+    override fun removeGeofencesById(
+        geofenceRequestIds: Array<out String>?,
+        callbacks: IGeofencerCallbacks?,
+        packageName: String?
+    ) {
         Log.d(TAG, "Not yet implemented: removeGeofencesById by ${getClientIdentity().packageName}")
     }
 
@@ -63,39 +78,79 @@ class LocationManagerInstance(
 
     override fun getLastActivity(packageName: String?): ActivityRecognitionResult {
         Log.d(TAG, "Not yet implemented: getLastActivity by ${getClientIdentity().packageName}")
-        return ActivityRecognitionResult(listOf(DetectedActivity(DetectedActivity.UNKNOWN, 0)), System.currentTimeMillis(), SystemClock.elapsedRealtime())
+        return ActivityRecognitionResult(
+            listOf(DetectedActivity(DetectedActivity.UNKNOWN, 0)),
+            System.currentTimeMillis(),
+            SystemClock.elapsedRealtime()
+        )
     }
 
-    override fun requestActivityTransitionUpdates(request: ActivityTransitionRequest?, pendingIntent: PendingIntent?, callback: IStatusCallback?) {
-        Log.d(TAG, "Not yet implemented: requestActivityTransitionUpdates by ${getClientIdentity().packageName}")
+    override fun requestActivityTransitionUpdates(
+        request: ActivityTransitionRequest?,
+        pendingIntent: PendingIntent?,
+        callback: IStatusCallback?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: requestActivityTransitionUpdates by ${getClientIdentity().packageName}"
+        )
         callback?.onResult(Status.SUCCESS)
     }
 
-    override fun removeActivityTransitionUpdates(pendingIntent: PendingIntent?, callback: IStatusCallback?) {
-        Log.d(TAG, "Not yet implemented: removeActivityTransitionUpdates by ${getClientIdentity().packageName}")
+    override fun removeActivityTransitionUpdates(
+        pendingIntent: PendingIntent?,
+        callback: IStatusCallback?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: removeActivityTransitionUpdates by ${getClientIdentity().packageName}"
+        )
         callback?.onResult(Status.SUCCESS)
     }
 
-    override fun requestActivityUpdatesWithCallback(request: ActivityRecognitionRequest?, pendingIntent: PendingIntent?, callback: IStatusCallback?) {
-        Log.d(TAG, "Not yet implemented: requestActivityUpdatesWithCallback by ${getClientIdentity().packageName}")
+    override fun requestActivityUpdatesWithCallback(
+        request: ActivityRecognitionRequest?,
+        pendingIntent: PendingIntent?,
+        callback: IStatusCallback?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: requestActivityUpdatesWithCallback by ${getClientIdentity().packageName}"
+        )
         callback?.onResult(Status.SUCCESS)
     }
 
     override fun removeActivityUpdates(callbackIntent: PendingIntent?) {
-        Log.d(TAG, "Not yet implemented: removeActivityUpdates by ${getClientIdentity().packageName}")
+        Log.d(
+            TAG,
+            "Not yet implemented: removeActivityUpdates by ${getClientIdentity().packageName}"
+        )
     }
 
     // endregion
 
     // region Sleep
 
-    override fun removeSleepSegmentUpdates(pendingIntent: PendingIntent?, callback: IStatusCallback?) {
-        Log.d(TAG, "Not yet implemented: removeSleepSegmentUpdates by ${getClientIdentity().packageName}")
+    override fun removeSleepSegmentUpdates(
+        pendingIntent: PendingIntent?,
+        callback: IStatusCallback?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: removeSleepSegmentUpdates by ${getClientIdentity().packageName}"
+        )
         callback?.onResult(Status.SUCCESS)
     }
 
-    override fun requestSleepSegmentUpdates(pendingIntent: PendingIntent?, request: SleepSegmentRequest?, callback: IStatusCallback?) {
-        Log.d(TAG, "Not yet implemented: requestSleepSegmentUpdates by ${getClientIdentity().packageName}")
+    override fun requestSleepSegmentUpdates(
+        pendingIntent: PendingIntent?,
+        request: SleepSegmentRequest?,
+        callback: IStatusCallback?
+    ) {
+        Log.d(
+            TAG,
+            "Not yet implemented: requestSleepSegmentUpdates by ${getClientIdentity().packageName}"
+        )
         callback?.onResult(Status.SUCCESS)
     }
 
@@ -109,17 +164,28 @@ class LocationManagerInstance(
         Log.d(TAG, "Not yet implemented: flushLocations")
     }
 
-    override fun getLocationAvailabilityWithReceiver(request: LocationAvailabilityRequest, receiver: LocationReceiver) {
+    override fun getLocationAvailabilityWithReceiver(
+        request: LocationAvailabilityRequest,
+        receiver: LocationReceiver
+    ) {
         Log.d(TAG, "getLocationAvailabilityWithReceiver by ${getClientIdentity().packageName}")
         checkHasAnyLocationPermission()
         val callback = receiver.availabilityStatusCallback
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             try {
-                callback.onLocationAvailabilityStatus(Status.SUCCESS, locationManager.getLocationAvailability(clientIdentity, request))
+                callback.onLocationAvailabilityStatus(
+                    Status.SUCCESS,
+                    locationManager.getLocationAvailability(clientIdentity, request)
+                )
             } catch (e: Exception) {
                 try {
-                    callback.onLocationAvailabilityStatus(Status(CommonStatusCodes.ERROR, e.message), LocationAvailability.UNAVAILABLE)
+                    callback.onLocationAvailabilityStatus(
+                        Status(
+                            CommonStatusCodes.ERROR,
+                            e.message
+                        ), LocationAvailability.UNAVAILABLE
+                    )
                 } catch (e2: Exception) {
                     Log.w(TAG, "Failed", e)
                 }
@@ -127,21 +193,30 @@ class LocationManagerInstance(
         }
     }
 
-    override fun getCurrentLocationWithReceiver(request: CurrentLocationRequest, receiver: LocationReceiver): ICancelToken {
+    override fun getCurrentLocationWithReceiver(
+        request: CurrentLocationRequest,
+        receiver: LocationReceiver
+    ): ICancelToken {
         Log.d(TAG, "getCurrentLocationWithReceiver by ${getClientIdentity().packageName}")
         checkHasAnyLocationPermission()
         Log.d(TAG, "Not yet implemented: getCurrentLocationWithReceiver")
         return NonCancelToken()
     }
 
-    override fun getLastLocationWithReceiver(request: LastLocationRequest, receiver: LocationReceiver) {
+    override fun getLastLocationWithReceiver(
+        request: LastLocationRequest,
+        receiver: LocationReceiver
+    ) {
         Log.d(TAG, "getLastLocationWithReceiver by ${getClientIdentity().packageName}")
         checkHasAnyLocationPermission()
         val callback = receiver.statusCallback
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             try {
-                callback.onLocationStatus(Status.SUCCESS, locationManager.getLastLocation(clientIdentity, request))
+                callback.onLocationStatus(
+                    Status.SUCCESS,
+                    locationManager.getLastLocation(clientIdentity, request)
+                )
             } catch (e: Exception) {
                 try {
                     callback.onLocationStatus(Status(CommonStatusCodes.ERROR, e.message), null)
@@ -152,18 +227,41 @@ class LocationManagerInstance(
         }
     }
 
-    override fun requestLocationSettingsDialog(settingsRequest: LocationSettingsRequest?, callback: ISettingsCallbacks?, packageName: String?) {
+    override fun requestLocationSettingsDialog(
+        settingsRequest: LocationSettingsRequest?,
+        callback: ISettingsCallbacks?,
+        packageName: String?
+    ) {
         Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName}")
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             val locationManager = context.getSystemService<android.location.LocationManager>()
             val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
             val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true
-            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
-                    context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
-            val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
-                    context.packageManager.checkPermission(ACCESS_COARSE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
-            callback?.onLocationSettingsResult(LocationSettingsResult(LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true), Status.SUCCESS))
+            val gpsUsable =
+                gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
+                        context.packageManager.checkPermission(
+                            ACCESS_FINE_LOCATION,
+                            clientIdentity.packageName
+                        ) == PERMISSION_GRANTED
+            val networkUsable =
+                networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
+                        context.packageManager.checkPermission(
+                            ACCESS_COARSE_LOCATION,
+                            clientIdentity.packageName
+                        ) == PERMISSION_GRANTED
+            callback?.onLocationSettingsResult(
+                LocationSettingsResult(
+                    LocationSettingsStates(
+                        gpsUsable,
+                        networkUsable,
+                        false,
+                        gpsPresent,
+                        networkPresent,
+                        true
+                    ), Status.SUCCESS
+                )
+            )
         }
     }
 
@@ -214,7 +312,13 @@ class LocationManagerInstance(
         lifecycleScope.launchWhenStarted {
             try {
                 if (oldBinder != null) {
-                    locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
+                    locationManager.updateBinderRequest(
+                        clientIdentity,
+                        oldBinder,
+                        binder,
+                        callback,
+                        request
+                    )
                 } else {
                     locationManager.addBinderRequest(clientIdentity, binder, callback, request)
                 }
@@ -229,7 +333,11 @@ class LocationManagerInstance(
         }
     }
 
-    override fun registerLocationUpdates(pendingIntent: PendingIntent, request: LocationRequest, statusCallback: IStatusCallback) {
+    override fun registerLocationUpdates(
+        pendingIntent: PendingIntent,
+        request: LocationRequest,
+        statusCallback: IStatusCallback
+    ) {
         Log.d(TAG, "registerLocationUpdates (intent) by ${getClientIdentity().packageName}")
         checkHasAnyLocationPermission()
         val clientIdentity = getClientIdentity()
@@ -263,7 +371,10 @@ class LocationManagerInstance(
         }
     }
 
-    override fun unregisterLocationUpdates(pendingIntent: PendingIntent, statusCallback: IStatusCallback) {
+    override fun unregisterLocationUpdates(
+        pendingIntent: PendingIntent,
+        statusCallback: IStatusCallback
+    ) {
         Log.d(TAG, "unregisterLocationUpdates (intent) by ${getClientIdentity().packageName}")
         lifecycleScope.launchWhenStarted {
             try {
@@ -293,14 +404,27 @@ class LocationManagerInstance(
         lifecycleScope.launchWhenStarted {
             try {
                 when (request.opCode) {
-                    REQUEST_UPDATES -> locationManager.deviceOrientationManager.add(clientIdentity, request.request, request.listener)
-                    REMOVE_UPDATES -> locationManager.deviceOrientationManager.remove(clientIdentity, request.listener)
+                    REQUEST_UPDATES -> locationManager.deviceOrientationManager.add(
+                        clientIdentity,
+                        request.request,
+                        request.listener
+                    )
+
+                    REMOVE_UPDATES -> locationManager.deviceOrientationManager.remove(
+                        clientIdentity,
+                        request.listener
+                    )
+
                     else -> throw UnsupportedOperationException("Op code ${request.opCode} not supported")
                 }
                 callback?.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS)
             } catch (e: Exception) {
                 try {
-                    callback?.onFusedLocationProviderResult(FusedLocationProviderResult.create(Status(CommonStatusCodes.ERROR, e.message)))
+                    callback?.onFusedLocationProviderResult(
+                        FusedLocationProviderResult.create(
+                            Status(CommonStatusCodes.ERROR, e.message)
+                        )
+                    )
                 } catch (e2: Exception) {
                     Log.w(TAG, "Failed", e)
                 }
@@ -310,13 +434,19 @@ class LocationManagerInstance(
 
     // endregion
 
-    private fun getClientIdentity() = ClientIdentity(packageName).apply { uid = getCallingUid(); pid = getCallingPid() }
+    private fun getClientIdentity() =
+        ClientIdentity(packageName).apply { uid = getCallingUid(); pid = getCallingPid() }
 
-    private fun checkHasAnyLocationPermission() = checkHasAnyPermission(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
+    private fun checkHasAnyLocationPermission() =
+        checkHasAnyPermission(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
 
     private fun checkHasAnyPermission(vararg permissions: String) {
         for (permission in permissions) {
-            if (context.packageManager.checkPermission(permission, packageName) == PERMISSION_GRANTED) {
+            if (context.packageManager.checkPermission(
+                    permission,
+                    packageName
+                ) == PERMISSION_GRANTED
+            ) {
                 return
             }
         }
@@ -324,5 +454,12 @@ class LocationManagerInstance(
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

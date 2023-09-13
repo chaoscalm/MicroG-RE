@@ -53,7 +53,7 @@ fun <T> Task<T>.asDeferred(): Deferred<T> = asDeferredImpl(null)
  */
 @ExperimentalCoroutinesApi // Since 1.5.1, tentatively until 1.6.0
 fun <T> Task<T>.asDeferred(cancellationTokenSource: CancellationTokenSource): Deferred<T> =
-        asDeferredImpl(cancellationTokenSource)
+    asDeferredImpl(cancellationTokenSource)
 
 private fun <T> Task<T>.asDeferredImpl(cancellationTokenSource: CancellationTokenSource?): Deferred<T> {
     val deferred = CompletableDeferred<T>()
@@ -113,7 +113,8 @@ suspend fun <T> Task<T>.await(): T = awaitImpl(null)
  * leads to an unspecified behaviour.
  */
 @ExperimentalCoroutinesApi // Since 1.5.1, tentatively until 1.6.0
-suspend fun <T> Task<T>.await(cancellationTokenSource: CancellationTokenSource): T = awaitImpl(cancellationTokenSource)
+suspend fun <T> Task<T>.await(cancellationTokenSource: CancellationTokenSource): T =
+    awaitImpl(cancellationTokenSource)
 
 private suspend fun <T> Task<T>.awaitImpl(cancellationTokenSource: CancellationTokenSource?): T {
     // fast path

@@ -7,7 +7,7 @@ package com.google.android.gms.clearcut.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 
-public class LogVerifierResultParcelable  extends AutoSafeParcelable {
+public class LogVerifierResultParcelable extends AutoSafeParcelable {
     @Field(1)
     public boolean b;
 

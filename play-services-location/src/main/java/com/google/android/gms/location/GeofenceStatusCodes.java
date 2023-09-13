@@ -9,6 +9,7 @@
 package com.google.android.gms.location;
 
 import android.app.PendingIntent;
+
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;

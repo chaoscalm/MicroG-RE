@@ -40,7 +40,8 @@ class ReCaptchaActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     private fun openWebsite() {
-        val apiKey = intent.getStringExtra(EXTRA_API_KEY) ?: return finishResult(Activity.RESULT_CANCELED)
+        val apiKey =
+            intent.getStringExtra(EXTRA_API_KEY) ?: return finishResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.activity_recaptcha)
         val view = findViewById<WebView>(R.id.web)
         val settings = view.settings
@@ -52,7 +53,8 @@ class ReCaptchaActivity : AppCompatActivity() {
         ProfileManager.ensureInitialized(this)
         settings.userAgentString = Build.generateWebViewUserAgentString(settings.userAgentString)
         view.addJavascriptInterface(ReCaptchaCallback(this), "MyCallback")
-        val captcha = assets.open("recaptcha.html").bufferedReader().readText().replace("%apikey%", apiKey)
+        val captcha =
+            assets.open("recaptcha.html").bufferedReader().readText().replace("%apikey%", apiKey)
         view.loadDataWithBaseURL("https://$hostname/", captcha, null, null, "https://$hostname/")
     }
 
@@ -84,26 +86,27 @@ class ReCaptchaActivity : AppCompatActivity() {
 
         fun isSupported(context: Context): Boolean = true
 
-        suspend fun awaitToken(context: Context, apiKey: String, hostname: String? = null) = suspendCoroutine<String> { continuation ->
-            val intent = Intent(context, ReCaptchaActivity::class.java)
-            val resultReceiver = object : ResultReceiver(null) {
-                override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-                    try {
-                        if (resultCode == Activity.RESULT_OK) {
-                            continuation.resume(resultData?.getString(EXTRA_TOKEN)!!)
+        suspend fun awaitToken(context: Context, apiKey: String, hostname: String? = null) =
+            suspendCoroutine<String> { continuation ->
+                val intent = Intent(context, ReCaptchaActivity::class.java)
+                val resultReceiver = object : ResultReceiver(null) {
+                    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+                        try {
+                            if (resultCode == Activity.RESULT_OK) {
+                                continuation.resume(resultData?.getString(EXTRA_TOKEN)!!)
+                            }
+                        } catch (e: Exception) {
+                            continuation.resumeWithException(e)
                         }
-                    } catch (e: Exception) {
-                        continuation.resumeWithException(e)
                     }
                 }
+                intent.putExtra(EXTRA_API_KEY, apiKey)
+                intent.putExtra(EXTRA_RESULT_RECEIVER, resultReceiver)
+                intent.putExtra(EXTRA_HOSTNAME, hostname)
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_REORDER_TO_FRONT)
+                intent.addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                context.startActivity(intent)
             }
-            intent.putExtra(EXTRA_API_KEY, apiKey)
-            intent.putExtra(EXTRA_RESULT_RECEIVER, resultReceiver)
-            intent.putExtra(EXTRA_HOSTNAME, hostname)
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(FLAG_ACTIVITY_REORDER_TO_FRONT)
-            intent.addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-            context.startActivity(intent)
-        }
     }
 }

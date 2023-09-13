@@ -27,7 +27,8 @@ public class GetCloudSyncSettingResponse extends AutoSafeParcelable {
     @SafeParceled(3)
     public boolean cloudSyncEnabled;
 
-    private GetCloudSyncSettingResponse() {}
+    private GetCloudSyncSettingResponse() {
+    }
 
     public GetCloudSyncSettingResponse(int statusCode, boolean cloudSyncEnabled) {
         this.statusCode = statusCode;

@@ -31,11 +31,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import org.microg.gms.location.network.TAG
 
-private fun locationFromCdma(latitude: Int, longitude: Int) = if (latitude == Int.MAX_VALUE || longitude == Int.MAX_VALUE) null else Location("cdma").also {
-    it.latitude = latitude.toDouble() / 14400.0
-    it.longitude = longitude.toDouble() / 14400.0
-    it.accuracy = 30000f
-}
+private fun locationFromCdma(latitude: Int, longitude: Int) =
+    if (latitude == Int.MAX_VALUE || longitude == Int.MAX_VALUE) null else Location("cdma").also {
+        it.latitude = latitude.toDouble() / 14400.0
+        it.longitude = longitude.toDouble() / 14400.0
+        it.accuracy = 30000f
+    }
 
 private fun CdmaCellLocation.toCellDetails(timestamp: Long? = null) = CellDetails(
     type = CellDetails.Companion.Type.CDMA,
@@ -46,7 +47,11 @@ private fun CdmaCellLocation.toCellDetails(timestamp: Long? = null) = CellDetail
     timestamp = timestamp
 )
 
-private fun GsmCellLocation.toCellDetails(mcc: Int? = null, mnc: Int? = null, timestamp: Long? = null) = CellDetails(
+private fun GsmCellLocation.toCellDetails(
+    mcc: Int? = null,
+    mnc: Int? = null,
+    timestamp: Long? = null
+) = CellDetails(
     type = CellDetails.Companion.Type.GSM,
     mcc = mcc,
     mnc = mnc,
@@ -56,7 +61,11 @@ private fun GsmCellLocation.toCellDetails(mcc: Int? = null, mnc: Int? = null, ti
     timestamp = timestamp
 )
 
-internal fun CellLocation.toCellDetails(mcc: Int? = null, mnc: Int? = null, timestamp: Long? = null) = when (this) {
+internal fun CellLocation.toCellDetails(
+    mcc: Int? = null,
+    mnc: Int? = null,
+    timestamp: Long? = null
+) = when (this) {
     is CdmaCellLocation -> toCellDetails(timestamp)
     is GsmCellLocation -> toCellDetails(mcc, mnc, timestamp)
     else -> throw IllegalArgumentException("Unknown CellLocation type")
@@ -135,12 +144,24 @@ private val CellInfo.epochTimestamp: Long
 
 @RequiresApi(17)
 internal fun CellInfo.toCellDetails() = when {
-    this is CellInfoCdma -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
-    this is CellInfoGsm -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
-    SDK_INT >= 18 && this is CellInfoWcdma -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
-    this is CellInfoLte -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
-    SDK_INT >= 29 && this is CellInfoTdscdma -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
-    SDK_INT >= 30 -> cellIdentity.toCellDetails().copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+    this is CellInfoCdma -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
+    this is CellInfoGsm -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
+    SDK_INT >= 18 && this is CellInfoWcdma -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
+    this is CellInfoLte -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
+    SDK_INT >= 29 && this is CellInfoTdscdma -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
+    SDK_INT >= 30 -> cellIdentity.toCellDetails()
+        .copy(timestamp = epochTimestamp, signalStrength = cellSignalStrength.dbm)
+
     else -> throw IllegalArgumentException("Unknown CellInfo type")
 }
 
@@ -149,7 +170,8 @@ internal fun CellInfo.toCellDetails() = when {
  */
 internal fun CellDetails.repair(context: Context): CellDetails {
     if (type == CellDetails.Companion.Type.CDMA) return this
-    val networkOperator = context.getSystemService<TelephonyManager>()?.networkOperator ?: return this
+    val networkOperator =
+        context.getSystemService<TelephonyManager>()?.networkOperator ?: return this
     if (networkOperator.length < 5) return this
     val networkOperatorMnc = networkOperator.substring(3).toInt()
     if (networkOperator[3] == '0' && mnc == null || networkOperator.length == 5 && mnc == networkOperatorMnc * 10 + 15)

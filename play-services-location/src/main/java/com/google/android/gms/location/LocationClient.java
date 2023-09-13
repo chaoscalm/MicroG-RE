@@ -22,6 +22,7 @@ import android.location.Location;
 import android.os.Looper;
 
 import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 
@@ -43,7 +44,7 @@ public class LocationClient extends AbstractPlayServicesClient {
     public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
 
     public LocationClient(Context context, ConnectionCallbacks callbacks,
-            OnConnectionFailedListener connectionFailedListener) {
+                          OnConnectionFailedListener connectionFailedListener) {
         super(new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new ForwardConnectionCallbacks(callbacks))
@@ -60,7 +61,7 @@ public class LocationClient extends AbstractPlayServicesClient {
 
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
-            LocationListener listener) {
+                                       LocationListener listener) {
         assertConnected();
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 listener).await();
@@ -68,7 +69,7 @@ public class LocationClient extends AbstractPlayServicesClient {
 
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
-            LocationListener listener, Looper looper) {
+                                       LocationListener listener, Looper looper) {
         assertConnected();
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 listener, looper).await();
@@ -76,7 +77,7 @@ public class LocationClient extends AbstractPlayServicesClient {
 
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
-            PendingIntent callbackIntent) {
+                                       PendingIntent callbackIntent) {
         assertConnected();
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 callbackIntent).await();

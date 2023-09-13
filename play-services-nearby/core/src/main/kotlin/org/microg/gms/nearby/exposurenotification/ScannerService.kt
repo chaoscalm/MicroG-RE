@@ -67,7 +67,10 @@ class ScannerService : LifecycleService() {
     // Wake lock for the duration of scan. Otherwise we might fall asleep while scanning
     // resulting in potentially very long scan times
     private val wakeLock: PowerManager.WakeLock by lazy {
-        powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ScannerService::class.java.canonicalName).apply { setReferenceCounted(false) }
+        powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            ScannerService::class.java.canonicalName
+        ).apply { setReferenceCounted(false) }
     }
 
     private val scanner: BluetoothLeScanner?
@@ -92,7 +95,11 @@ class ScannerService : LifecycleService() {
         lastAdvertisement = System.currentTimeMillis()
         lifecycleScope.launchWhenStarted {
             ExposureDatabase.with(this@ScannerService) { database ->
-                database.noteAdvertisement(data.sliceArray(0..15), data.drop(16).toByteArray(), result.rssi)
+                database.noteAdvertisement(
+                    data.sliceArray(0..15),
+                    data.drop(16).toByteArray(),
+                    result.rssi
+                )
             }
         }
     }
@@ -126,15 +133,20 @@ class ScannerService : LifecycleService() {
         wakeLock.acquire()
         try {
             scanner.startScan(
-                    listOf(ScanFilter.Builder()
-                            .setServiceUuid(SERVICE_UUID)
-                            .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
-                            .build()),
-                    ScanSettings.Builder().build(),
-                    callback
+                listOf(
+                    ScanFilter.Builder()
+                        .setServiceUuid(SERVICE_UUID)
+                        .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
+                        .build()
+                ),
+                ScanSettings.Builder().build(),
+                callback
             )
         } catch (e: SecurityException) {
-            Log.e(TAG, "Couldn't start ScannerService, need android.permission.BLUETOOTH_SCAN permission.")
+            Log.e(
+                TAG,
+                "Couldn't start ScannerService, need android.permission.BLUETOOTH_SCAN permission."
+            )
         }
         scanning = true
         lastStartTime = System.currentTimeMillis()
@@ -145,7 +157,10 @@ class ScannerService : LifecycleService() {
     @Synchronized
     private fun stopScan() {
         if (!scanning) return
-        Log.i(TAG, "Stopping scanner for service $SERVICE_UUID, had seen $seenAdvertisements advertisements")
+        Log.i(
+            TAG,
+            "Stopping scanner for service $SERVICE_UUID, had seen $seenAdvertisements advertisements"
+        )
         handler.removeCallbacks(stopLaterRunnable)
         scanning = false
         try {
@@ -154,19 +169,38 @@ class ScannerService : LifecycleService() {
             // Ignored
         }
         if (ExposurePreferences(this).enabled) {
-            scheduleStartScan(((lastStartTime + SCANNING_INTERVAL_MS) - System.currentTimeMillis()).coerceIn(0, SCANNING_INTERVAL_MS))
+            scheduleStartScan(
+                ((lastStartTime + SCANNING_INTERVAL_MS) - System.currentTimeMillis()).coerceIn(
+                    0,
+                    SCANNING_INTERVAL_MS
+                )
+            )
         }
         wakeLock.release()
     }
 
     private fun scheduleStartScan(nextScan: Long) {
         val intent = Intent(this, ScannerService::class.java)
-        val pendingIntent = PendingIntent.getService(this, ScannerService::class.java.hashCode(), intent, FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getService(
+            this,
+            ScannerService::class.java.hashCode(),
+            intent,
+            FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
         if (Build.VERSION.SDK_INT >= 23) {
             // Note: there is no setWindowAndAllowWhileIdle()
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextScan, pendingIntent)
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + nextScan,
+                pendingIntent
+            )
         } else {
-            alarmManager.setWindow(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextScan - SCANNING_TIME_MS / 2, SCANNING_TIME_MS, pendingIntent)
+            alarmManager.setWindow(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + nextScan - SCANNING_TIME_MS / 2,
+                SCANNING_TIME_MS,
+                pendingIntent
+            )
         }
     }
 

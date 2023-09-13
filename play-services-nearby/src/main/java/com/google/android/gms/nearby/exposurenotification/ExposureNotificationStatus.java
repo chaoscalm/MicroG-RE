@@ -71,8 +71,7 @@ public enum ExposureNotificationStatus {
      */
     USER_PROFILE_NOT_SUPPORT,
     @Deprecated
-    NOT_IN_WHITELIST
-    ;
+    NOT_IN_WHITELIST;
 
     private long flag() {
         if (this == NOT_IN_WHITELIST) return NOT_IN_ALLOWLIST.flag();

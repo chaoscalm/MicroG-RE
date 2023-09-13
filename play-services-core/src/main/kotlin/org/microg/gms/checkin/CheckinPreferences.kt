@@ -15,7 +15,11 @@ object CheckinPreferences {
     @JvmStatic
     fun isEnabled(context: Context): Boolean {
         val projection = arrayOf(CheckIn.ENABLED)
-        return SettingsContract.getSettings(context, CheckIn.getContentUri(context), projection) { c ->
+        return SettingsContract.getSettings(
+            context,
+            CheckIn.getContentUri(context),
+            projection
+        ) { c ->
             c.getInt(0) != 0
         }
     }

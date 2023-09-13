@@ -204,13 +204,13 @@ public class InstanceIdRpc {
             if (split.length > 4) {
                 if ("SYNC".equals(split[3])) {
                     // TODO: sync
-                } else if("RST".equals(split[3])) {
+                } else if ("RST".equals(split[3])) {
                     // TODO: rst
                     resultIntent.removeExtra(EXTRA_REGISTRATION_ID);
                     return;
                 }
             }
-            result = split[split.length-1];
+            result = split[split.length - 1];
             if (result.startsWith(":"))
                 result = result.substring(1);
             resultIntent.putExtra(EXTRA_REGISTRATION_ID, result);

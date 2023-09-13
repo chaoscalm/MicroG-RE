@@ -31,18 +31,42 @@ class HandleProxyFactory(private val context: Context) {
     private val version = VersionUtil(context)
     private val queue = Volley.newRequestQueue(context)
 
-    fun createHandle(packageName: String, flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
+    fun createHandle(
+        packageName: String,
+        flow: String?,
+        callback: GuardCallback,
+        request: DroidGuardResultsRequest?
+    ): HandleProxy {
         val (vmKey, byteCode, bytes) = readFromDatabase(flow) ?: fetchFromServer(flow, packageName)
         return createHandleProxy(flow, vmKey, byteCode, bytes, callback, request)
     }
 
-    fun createPingHandle(packageName: String, flow: String, callback: GuardCallback, pingData: PingData?): HandleProxy {
-        val (vmKey, byteCode, bytes) = fetchFromServer(flow, createRequest(flow, packageName, pingData))
-        return createHandleProxy(flow, vmKey, byteCode, bytes, callback, DroidGuardResultsRequest().also { it.clientVersion = 0 })
+    fun createPingHandle(
+        packageName: String,
+        flow: String,
+        callback: GuardCallback,
+        pingData: PingData?
+    ): HandleProxy {
+        val (vmKey, byteCode, bytes) = fetchFromServer(
+            flow,
+            createRequest(flow, packageName, pingData)
+        )
+        return createHandleProxy(
+            flow,
+            vmKey,
+            byteCode,
+            bytes,
+            callback,
+            DroidGuardResultsRequest().also { it.clientVersion = 0 })
     }
 
-    fun createLowLatencyHandle(flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
-        val (vmKey, byteCode, bytes) = readFromDatabase("fast") ?: throw Exception("low latency (fast) flow not available")
+    fun createLowLatencyHandle(
+        flow: String?,
+        callback: GuardCallback,
+        request: DroidGuardResultsRequest?
+    ): HandleProxy {
+        val (vmKey, byteCode, bytes) = readFromDatabase("fast")
+            ?: throw Exception("low latency (fast) flow not available")
         return createHandleProxy(flow, vmKey, byteCode, bytes, callback, request)
     }
 
@@ -60,47 +84,52 @@ class HandleProxyFactory(private val context: Context) {
         return dgDb.get(id)
     }
 
-    fun createRequest(flow: String?, packageName: String, pingData: PingData? = null, extra: ByteArray? = null): Request {
+    fun createRequest(
+        flow: String?,
+        packageName: String,
+        pingData: PingData? = null,
+        extra: ByteArray? = null
+    ): Request {
         ProfileManager.ensureInitialized(context)
         return Request(
-                usage = Usage(flow, packageName),
-                info = listOf(
-                        KeyValuePair("BOARD", Build.BOARD),
-                        KeyValuePair("BOOTLOADER", Build.BOOTLOADER),
-                        KeyValuePair("BRAND", Build.BRAND),
-                        KeyValuePair("CPU_ABI", Build.CPU_ABI),
-                        KeyValuePair("CPU_ABI2", Build.CPU_ABI2),
-                        KeyValuePair("SUPPORTED_ABIS", Build.SUPPORTED_ABIS.joinToString(",")),
-                        KeyValuePair("DEVICE", Build.DEVICE),
-                        KeyValuePair("DISPLAY", Build.DISPLAY),
-                        KeyValuePair("FINGERPRINT", Build.FINGERPRINT),
-                        KeyValuePair("HARDWARE", Build.HARDWARE),
-                        KeyValuePair("HOST", Build.HOST),
-                        KeyValuePair("ID", Build.ID),
-                        KeyValuePair("MANUFACTURER", Build.MANUFACTURER),
-                        KeyValuePair("MODEL", Build.MODEL),
-                        KeyValuePair("PRODUCT", Build.PRODUCT),
-                        KeyValuePair("RADIO", Build.RADIO),
-                        KeyValuePair("SERIAL", Build.SERIAL),
-                        KeyValuePair("TAGS", Build.TAGS),
-                        KeyValuePair("TIME", Build.TIME.toString()),
-                        KeyValuePair("TYPE", Build.TYPE),
-                        KeyValuePair("USER", Build.USER),
-                        KeyValuePair("VERSION.CODENAME", Build.VERSION.CODENAME),
-                        KeyValuePair("VERSION.INCREMENTAL", Build.VERSION.INCREMENTAL),
-                        KeyValuePair("VERSION.RELEASE", Build.VERSION.RELEASE),
-                        KeyValuePair("VERSION.SDK", Build.VERSION.SDK),
-                        KeyValuePair("VERSION.SDK_INT", Build.VERSION.SDK_INT.toString()),
-                ),
-                versionName = version.versionString,
-                versionCode = BuildConfig.VERSION_CODE,
-                hasAccount = false,
-                isGoogleCn = false,
-                enableInlineVm = true,
-                cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
-                arch = System.getProperty("os.arch"),
-                ping = pingData,
-                field10 = extra?.let { of(*it) },
+            usage = Usage(flow, packageName),
+            info = listOf(
+                KeyValuePair("BOARD", Build.BOARD),
+                KeyValuePair("BOOTLOADER", Build.BOOTLOADER),
+                KeyValuePair("BRAND", Build.BRAND),
+                KeyValuePair("CPU_ABI", Build.CPU_ABI),
+                KeyValuePair("CPU_ABI2", Build.CPU_ABI2),
+                KeyValuePair("SUPPORTED_ABIS", Build.SUPPORTED_ABIS.joinToString(",")),
+                KeyValuePair("DEVICE", Build.DEVICE),
+                KeyValuePair("DISPLAY", Build.DISPLAY),
+                KeyValuePair("FINGERPRINT", Build.FINGERPRINT),
+                KeyValuePair("HARDWARE", Build.HARDWARE),
+                KeyValuePair("HOST", Build.HOST),
+                KeyValuePair("ID", Build.ID),
+                KeyValuePair("MANUFACTURER", Build.MANUFACTURER),
+                KeyValuePair("MODEL", Build.MODEL),
+                KeyValuePair("PRODUCT", Build.PRODUCT),
+                KeyValuePair("RADIO", Build.RADIO),
+                KeyValuePair("SERIAL", Build.SERIAL),
+                KeyValuePair("TAGS", Build.TAGS),
+                KeyValuePair("TIME", Build.TIME.toString()),
+                KeyValuePair("TYPE", Build.TYPE),
+                KeyValuePair("USER", Build.USER),
+                KeyValuePair("VERSION.CODENAME", Build.VERSION.CODENAME),
+                KeyValuePair("VERSION.INCREMENTAL", Build.VERSION.INCREMENTAL),
+                KeyValuePair("VERSION.RELEASE", Build.VERSION.RELEASE),
+                KeyValuePair("VERSION.SDK", Build.VERSION.SDK),
+                KeyValuePair("VERSION.SDK_INT", Build.VERSION.SDK_INT.toString()),
+            ),
+            versionName = version.versionString,
+            versionCode = BuildConfig.VERSION_CODE,
+            hasAccount = false,
+            isGoogleCn = false,
+            enableInlineVm = true,
+            cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
+            arch = System.getProperty("os.arch"),
+            ping = pingData,
+            field10 = extra?.let { of(*it) },
         )
     }
 
@@ -130,7 +159,7 @@ class HandleProxyFactory(private val context: Context) {
 
             override fun getHeaders(): Map<String, String> {
                 return mapOf(
-                        "User-Agent" to "DroidGuard/${version.versionCode}"
+                    "User-Agent" to "DroidGuard/${version.versionCode}"
                 )
             }
         })
@@ -159,7 +188,14 @@ class HandleProxyFactory(private val context: Context) {
         return Triple(vmKey, byteCode, extra)
     }
 
-    private fun createHandleProxy(flow: String?, vmKey: String, byteCode: ByteArray, extra: ByteArray, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
+    private fun createHandleProxy(
+        flow: String?,
+        vmKey: String,
+        byteCode: ByteArray,
+        extra: ByteArray,
+        callback: GuardCallback,
+        request: DroidGuardResultsRequest?
+    ): HandleProxy {
         ProfileManager.ensureInitialized(context)
         val clazz = loadClass(vmKey, extra)
         return HandleProxy(clazz, context, flow, byteCode, callback, vmKey, extra, request?.bundle)
@@ -169,7 +205,8 @@ class HandleProxyFactory(private val context: Context) {
     private fun getCacheDir() = context.getDir(CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
     private fun getCacheDir(vmKey: String) = File(getCacheDir(), vmKey)
     private fun getOptDir(vmKey: String) = File(getCacheDir(vmKey), "opt")
-    private fun isValidCache(vmKey: String) = getTheApkFile(vmKey).isFile && getOptDir(vmKey).isDirectory
+    private fun isValidCache(vmKey: String) =
+        getTheApkFile(vmKey).isFile && getOptDir(vmKey).isDirectory
 
     private fun updateCacheTimestamp(vmKey: String) {
         try {
@@ -189,7 +226,10 @@ class HandleProxyFactory(private val context: Context) {
         return true
         val certificates: Array<Certificate> = TODO()
         if (certificates.size != 1) return false
-        return Arrays.equals(MessageDigest.getInstance("SHA-256").digest(certificates[0].encoded), PROD_CERT_HASH)
+        return Arrays.equals(
+            MessageDigest.getInstance("SHA-256").digest(certificates[0].encoded),
+            PROD_CERT_HASH
+        )
     }
 
     private fun loadClass(vmKey: String, bytes: ByteArray): Class<*> {
@@ -205,7 +245,12 @@ class HandleProxyFactory(private val context: Context) {
                 getCacheDir(vmKey).deleteRecursively()
                 throw ClassNotFoundException("APK signature verification failed")
             }
-            val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
+            val loader = DexClassLoader(
+                getTheApkFile(vmKey).absolutePath,
+                getOptDir(vmKey).absolutePath,
+                null,
+                context.classLoader
+            )
             val clazz = loader.loadClass(CLASS_NAME)
             classMap[vmKey] = clazz
             return clazz
@@ -214,8 +259,42 @@ class HandleProxyFactory(private val context: Context) {
 
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
-        const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
+        const val SERVER_URL =
+            "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
         const val CACHE_FOLDER_NAME = "cache_dg"
-        val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
+        val PROD_CERT_HASH = byteArrayOf(
+            61,
+            122,
+            18,
+            35,
+            1,
+            -102,
+            -93,
+            -99,
+            -98,
+            -96,
+            -29,
+            67,
+            106,
+            -73,
+            -64,
+            -119,
+            107,
+            -5,
+            79,
+            -74,
+            121,
+            -12,
+            -34,
+            95,
+            -25,
+            -62,
+            63,
+            50,
+            108,
+            -113,
+            -103,
+            74
+        )
     }
 }

@@ -16,8 +16,19 @@ import androidx.preference.PreferenceViewHolder
 import org.microg.gms.droidguard.core.R
 
 class ContainedEditTextPreference : Preference {
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context) : super(context)
 
@@ -32,7 +43,10 @@ class ContainedEditTextPreference : Preference {
         editText.isEnabled = editable
         if (requestFocus) {
             editText.requestFocus()
-            (editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            (editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(
+                editText,
+                InputMethodManager.SHOW_IMPLICIT
+            )
             requestFocus = false
         }
     }

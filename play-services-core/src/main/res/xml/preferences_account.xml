@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +21,15 @@
             android:defaultValue="true"
             android:key="auth_manager_trust_google"
             android:summary="@string/pref_auth_trust_google_summary"
-            android:title="@string/pref_auth_trust_google_title"/>
+            android:title="@string/pref_auth_trust_google_title" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="auth_manager_visible"
             android:summary="@string/pref_auth_visible_summary"
-            android:title="@string/pref_auth_visible_title"/>
+            android:title="@string/pref_auth_visible_title" />
     </PreferenceCategory>
 
     <Preference
         android:selectable="false"
-        android:summary="Google account settings not yet implemented."/>
+        android:summary="Google account settings not yet implemented." />
 </PreferenceScreen>

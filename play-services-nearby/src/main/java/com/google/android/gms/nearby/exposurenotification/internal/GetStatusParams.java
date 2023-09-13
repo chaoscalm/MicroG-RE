@@ -11,7 +11,8 @@ public class GetStatusParams extends AutoSafeParcelable {
     @Field(1)
     public ILongCallback callback;
 
-    private GetStatusParams() {}
+    private GetStatusParams() {
+    }
 
     public GetStatusParams(ILongCallback callback) {
         this.callback = callback;

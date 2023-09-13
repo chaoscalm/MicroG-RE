@@ -9,7 +9,12 @@ import org.microg.gms.fido.core.digest
 import java.nio.ByteBuffer
 import java.security.PublicKey
 
-class CredentialId(val type: Byte, val data: ByteArray, val rpId: String, val publicKey: PublicKey) {
+class CredentialId(
+    val type: Byte,
+    val data: ByteArray,
+    val rpId: String,
+    val publicKey: PublicKey
+) {
     fun encode(): ByteArray = ByteBuffer.allocate(1 + data.size + 32).apply {
         put(type)
         put(data)

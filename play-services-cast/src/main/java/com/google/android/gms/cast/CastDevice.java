@@ -35,13 +35,13 @@ import java.util.List;
 public class CastDevice extends AutoSafeParcelable {
     private static final String EXTRA_CAST_DEVICE = "com.google.android.gms.cast.EXTRA_CAST_DEVICE";
 
-    public CastDevice () {
+    public CastDevice() {
     }
 
-    public CastDevice (
+    public CastDevice(
             String id, String name, InetAddress host, int port, String
             deviceVersion, String friendlyName, String modelName, String
-            iconPath, int status, int capabilities) {
+                    iconPath, int status, int capabilities) {
         this.deviceId = id;
         this.address = host.getHostAddress();
         this.servicePort = port;

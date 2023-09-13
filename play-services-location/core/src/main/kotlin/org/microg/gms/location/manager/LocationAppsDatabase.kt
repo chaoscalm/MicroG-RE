@@ -24,7 +24,13 @@ class LocationAppsDatabase(context: Context) : SQLiteOpenHelper(context, "geoapp
 
     private fun insertOrUpdateApp(packageName: String, vararg pairs: Pair<String, Any?>) {
         val values = contentValuesOf(FIELD_PACKAGE to packageName, *pairs)
-        if (writableDatabase.insertWithOnConflict(TABLE_APPS, null, values, SQLiteDatabase.CONFLICT_IGNORE) < 0) {
+        if (writableDatabase.insertWithOnConflict(
+                TABLE_APPS,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_IGNORE
+            ) < 0
+        ) {
             writableDatabase.update(TABLE_APPS, values, "$FIELD_PACKAGE = ?", arrayOf(packageName))
         }
         close()
@@ -35,7 +41,16 @@ class LocationAppsDatabase(context: Context) : SQLiteOpenHelper(context, "geoapp
     }
 
     fun getForceCoarse(packageName: String): Boolean {
-        return readableDatabase.query(TABLE_APPS, arrayOf(FIELD_FORCE_COARSE), "$FIELD_PACKAGE = ?", arrayOf(packageName), null, null, null, "1").run {
+        return readableDatabase.query(
+            TABLE_APPS,
+            arrayOf(FIELD_FORCE_COARSE),
+            "$FIELD_PACKAGE = ?",
+            arrayOf(packageName),
+            null,
+            null,
+            null,
+            "1"
+        ).run {
             try {
                 if (moveToNext()) {
                     getIntOrNull(0) == 1
@@ -64,13 +79,27 @@ class LocationAppsDatabase(context: Context) : SQLiteOpenHelper(context, "geoapp
             FIELD_ACCURACY to location.accuracy,
             FIELD_PROVIDER to location.provider
         )
-        writableDatabase.insertWithOnConflict(TABLE_APPS_LAST_LOCATION, null, values, SQLiteDatabase.CONFLICT_REPLACE)
+        writableDatabase.insertWithOnConflict(
+            TABLE_APPS_LAST_LOCATION,
+            null,
+            values,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
         close()
     }
 
     fun listAppsByAccessTime(limit: Int = Int.MAX_VALUE): List<Pair<String, Long>> {
         val res = arrayListOf<Pair<String, Long>>()
-        readableDatabase.query(TABLE_APPS, arrayOf(FIELD_PACKAGE, FIELD_TIME), null, null, null, null, "$FIELD_TIME DESC", "$limit").apply {
+        readableDatabase.query(
+            TABLE_APPS,
+            arrayOf(FIELD_PACKAGE, FIELD_TIME),
+            null,
+            null,
+            null,
+            null,
+            "$FIELD_TIME DESC",
+            "$limit"
+        ).apply {
             while (moveToNext()) {
                 res.add(getString(0) to getLong(1))
             }

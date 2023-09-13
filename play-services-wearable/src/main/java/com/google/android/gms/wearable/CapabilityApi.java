@@ -100,7 +100,7 @@ public interface CapabilityApi {
      * <pre>wear://* /<capability_name></pre>
      * Listener events will be called on the main thread, or the handler specified on {@code client}
      * when it was built (using {@link Builder#setHandler(Handler)}).
-     *
+     * <p>
      * Callers wishing to be notified of events in the background should use WearableListenerService.
      */
     PendingResult<Status> addListener(GoogleApiClient client, CapabilityListener listener, Uri uri, @CapabilityFilterType int filterType);

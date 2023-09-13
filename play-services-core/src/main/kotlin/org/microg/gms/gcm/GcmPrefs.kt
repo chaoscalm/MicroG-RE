@@ -43,7 +43,11 @@ data class GcmPrefs(
 
         @JvmStatic
         fun get(context: Context): GcmPrefs {
-            return SettingsContract.getSettings(context, Gcm.getContentUri(context), Gcm.PROJECTION) { c ->
+            return SettingsContract.getSettings(
+                context,
+                Gcm.getContentUri(context),
+                Gcm.PROJECTION
+            ) { c ->
                 GcmPrefs(
                     isGcmLogEnabled = c.getInt(0) != 0,
                     lastPersistedId = c.getString(1),
@@ -132,14 +136,19 @@ data class GcmPrefs(
     fun learnTimeout(context: Context, pref: String) {
         Log.d("GmsGcmPrefs", "learnTimeout: $pref")
         when (pref) {
-            PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(context, Gcm.getContentUri(context)) {
+            PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(
+                context,
+                Gcm.getContentUri(context)
+            ) {
                 val newInterval = (learntMobileInterval * 0.95).toInt()
                 put(Gcm.LEARNT_MOBILE, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
             }
+
             PREF_NETWORK_WIFI -> setSettings(context, Gcm.getContentUri(context)) {
                 val newInterval = (learntWifiInterval * 0.95).toInt()
                 put(Gcm.LEARNT_WIFI, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
             }
+
             else -> setSettings(context, Gcm.getContentUri(context)) {
                 val newInterval = (learntOtherInterval * 0.95).toInt()
                 put(Gcm.LEARNT_OTHER, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
@@ -158,6 +167,7 @@ data class GcmPrefs(
                     }
                 }
             }
+
             PREF_NETWORK_WIFI -> {
                 if (time > learntWifiInterval / 4 * 3) {
                     val newInterval = (learntWifiInterval * 1.02).toInt()
@@ -166,6 +176,7 @@ data class GcmPrefs(
                     }
                 }
             }
+
             else -> {
                 if (time > learntOtherInterval / 4 * 3) {
                     val newInterval = (learntOtherInterval * 1.02).toInt()

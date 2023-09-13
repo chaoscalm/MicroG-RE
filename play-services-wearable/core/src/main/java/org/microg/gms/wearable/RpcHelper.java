@@ -43,7 +43,7 @@ public class RpcHelper {
         String rpcConnectionId = getRpcConnectionId(packageName, targetNodeId, path);
         synchronized (rpcStateMap) {
             if (!rpcStateMap.containsKey(rpcConnectionId)) {
-                int g = preferences.getInt(rpcConnectionId, 1)+1;
+                int g = preferences.getInt(rpcConnectionId, 1) + 1;
                 preferences.edit().putInt(rpcConnectionId, g).apply();
                 rpcStateMap.put(rpcConnectionId, new RpcConnectionState(g));
             }

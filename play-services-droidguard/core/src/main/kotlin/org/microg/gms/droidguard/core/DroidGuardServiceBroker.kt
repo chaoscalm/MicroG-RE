@@ -13,14 +13,22 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import java.util.*
 
-class DroidGuardServiceBroker(val service: DroidGuardChimeraService) : AbstractGmsServiceBroker(EnumSet.of(GmsService.DROIDGUARD)) {
+class DroidGuardServiceBroker(val service: DroidGuardChimeraService) :
+    AbstractGmsServiceBroker(EnumSet.of(GmsService.DROIDGUARD)) {
 
     override fun getService(callback: IGmsCallbacks?, request: GetServiceRequest?) {
         handleServiceRequest(callback, request, null)
     }
 
-    override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
-        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(this.service, request!!.packageName)
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks?,
+        request: GetServiceRequest?,
+        service: GmsService?
+    ) {
+        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(
+            this.service,
+            request!!.packageName
+        )
         callback!!.onPostInitComplete(0, DroidGuardServiceImpl(this.service, packageName!!), null)
     }
 }

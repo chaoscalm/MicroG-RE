@@ -63,7 +63,7 @@ public class LocationStatus extends AutoSafeParcelable {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[] { cellStatus, wifiStatus, elapsedRealtimeNanos });
+        return Arrays.hashCode(new Object[]{cellStatus, wifiStatus, elapsedRealtimeNanos});
     }
 
     private String statusToString(int status) {

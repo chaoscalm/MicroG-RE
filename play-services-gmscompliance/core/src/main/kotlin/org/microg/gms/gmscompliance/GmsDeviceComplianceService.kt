@@ -24,21 +24,31 @@ import org.microg.gms.common.GmsService
 const val TAG = "DeviceCompliance"
 
 class GmsDeviceComplianceService : BaseService(TAG, GmsService.GMS_COMPLIANCE) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, GmsDeviceComplianceServiceImpl(lifecycle).asBinder(), ConnectionInfo().apply {
-            features = arrayOf(
-                Feature("gmscompliance_api", 1)
-            )
-        });
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
+        callback.onPostInitCompleteWithConnectionInfo(
+            CommonStatusCodes.SUCCESS,
+            GmsDeviceComplianceServiceImpl(lifecycle).asBinder(),
+            ConnectionInfo().apply {
+                features = arrayOf(
+                    Feature("gmscompliance_api", 1)
+                )
+            });
     }
 }
 
-class GmsDeviceComplianceServiceImpl(override val lifecycle: Lifecycle) : IGmsDeviceComplianceService.Stub(), LifecycleOwner {
+class GmsDeviceComplianceServiceImpl(override val lifecycle: Lifecycle) :
+    IGmsDeviceComplianceService.Stub(), LifecycleOwner {
     override fun getDeviceCompliance(callback: IGmsDeviceComplianceServiceCallback?) {
         Log.d(TAG, "getDeviceCompliance()")
         lifecycleScope.launchWhenStarted {
             try {
-                callback?.onResponse(Status.SUCCESS, GmsDeviceComplianceResponse().apply { compliant = true })
+                callback?.onResponse(
+                    Status.SUCCESS,
+                    GmsDeviceComplianceResponse().apply { compliant = true })
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }

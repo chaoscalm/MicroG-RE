@@ -39,7 +39,7 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     String ACTION_EXPOSURE_STATE_UPDATED = "com.google.android.gms.exposurenotification.ACTION_EXPOSURE_STATE_UPDATED";
     /**
      * Action broadcast to a client application if {@link #requestPreAuthorizedTemporaryExposureKeyRelease()} has been authorized and the user has unlocked their phone, granting release of their keys after a positive diagnosis.
-     *
+     * <p>
      * This action will include an {@link java.util.ArrayList} of {@link TemporaryExposureKey}s keyed by {@link #EXTRA_TEMPORARY_EXPOSURE_KEY_LIST}.
      */
     String ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED = "com.google.android.gms.exposurenotification.ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED";
@@ -230,7 +230,7 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     /**
      * If consent has previously been requested and granted by the user using {@link #requestPreAuthorizedTemporaryExposureKeyHistory()}, then this method will cause keys to be released to the client application after the screen is unlocked by the user. Keys will be delivered via a broadcast denoted with the {@link #ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED} action.
      */
-    Task<Void> requestPreAuthorizedTemporaryExposureKeyRelease ();
+    Task<Void> requestPreAuthorizedTemporaryExposureKeyRelease();
 
     /**
      * Sets the diagnosis keys data mapping if it wasn't already changed recently.

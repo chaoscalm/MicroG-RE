@@ -22,14 +22,19 @@ class CellDetailsSource(private val context: Context, private val callback: Cell
     fun startScan(workSource: WorkSource?) {
         val telephonyManager = context.getSystemService<TelephonyManager>() ?: return
         if (SDK_INT >= 29) {
-            telephonyManager.requestCellInfoUpdate(context.mainExecutor, object : TelephonyManager.CellInfoCallback() {
-                override fun onCellInfo(cells: MutableList<CellInfo>) {
-                    val details = cells.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
-                    if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
-                }
-            })
+            telephonyManager.requestCellInfoUpdate(
+                context.mainExecutor,
+                object : TelephonyManager.CellInfoCallback() {
+                    override fun onCellInfo(cells: MutableList<CellInfo>) {
+                        val details = cells.map(CellInfo::toCellDetails).map { it.repair(context) }
+                            .filter(CellDetails::isValid)
+                        if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
+                    }
+                })
         } else if (SDK_INT >= 17) {
-            val details = telephonyManager.allCellInfo.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
+            val details =
+                telephonyManager.allCellInfo.map(CellInfo::toCellDetails).map { it.repair(context) }
+                    .filter(CellDetails::isValid)
             if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
         } else {
             val networkOperator = telephonyManager.networkOperator
@@ -45,6 +50,7 @@ class CellDetailsSource(private val context: Context, private val callback: Cell
     }
 
     companion object {
-        fun create(context: Context, callback: CellDetailsCallback): CellDetailsSource = CellDetailsSource(context, callback)
+        fun create(context: Context, callback: CellDetailsCallback): CellDetailsSource =
+            CellDetailsSource(context, callback)
     }
 }

@@ -31,20 +31,26 @@ class ServiceProvider : ContentProvider() {
         when (method) {
             "serviceIntentCall" -> {
                 val serviceAction = extras?.getString("serviceActionBundleKey") ?: return null
-                val ourServiceAction = GmsService.byAction(serviceAction)?.takeIf { it.SERVICE_ID > 0 }?.ACTION ?: serviceAction
+                val ourServiceAction =
+                    GmsService.byAction(serviceAction)?.takeIf { it.SERVICE_ID > 0 }?.ACTION
+                        ?: serviceAction
                 val context = context!!
                 val intent = Intent(ourServiceAction).apply { `package` = context.packageName }
                 val resolveInfo = context.packageManager.resolveService(intent, 0)
                 if (resolveInfo != null) {
-                    intent.setClassName(resolveInfo.serviceInfo.packageName, resolveInfo.serviceInfo.name)
+                    intent.setClassName(
+                        resolveInfo.serviceInfo.packageName,
+                        resolveInfo.serviceInfo.name
+                    )
                 } else {
                     intent.setClass(context, DummyService::class.java)
                 }
                 Log.d(TAG, "$method: $serviceAction -> $intent")
                 return bundleOf(
-                        "serviceResponseIntentKey" to intent
+                    "serviceResponseIntentKey" to intent
                 )
             }
+
             else -> {
                 Log.d(TAG, "$method: $arg, $extras")
                 return super.call(method, arg, extras)
@@ -52,7 +58,13 @@ class ServiceProvider : ContentProvider() {
         }
     }
 
-    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
+    override fun query(
+        uri: Uri,
+        projection: Array<out String>?,
+        selection: String?,
+        selectionArgs: Array<out String>?,
+        sortOrder: String?
+    ): Cursor? {
         val cursor = MatrixCursor(COLUMNS)
         Log.d(TAG, "query: $uri")
         return cursor
@@ -63,7 +75,12 @@ class ServiceProvider : ContentProvider() {
         return uri
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<out String>?
+    ): Int {
         Log.d(TAG, "update: $uri, $values, $selection, $selectionArgs")
         return 0
     }

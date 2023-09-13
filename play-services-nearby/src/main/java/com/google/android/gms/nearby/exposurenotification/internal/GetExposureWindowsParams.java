@@ -13,7 +13,8 @@ public class GetExposureWindowsParams extends AutoSafeParcelable {
     @Field(2)
     public String token;
 
-    private GetExposureWindowsParams() {}
+    private GetExposureWindowsParams() {
+    }
 
     public GetExposureWindowsParams(IExposureWindowListCallback callback, String token) {
         this.callback = callback;

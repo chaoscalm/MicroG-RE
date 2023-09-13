@@ -80,7 +80,8 @@ val WifiDetails.isMoving: Boolean
 class MovingWifiHelper(private val context: Context) {
     suspend fun retrieveMovingLocation(current: WifiDetails): Location {
         if (!isLocallyRetrievable(current)) throw IllegalArgumentException()
-        val connectivityManager = context.getSystemService<ConnectivityManager>() ?: throw IllegalStateException()
+        val connectivityManager =
+            context.getSystemService<ConnectivityManager>() ?: throw IllegalStateException()
         val url = URL(MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE[current.ssid])
         return withContext(Dispatchers.IO) {
             val network = if (isLocallyRetrievable(current) && SDK_INT >= 23) {

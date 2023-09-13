@@ -138,7 +138,7 @@ public final class LatLngBounds extends AutoSafeParcelable {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[] { southwest, northeast });
+        return Arrays.hashCode(new Object[]{southwest, northeast});
     }
 
     /**

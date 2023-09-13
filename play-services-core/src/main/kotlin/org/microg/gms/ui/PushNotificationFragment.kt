@@ -48,8 +48,10 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        switchBarPreference = preferenceScreen.findPreference("pref_push_enabled") ?: switchBarPreference
-        pushStatusCategory = preferenceScreen.findPreference("prefcat_push_status") ?: pushStatusCategory
+        switchBarPreference =
+            preferenceScreen.findPreference("pref_push_enabled") ?: switchBarPreference
+        pushStatusCategory =
+            preferenceScreen.findPreference("prefcat_push_status") ?: pushStatusCategory
         pushStatus = preferenceScreen.findPreference("pref_push_status") ?: pushStatus
         pushApps = preferenceScreen.findPreference("prefcat_push_apps") ?: pushApps
         pushAppsAll = preferenceScreen.findPreference("pref_push_apps_all") ?: pushAppsAll
@@ -89,7 +91,14 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
             switchBarPreference.isChecked = statusInfo.configuration.enabled
             pushStatusCategory.isVisible = statusInfo != null && statusInfo.configuration.enabled
             pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
-                appContext.getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
+                appContext.getString(
+                    R.string.gcm_network_state_connected,
+                    DateUtils.getRelativeTimeSpanString(
+                        statusInfo.startTimestamp,
+                        System.currentTimeMillis(),
+                        0
+                    )
+                )
             } else {
                 appContext.getString(R.string.gcm_network_state_disconnected)
             }
@@ -110,9 +119,11 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
                     pref.order = idx
                     pref.applicationInfo = applicationInfo
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(requireContext(), R.id.openGcmAppDetails, bundleOf(
+                        findNavController().navigate(
+                            requireContext(), R.id.openGcmAppDetails, bundleOf(
                                 "package" to app.packageName
-                        ))
+                            )
+                        )
                         true
                     }
                     pref.key = "pref_push_app_" + app.packageName
@@ -149,6 +160,7 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(requireContext(), R.id.openGcmAdvancedSettings)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

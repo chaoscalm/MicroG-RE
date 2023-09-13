@@ -26,11 +26,11 @@ import org.microg.safeparcel.SafeParceled;
 public class WebImage extends AutoSafeParcelable {
     public static final Creator<WebImage> CREATOR = new AutoCreator<WebImage>(WebImage.class);
 
-    public WebImage () {
+    public WebImage() {
         this.uri = null;
     }
 
-    public WebImage (Uri uri) {
+    public WebImage(Uri uri) {
         this.uri = uri;
     }
 

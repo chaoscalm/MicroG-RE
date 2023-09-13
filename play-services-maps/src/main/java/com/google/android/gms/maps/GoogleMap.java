@@ -10,13 +10,16 @@ package com.google.android.gms.maps;
 
 import android.os.RemoteException;
 import android.view.View;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.internal.ICancelableCallback;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
+
 import org.microg.gms.common.Hide;
 
 /**

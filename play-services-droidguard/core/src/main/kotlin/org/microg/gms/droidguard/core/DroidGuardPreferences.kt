@@ -18,32 +18,42 @@ object DroidGuardPreferences {
 
     private fun <T> getSettings(context: Context, projection: String, def: T, f: (Cursor) -> T): T {
         return try {
-            SettingsContract.getSettings(context, SettingsContract.DroidGuard.getContentUri(context), arrayOf(projection), f)
+            SettingsContract.getSettings(
+                context,
+                SettingsContract.DroidGuard.getContentUri(context),
+                arrayOf(projection),
+                f
+            )
         } catch (e: Exception) {
             def
         }
     }
 
     private fun setSettings(context: Context, f: ContentValues.() -> Unit) =
-            SettingsContract.setSettings(context, SettingsContract.DroidGuard.getContentUri(context), f)
+        SettingsContract.setSettings(context, SettingsContract.DroidGuard.getContentUri(context), f)
 
     @JvmStatic
-    fun isEnabled(context: Context): Boolean = getSettings(context, ENABLED, false) { it.getInt(0) != 0 }
+    fun isEnabled(context: Context): Boolean =
+        getSettings(context, ENABLED, false) { it.getInt(0) != 0 }
 
     @JvmStatic
-    fun setEnabled(context: Context, enabled: Boolean) = setSettings(context) { put(ENABLED, enabled) }
+    fun setEnabled(context: Context, enabled: Boolean) =
+        setSettings(context) { put(ENABLED, enabled) }
 
     @JvmStatic
-    fun getMode(context: Context): Mode = getSettings(context, MODE, Mode.Embedded) { c -> Mode.valueOf(c.getString(0)) }
+    fun getMode(context: Context): Mode =
+        getSettings(context, MODE, Mode.Embedded) { c -> Mode.valueOf(c.getString(0)) }
 
     @JvmStatic
     fun setMode(context: Context, mode: Mode) = setSettings(context) { put(MODE, mode.toString()) }
 
     @JvmStatic
-    fun getNetworkServerUrl(context: Context): String? = getSettings(context, NETWORK_SERVER_URL, null) { c -> c.getStringOrNull(0) }
+    fun getNetworkServerUrl(context: Context): String? =
+        getSettings(context, NETWORK_SERVER_URL, null) { c -> c.getStringOrNull(0) }
 
     @JvmStatic
-    fun setNetworkServerUrl(context: Context, url: String?) = setSettings(context) { put(NETWORK_SERVER_URL, url) }
+    fun setNetworkServerUrl(context: Context, url: String?) =
+        setSettings(context) { put(NETWORK_SERVER_URL, url) }
 
     enum class Mode {
         Embedded,

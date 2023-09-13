@@ -70,7 +70,7 @@ public class Attestation {
                 .seLinuxState(new SELinuxState.Builder().enabled(true).supported(true).build())
                 .suCandidates(Collections.<FileState>emptyList())
                 .build();
-        Log.d(TAG, "Payload: "+payload.toString());
+        Log.d(TAG, "Payload: " + payload.toString());
         this.payload = payload.encode();
         return payload;
     }

@@ -19,5 +19,7 @@ internal var Location.precision: Double
         extras = (extras ?: Bundle()).apply { putDouble(LOCATION_EXTRA_PRECISION, value) }
     }
 
-fun ByteArray.toHexString(separator: String = "") : String = joinToString(separator) { "%02x".format(it) }
+fun ByteArray.toHexString(separator: String = ""): String =
+    joinToString(separator) { "%02x".format(it) }
+
 fun ByteArray.digest(md: String): ByteArray = MessageDigest.getInstance(md).digest(this)

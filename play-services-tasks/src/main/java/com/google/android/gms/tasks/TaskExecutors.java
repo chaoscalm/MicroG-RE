@@ -25,6 +25,7 @@ public final class TaskExecutors {
      */
     public static final Executor MAIN_THREAD = new Executor() {
         private Handler handler = new Handler(Looper.getMainLooper());
+
         @Override
         public void execute(Runnable command) {
             handler.post(command);

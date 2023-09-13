@@ -23,8 +23,11 @@ fun PackageManager.getApplicationLabel(packageName: String): CharSequence = try 
     packageName
 }
 
-fun ByteArray.toBase64(vararg flags: Int): String = Base64.encodeToString(this, flags.fold(0) { a, b -> a or b })
-fun ByteArray.toHexString(separator: String = "") : String = joinToString(separator) { "%02x".format(it) }
+fun ByteArray.toBase64(vararg flags: Int): String =
+    Base64.encodeToString(this, flags.fold(0) { a, b -> a or b })
+
+fun ByteArray.toHexString(separator: String = ""): String =
+    joinToString(separator) { "%02x".format(it) }
 
 fun PackageManager.getFirstSignatureDigest(packageName: String, md: String): ByteArray? =
     getSignatures(packageName).firstOrNull()?.digest(md)

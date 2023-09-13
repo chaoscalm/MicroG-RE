@@ -67,7 +67,7 @@ public class WearableLocationService extends WearableListenerService {
         } else {
             requestMap.put(nodeId, requests);
         }
-        Log.d(TAG, "Requests: "+requestMap.entrySet());
+        Log.d(TAG, "Requests: " + requestMap.entrySet());
         // TODO actually request
     }
 

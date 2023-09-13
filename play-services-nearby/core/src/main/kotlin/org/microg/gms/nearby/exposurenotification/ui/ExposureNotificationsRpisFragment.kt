@@ -44,23 +44,24 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        histogramCategory = preferenceScreen.findPreference("prefcat_exposure_rpi_histogram") ?: histogramCategory
+        histogramCategory =
+            preferenceScreen.findPreference("prefcat_exposure_rpi_histogram") ?: histogramCategory
         histogram = preferenceScreen.findPreference("pref_exposure_rpi_histogram") ?: histogram
         deleteAll = preferenceScreen.findPreference("pref_exposure_rpi_delete_all") ?: deleteAll
         exportDb = preferenceScreen.findPreference("pref_exposure_export_database") ?: exportDb
         deleteAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.pref_exposure_rpi_delete_all_title)
-                    .setView(R.layout.exposure_notifications_confirm_delete)
-                    .setPositiveButton(R.string.pref_exposure_rpi_delete_all_warning_confirm_button) { _, _ ->
-                        lifecycleScope.launchWhenStarted {
-                            ExposureDatabase.with(requireContext()) { it.deleteAllCollectedAdvertisements() }
-                            updateChart()
-                        }
+                .setTitle(R.string.pref_exposure_rpi_delete_all_title)
+                .setView(R.layout.exposure_notifications_confirm_delete)
+                .setPositiveButton(R.string.pref_exposure_rpi_delete_all_warning_confirm_button) { _, _ ->
+                    lifecycleScope.launchWhenStarted {
+                        ExposureDatabase.with(requireContext()) { it.deleteAllCollectedAdvertisements() }
+                        updateChart()
                     }
-                    .setNegativeButton(android.R.string.cancel) { _, _ -> }
-                    .create()
-                    .show()
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .create()
+                .show()
             true
         }
         exportDb.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -77,10 +78,12 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     fun updateChart() {
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val rpiHourHistogram = ExposureDatabase.with(appContext) { database -> database.rpiHourHistogram }
+            val rpiHourHistogram =
+                ExposureDatabase.with(appContext) { database -> database.rpiHourHistogram }
             val totalRpiCount = rpiHourHistogram.map { it.rpis }.sum()
             deleteAll.isEnabled = totalRpiCount > 0
-            histogramCategory.title = getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)
+            histogramCategory.title =
+                getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)
             histogram.data = rpiHourHistogram
         }
     }

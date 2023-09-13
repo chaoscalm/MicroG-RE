@@ -28,7 +28,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 @RequiresApi(23)
-class ScreenLockTransportHandler(private val activity: FragmentActivity, callback: TransportHandlerCallback? = null) :
+class ScreenLockTransportHandler(
+    private val activity: FragmentActivity,
+    callback: TransportHandlerCallback? = null
+) :
     TransportHandler(Transport.SCREEN_LOCK, callback) {
     private val store by lazy { ScreenLockCredentialStore(activity) }
 
@@ -37,19 +40,25 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
 
     suspend fun showBiometricPrompt(applicationName: String, signature: Signature?) {
         suspendCancellableCoroutine<BiometricPrompt.AuthenticationResult> { continuation ->
-            val prompt = BiometricPrompt(activity, object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    continuation.resume(result)
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    val errorMessage = when (errorCode) {
-                        BiometricPrompt.ERROR_CANCELED, BiometricPrompt.ERROR_USER_CANCELED, BiometricPrompt.ERROR_NEGATIVE_BUTTON -> "User canceled verification"
-                        else -> errString.toString()
+            val prompt =
+                BiometricPrompt(activity, object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        continuation.resume(result)
                     }
-                    continuation.resumeWithException(RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR, errorMessage))
-                }
-            })
+
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                        val errorMessage = when (errorCode) {
+                            BiometricPrompt.ERROR_CANCELED, BiometricPrompt.ERROR_USER_CANCELED, BiometricPrompt.ERROR_NEGATIVE_BUTTON -> "User canceled verification"
+                            else -> errString.toString()
+                        }
+                        continuation.resumeWithException(
+                            RequestHandlingException(
+                                ErrorCode.NOT_ALLOWED_ERR,
+                                errorMessage
+                            )
+                        )
+                    }
+                })
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle(activity.getString(R.string.fido_biometric_prompt_title))
                 .setDescription(
@@ -76,16 +85,18 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         keyId: ByteArray
     ): Signature {
         val signature =
-            store.getSignature(options.rpId, keyId) ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
+            store.getSignature(options.rpId, keyId)
+                ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         showBiometricPrompt(getApplicationName(activity, options, callingPackage), signature)
         return signature
     }
 
-    fun getCredentialData(aaguid: ByteArray, credentialId: CredentialId, coseKey: CoseKey) = AttestedCredentialData(
-        aaguid,
-        credentialId.encode(),
-        coseKey.encode()
-    )
+    fun getCredentialData(aaguid: ByteArray, credentialId: CredentialId, coseKey: CoseKey) =
+        AttestedCredentialData(
+            aaguid,
+            credentialId.encode(),
+            coseKey.encode()
+        )
 
     fun getAuthenticatorData(
         rpId: String,
@@ -118,7 +129,8 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val aaguid = if (options.registerOptions.skipAttestation) ByteArray(16) else AAGUID
         val keyId = store.createKey(options.rpId, clientDataHash)
         val publicKey =
-            store.getPublicKey(options.rpId, keyId) ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
+            store.getPublicKey(options.rpId, keyId)
+                ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
 
         // We're ignoring the signature object as we don't need it for registration
         val signature = getActiveSignature(options, callerPackage, keyId)
@@ -135,7 +147,13 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         } else {
             try {
                 if (Build.VERSION.SDK_INT >= 24) {
-                    createAndroidKeyAttestation(signature, authenticatorData, clientDataHash, options.rpId, keyId)
+                    createAndroidKeyAttestation(
+                        signature,
+                        authenticatorData,
+                        clientDataHash,
+                        options.rpId,
+                        keyId
+                    )
                 } else {
                     createSafetyNetAttestation(authenticatorData, clientDataHash)
                 }
@@ -194,7 +212,14 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             try {
                 val (type, data) = CredentialId.decodeTypeAndData(descriptor.id)
                 if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
-                    candidates.add(CredentialId(type, data, options.rpId, store.getPublicKey(options.rpId, data)!!))
+                    candidates.add(
+                        CredentialId(
+                            type,
+                            data,
+                            options.rpId,
+                            store.getPublicKey(options.rpId, data)!!
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 // Not in store or unknown id
@@ -229,7 +254,10 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse =
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String
+    ): AuthenticatorResponse =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
             RequestOptionsType.SIGN -> sign(options, callerPackage)

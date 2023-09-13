@@ -51,7 +51,8 @@ public class GeofencingApiImpl implements GeofencingApi {
     public PendingResult<Status> addGeofences(GoogleApiClient client, final List<Geofence> geofences, final PendingIntent pendingIntent) {
         final List<ParcelableGeofence> geofenceList = new ArrayList<ParcelableGeofence>();
         for (Geofence geofence : geofences) {
-            if (geofence instanceof ParcelableGeofence) geofenceList.add((ParcelableGeofence) geofence);
+            if (geofence instanceof ParcelableGeofence)
+                geofenceList.add((ParcelableGeofence) geofence);
         }
         return callGeofencer(client, new Runnable() {
             @Override
@@ -83,7 +84,7 @@ public class GeofencingApiImpl implements GeofencingApi {
 
     @NonNull
     private IGeofencerCallbacks.Stub createGeofencerCallbacks(final GmsConnector.Callback.ResultProvider<Status> resultProvider) {
-        return new IGeofencerCallbacks.Stub(){
+        return new IGeofencerCallbacks.Stub() {
             @Override
             public void onAddGeofenceResult(int statusCode, String[] requestIds) throws RemoteException {
                 resultProvider.onResultAvailable(new Status(statusCode));

@@ -26,7 +26,8 @@ public class COSEAlgorithmIdentifier implements Parcelable {
     }
 
     public static COSEAlgorithmIdentifier fromCoseValue(int value) throws UnsupportedAlgorithmIdentifierException {
-        if (value == RSAAlgorithm.LEGACY_RS1.getAlgoValue()) return new COSEAlgorithmIdentifier(RSAAlgorithm.RS1);
+        if (value == RSAAlgorithm.LEGACY_RS1.getAlgoValue())
+            return new COSEAlgorithmIdentifier(RSAAlgorithm.RS1);
         for (RSAAlgorithm algorithm : RSAAlgorithm.values()) {
             if (algorithm.getAlgoValue() == value) return new COSEAlgorithmIdentifier(algorithm);
         }

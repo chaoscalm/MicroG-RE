@@ -9,9 +9,12 @@
 package com.google.android.gms.maps;
 
 import android.os.RemoteException;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
+
 import org.microg.gms.common.Hide;
 
 /**
@@ -21,12 +24,15 @@ import org.microg.gms.common.Hide;
  */
 public class CameraUpdateFactory {
     private static ICameraUpdateFactoryDelegate delegate;
+
     @Hide
     public static void setDelegate(@NonNull ICameraUpdateFactoryDelegate delegate) {
         CameraUpdateFactory.delegate = delegate;
     }
+
     private static ICameraUpdateFactoryDelegate getDelegate() {
-        if (delegate == null) throw new IllegalStateException("CameraUpdateFactory is not initialized");
+        if (delegate == null)
+            throw new IllegalStateException("CameraUpdateFactory is not initialized");
         return delegate;
     }
 

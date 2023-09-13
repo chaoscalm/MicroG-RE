@@ -21,7 +21,8 @@ import javax.tools.Diagnostic
 const val SafeParcelable = "com.google.android.gms.common.internal.safeparcel.SafeParcelable"
 const val SafeParcelReader = "com.google.android.gms.common.internal.safeparcel.SafeParcelReader"
 const val SafeParcelWriter = "com.google.android.gms.common.internal.safeparcel.SafeParcelWriter"
-const val SafeParcelableCreatorAndWriter = "com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter"
+const val SafeParcelableCreatorAndWriter =
+    "com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter"
 
 const val Field = "java.lang.reflect.Field"
 
@@ -33,10 +34,13 @@ const val Parcel = "android.os.Parcel"
 class SafeParcelProcessor : AbstractProcessor() {
     override fun process(set: Set<TypeElement>, roundEnvironment: RoundEnvironment): Boolean {
         val safeParcelableClassTypeElement = set.firstOrNull() ?: return false
-        classes@ for (classElement in roundEnvironment.getElementsAnnotatedWith(safeParcelableClassTypeElement)) {
+        classes@ for (classElement in roundEnvironment.getElementsAnnotatedWith(
+            safeParcelableClassTypeElement
+        )) {
             val clazz = ClassInfo(classElement)
             if (clazz.check(processingEnv.messager)) {
-                processingEnv.filer.createSourceFile(clazz.fullCreatorName, clazz.classElement).openWriter().use { it.write(clazz.generateCreator()) }
+                processingEnv.filer.createSourceFile(clazz.fullCreatorName, clazz.classElement)
+                    .openWriter().use { it.write(clazz.generateCreator()) }
             }
         }
         return false
@@ -82,7 +86,17 @@ class ClassInfo(val classElement: Element) {
             note("Using reflection to construct $fullName from parcel. Consider providing a suitable package-visible constructor for improved performance.")
         }
         for (field in fields) {
-            if (field.type !in listOf("int", "byte", "short", "boolean", "long", "float", "double", "java.lang.String")) {
+            if (field.type !in listOf(
+                    "int",
+                    "byte",
+                    "short",
+                    "boolean",
+                    "long",
+                    "float",
+                    "double",
+                    "java.lang.String"
+                )
+            ) {
                 error("Field ${field.name} in $fullName has unsupported type.")
                 return false
             }
@@ -95,12 +109,17 @@ class ClassInfo(val classElement: Element) {
 
     fun generateCreator(): String {
         if (constructor == null) throw IllegalStateException("Can't create Creator for class without constructor")
-        fun List<String>.linesToString(prefix: String = "") = joinToString("\n                            $prefix")
+        fun List<String>.linesToString(prefix: String = "") =
+            joinToString("\n                            $prefix")
+
         val variableDeclarations = fields.map { it.variableDeclaration }.linesToString()
         val setVariablesDefault = fields.map { it.setVariableDefault }.linesToString()
-        val readVariablesFromParcel = fields.map { it.readVariableFromParcelCase }.linesToString("        ")
+        val readVariablesFromParcel =
+            fields.map { it.readVariableFromParcelCase }.linesToString("        ")
         val writeVariableToParcel = fields.map { it.writeVariableToParcel }.linesToString()
-        val setFieldsFromVariables = fields.filter { it.id !in constructor.fieldIds }.flatMap { it.setFieldFromVariable }.linesToString()
+        val setFieldsFromVariables =
+            fields.filter { it.id !in constructor.fieldIds }.flatMap { it.setFieldFromVariable }
+                .linesToString()
         val invokeConstructor = constructor.invocation.linesToString()
         val setVariablesFromFields = fields.flatMap { it.setVariableFromField }.linesToString()
         val file = """
@@ -179,7 +198,9 @@ class ConstructorInfo(val clazz: ClassInfo, val constructorElement: ExecutableEl
     val invocation by lazy {
         if (isPrivate) {
             listOf(
-                "Constructor<${clazz.fullName}> constructor = ${clazz.fullName}.class.getConstructor(${argTypes.map { "$it.class" }.joinToString(", ")});",
+                "Constructor<${clazz.fullName}> constructor = ${clazz.fullName}.class.getConstructor(${
+                    argTypes.map { "$it.class" }.joinToString(", ")
+                });",
                 "constructor.setAccessible(true);",
                 "object = constructor.newInstance(${args.joinToString(", ")});"
             )

@@ -6,6 +6,7 @@
 package com.google.android.gms.tapandpay.internal.firstparty;
 
 import android.accounts.Account;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAllCardsRequest extends AutoSafeParcelable {

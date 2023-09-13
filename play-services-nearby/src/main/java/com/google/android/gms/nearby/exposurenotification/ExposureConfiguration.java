@@ -104,7 +104,8 @@ public class ExposureConfiguration extends AutoSafeParcelable {
         if (durationWeight != that.durationWeight) return false;
         if (transmissionRiskWeight != that.transmissionRiskWeight) return false;
         if (!Arrays.equals(attenuationScores, that.attenuationScores)) return false;
-        if (!Arrays.equals(daysSinceLastExposureScores, that.daysSinceLastExposureScores)) return false;
+        if (!Arrays.equals(daysSinceLastExposureScores, that.daysSinceLastExposureScores))
+            return false;
         if (!Arrays.equals(durationScores, that.durationScores)) return false;
         if (!Arrays.equals(transmissionRiskScores, that.transmissionRiskScores)) return false;
         return Arrays.equals(durationAtAttenuationThresholds, that.durationAtAttenuationThresholds);

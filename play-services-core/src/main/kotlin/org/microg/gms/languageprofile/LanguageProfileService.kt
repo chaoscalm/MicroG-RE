@@ -23,8 +23,16 @@ import org.microg.gms.common.GmsService
 private const val TAG = "LanguageProfileService"
 
 class LanguageProfileService : BaseService(TAG, GmsService.LANGUAGE_PROFILE) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, LanguageProfileServiceImpl(), Bundle())
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
+        callback.onPostInitComplete(
+            CommonStatusCodes.SUCCESS,
+            LanguageProfileServiceImpl(),
+            Bundle()
+        )
     }
 }
 

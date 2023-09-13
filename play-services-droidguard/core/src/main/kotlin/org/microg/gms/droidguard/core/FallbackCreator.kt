@@ -9,7 +9,13 @@ import android.content.Context
 import android.util.Log
 
 object FallbackCreator {
-    private val FAST_FAIL = setOf("ad_attest", "recaptcha-frame", "federatedMachineLearningReduced", "msa-f", "ad-event-attest-token")
+    private val FAST_FAIL = setOf(
+        "ad_attest",
+        "recaptcha-frame",
+        "federatedMachineLearningReduced",
+        "msa-f",
+        "ad-event-attest-token"
+    )
 
     @JvmStatic
     fun create(flow: String?, context: Context, map: Map<Any?, Any?>, e: Throwable): ByteArray {
@@ -27,7 +33,13 @@ object FallbackCreator {
     }
 
     @JvmStatic
-    fun create(map: Map<Any?, Any?>, bytes: ByteArray?, flow: String?, context: Context, e: Throwable): ByteArray {
+    fun create(
+        map: Map<Any?, Any?>,
+        bytes: ByteArray?,
+        flow: String?,
+        context: Context,
+        e: Throwable
+    ): ByteArray {
         TODO("Not yet implemented")
     }
 }

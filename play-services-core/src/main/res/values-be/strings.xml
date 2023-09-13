@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -92,7 +91,7 @@
     <string name="self_check_resolution_app_installed">Усталюйце прыкладанне <xliff:g example="F-Droid">%1$s</xliff:g> або сумяшчальнае. Калі ласка, азнаёмцеся з дакументацыяй, дзе апісана якія прыкладанні сумяшчальныя.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> мае правільны подпіс: </string>
     <string name="self_check_resolution_correct_sig">Альбо усталяваны <xliff:g example="F-Droid">%1$s</xliff:g> не сумяшчальны, альбо падмена подпісу не актыўная для яго. Калі ласка, азнаёмцеся з дакументацыяй, дзе апісана якія прыкладанні або прашыўкі сумяшчальныя.</string>
-	
+
     <string name="self_check_name_battery_optimizations">Аптымізацыя энергаспажывання адключаная:</string>
     <string name="self_check_resolution_battery_optimizations">Націсніце тут, каб дазволіць прыкладанням працаваць у фоне. Без гэтага некаторыя праграмы могуць працаваць са збоямі.</string>
 
@@ -140,7 +139,7 @@
     <string name="pref_gcm_confirm_new_apps_title">Пацверджваць новыя прыкладанні</string>
     <string name="pref_gcm_confirm_new_apps_summary">Пытаць дазвол перад прывязкай новых прыкладанняў для атрымання push-паведамленняў</string>
     <string name="pref_gcm_ping_interval">Інтэрвал праверкі: <xliff:g example="10 минут">%1$s</xliff:g></string>
-	
+
     <string name="pref_about_title">Аб сэрвісах microG Services</string>
     <string name="pref_about_summary">Інфармацыя аб версіі і выкарыстоўваныя бібліятэкі</string>
 

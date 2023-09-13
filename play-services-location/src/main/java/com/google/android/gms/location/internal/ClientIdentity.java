@@ -6,7 +6,9 @@
 package com.google.android.gms.location.internal;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.Feature;
+
 import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -35,7 +37,8 @@ public class ClientIdentity extends AutoSafeParcelable {
     @Field(8)
     public List<Feature> clientFeatures = Collections.emptyList();
 
-    private ClientIdentity() {}
+    private ClientIdentity() {
+    }
 
     public ClientIdentity(String packageName) {
         this.packageName = packageName;

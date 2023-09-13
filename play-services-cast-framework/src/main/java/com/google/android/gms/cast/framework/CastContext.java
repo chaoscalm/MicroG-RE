@@ -14,11 +14,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.cast.framework.internal.IMediaRouter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+
 import org.microg.gms.cast.CastDynamiteModule;
 import org.microg.gms.cast.CastSessionProvider;
 import org.microg.gms.common.PublicApi;
@@ -159,7 +162,8 @@ public class CastContext {
         List<SessionProvider> list = this.additionalSessionProviders;
         if (list != null) {
             for (SessionProvider sessionProvider : list) {
-                if (sessionProvider == null) throw new IllegalArgumentException("Additional SessionProvider must not be null.");
+                if (sessionProvider == null)
+                    throw new IllegalArgumentException("Additional SessionProvider must not be null.");
                 if (sessionProvider.getCategory() == null || sessionProvider.getCategory().isEmpty())
                     throw new IllegalArgumentException("Category for SessionProvider must not be null or empty string.");
                 if (map.containsKey(sessionProvider.getCategory()))
@@ -178,7 +182,8 @@ public class CastContext {
                 return Class.forName(optionsProviderClassName).asSubclass(OptionsProvider.class).getDeclaredConstructor().newInstance();
             }
             throw new IllegalStateException("The fully qualified name of the implementation of OptionsProvider must be provided as a metadata in the AndroidManifest.xml with key com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME.");
-        } catch (PackageManager.NameNotFoundException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException |
+        } catch (PackageManager.NameNotFoundException | ClassNotFoundException |
+                 NoSuchMethodException | IllegalAccessException | InstantiationException |
                  InvocationTargetException | NullPointerException e) {
             throw new IllegalStateException("Failed to initialize CastContext.", e);
         }

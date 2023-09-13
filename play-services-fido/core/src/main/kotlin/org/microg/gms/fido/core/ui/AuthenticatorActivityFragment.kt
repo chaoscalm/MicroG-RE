@@ -28,8 +28,15 @@ abstract class AuthenticatorActivityFragment : Fragment() {
     val options: RequestOptions?
         get() = authenticatorActivity?.options
 
-    fun startTransportHandling(transport: Transport) = authenticatorActivity?.startTransportHandling(transport)
-    fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
+    fun startTransportHandling(transport: Transport) =
+        authenticatorActivity?.startTransportHandling(transport)
 
-    abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    fun shouldStartTransportInstantly(transport: Transport) =
+        authenticatorActivity?.shouldStartTransportInstantly(transport) == true
+
+    abstract override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View?
 }

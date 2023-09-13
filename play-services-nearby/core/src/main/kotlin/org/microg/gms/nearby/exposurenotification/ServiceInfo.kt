@@ -18,14 +18,18 @@ data class ServiceConfiguration(val enabled: Boolean) : Serializable {
     }
 }
 
-private fun ExposurePreferences.toConfiguration(): ServiceConfiguration = ServiceConfiguration(enabled)
+private fun ExposurePreferences.toConfiguration(): ServiceConfiguration =
+    ServiceConfiguration(enabled)
 
 suspend fun getExposureNotificationsServiceInfo(context: Context): ServiceInfo =
     withContext(Dispatchers.IO) {
         ServiceInfo(ExposurePreferences(context).toConfiguration())
     }
 
-suspend fun setExposureNotificationsServiceConfiguration(context: Context, configuration: ServiceConfiguration) =
+suspend fun setExposureNotificationsServiceConfiguration(
+    context: Context,
+    configuration: ServiceConfiguration
+) =
     withContext(Dispatchers.IO) {
         ExposurePreferences(context).enabled = configuration.enabled
     }

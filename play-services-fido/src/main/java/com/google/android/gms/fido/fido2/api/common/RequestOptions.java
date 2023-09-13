@@ -18,9 +18,13 @@ import org.microg.safeparcel.SafeParcelUtil;
 @PublicApi
 public abstract class RequestOptions extends AutoSafeParcelable {
     public abstract byte[] getChallenge();
+
     public abstract Double getTimeoutSeconds();
+
     public abstract Integer getRequestId();
+
     public abstract TokenBinding getTokenBinding();
+
     public abstract AuthenticationExtensions getAuthenticationExtensions();
 
     /**

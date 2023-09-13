@@ -7,8 +7,11 @@ package org.microg.gms.pay;
 
 import android.content.Context;
 import android.os.IBinder;
+
 import org.microg.gms.common.GmsClient;
+
 import com.google.android.gms.pay.internal.IPayService;
+
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.api.ConnectionCallbacks;
 import org.microg.gms.common.api.OnConnectionFailedListener;

@@ -22,7 +22,8 @@ fun PatternItem.getName(): String = when (this) {
  */
 fun List<PatternItem>.getName(color: Int, strokeWidth: Float, skew: Float = 1f) = if (isEmpty()) {
     "solid-${color}"
-} else {joinToString("-") {
+} else {
+    joinToString("-") {
         it.getName()
     } + "-${color}-width${strokeWidth}-skew${skew}"
 }
@@ -42,12 +43,14 @@ fun PatternItem.getWidth(strokeWidth: Float, skew: Float): Float = when (this) {
  * Gets width that a bitmap for this pattern would have if it were to be drawn
  * with respect to aspect ratio onto a canvas with height 1.
  */
-fun List<PatternItem>.getWidth(strokeWidth: Float, skew: Float) = map { it.getWidth(strokeWidth, skew) }.sum()
+fun List<PatternItem>.getWidth(strokeWidth: Float, skew: Float) =
+    map { it.getWidth(strokeWidth, skew) }.sum()
 
-fun List<PatternItem>.makeBitmap(color: Int, strokeWidth: Float, skew: Float = 1f): Bitmap = makeBitmap(Paint().apply {
-    setColor(color)
-    style = Paint.Style.FILL
-}, strokeWidth, skew)
+fun List<PatternItem>.makeBitmap(color: Int, strokeWidth: Float, skew: Float = 1f): Bitmap =
+    makeBitmap(Paint().apply {
+        setColor(color)
+        style = Paint.Style.FILL
+    }, strokeWidth, skew)
 
 
 fun List<PatternItem>.makeBitmap(paint: Paint, strokeWidth: Float, skew: Float): Bitmap {

@@ -162,7 +162,8 @@ public class GcmNetworkManager {
      * @param gcmTaskService The endpoint for which you want to cancel all outstanding tasks.
      */
     public void cancelTask(String tag, Class<? extends GcmTaskService> gcmTaskService) {
-        if (TextUtils.isEmpty(tag) || tag.length() < 100) throw new IllegalArgumentException("tag invalid");
+        if (TextUtils.isEmpty(tag) || tag.length() < 100)
+            throw new IllegalArgumentException("tag invalid");
         validateService(gcmTaskService.getName());
         Intent scheduleIntent = createScheduleIntent();
         if (scheduleIntent != null) {

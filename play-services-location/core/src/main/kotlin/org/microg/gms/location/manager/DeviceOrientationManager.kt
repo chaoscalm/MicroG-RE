@@ -40,16 +40,22 @@ import org.microg.gms.utils.WorkSourceUtil
 import java.io.PrintWriter
 import kotlin.math.*
 
-class DeviceOrientationManager(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
+class DeviceOrientationManager(private val context: Context, override val lifecycle: Lifecycle) :
+    LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
     private var lock = Mutex(false)
     private var started: Boolean = false
     private var handlerThread: HandlerThread? = null
     private val requests = mutableMapOf<IBinder, DeviceOrientationRequestHolder>()
 
-    suspend fun add(clientIdentity: ClientIdentity, request: DeviceOrientationRequestInternal, listener: IDeviceOrientationListener) {
+    suspend fun add(
+        clientIdentity: ClientIdentity,
+        request: DeviceOrientationRequestInternal,
+        listener: IDeviceOrientationListener
+    ) {
         listener.asBinder().linkToDeath(this, 0)
         lock.withLock {
-            requests[listener.asBinder()] = DeviceOrientationRequestHolder(clientIdentity, request.request, listener)
+            requests[listener.asBinder()] =
+                DeviceOrientationRequestHolder(clientIdentity, request.request, listener)
             updateStatus()
         }
     }
@@ -64,7 +70,13 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
 
     private fun SensorManager.registerListener(sensor: Sensor, handler: Handler) {
         if (SDK_INT >= 19) {
-            registerListener(this@DeviceOrientationManager, sensor, SAMPLING_PERIOD_US, MAX_REPORT_LATENCY_US, handler)
+            registerListener(
+                this@DeviceOrientationManager,
+                sensor,
+                SAMPLING_PERIOD_US,
+                MAX_REPORT_LATENCY_US,
+                handler
+            )
         } else {
             registerListener(this@DeviceOrientationManager, sensor, SAMPLING_PERIOD_US, handler)
         }
@@ -202,9 +214,17 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
                 headingAccuracy = azimuthAccuracy.takeIf { !it.isNaN() } ?: 90.0f
                 headingRealtimeNanos = azimuthRealtimeNanos
             } else {
-                heading = azimuth + location!!.run { GeomagneticField(latitude.toFloat(), longitude.toFloat(), altitude.toFloat(), time).declination }
+                heading = azimuth + location!!.run {
+                    GeomagneticField(
+                        latitude.toFloat(),
+                        longitude.toFloat(),
+                        altitude.toFloat(),
+                        time
+                    ).declination
+                }
                 headingAccuracy = azimuthAccuracy.takeIf { !it.isNaN() } ?: 45.0f
-                headingRealtimeNanos = max(LocationCompat.getElapsedRealtimeNanos(location!!), azimuthRealtimeNanos)
+                headingRealtimeNanos =
+                    max(LocationCompat.getElapsedRealtimeNanos(location!!), azimuthRealtimeNanos)
             }
             updateDeviceOrientation()
         }
@@ -297,11 +317,20 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
                 get() = request.numUpdates - updates
             val timePendingMillis: Long
                 get() = request.expirationTime - SystemClock.elapsedRealtime()
-            val workSource = WorkSource().also { WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
+            val workSource = WorkSource().also {
+                WorkSourceUtil.add(
+                    it,
+                    clientIdentity.uid,
+                    clientIdentity.packageName
+                )
+            }
 
             fun processNewDeviceOrientation(deviceOrientation: DeviceOrientation) {
                 if (timePendingMillis < 0) throw RuntimeException("duration limit reached (expired at ${request.expirationTime}, now is ${SystemClock.elapsedRealtime()})")
-                if (lastOrientation != null && abs(lastOrientation!!.headingDegrees - deviceOrientation.headingDegrees) < Math.toDegrees(request.smallestAngleChangeRadians.toDouble())) return
+                if (lastOrientation != null && abs(lastOrientation!!.headingDegrees - deviceOrientation.headingDegrees) < Math.toDegrees(
+                        request.smallestAngleChangeRadians.toDouble()
+                    )
+                ) return
                 if (lastOrientation == deviceOrientation) return
                 listener.onDeviceOrientationChanged(deviceOrientation)
                 if (request.numUpdates != Int.MAX_VALUE) updates++

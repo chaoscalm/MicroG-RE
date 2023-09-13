@@ -27,7 +27,12 @@ class CtapNfcConnection(
         require(hasCtap1Support)
         Log.d(TAG, "Send CTAP1 command: ${command.request.apdu.toBase64(Base64.NO_WRAP)}")
         val (statusCode, payload) = decodeResponseApdu(isoDep.transceive(command.request.apdu))
-        Log.d(TAG, "Received CTAP1 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
+        Log.d(
+            TAG,
+            "Received CTAP1 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${
+                payload.toBase64(Base64.NO_WRAP)
+            }"
+        )
         if (statusCode != 0x9000.toShort()) {
             throw CtapNfcMessageStatusException(statusCode.toInt() and 0xffff)
         }
@@ -36,14 +41,40 @@ class CtapNfcConnection(
 
     override suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
         require(hasCtap2Support)
-        val request = encodeCommandApdu(0x80.toByte(), 0x10, 0x00, 0x00, byteArrayOf(command.request.commandByte) + command.request.payload, extended = true)
+        val request = encodeCommandApdu(
+            0x80.toByte(),
+            0x10,
+            0x00,
+            0x00,
+            byteArrayOf(command.request.commandByte) + command.request.payload,
+            extended = true
+        )
         Log.d(TAG, "Send CTAP2 command: ${request.toBase64(Base64.NO_WRAP)}")
         var (statusCode, payload) = decodeResponseApdu(isoDep.transceive(request))
-        Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
+        Log.d(
+            TAG,
+            "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${
+                payload.toBase64(Base64.NO_WRAP)
+            }"
+        )
         while (statusCode == 0x9100.toShort()) {
             Log.d(TAG, "Sending GETRESPONSE")
-            val res = decodeResponseApdu(isoDep.transceive(encodeCommandApdu(0x00, 0xC0.toByte(), 0x00,0x00)))
-            Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
+            val res = decodeResponseApdu(
+                isoDep.transceive(
+                    encodeCommandApdu(
+                        0x00,
+                        0xC0.toByte(),
+                        0x00,
+                        0x00
+                    )
+                )
+            )
+            Log.d(
+                TAG,
+                "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${
+                    payload.toBase64(Base64.NO_WRAP)
+                }"
+            )
             statusCode = res.first
             payload = res.second
         }
@@ -60,7 +91,17 @@ class CtapNfcConnection(
 
     private fun select(aid: ByteArray): Pair<Short, ByteArray> {
         Log.d(TAG, "Selecting AID: ${aid.toBase64(Base64.NO_WRAP)}")
-        return decodeResponseApdu(isoDep.transceive(encodeCommandApdu(0x00, 0xa4.toByte(), 0x04, 0x00, aid)))
+        return decodeResponseApdu(
+            isoDep.transceive(
+                encodeCommandApdu(
+                    0x00,
+                    0xa4.toByte(),
+                    0x04,
+                    0x00,
+                    aid
+                )
+            )
+        )
     }
 
     private fun deselect() = isoDep.transceive(encodeCommandApdu(0x80.toByte(), 0x12, 0x01, 0x02))
@@ -89,6 +130,7 @@ class CtapNfcConnection(
                     }
                     true
                 }
+
                 "U2F_V2" -> {
                     capabilities = CAPABILITY_CTAP_1 or CAPABILITY_CTAP_2
                     try {
@@ -99,6 +141,7 @@ class CtapNfcConnection(
                     }
                     true
                 }
+
                 else -> {
                     false
                 }
@@ -141,4 +184,5 @@ class CtapNfcConnection(
     }
 }
 
-class CtapNfcMessageStatusException(val status: Int) : Exception("Received status ${status.toString(16)}")
+class CtapNfcMessageStatusException(val status: Int) :
+    Exception("Received status ${status.toString(16)}")

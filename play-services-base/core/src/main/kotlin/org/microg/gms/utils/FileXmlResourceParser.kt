@@ -13,7 +13,10 @@ import java.io.File
 import java.io.FileReader
 import java.io.Reader
 
-class FileXmlResourceParser(private val reader: Reader, private val parser: XmlPullParser = Xml.newPullParser()) :
+class FileXmlResourceParser(
+    private val reader: Reader,
+    private val parser: XmlPullParser = Xml.newPullParser()
+) :
     XmlResourceParser,
     XmlPullParser by parser,
     Closeable by reader {

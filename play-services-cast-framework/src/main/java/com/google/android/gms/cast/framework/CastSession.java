@@ -5,5 +5,5 @@
 
 package com.google.android.gms.cast.framework;
 
-public class CastSession extends Session{
+public class CastSession extends Session {
 }

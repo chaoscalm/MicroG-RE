@@ -15,7 +15,8 @@ public class GetDailySummariesParams extends AutoSafeParcelable {
     @Field(2)
     public DailySummariesConfig config;
 
-    private GetDailySummariesParams() {}
+    private GetDailySummariesParams() {
+    }
 
     public GetDailySummariesParams(IDailySummaryListCallback callback, DailySummariesConfig config) {
         this.callback = callback;

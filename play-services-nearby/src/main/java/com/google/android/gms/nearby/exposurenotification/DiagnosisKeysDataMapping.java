@@ -95,7 +95,8 @@ public class DiagnosisKeysDataMapping extends AutoSafeParcelable {
             Integer[] values = new Integer[MAX_DAYS];
             Arrays.fill(values, 0);
             for (Map.Entry<Integer, Integer> entry : daysSinceOnsetToInfectiousness.entrySet()) {
-                if (entry.getKey() > 14) throw new IllegalArgumentException("invalid day since onset");
+                if (entry.getKey() > 14)
+                    throw new IllegalArgumentException("invalid day since onset");
                 values[entry.getKey() + 14] = entry.getValue();
             }
             this.daysSinceOnsetToInfectiousness = Arrays.asList(values);

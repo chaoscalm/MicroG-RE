@@ -115,11 +115,11 @@ class UiSettingsImpl(private val uiSettings: UiSettings) : AbstractUiSettings() 
     override fun isRotateGesturesEnabled(): Boolean = uiSettings.isRotateGesturesEnabled
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+        if (super.onTransact(code, data, reply, flags)) {
+            true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+        }
 
     companion object {
         private val TAG = "GmsMapsUiImpl"

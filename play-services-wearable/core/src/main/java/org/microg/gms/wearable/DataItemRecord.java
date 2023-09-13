@@ -37,7 +37,7 @@ import java.util.Map;
 import okio.ByteString;
 
 public class DataItemRecord {
-    private static String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
+    private static String[] EVENT_DATA_HOLDER_FIELDS = new String[]{"event_type", "path", "data", "tags", "asset_key", "asset_id"};
 
     public DataItemInternal dataItem;
     public String source;

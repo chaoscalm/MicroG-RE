@@ -33,7 +33,10 @@ const val KEY_LAYER_PAINT = "paint"
 
 
 fun getStyle(
-    context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
+    context: MapContext,
+    mapType: Int,
+    styleOptions: MapStyleOptions?,
+    styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
 
     // TODO: Serve map style resources locally
@@ -117,9 +120,17 @@ fun MapStyleOptions.apply(style: JSONObject) {
     }
 }
 
-data class StyleOperation(val featureType: String?, val elementType: String?, val stylers: Array<Styler>?)
+data class StyleOperation(
+    val featureType: String?,
+    val elementType: String?,
+    val stylers: Array<Styler>?
+)
 
-data class NonNullStyleOperation(val featureType: String, val elementType: String, val stylers: Array<Styler>)
+data class NonNullStyleOperation(
+    val featureType: String,
+    val elementType: String,
+    val stylers: Array<Styler>
+)
 
 class Styler(
     val hue: String?,
@@ -137,7 +148,11 @@ class Styler(
  * default values.
  */
 fun StyleOperation.toNonNull() =
-    NonNullStyleOperation(featureType ?: SELECTOR_ALL, elementType ?: SELECTOR_ALL, stylers ?: emptyArray())
+    NonNullStyleOperation(
+        featureType ?: SELECTOR_ALL,
+        elementType ?: SELECTOR_ALL,
+        stylers ?: emptyArray()
+    )
 
 /**
  * Returns false iff the operation is invalid.
@@ -157,9 +172,11 @@ fun NonNullStyleOperation.isValid() = !(featureType.startsWith("administrative")
  * (more concretely: starts with) the operation's selector.
  */
 fun JSONObject.matchesOperation(operation: NonNullStyleOperation) =
-    (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_FEATURE_TYPE).startsWith(operation.featureType)
+    (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_FEATURE_TYPE)
+        .startsWith(operation.featureType)
             || operation.featureType == "all")
-    && (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE).startsWith(operation.elementType)
+            && (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE)
+        .startsWith(operation.elementType)
             || operation.elementType == "all")
 
 
@@ -167,7 +184,11 @@ fun JSONObject.matchesOperation(operation: NonNullStyleOperation) =
  * Layer has fields that allow applying style operations.
  */
 fun JSONObject.layerHasRequiredFields() = has(KEY_LAYER_PAINT) && has(KEY_LAYER_METADATA) &&
-        getJSONObject(KEY_LAYER_METADATA).let { it.has(KEY_METADATA_FEATURE_TYPE) && it.has(KEY_METADATA_ELEMENT_TYPE) }
+        getJSONObject(KEY_LAYER_METADATA).let {
+            it.has(KEY_METADATA_FEATURE_TYPE) && it.has(
+                KEY_METADATA_ELEMENT_TYPE
+            )
+        }
 
 /**
  * True iff the layer represented by the JSON object should be removed according to the provided style operation.
@@ -177,25 +198,32 @@ fun JSONObject.layerHasRequiredFields() = has(KEY_LAYER_PAINT) && has(KEY_LAYER_
 fun JSONObject.layerShouldBeRemoved(operation: NonNullStyleOperation) =
     // A styler sets the layer to be invisible
     operation.stylers.any { it.visibility == "off" } ||
-        // A styler sets the layer to simplified and we are working with a label
-        (getJSONObject("metadata").getString(KEY_METADATA_ELEMENT_TYPE)
+            // A styler sets the layer to simplified and we are working with a label
+            (getJSONObject("metadata").getString(KEY_METADATA_ELEMENT_TYPE)
                 .startsWith("labels") && operation.stylers.any { it.visibility == "simplified" })
 
 /**
  * Applies the provided style operation to the layer represented by the JSON object.
  */
-fun JSONObject.applyOperation(operation: NonNullStyleOperation) = operation.stylers.forEach { styler ->
-    when (operation.elementType) {
-        SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(getJSONObject(KEY_LAYER_PAINT))
-        SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE -> styler.applyTextOutline(getJSONObject(KEY_LAYER_PAINT))
-        else -> styler.traverse(getJSONObject(KEY_LAYER_PAINT))
+fun JSONObject.applyOperation(operation: NonNullStyleOperation) =
+    operation.stylers.forEach { styler ->
+        when (operation.elementType) {
+            SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(getJSONObject(KEY_LAYER_PAINT))
+            SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE -> styler.applyTextOutline(
+                getJSONObject(
+                    KEY_LAYER_PAINT
+                )
+            )
+
+            else -> styler.traverse(getJSONObject(KEY_LAYER_PAINT))
+        }
     }
-}
 
 /**
  * Returns true if string is likely to contain a color.
  */
-fun String.isColor() = startsWith("hsl(") || startsWith("hsla(") || startsWith("#") || startsWith("rgba(")
+fun String.isColor() =
+    startsWith("hsl(") || startsWith("hsla(") || startsWith("#") || startsWith("rgba(")
 
 /**
  * Can parse colors in the format '#rrggbb', '#aarrggbb', 'hsl(h, s, l)', and 'rgba(r, g, b, a)'
@@ -383,7 +411,10 @@ fun Styler.applyTextFill(paint: JSONObject) {
     if (paint.has("text-color")) when (val textColor = paint.get("text-color")) {
         is JSONObject -> traverse(textColor)
         is JSONArray -> traverse(textColor)
-        is String -> paint.put("text-color", applyColorChanges(textColor.parseColor()).colorToString())
+        is String -> paint.put(
+            "text-color",
+            applyColorChanges(textColor.parseColor()).colorToString()
+        )
     }
 }
 
@@ -391,7 +422,10 @@ fun Styler.applyTextOutline(paint: JSONObject) {
     if (paint.has("text-halo-color")) when (val textOutline = paint.get("text-halo-color")) {
         is JSONObject -> traverse(textOutline)
         is JSONArray -> traverse(textOutline)
-        is String -> paint.put("text-halo-color", applyColorChanges(textOutline.parseColor()).colorToString())
+        is String -> paint.put(
+            "text-halo-color",
+            applyColorChanges(textOutline.parseColor()).colorToString()
+        )
     }
 }
 

@@ -18,7 +18,11 @@ import org.microg.gms.fido.core.databinding.FidoWelcomeFragmentBinding
 class WelcomeFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoWelcomeFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FidoWelcomeFragmentBinding.inflate(inflater, container, false)
         binding.data = data
         binding.onGetStartedClick = View.OnClickListener {

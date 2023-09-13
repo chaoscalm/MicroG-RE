@@ -27,7 +27,10 @@ import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.fido.core.type
 
-class NfcTransportHandler(private val activity: Activity, callback: TransportHandlerCallback? = null) :
+class NfcTransportHandler(
+    private val activity: Activity,
+    callback: TransportHandlerCallback? = null
+) :
     TransportHandler(Transport.NFC, callback) {
     override val isSupported: Boolean
         get() = NfcAdapter.getDefaultAdapter(activity)?.isEnabled == true && activity is OnNewIntentProvider
@@ -35,8 +38,10 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     private var deferred = CompletableDeferred<Tag>()
 
     private suspend fun waitForNewNfcTag(adapter: NfcAdapter): Tag {
-        val intent = Intent(activity, activity.javaClass).apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_MUTABLE)
+        val intent =
+            Intent(activity, activity.javaClass).apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_MUTABLE)
         adapter.enableForegroundDispatch(
             activity,
             pendingIntent,
@@ -82,7 +87,10 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     }
 
 
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse {
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String
+    ): AuthenticatorResponse {
         val adapter = NfcAdapter.getDefaultAdapter(activity)
         val newIntentListener = Consumer<Intent> {
             if (it?.action != NfcAdapter.ACTION_TECH_DISCOVERED) return@Consumer

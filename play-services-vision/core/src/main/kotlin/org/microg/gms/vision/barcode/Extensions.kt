@@ -180,18 +180,25 @@ fun Result.toGms(): Barcode {
     when (parsed) {
         is EmailAddressParsedResult ->
             barcode.email = parsed.toGms()
+
         is TelParsedResult ->
             barcode.phone = parsed.toGms()
+
         is SMSParsedResult ->
             barcode.sms = parsed.toGms()
+
         is WifiParsedResult ->
             barcode.wifi = parsed.toGms()
+
         is URIParsedResult ->
             barcode.url = parsed.toGms()
+
         is GeoParsedResult ->
             barcode.geoPoint = parsed.toGms()
+
         is CalendarParsedResult ->
             barcode.calendarEvent = parsed.toGms()
+
         is AddressBookParsedResult ->
             barcode.contactInfo = parsed.toGms()
     }

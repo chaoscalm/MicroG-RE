@@ -17,12 +17,16 @@ import android.util.Log
 import androidx.core.content.getSystemService
 import org.microg.gms.location.network.TAG
 
-class WifiManagerSource(private val context: Context, private val callback: WifiDetailsCallback) : BroadcastReceiver(), WifiDetailsSource {
+class WifiManagerSource(private val context: Context, private val callback: WifiDetailsCallback) :
+    BroadcastReceiver(), WifiDetailsSource {
 
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         try {
-            callback.onWifiDetailsAvailable(this.context.getSystemService<WifiManager>()?.scanResults.orEmpty().map(ScanResult::toWifiDetails))
+            callback.onWifiDetailsAvailable(
+                this.context.getSystemService<WifiManager>()?.scanResults.orEmpty()
+                    .map(ScanResult::toWifiDetails)
+            )
         } catch (e: Exception) {
             Log.w(TAG, e)
         }

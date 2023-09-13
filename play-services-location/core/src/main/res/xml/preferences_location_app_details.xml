@@ -23,7 +23,7 @@
             android:key="pref_location_app_last_location"
             tools:title="Yesterday, 00:30:23"
             tools:summary="Pl. Charles de Gaulle, 75008 Paris, France"
-            android:persistent="false"/>
+            android:persistent="false" />
         <org.microg.gms.location.ui.LocationMapPreference
             android:key="pref_location_app_last_location_map"
             android:selectable="false"

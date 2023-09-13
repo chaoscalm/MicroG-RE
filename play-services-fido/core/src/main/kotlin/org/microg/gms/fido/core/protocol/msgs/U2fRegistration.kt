@@ -12,9 +12,15 @@ import javax.security.cert.X509Certificate
 
 class U2fRegistrationCommand(request: U2fRegistrationRequest) :
     Ctap1Command<U2fRegistrationRequest, U2fRegistrationResponse>(request) {
-    constructor(challenge: ByteArray, application: ByteArray) : this(U2fRegistrationRequest(challenge, application))
+    constructor(challenge: ByteArray, application: ByteArray) : this(
+        U2fRegistrationRequest(
+            challenge,
+            application
+        )
+    )
 
-    override fun decodeResponse(statusCode: Short, i: InputStream): U2fRegistrationResponse = U2fRegistrationResponse.decode(statusCode, i)
+    override fun decodeResponse(statusCode: Short, i: InputStream): U2fRegistrationResponse =
+        U2fRegistrationResponse.decode(statusCode, i)
 }
 
 class U2fRegistrationRequest(val challenge: ByteArray, val application: ByteArray) :
@@ -23,8 +29,10 @@ class U2fRegistrationRequest(val challenge: ByteArray, val application: ByteArra
         require(challenge.size == 32)
         require(application.size == 32)
     }
-    override fun toString(): String = "U2fRegistrationRequest(challenge=${challenge.toBase64(Base64.NO_WRAP)}, " +
-            "application=${application.toBase64(Base64.NO_WRAP)})"
+
+    override fun toString(): String =
+        "U2fRegistrationRequest(challenge=${challenge.toBase64(Base64.NO_WRAP)}, " +
+                "application=${application.toBase64(Base64.NO_WRAP)})"
 }
 
 class U2fRegistrationResponse(
@@ -43,7 +51,13 @@ class U2fRegistrationResponse(
             i.read(keyHandle)
             val attestationCertificate = X509Certificate.getInstance(i).encoded
             val signature = i.readBytes()
-            return U2fRegistrationResponse(statusCode, userPublicKey, keyHandle, attestationCertificate, signature)
+            return U2fRegistrationResponse(
+                statusCode,
+                userPublicKey,
+                keyHandle,
+                attestationCertificate,
+                signature
+            )
         }
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2019 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,14 +108,16 @@
 
         <!-- Device Checkin -->
 
-        <service android:name="org.microg.gms.checkin.CheckinService"
+        <service
+            android:name="org.microg.gms.checkin.CheckinService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.checkin.BIND_TO_SERVICE" />
             </intent-filter>
         </service>
 
-        <receiver android:name="org.microg.gms.checkin.TriggerReceiver"
+        <receiver
+            android:name="org.microg.gms.checkin.TriggerReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -220,7 +221,8 @@
 
         <!-- Auth -->
 
-        <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
+        <service
+            android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -286,21 +288,24 @@
             </intent-filter>
         </activity>
 
-        <service android:name="org.microg.gms.auth.credentials.CredentialsService"
+        <service
+            android:name="org.microg.gms.auth.credentials.CredentialsService"
             android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.auth.api.credentials.service.START" />
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.auth.proxy.AuthProxyService"
+        <service
+            android:name="org.microg.gms.auth.proxy.AuthProxyService"
             android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.auth.service.START" />
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.auth.appcert.AppCertService"
+        <service
+            android:name="org.microg.gms.auth.appcert.AppCertService"
             android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.auth.be.appcert.AppCertService" />
@@ -393,19 +398,22 @@
 
         <!-- Other -->
 
-        <service android:name="org.microg.gms.icing.LightweightIndexService"
+        <service
+            android:name="org.microg.gms.icing.LightweightIndexService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.icing.IndexService"
+        <service
+            android:name="org.microg.gms.icing.IndexService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.auth.SignInService"
+        <service
+            android:name="org.microg.gms.auth.SignInService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.signin.service.START" />
@@ -413,7 +421,8 @@
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.DummyService"
+        <service
+            android:name="org.microg.gms.DummyService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />

@@ -82,7 +82,8 @@ public class DeviceOrientation extends AutoSafeParcelable {
     }
 
     public float getConservativeHeadingErrorVonMisesKappa() {
-        if (hasConservativeHeadingErrorVonMisesKappa()) return conservativeHeadingErrorVonMisesKappa;
+        if (hasConservativeHeadingErrorVonMisesKappa())
+            return conservativeHeadingErrorVonMisesKappa;
         return Float.NaN;
     }
 
@@ -123,7 +124,8 @@ public class DeviceOrientation extends AutoSafeParcelable {
         if (hasMagConfidence()) helper.field("magConfidence", magConfidence);
         if (hasHeadingDegrees()) helper.field("headingDegrees", headingDegrees);
         if (hasHeadingErrorDegrees()) helper.field("headingErrorDegrees", headingErrorDegrees);
-        if (hasConservativeHeadingErrorVonMisesKappa()) helper.field("conservativeHeadingErrorVonMisesKappa", conservativeHeadingErrorVonMisesKappa);
+        if (hasConservativeHeadingErrorVonMisesKappa())
+            helper.field("conservativeHeadingErrorVonMisesKappa", conservativeHeadingErrorVonMisesKappa);
         helper.field("elapsedRealtimeNanos", elapsedRealtimeNanos);
         return helper.end();
     }

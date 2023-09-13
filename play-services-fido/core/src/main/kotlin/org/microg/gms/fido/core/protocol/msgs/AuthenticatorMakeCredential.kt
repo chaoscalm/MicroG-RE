@@ -16,7 +16,9 @@ import org.microg.gms.utils.toBase64
 
 class AuthenticatorMakeCredentialCommand(request: AuthenticatorMakeCredentialRequest) :
     Ctap2Command<AuthenticatorMakeCredentialRequest, AuthenticatorMakeCredentialResponse>(request) {
-    override fun decodeResponse(obj: CBORObject) = AuthenticatorMakeCredentialResponse.decodeFromCbor(obj)
+    override fun decodeResponse(obj: CBORObject) =
+        AuthenticatorMakeCredentialResponse.decodeFromCbor(obj)
+
     override val timeout: Long
         get() = 60000
 }
@@ -42,10 +44,11 @@ class AuthenticatorMakeCredentialRequest(
     if (pinAuth != null) set(0x08, pinAuth.encodeAsCbor())
     if (pinProtocol != null) set(0x09, pinProtocol.encodeAsCbor())
 }) {
-    override fun toString() = "AuthenticatorMakeCredentialRequest(clientDataHash=0x${clientDataHash.toBase64(Base64.NO_WRAP)}, " +
-            "rp=$rp,user=$user,pubKeyCredParams=[${pubKeyCredParams.joinToString()}]," +
-            "excludeList=[${excludeList.joinToString()}],extensions=[${extensions.entries.joinToString()}]," +
-            "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
+    override fun toString() =
+        "AuthenticatorMakeCredentialRequest(clientDataHash=0x${clientDataHash.toBase64(Base64.NO_WRAP)}, " +
+                "rp=$rp,user=$user,pubKeyCredParams=[${pubKeyCredParams.joinToString()}]," +
+                "excludeList=[${excludeList.joinToString()}],extensions=[${extensions.entries.joinToString()}]," +
+                "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
 
     companion object {
         class Options(

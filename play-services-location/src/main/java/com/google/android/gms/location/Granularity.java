@@ -9,6 +9,7 @@
 package com.google.android.gms.location;
 
 import android.Manifest;
+
 import androidx.annotation.IntDef;
 
 import java.lang.annotation.ElementType;

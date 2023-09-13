@@ -38,7 +38,8 @@ class CleanupService : LifecycleService() {
                         }
                         if (workPending) delay(5000L)
                     }
-                    ExposurePreferences(this@CleanupService).lastCleanup = System.currentTimeMillis()
+                    ExposurePreferences(this@CleanupService).lastCleanup =
+                        System.currentTimeMillis()
                 }
                 stop()
             }
@@ -50,8 +51,17 @@ class CleanupService : LifecycleService() {
 
     fun stop() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pendingIntent = PendingIntent.getService(applicationContext, CleanupService::class.java.name.hashCode(), Intent(applicationContext, CleanupService::class.java), FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
-        alarmManager.set(AlarmManager.RTC, ExposurePreferences(this).lastCleanup + CLEANUP_INTERVAL, pendingIntent)
+        val pendingIntent = PendingIntent.getService(
+            applicationContext,
+            CleanupService::class.java.name.hashCode(),
+            Intent(applicationContext, CleanupService::class.java),
+            FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
+        alarmManager.set(
+            AlarmManager.RTC,
+            ExposurePreferences(this).lastCleanup + CLEANUP_INTERVAL,
+            pendingIntent
+        )
         stopSelf()
     }
 

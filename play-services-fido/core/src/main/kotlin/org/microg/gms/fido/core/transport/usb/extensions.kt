@@ -48,7 +48,11 @@ inline fun <R> UsbDeviceConnection.use(block: (UsbDeviceConnection) -> R): R {
     }
 }
 
-inline fun <R> UsbRequest.initialize(connection: UsbDeviceConnection, endpoint: UsbEndpoint, block: (UsbRequest) -> R): R {
+inline fun <R> UsbRequest.initialize(
+    connection: UsbDeviceConnection,
+    endpoint: UsbEndpoint,
+    block: (UsbRequest) -> R
+): R {
     var exception: Throwable? = null
     try {
         initialize(connection, endpoint)

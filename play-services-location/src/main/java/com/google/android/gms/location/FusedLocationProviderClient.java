@@ -16,8 +16,10 @@ import android.location.Location;
 import android.os.Looper;
 
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.tasks.CancellationToken;

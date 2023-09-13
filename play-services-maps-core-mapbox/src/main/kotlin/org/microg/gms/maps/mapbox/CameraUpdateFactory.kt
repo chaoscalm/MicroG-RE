@@ -40,57 +40,64 @@ class CameraUpdateFactoryImpl : ICameraUpdateFactoryDelegate.Stub() {
     override fun zoomTo(zoom: Float): IObjectWrapper = ObjectWrapper.wrap(ZoomToCameraUpdate(zoom))
 
     override fun zoomBy(zoomDelta: Float): IObjectWrapper =
-            ObjectWrapper.wrap(ZoomByCameraUpdate(zoomDelta)).also {
-                Log.d(TAG, "zoomBy")
-            }
+        ObjectWrapper.wrap(ZoomByCameraUpdate(zoomDelta)).also {
+            Log.d(TAG, "zoomBy")
+        }
 
     override fun zoomByWithFocus(zoomDelta: Float, x: Int, y: Int): IObjectWrapper =
-            ObjectWrapper.wrap(ZoomByWithFocusCameraUpdate(zoomDelta, x, y)).also {
-                Log.d(TAG, "zoomByWithFocus")
-            }
+        ObjectWrapper.wrap(ZoomByWithFocusCameraUpdate(zoomDelta, x, y)).also {
+            Log.d(TAG, "zoomByWithFocus")
+        }
 
     override fun newCameraPosition(cameraPosition: CameraPosition): IObjectWrapper =
-            ObjectWrapper.wrap(NewCameraPositionCameraUpdate(cameraPosition)).also {
-                Log.d(TAG, "newCameraPosition")
-            }
+        ObjectWrapper.wrap(NewCameraPositionCameraUpdate(cameraPosition)).also {
+            Log.d(TAG, "newCameraPosition")
+        }
 
     override fun newLatLng(latLng: LatLng): IObjectWrapper =
-            ObjectWrapper.wrap(NewLatLngCameraUpdate(latLng)).also {
-                Log.d(TAG, "newLatLng")
-            }
+        ObjectWrapper.wrap(NewLatLngCameraUpdate(latLng)).also {
+            Log.d(TAG, "newLatLng")
+        }
 
     override fun newLatLngZoom(latLng: LatLng, zoom: Float): IObjectWrapper =
-            ObjectWrapper.wrap(NewLatLngZoomCameraUpdate(latLng, zoom)).also {
-                Log.d(TAG, "newLatLngZoom")
-            }
+        ObjectWrapper.wrap(NewLatLngZoomCameraUpdate(latLng, zoom)).also {
+            Log.d(TAG, "newLatLngZoom")
+        }
 
     override fun newLatLngBounds(bounds: LatLngBounds, padding: Int): IObjectWrapper =
-            ObjectWrapper.wrap(NewLatLngBoundsCameraUpdate(bounds, padding)).also {
-                Log.d(TAG, "newLatLngBounds")
-            }
+        ObjectWrapper.wrap(NewLatLngBoundsCameraUpdate(bounds, padding)).also {
+            Log.d(TAG, "newLatLngBounds")
+        }
 
     override fun scrollBy(x: Float, y: Float): IObjectWrapper {
         Log.d(TAG, "unimplemented Method: scrollBy")
         return ObjectWrapper.wrap(NoCameraUpdate())
     }
 
-    override fun newLatLngBoundsWithSize(bounds: LatLngBounds, width: Int, height: Int, padding: Int): IObjectWrapper =
-        ObjectWrapper.wrap(CameraBoundsWithSizeUpdate(bounds.toMapbox(), width, height, padding)).also {
-            Log.d(TAG, "newLatLngBoundsWithSize")
-        }
+    override fun newLatLngBoundsWithSize(
+        bounds: LatLngBounds,
+        width: Int,
+        height: Int,
+        padding: Int
+    ): IObjectWrapper =
+        ObjectWrapper.wrap(CameraBoundsWithSizeUpdate(bounds.toMapbox(), width, height, padding))
+            .also {
+                Log.d(TAG, "newLatLngBoundsWithSize")
+            }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+        if (super.onTransact(code, data, reply, flags)) {
+            true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+        }
 
     private inner class NoCameraUpdate : CameraUpdate, LiteModeCameraUpdate {
         override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition? =
-                mapboxMap.cameraPosition
+            mapboxMap.cameraPosition
 
-        override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition = map.cameraPosition
+        override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition =
+            map.cameraPosition
     }
 
     companion object {
@@ -122,18 +129,33 @@ class ZoomByCameraUpdate(private val delta: Float) : LiteModeCameraUpdate, Camer
 
 }
 
-class ZoomByWithFocusCameraUpdate(private val delta: Float, private val x: Int, private val y: Int) : LiteModeCameraUpdate,
+class ZoomByWithFocusCameraUpdate(
+    private val delta: Float,
+    private val x: Int,
+    private val y: Int
+) : LiteModeCameraUpdate,
     CameraUpdate {
     override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition =
         CameraPosition.Builder(map.cameraPosition).zoom(map.cameraPosition.zoom + delta)
-            .target(map.projection.fromScreenLocation(ObjectWrapper.wrap(PointF(x.toFloat(), y.toFloat())))).build()
+            .target(
+                map.projection.fromScreenLocation(
+                    ObjectWrapper.wrap(
+                        PointF(
+                            x.toFloat(),
+                            y.toFloat()
+                        )
+                    )
+                )
+            ).build()
 
     override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition? =
         CameraUpdateFactory.zoomBy(delta.toDouble(), Point(x, y)).getCameraPosition(mapboxMap)
 }
 
-class NewCameraPositionCameraUpdate(private val cameraPosition: CameraPosition) : LiteModeCameraUpdate, CameraUpdate {
-    override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition = this.cameraPosition
+class NewCameraPositionCameraUpdate(private val cameraPosition: CameraPosition) :
+    LiteModeCameraUpdate, CameraUpdate {
+    override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition =
+        this.cameraPosition
 
     override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition =
         this.cameraPosition.toMapbox()
@@ -147,15 +169,18 @@ class NewLatLngCameraUpdate(private val latLng: LatLng) : LiteModeCameraUpdate, 
         CameraUpdateFactory.newLatLng(latLng.toMapbox()).getCameraPosition(mapboxMap)
 }
 
-class NewLatLngZoomCameraUpdate(private val latLng: LatLng, private val zoom: Float) : LiteModeCameraUpdate, CameraUpdate {
+class NewLatLngZoomCameraUpdate(private val latLng: LatLng, private val zoom: Float) :
+    LiteModeCameraUpdate, CameraUpdate {
     override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition =
         CameraPosition.Builder(map.cameraPosition).target(latLng).zoom(zoom).build()
 
     override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition? =
-        CameraUpdateFactory.newLatLngZoom(latLng.toMapbox(), zoom - 1.0).getCameraPosition(mapboxMap)
+        CameraUpdateFactory.newLatLngZoom(latLng.toMapbox(), zoom - 1.0)
+            .getCameraPosition(mapboxMap)
 }
 
-class NewLatLngBoundsCameraUpdate(private val bounds: LatLngBounds, internal val padding: Int) : LiteModeCameraUpdate,
+class NewLatLngBoundsCameraUpdate(private val bounds: LatLngBounds, internal val padding: Int) :
+    LiteModeCameraUpdate,
     CameraUpdate {
 
     override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition? = null

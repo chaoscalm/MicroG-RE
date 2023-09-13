@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2021 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -8,10 +7,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/droidguard_sub_preferences"
         android:name="org.microg.gms.droidguard.core.ui.DroidGuardPreferencesFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 </LinearLayout>

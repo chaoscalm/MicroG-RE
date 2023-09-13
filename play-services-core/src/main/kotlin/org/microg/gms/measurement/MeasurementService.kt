@@ -19,7 +19,11 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "MeasurementService"
 
 class MeasurementService : BaseService(TAG, GmsService.MEASUREMENT) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, MeasurementServiceImpl(), Bundle())
     }
 }
@@ -54,5 +58,13 @@ class MeasurementServiceImpl : IMeasurementService.Stub() {
         Log.d(TAG, "setDefaultEventParameters($params) for $app")
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

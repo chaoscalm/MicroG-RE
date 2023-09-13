@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2014 The Android Open Source Project
   ~ Copyright (C) 2014-2017 microG Project Team
   ~
@@ -29,7 +28,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/v7_preference_on"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse" />
 
     <org.microg.tools.ui.ToggleSwitch
         android:id="@+id/switch_widget"
@@ -38,6 +37,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="@null"/>
+        android:background="@null" />
 
 </merge>

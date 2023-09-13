@@ -33,9 +33,9 @@ import kotlin.math.min
 private const val TAG = "GmsReCAPTCHA"
 
 private fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = append("&")
-        .append(URLEncoder.encode(key, "UTF-8"))
-        .append("=")
-        .append(value?.let { URLEncoder.encode(it, "UTF-8") } ?: "")
+    .append(URLEncoder.encode(key, "UTF-8"))
+    .append("=")
+    .append(value?.let { URLEncoder.encode(it, "UTF-8") } ?: "")
 
 class ReCaptchaActivity : AppCompatActivity() {
     private val receiver: ResultReceiver?
@@ -54,7 +54,8 @@ class ReCaptchaActivity : AppCompatActivity() {
         get() {
             val base = resources.displayMetrics.heightPixels
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
-            val statusBarHeight = if (statusBarHeightId > 0) resources.getDimensionPixelSize(statusBarHeightId) else 0
+            val statusBarHeight =
+                if (statusBarHeightId > 0) resources.getDimensionPixelSize(statusBarHeightId) else 0
             return base - statusBarHeight - (density * 20.0).toInt()
         }
     private var resultSent: Boolean = false
@@ -70,13 +71,23 @@ class ReCaptchaActivity : AppCompatActivity() {
         setContentView(R.layout.recaptcha_window)
         webView?.apply {
             webViewClient = object : WebViewClientCompat() {
-                fun String.isRecaptchaUrl() = startsWith("https://www.gstatic.com/recaptcha/") || startsWith("https://www.google.com/recaptcha/") || startsWith("https://www.google.com/js/bg/")
+                fun String.isRecaptchaUrl() =
+                    startsWith("https://www.gstatic.com/recaptcha/") || startsWith("https://www.google.com/recaptcha/") || startsWith(
+                        "https://www.google.com/js/bg/"
+                    )
 
-                override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
+                override fun shouldInterceptRequest(
+                    view: WebView,
+                    url: String
+                ): WebResourceResponse? {
                     if (url.isRecaptchaUrl()) {
                         return null
                     }
-                    return WebResourceResponse("text/plain", "UTF-8", ByteArrayInputStream(byteArrayOf()))
+                    return WebResourceResponse(
+                        "text/plain",
+                        "UTF-8",
+                        ByteArrayInputStream(byteArrayOf())
+                    )
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -104,7 +115,8 @@ class ReCaptchaActivity : AppCompatActivity() {
         }
     }
 
-    fun sendErrorResult(errorCode: Int, error: String) = sendResult(errorCode) { putString("error", error); putInt("errorCode", errorCode) }
+    fun sendErrorResult(errorCode: Int, error: String) =
+        sendResult(errorCode) { putString("error", error); putInt("errorCode", errorCode) }
 
     fun sendResult(resultCode: Int, v: Bundle.() -> Unit) {
         receiver?.send(resultCode, Bundle().also(v))
@@ -131,30 +143,68 @@ class ReCaptchaActivity : AppCompatActivity() {
     }
 
     suspend fun updateToken(flow: String, params: String) {
-        val map = mapOf("contentBinding" to Base64.encodeToString(MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP))
+        val map = mapOf(
+            "contentBinding" to Base64.encodeToString(
+                MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP
+            )
+        )
         val dg = try {
             DroidGuardResultCreator.getResults(this, flow, map)
         } catch (e: Exception) {
             Log.w(TAG, e)
-            Base64.encodeToString("ERROR : IOException".toByteArray(), Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING)
+            Base64.encodeToString(
+                "ERROR : IOException".toByteArray(),
+                Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING
+            )
         }
         if (SDK_INT >= 19) {
-            webView?.evaluateJavascript("RecaptchaMFrame.token('${URLEncoder.encode(dg, "UTF-8")}', '$params');", null)
+            webView?.evaluateJavascript(
+                "RecaptchaMFrame.token('${
+                    URLEncoder.encode(
+                        dg,
+                        "UTF-8"
+                    )
+                }', '$params');", null
+            )
         } else {
-            webView?.loadUrl("javascript: RecaptchaMFrame.token('${URLEncoder.encode(dg, "UTF-8")}', '$params');")
+            webView?.loadUrl(
+                "javascript: RecaptchaMFrame.token('${
+                    URLEncoder.encode(
+                        dg,
+                        "UTF-8"
+                    )
+                }', '$params');"
+            )
         }
     }
 
     suspend fun open() {
-        val params = StringBuilder(params).appendUrlEncodedParam("mt", System.currentTimeMillis().toString()).toString()
-        val map = mapOf("contentBinding" to Base64.encodeToString(MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP))
+        val params =
+            StringBuilder(params).appendUrlEncodedParam("mt", System.currentTimeMillis().toString())
+                .toString()
+        val map = mapOf(
+            "contentBinding" to Base64.encodeToString(
+                MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP
+            )
+        )
         val dg = try {
             DroidGuardResultCreator.getResults(this, "recaptcha-android-frame", map)
         } catch (e: Exception) {
             Log.w(TAG, e)
-            Base64.encodeToString("ERROR : IOException".toByteArray(), Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING)
+            Base64.encodeToString(
+                "ERROR : IOException".toByteArray(),
+                Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING
+            )
         }
-        webView?.postUrl(MFRAME_URL, "mav=1&dg=${URLEncoder.encode(dg, "UTF-8")}&mp=${URLEncoder.encode(params, "UTF-8")}".toByteArray())
+        webView?.postUrl(
+            MFRAME_URL,
+            "mav=1&dg=${URLEncoder.encode(dg, "UTF-8")}&mp=${
+                URLEncoder.encode(
+                    params,
+                    "UTF-8"
+                )
+            }".toByteArray()
+        )
     }
 
     companion object {
@@ -164,7 +214,16 @@ class ReCaptchaActivity : AppCompatActivity() {
             @JavascriptInterface
             fun challengeReady() {
                 Log.d(TAG, "challengeReady()")
-                activity.runOnUiThread { activity.webView?.loadUrl("javascript: RecaptchaMFrame.show(${min(activity.widthPixels / activity.density, 400f)}, ${min(activity.heightPixels / activity.density, 400f)});") }
+                activity.runOnUiThread {
+                    activity.webView?.loadUrl(
+                        "javascript: RecaptchaMFrame.show(${
+                            min(
+                                activity.widthPixels / activity.density,
+                                400f
+                            )
+                        }, ${min(activity.heightPixels / activity.density, 400f)});"
+                    )
+                }
             }
 
             @JavascriptInterface
@@ -182,8 +241,16 @@ class ReCaptchaActivity : AppCompatActivity() {
                     1 -> activity.sendErrorResult(ERROR, "Invalid Input Argument")
                     2 -> activity.sendErrorResult(TIMEOUT, "Session Timeout")
                     7 -> activity.sendErrorResult(RECAPTCHA_INVALID_SITEKEY, "Invalid Site Key")
-                    8 -> activity.sendErrorResult(RECAPTCHA_INVALID_KEYTYPE, "Invalid Type of Site Key")
-                    9 -> activity.sendErrorResult(RECAPTCHA_INVALID_PACKAGE_NAME, "Invalid Package Name for App")
+                    8 -> activity.sendErrorResult(
+                        RECAPTCHA_INVALID_KEYTYPE,
+                        "Invalid Type of Site Key"
+                    )
+
+                    9 -> activity.sendErrorResult(
+                        RECAPTCHA_INVALID_PACKAGE_NAME,
+                        "Invalid Package Name for App"
+                    )
+
                     else -> activity.sendErrorResult(ERROR, "error")
                 }
                 if (finish) activity.finish()
@@ -217,9 +284,17 @@ class ReCaptchaActivity : AppCompatActivity() {
             fun requestToken(s: String, b: Boolean) {
                 Log.d(TAG, "requestToken($s, $b)")
                 activity.runOnUiThread {
-                    val cert = activity.webView?.certificate?.let { Base64.encodeToString(SslCertificate.saveState(it).getByteArray("x509-certificate"), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP) }
+                    val cert = activity.webView?.certificate?.let {
+                        Base64.encodeToString(
+                            SslCertificate.saveState(it).getByteArray("x509-certificate"),
+                            Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP
+                        )
+                    }
                         ?: ""
-                    val params = StringBuilder(activity.params).appendUrlEncodedParam("c", s).appendUrlEncodedParam("sc", cert).appendUrlEncodedParam("mt", System.currentTimeMillis().toString()).toString()
+                    val params = StringBuilder(activity.params).appendUrlEncodedParam("c", s)
+                        .appendUrlEncodedParam("sc", cert)
+                        .appendUrlEncodedParam("mt", System.currentTimeMillis().toString())
+                        .toString()
                     val flow = "recaptcha-android-${if (b) "verify" else "reload"}"
                     activity.lifecycleScope.launchWhenResumed {
                         activity.updateToken(flow, params)

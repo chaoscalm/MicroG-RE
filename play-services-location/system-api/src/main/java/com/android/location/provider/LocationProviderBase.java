@@ -160,7 +160,8 @@ public abstract class LocationProviderBase {
      */
     @Deprecated
     @RequiresApi(VERSION_CODES.Q)
-    public void setAdditionalProviderPackages(List<String> packageNames) {}
+    public void setAdditionalProviderPackages(List<String> packageNames) {
+    }
 
     /**
      * @deprecated Use {@link #isAllowed()} instead.
@@ -207,7 +208,8 @@ public abstract class LocationProviderBase {
      * design. This method may be removed in the future.
      */
     @Deprecated
-    protected void onEnable() {}
+    protected void onEnable() {
+    }
 
     /**
      * @deprecated This callback will be never be invoked on Android Q and above. This method should
@@ -216,7 +218,8 @@ public abstract class LocationProviderBase {
      * method may be removed in the future.
      */
     @Deprecated
-    protected void onDisable() {}
+    protected void onDisable() {
+    }
 
     /**
      * Set the {@link ProviderRequestUnbundled} requirements for this provider. Each call to this method
@@ -240,7 +243,8 @@ public abstract class LocationProviderBase {
      * removed in the future. Prefer to dump provider state via the containing service instead.
      */
     @Deprecated
-    protected void onDump(FileDescriptor fd, PrintWriter pw, String[] args) {}
+    protected void onDump(FileDescriptor fd, PrintWriter pw, String[] args) {
+    }
 
     /**
      * This method will no longer be invoked.

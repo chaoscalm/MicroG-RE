@@ -86,9 +86,9 @@ public final class ProviderProperties implements Parcelable {
     public final int mAccuracy;
 
     public ProviderProperties(boolean mRequiresNetwork,
-            boolean mRequiresSatellite, boolean mRequiresCell, boolean mHasMonetaryCost,
-            boolean mSupportsAltitude, boolean mSupportsSpeed, boolean mSupportsBearing,
-            int mPowerRequirement, int mAccuracy) {
+                              boolean mRequiresSatellite, boolean mRequiresCell, boolean mHasMonetaryCost,
+                              boolean mSupportsAltitude, boolean mSupportsSpeed, boolean mSupportsBearing,
+                              int mPowerRequirement, int mAccuracy) {
         this.mRequiresNetwork = mRequiresNetwork;
         this.mRequiresSatellite = mRequiresSatellite;
         this.mRequiresCell = mRequiresCell;

@@ -44,7 +44,8 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profileFileImport = registerForActivityResult(ActivityResultContracts.GetContent(), this::onFileSelected)
+        profileFileImport =
+            registerForActivityResult(ActivityResultContracts.GetContent(), this::onFileSelected)
     }
 
     private fun onFileSelected(uri: Uri?) {
@@ -72,13 +73,17 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        switchBarPreference = preferenceScreen.findPreference("pref_checkin_enabled") ?: switchBarPreference
+        switchBarPreference =
+            preferenceScreen.findPreference("pref_checkin_enabled") ?: switchBarPreference
         deviceProfile = preferenceScreen.findPreference("pref_device_profile") ?: deviceProfile
-        importProfile = preferenceScreen.findPreference("pref_device_profile_import") ?: importProfile
+        importProfile =
+            preferenceScreen.findPreference("pref_device_profile_import") ?: importProfile
         serial = preferenceScreen.findPreference("pref_device_serial") ?: serial
-        statusCategory = preferenceScreen.findPreference("prefcat_device_registration_status") ?: statusCategory
+        statusCategory =
+            preferenceScreen.findPreference("prefcat_device_registration_status") ?: statusCategory
         status = preferenceScreen.findPreference("pref_device_registration_status") ?: status
-        androidId = preferenceScreen.findPreference("pref_device_registration_android_id") ?: androidId
+        androidId =
+            preferenceScreen.findPreference("pref_device_registration_android_id") ?: androidId
 
         deviceProfile.setOnPreferenceChangeListener { _, newValue ->
             ProfileManager.setProfile(requireContext(), newValue as String? ?: PROFILE_AUTO)
@@ -107,14 +112,28 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
         }
         val profiles =
             mutableListOf(PROFILE_AUTO, PROFILE_NATIVE, PROFILE_REAL)
-        val profileNames = mutableListOf(getString(R.string.profile_name_auto, autoProfileName), getString(R.string.profile_name_native), getString(R.string.profile_name_real))
+        val profileNames = mutableListOf(
+            getString(R.string.profile_name_auto, autoProfileName),
+            getString(R.string.profile_name_native),
+            getString(R.string.profile_name_real)
+        )
         if (ProfileManager.hasProfile(context, PROFILE_SYSTEM)) {
             profiles.add(PROFILE_SYSTEM)
-            profileNames.add(getString(R.string.profile_name_system, ProfileManager.getProfileName(context, PROFILE_SYSTEM)))
+            profileNames.add(
+                getString(
+                    R.string.profile_name_system,
+                    ProfileManager.getProfileName(context, PROFILE_SYSTEM)
+                )
+            )
         }
         if (ProfileManager.hasProfile(context, PROFILE_USER)) {
             profiles.add(PROFILE_USER)
-            profileNames.add(getString(R.string.profile_name_user, ProfileManager.getProfileName(context, PROFILE_USER)))
+            profileNames.add(
+                getString(
+                    R.string.profile_name_user,
+                    ProfileManager.getProfileName(context, PROFILE_USER)
+                )
+            )
         }
         for (profile in R.xml::class.java.declaredFields.map { it.name }
             .filter { it.startsWith("profile_") }
@@ -130,7 +149,8 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
         deviceProfile.entries = profileNames.toTypedArray()
         deviceProfile.value = configuredProfile
         deviceProfile.summary =
-            profiles.indexOf(configuredProfile).takeIf { it >= 0 }?.let { profileNames[it] } ?: "Unknown"
+            profiles.indexOf(configuredProfile).takeIf { it >= 0 }?.let { profileNames[it] }
+                ?: "Unknown"
     }
 
     override fun onResume() {
@@ -158,7 +178,11 @@ class DeviceRegistrationFragment : PreferenceFragmentCompat() {
             if (serviceInfo.lastCheckin > 0) {
                 status.summary = getString(
                     R.string.checkin_last_registration,
-                    DateUtils.getRelativeTimeSpanString(serviceInfo.lastCheckin, System.currentTimeMillis(), 0)
+                    DateUtils.getRelativeTimeSpanString(
+                        serviceInfo.lastCheckin,
+                        System.currentTimeMillis(),
+                        0
+                    )
                 )
                 androidId.isVisible = true
                 androidId.summary = serviceInfo.androidId.toString(16)

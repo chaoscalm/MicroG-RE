@@ -30,9 +30,13 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "AuthProxyService"
 
 class AuthProxyService : BaseService(TAG, GmsService.AUTH_PROXY) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-                ?: throw IllegalArgumentException("Missing package name")
+            ?: throw IllegalArgumentException("Missing package name")
         val consumerPackageName = request.extras.getString("consumerPkg")
         if (consumerPackageName != null) PackageUtils.assertExtendedAccess(this)
         val serviceImpl = AuthServiceImpl(this, lifecycle, consumerPackageName ?: packageName)
@@ -40,22 +44,37 @@ class AuthProxyService : BaseService(TAG, GmsService.AUTH_PROXY) {
     }
 }
 
-class AuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String) : IAuthService.Stub(), LifecycleOwner {
+class AuthServiceImpl(
+    private val context: Context,
+    override val lifecycle: Lifecycle,
+    private val packageName: String
+) : IAuthService.Stub(), LifecycleOwner {
     override fun performProxyRequest(callbacks: IAuthCallbacks, request: ProxyRequest) {
         Log.d(TAG, "performProxyRequest($packageName, $request)")
         lifecycleScope.launchWhenStarted {
-            callbacks.onProxyResponse(ProxyResponse().apply { gmsStatusCode = CommonStatusCodes.CANCELED })
+            callbacks.onProxyResponse(ProxyResponse().apply {
+                gmsStatusCode = CommonStatusCodes.CANCELED
+            })
         }
     }
 
     override fun getSpatulaHeader(callbacks: IAuthCallbacks) {
         Log.d(TAG, "getSpatulaHeader($packageName)")
         lifecycleScope.launchWhenStarted {
-            val result = withContext(Dispatchers.IO) { AppCertManager(context).getSpatulaHeader(packageName) }
+            val result =
+                withContext(Dispatchers.IO) { AppCertManager(context).getSpatulaHeader(packageName) }
             Log.d(TAG, "Result: $result")
             callbacks.onSpatulaHeader(result)
         }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

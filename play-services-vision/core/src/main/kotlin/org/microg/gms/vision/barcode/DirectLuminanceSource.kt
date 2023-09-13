@@ -8,7 +8,8 @@ package org.microg.gms.vision.barcode
 import com.google.zxing.LuminanceSource
 import java.nio.ByteBuffer
 
-class DirectLuminanceSource(width: Int, height: Int, val bytes: ByteBuffer) : LuminanceSource(width, height) {
+class DirectLuminanceSource(width: Int, height: Int, val bytes: ByteBuffer) :
+    LuminanceSource(width, height) {
     override fun getRow(y: Int, row: ByteArray?): ByteArray {
         val row = row?.takeIf { it.size >= width } ?: ByteArray(width)
         bytes.position(width * y)

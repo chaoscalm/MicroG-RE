@@ -17,7 +17,11 @@ import org.microg.gms.common.GmsService
 private const val TAG = "OssLicensesService"
 
 class OssLicensesService : BaseService(TAG, GmsService.OSS_LICENSES) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService?
+    ) {
         callback.onPostInitComplete(SUCCESS, OssLicensesServiceImpl(), null)
     }
 }

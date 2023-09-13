@@ -16,22 +16,31 @@ import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
 import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest
 import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 
-class SourceLocationEngine(private val locationSource: ILocationSourceDelegate) : LocationEngine, IOnLocationChangeListener.Stub() {
-    val callbacks: MutableSet<Pair<LocationEngineCallback<LocationEngineResult>, Handler>> = hashSetOf()
+class SourceLocationEngine(private val locationSource: ILocationSourceDelegate) : LocationEngine,
+    IOnLocationChangeListener.Stub() {
+    val callbacks: MutableSet<Pair<LocationEngineCallback<LocationEngineResult>, Handler>> =
+        hashSetOf()
     var lastLocation: Location? = null
 
     override fun getLastLocation(callback: LocationEngineCallback<LocationEngineResult>) {
         callback.onSuccess(LocationEngineResult.create(lastLocation))
     }
 
-    override fun requestLocationUpdates(request: LocationEngineRequest, callback: LocationEngineCallback<LocationEngineResult>, looper: Looper?) {
+    override fun requestLocationUpdates(
+        request: LocationEngineRequest,
+        callback: LocationEngineCallback<LocationEngineResult>,
+        looper: Looper?
+    ) {
         callbacks.add(callback to Handler(looper ?: Looper.myLooper() ?: Looper.getMainLooper()))
         if (callbacks.size == 1) {
             locationSource.activate(this)
         }
     }
 
-    override fun requestLocationUpdates(request: LocationEngineRequest, pendingIntent: PendingIntent?) {
+    override fun requestLocationUpdates(
+        request: LocationEngineRequest,
+        pendingIntent: PendingIntent?
+    ) {
         throw UnsupportedOperationException()
     }
 

@@ -10,7 +10,9 @@ package com.google.android.gms.pay;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+
 import androidx.annotation.IntDef;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.HasApiKey;
 import com.google.android.gms.tasks.Task;

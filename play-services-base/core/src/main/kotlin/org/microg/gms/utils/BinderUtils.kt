@@ -12,7 +12,13 @@ import android.util.Log
 
 private const val TAG = "BinderUtils"
 
-fun IBinder.warnOnTransactionIssues(code: Int, reply: Parcel?, flags: Int, tag: String = TAG, base: () -> Boolean): Boolean {
+fun IBinder.warnOnTransactionIssues(
+    code: Int,
+    reply: Parcel?,
+    flags: Int,
+    tag: String = TAG,
+    base: () -> Boolean
+): Boolean {
     if (base.invoke()) {
         if ((flags and Binder.FLAG_ONEWAY) > 0 && (reply?.dataSize() ?: 0) > 0) {
             Log.w(tag, "Method $code in $interfaceDescriptor is oneway, but returned data")

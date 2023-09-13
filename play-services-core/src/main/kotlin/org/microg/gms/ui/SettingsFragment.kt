@@ -22,14 +22,16 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
 
-        findPreference<Preference>(PREF_CHECKIN)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openCheckinSettings)
-            true
-        }
-        findPreference<Preference>(PREF_GCM)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openGcmSettings)
-            true
-        }
+        findPreference<Preference>(PREF_CHECKIN)!!.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.openCheckinSettings)
+                true
+            }
+        findPreference<Preference>(PREF_GCM)!!.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.openGcmSettings)
+                true
+            }
 //        findPreference<Preference>(PREF_SNET)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 //            findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
 //            true
@@ -42,11 +44,13 @@ class SettingsFragment : ResourceSettingsFragment() {
 //            findNavController().navigate(requireContext(), NearbyPreferencesIntegration.exposureNotificationNavigationId)
 //            true
 //        }
-        findPreference<Preference>(PREF_ABOUT)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openAbout)
-            true
-        }
-        findPreference<Preference>(PREF_ABOUT)!!.summary = getString(R.string.about_version_str, AboutFragment.getSelfVersion(context))
+        findPreference<Preference>(PREF_ABOUT)!!.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.openAbout)
+                true
+            }
+        findPreference<Preference>(PREF_ABOUT)!!.summary =
+            getString(R.string.about_version_str, AboutFragment.getSelfVersion(context))
     }
 
     override fun onResume() {
@@ -56,12 +60,22 @@ class SettingsFragment : ResourceSettingsFragment() {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
             database.close()
-            findPreference<Preference>(PREF_GCM)!!.summary = context.getString(R.string.service_status_enabled_short) + " - " + context.resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
+            findPreference<Preference>(PREF_GCM)!!.summary =
+                context.getString(R.string.service_status_enabled_short) + " - " + context.resources.getQuantityString(
+                    R.plurals.gcm_registered_apps_counter,
+                    regCount,
+                    regCount
+                )
         } else {
             findPreference<Preference>(PREF_GCM)!!.setSummary(R.string.service_status_disabled_short)
         }
 
-        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(
+            if (CheckinPreferences.isEnabled(
+                    requireContext()
+                )
+            ) R.string.service_status_enabled_short else R.string.service_status_disabled_short
+        )
 //        findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
 
 //        findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable
@@ -72,7 +86,8 @@ class SettingsFragment : ResourceSettingsFragment() {
     companion object {
         const val PREF_ABOUT = "pref_about"
         const val PREF_GCM = "pref_gcm"
-//        const val PREF_SNET = "pref_snet"
+
+        //        const val PREF_SNET = "pref_snet"
 //        const val PREF_LOCATION = "pref_location"
         const val PREF_CHECKIN = "pref_checkin"
 //        const val PREF_EXPOSURE = "pref_exposure"

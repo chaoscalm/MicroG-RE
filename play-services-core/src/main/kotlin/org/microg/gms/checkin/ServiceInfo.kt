@@ -14,7 +14,11 @@ import org.microg.gms.settings.SettingsContract.getSettings
 import org.microg.gms.settings.SettingsContract.setSettings
 import java.io.Serializable
 
-data class ServiceInfo(val configuration: ServiceConfiguration, val lastCheckin: Long, val androidId: Long) : Serializable
+data class ServiceInfo(
+    val configuration: ServiceConfiguration,
+    val lastCheckin: Long,
+    val androidId: Long
+) : Serializable
 
 data class ServiceConfiguration(val enabled: Boolean) : Serializable
 
@@ -29,14 +33,15 @@ suspend fun getCheckinServiceInfo(context: Context): ServiceInfo = withContext(D
     }
 }
 
-suspend fun setCheckinServiceConfiguration(context: Context, configuration: ServiceConfiguration) = withContext(Dispatchers.IO) {
-    val serviceInfo = getCheckinServiceInfo(context)
-    if (serviceInfo.configuration == configuration) return@withContext
-    // enabled state is not already set, setting it now
-    setSettings(context, CheckIn.getContentUri(context)) {
-        put(CheckIn.ENABLED, configuration.enabled)
+suspend fun setCheckinServiceConfiguration(context: Context, configuration: ServiceConfiguration) =
+    withContext(Dispatchers.IO) {
+        val serviceInfo = getCheckinServiceInfo(context)
+        if (serviceInfo.configuration == configuration) return@withContext
+        // enabled state is not already set, setting it now
+        setSettings(context, CheckIn.getContentUri(context)) {
+            put(CheckIn.ENABLED, configuration.enabled)
+        }
+        if (configuration.enabled) {
+            context.sendOrderedBroadcast(Intent(context, TriggerReceiver::class.java), null)
+        }
     }
-    if (configuration.enabled) {
-        context.sendOrderedBroadcast(Intent(context, TriggerReceiver::class.java), null)
-    }
-}

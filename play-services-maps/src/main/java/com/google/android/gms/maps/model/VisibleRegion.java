@@ -39,7 +39,7 @@ public class VisibleRegion extends AutoSafeParcelable {
     }
 
     public VisibleRegion(int versionCode, LatLng nearLeft, LatLng nearRight, LatLng farLeft,
-            LatLng farRight, LatLngBounds bounds) {
+                         LatLng farRight, LatLngBounds bounds) {
         this.versionCode = versionCode;
         this.nearLeft = nearLeft;
         this.nearRight = nearRight;
@@ -49,7 +49,7 @@ public class VisibleRegion extends AutoSafeParcelable {
     }
 
     public VisibleRegion(LatLng nearLeft, LatLng nearRight, LatLng farLeft, LatLng farRight,
-            LatLngBounds bounds) {
+                         LatLngBounds bounds) {
         this(1, nearLeft, nearRight, farLeft, farRight, bounds);
     }
 

@@ -21,7 +21,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
+
 import org.microg.gms.maps.vtm.GoogleMapImpl;
 import org.microg.gms.maps.vtm.ResourcesContainer;
 import org.microg.gms.maps.vtm.R;

@@ -156,7 +156,7 @@ class CtapHidConnection(
         throw RuntimeException("Unexpected response: $response")
     }
 
-    override suspend fun <Q: Ctap2Request, S: Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
+    override suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
         require(hasCtap2Support)
         sendRequest(CtapHidCborRequest(command.request))
         val response = readResponse(command.timeout)
@@ -194,4 +194,5 @@ class CtapHidConnection(
     }
 }
 
-class CtapHidMessageStatusException(val status: Int) : Exception("Received status ${status.toString(16)}")
+class CtapHidMessageStatusException(val status: Int) :
+    Exception("Received status ${status.toString(16)}")

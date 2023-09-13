@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -15,7 +14,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы использовать:</string>
     <string name="account_manager_title">Менеджер аккаунта Google</string>
     <string name="sorry">Извините…</string>
-	<string name="auth_before_connect">"Приложение на вашем устройстве пытается войти в учетную запись Google.
+    <string name="auth_before_connect">"Приложение на вашем устройстве пытается войти в учетную запись Google.
 
 Если это было намеренно, нажмите кнопку <b>Войти</b>, чтобы подключиться к странице входа в Google, если нет, нажмите <b>Отмена</b>, чтобы вернуться к приложению, которое вызвало это диалоговое окно."</string>
     <string name="auth_sign_in">Войти</string>
@@ -92,7 +91,7 @@
     <string name="self_check_resolution_app_installed">Установите приложение <xliff:g example="F-Droid">%1$s</xliff:g> или совместимое. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения совместимы.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> имеет правильную подпись: </string>
     <string name="self_check_resolution_correct_sig">Либо установленный <xliff:g example="F-Droid">%1$s</xliff:g> не совместим, либо подмена подписи не активна для него. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения или прошивки совместимы.</string>
-	
+
     <string name="self_check_name_battery_optimizations">Оптимизация энергопотребления отключена:</string>
     <string name="self_check_resolution_battery_optimizations">Нажмите здесь, чтобы разрешить приложению работать в фоне. Без этого некоторые приложения могут работать со сбоями.</string>
 
@@ -140,7 +139,7 @@
     <string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
     <string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
-	
+
     <string name="pref_about_title">О сервисах microG Services</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>
 

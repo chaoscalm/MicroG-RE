@@ -52,7 +52,11 @@ class LocationManagerService : BaseService(TAG, GmsService.LOCATION_MANAGER) {
         super.onDestroy()
     }
 
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService?
+    ) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
         locationManager.start()

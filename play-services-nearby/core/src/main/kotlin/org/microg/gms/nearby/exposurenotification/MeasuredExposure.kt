@@ -11,9 +11,22 @@ import java.util.concurrent.TimeUnit
 
 data class ExposureScanSummary(val time: Long, val rpis: Int, val records: Int)
 
-data class PlainExposure(val rpi: ByteArray, val aem: ByteArray, val timestamp: Long, val duration: Long, val rssi: Int)
+data class PlainExposure(
+    val rpi: ByteArray,
+    val aem: ByteArray,
+    val timestamp: Long,
+    val duration: Long,
+    val rssi: Int
+)
 
-data class MeasuredExposure(val timestamp: Long, val duration: Long, val rssi: Int, val txPower: Int, @CalibrationConfidence val confidence: Int, val key: TemporaryExposureKey) {
+data class MeasuredExposure(
+    val timestamp: Long,
+    val duration: Long,
+    val rssi: Int,
+    val txPower: Int,
+    @CalibrationConfidence val confidence: Int,
+    val key: TemporaryExposureKey
+) {
     val attenuation
         get() = txPower - (rssi + currentDeviceInfo.rssiCorrection)
 }
@@ -23,14 +36,21 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
     val result = arrayListOf<MergedExposure>()
     for (key in keys) {
         var merged: MergedExposure? = null
-        for (exposure in filter { it.key == key }.distinctBy { it.timestamp }.sortedBy { it.timestamp }) {
+        for (exposure in filter { it.key == key }.distinctBy { it.timestamp }
+            .sortedBy { it.timestamp }) {
             if (merged != null && merged.timestamp + MergedExposure.MAXIMUM_DURATION > exposure.timestamp) {
                 merged += exposure
             } else {
                 if (merged != null) {
                     result.add(merged)
                 }
-                merged = MergedExposure(key, exposure.timestamp, exposure.txPower, exposure.confidence, listOf(MergedSubExposure(exposure.attenuation, exposure.duration)))
+                merged = MergedExposure(
+                    key,
+                    exposure.timestamp,
+                    exposure.txPower,
+                    exposure.confidence,
+                    listOf(MergedSubExposure(exposure.attenuation, exposure.duration))
+                )
             }
             if (merged.durationInMinutes >= 30) {
                 result.add(merged)
@@ -46,7 +66,13 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
 
 data class MergedSubExposure(val attenuation: Int, val duration: Long)
 
-data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, val txPower: Int, @CalibrationConfidence val confidence: Int, val subs: List<MergedSubExposure>) {
+data class MergedExposure internal constructor(
+    val key: TemporaryExposureKey,
+    val timestamp: Long,
+    val txPower: Int,
+    @CalibrationConfidence val confidence: Int,
+    val subs: List<MergedSubExposure>
+) {
     @RiskLevel
     val transmissionRiskLevel: Int
         get() = key.transmissionRiskLevel
@@ -58,7 +84,9 @@ data class MergedExposure internal constructor(val key: TemporaryExposureKey, va
         get() = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - timestamp)
 
     val attenuation
-        get() = if (subs.map { it.duration }.sum() == 0L) subs[0].attenuation else (subs.map { it.attenuation * it.duration }.sum().toDouble() / subs.map { it.duration }.sum().toDouble()).toInt()
+        get() = if (subs.map { it.duration }
+                .sum() == 0L) subs[0].attenuation else (subs.map { it.attenuation * it.duration }
+            .sum().toDouble() / subs.map { it.duration }.sum().toDouble()).toInt()
 
     fun getAttenuationRiskScore(configuration: ExposureConfiguration): Int {
         return when {
@@ -114,31 +142,43 @@ data class MergedExposure internal constructor(val key: TemporaryExposureKey, va
     }
 
     fun getRiskScore(configuration: ExposureConfiguration): Int {
-        val risk = getAttenuationRiskScore(configuration) * getDaysSinceLastExposureRiskScore(configuration) * getDurationRiskScore(configuration) * getTransmissionRiskScore(configuration)
-        Log.d(TAG, "Risk score calculation: ${getAttenuationRiskScore(configuration)} * ${getDaysSinceLastExposureRiskScore(configuration)} * ${getDurationRiskScore(configuration)} * ${getTransmissionRiskScore(configuration)} = $risk")
+        val risk =
+            getAttenuationRiskScore(configuration) * getDaysSinceLastExposureRiskScore(configuration) * getDurationRiskScore(
+                configuration
+            ) * getTransmissionRiskScore(configuration)
+        Log.d(
+            TAG,
+            "Risk score calculation: ${getAttenuationRiskScore(configuration)} * ${
+                getDaysSinceLastExposureRiskScore(configuration)
+            } * ${getDurationRiskScore(configuration)} * ${getTransmissionRiskScore(configuration)} = $risk"
+        )
         if (risk < configuration.minimumRiskScore) return 0
         return risk
     }
 
     fun getAttenuationDurations(configuration: ExposureConfiguration): IntArray {
         return intArrayOf(
-                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation < configuration.durationAtAttenuationThresholds[0] }.map { it.duration }.sum()).toInt(),
-                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[0] && it.attenuation < configuration.durationAtAttenuationThresholds[1] }.map { it.duration }.sum()).toInt(),
-                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[1] }.map { it.duration }.sum()).toInt()
+            TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation < configuration.durationAtAttenuationThresholds[0] }
+                .map { it.duration }.sum()).toInt(),
+            TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[0] && it.attenuation < configuration.durationAtAttenuationThresholds[1] }
+                .map { it.duration }.sum()).toInt(),
+            TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[1] }
+                .map { it.duration }.sum()).toInt()
         )
     }
 
     fun toExposureInformation(configuration: ExposureConfiguration): ExposureInformation =
-            ExposureInformation.ExposureInformationBuilder()
-                    .setDateMillisSinceEpoch(key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS)
-                    .setDurationMinutes(durationInMinutes.toInt())
-                    .setAttenuationValue(attenuation)
-                    .setTransmissionRiskLevel(transmissionRiskLevel)
-                    .setTotalRiskScore(getRiskScore(configuration))
-                    .setAttenuationDurations(getAttenuationDurations(configuration))
-                    .build()
+        ExposureInformation.ExposureInformationBuilder()
+            .setDateMillisSinceEpoch(key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS)
+            .setDurationMinutes(durationInMinutes.toInt())
+            .setAttenuationValue(attenuation)
+            .setTransmissionRiskLevel(transmissionRiskLevel)
+            .setTotalRiskScore(getRiskScore(configuration))
+            .setAttenuationDurations(getAttenuationDurations(configuration))
+            .build()
 
-    operator fun plus(exposure: MeasuredExposure): MergedExposure = copy(subs = subs + MergedSubExposure(exposure.attenuation, exposure.duration))
+    operator fun plus(exposure: MeasuredExposure): MergedExposure =
+        copy(subs = subs + MergedSubExposure(exposure.attenuation, exposure.duration))
 
     companion object {
         const val MAXIMUM_DURATION = 30 * 60 * 1000

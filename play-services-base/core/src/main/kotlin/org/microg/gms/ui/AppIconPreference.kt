@@ -15,8 +15,19 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 
 class AppIconPreference : AppPreference {
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context) : super(context)
 
@@ -26,7 +37,8 @@ class AppIconPreference : AppPreference {
         if (icon is ImageView) {
             icon.adjustViewBounds = true
             icon.scaleType = ImageView.ScaleType.CENTER_INSIDE
-            icon.maxHeight = (32.0 * context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT).toInt()
+            icon.maxHeight =
+                (32.0 * context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT).toInt()
         }
     }
 }

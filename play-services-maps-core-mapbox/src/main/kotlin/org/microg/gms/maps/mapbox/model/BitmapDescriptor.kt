@@ -28,26 +28,53 @@ import com.mapbox.mapboxsdk.utils.ColorUtils
 
 open class BitmapDescriptorImpl(private val id: String, internal val size: FloatArray) {
     open fun applyTo(options: SymbolOptions, anchor: FloatArray, dpiFactor: Float): SymbolOptions {
-        return options.withIconImage(id).withIconAnchor(ICON_ANCHOR_TOP_LEFT).withIconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor))
+        return options.withIconImage(id).withIconAnchor(ICON_ANCHOR_TOP_LEFT).withIconOffset(
+            arrayOf(
+                -anchor[0] * size[0] / dpiFactor,
+                -anchor[1] * size[1] / dpiFactor
+            )
+        )
     }
 
     open fun applyTo(symbol: Symbol, anchor: FloatArray, dpiFactor: Float) {
         symbol.iconAnchor = ICON_ANCHOR_TOP_LEFT
-        symbol.iconOffset = PointF(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)
+        symbol.iconOffset =
+            PointF(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)
         symbol.iconImage = id
     }
 
     open fun applyTo(symbolLayer: SymbolLayer, anchor: FloatArray, dpiFactor: Float) {
         symbolLayer.withProperties(
             PropertyFactory.iconAnchor(ICON_ANCHOR_TOP_LEFT),
-            PropertyFactory.iconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)),
+            PropertyFactory.iconOffset(
+                arrayOf(
+                    -anchor[0] * size[0] / dpiFactor,
+                    -anchor[1] * size[1] / dpiFactor
+                )
+            ),
             PropertyFactory.iconImage(id)
         )
     }
 }
 
-class ColorBitmapDescriptorImpl(id: String, size: FloatArray, val hue: Float) : BitmapDescriptorImpl(id, size) {
-    override fun applyTo(options: SymbolOptions, anchor: FloatArray, dpiFactor: Float): SymbolOptions = super.applyTo(options, anchor, dpiFactor).withIconColor(ColorUtils.colorToRgbaString(Color.HSVToColor(floatArrayOf(hue, 1.0f, 0.5f))))
+class ColorBitmapDescriptorImpl(id: String, size: FloatArray, val hue: Float) :
+    BitmapDescriptorImpl(id, size) {
+    override fun applyTo(
+        options: SymbolOptions,
+        anchor: FloatArray,
+        dpiFactor: Float
+    ): SymbolOptions = super.applyTo(options, anchor, dpiFactor).withIconColor(
+        ColorUtils.colorToRgbaString(
+            Color.HSVToColor(
+                floatArrayOf(
+                    hue,
+                    1.0f,
+                    0.5f
+                )
+            )
+        )
+    )
+
     override fun applyTo(symbol: Symbol, anchor: FloatArray, dpiFactor: Float) {
         super.applyTo(symbol, anchor, dpiFactor)
         symbol.setIconColor(Color.HSVToColor(floatArrayOf(hue, 1.0f, 0.5f)))

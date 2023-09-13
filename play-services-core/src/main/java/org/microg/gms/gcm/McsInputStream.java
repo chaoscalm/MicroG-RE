@@ -170,7 +170,7 @@ public class McsInputStream extends Thread implements Closeable {
                     return null;
             }
         } catch (IllegalStateException e) {
-            Log.w(TAG, "Error parsing tag: "+mcsTag, e);
+            Log.w(TAG, "Error parsing tag: " + mcsTag, e);
             return null;
         }
     }

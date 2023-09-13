@@ -9,6 +9,7 @@
 package com.google.android.gms.location;
 
 import androidx.annotation.NonNull;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 

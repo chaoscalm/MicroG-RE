@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.location.GeofencingClient;

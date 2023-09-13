@@ -43,12 +43,11 @@ public abstract class AssistantActivity extends AppCompatActivity {
         findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 if (!isHuaweiDevice()) {
-                     onNextButtonClicked();
-                 }
-                 else {
-                     onHuaweiButtonClicked();
-                 }
+                if (!isHuaweiDevice()) {
+                    onNextButtonClicked();
+                } else {
+                    onHuaweiButtonClicked();
+                }
             }
         });
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
@@ -59,10 +58,10 @@ public abstract class AssistantActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isHuaweiDevice(){
+    private boolean isHuaweiDevice() {
         String manufacturer = android.os.Build.MANUFACTURER;
-        String brand =  android.os.Build.BRAND;
-        return  manufacturer.toLowerCase().contains("huawei") ||  brand.toLowerCase().contains("huawei");
+        String brand = android.os.Build.BRAND;
+        return manufacturer.toLowerCase().contains("huawei") || brand.toLowerCase().contains("huawei");
     }
 
     @SuppressLint("WrongViewCast")
@@ -88,6 +87,7 @@ public abstract class AssistantActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.next_button)).setText(text);
         }
     }
+
     protected void onHuaweiButtonClicked() {
 
     }

@@ -26,12 +26,15 @@ import org.microg.gms.common.PackageUtils
 import java.io.*
 import java.util.zip.ZipFile
 
-class MultiArchLoader(private val mapContext: Context, private val appContext: Context) : LibraryLoader() {
+class MultiArchLoader(private val mapContext: Context, private val appContext: Context) :
+    LibraryLoader() {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     override fun load(name: String) {
         try {
-            val otherAppInfo = mapContext.packageManager.getApplicationInfo(appContext.packageName, 0)
-            var primaryCpuAbi = ApplicationInfo::class.java.getField("primaryCpuAbi").get(otherAppInfo) as String?
+            val otherAppInfo =
+                mapContext.packageManager.getApplicationInfo(appContext.packageName, 0)
+            var primaryCpuAbi =
+                ApplicationInfo::class.java.getField("primaryCpuAbi").get(otherAppInfo) as String?
             if (primaryCpuAbi == "armeabi") {
                 primaryCpuAbi = "armeabi-v7a"
             }
@@ -39,7 +42,8 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
                 val path = "lib/$primaryCpuAbi/lib$name.so"
                 val cacheFile = File("${appContext.cacheDir.absolutePath}/.gmscore/$path")
                 cacheFile.parentFile?.mkdirs()
-                val cacheFileStamp = File("${appContext.cacheDir.absolutePath}/.gmscore/$path.stamp")
+                val cacheFileStamp =
+                    File("${appContext.cacheDir.absolutePath}/.gmscore/$path.stamp")
                 val cacheVersion = kotlin.runCatching { cacheFileStamp.readText() }.getOrNull()
                 val mapVersion = PackageUtils.versionName(mapContext, Constants.GMS_PACKAGE_NAME)
                 val apkFile = File(mapContext.packageCodePath)

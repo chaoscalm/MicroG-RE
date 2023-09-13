@@ -75,7 +75,7 @@ message LoginRequest {
     ANDROID_ID = 2;
   }
   required string id = 1; // Must be present ( proto required ), may be empty
-                          // string.
+  // string.
   // mcs.android.com.
   required string domain = 2;
   // Decimal android ID

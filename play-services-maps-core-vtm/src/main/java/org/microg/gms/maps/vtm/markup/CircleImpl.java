@@ -19,6 +19,7 @@ package org.microg.gms.maps.vtm.markup;
 import android.os.RemoteException;
 
 import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.model.CircleOptions;

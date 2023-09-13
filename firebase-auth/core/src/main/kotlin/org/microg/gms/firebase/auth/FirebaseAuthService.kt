@@ -65,24 +65,45 @@ private fun Intent.getSmsMessages(): Array<SmsMessage> {
     return if (Build.VERSION.SDK_INT >= 19) {
         Telephony.Sms.Intents.getMessagesFromIntent(this)
     } else {
-        (getSerializableExtra("pdus") as? Array<ByteArray>)?.map { SmsMessage.createFromPdu(it) }.orEmpty().toTypedArray()
+        (getSerializableExtra("pdus") as? Array<ByteArray>)?.map { SmsMessage.createFromPdu(it) }
+            .orEmpty().toTypedArray()
     }
 }
 
 class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService?
+    ) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         val apiKey = request.extras?.getString(Constants.EXTRA_API_KEY)
         val libraryVersion = request.extras?.getString(Constants.EXTRA_LIBRARY_VERSION)
         if (apiKey == null) {
             callback.onPostInitComplete(CommonStatusCodes.DEVELOPER_ERROR, null, null)
         } else {
-            callback.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey).asBinder(), null)
+            callback.onPostInitComplete(
+                0,
+                FirebaseAuthServiceImpl(
+                    this,
+                    lifecycle,
+                    request.packageName,
+                    libraryVersion,
+                    apiKey
+                ).asBinder(),
+                null
+            )
         }
     }
 }
 
-class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
+class FirebaseAuthServiceImpl(
+    private val context: Context,
+    override val lifecycle: Lifecycle,
+    private val packageName: String,
+    private val libraryVersion: String?,
+    private val apiKey: String
+) : IFirebaseAuthService.Stub(), LifecycleOwner {
     private val client = IdentityToolkitClient(context, apiKey)
     private var authorizedDomain: String? = null
 
@@ -138,20 +159,24 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         lastSignInTimestamp = getStringOrNull("lastLoginAt")?.toLong() ?: 0L
     }
 
-    private fun JSONObject.toCreateAuthUriResponse(): CreateAuthUriResponse = CreateAuthUriResponse().apply {
-        authUri = getStringOrNull("authUri")
-        isRegistered = optBoolean("registered")
-        providerId = getStringOrNull("providerId")
-        isForExistingProvider = optBoolean("forExistingProvider")
-        for (i in 0 until getJSONArrayLength("allProviders")) {
-            stringList.values.add(getJSONArray("allProviders").getString(i))
+    private fun JSONObject.toCreateAuthUriResponse(): CreateAuthUriResponse =
+        CreateAuthUriResponse().apply {
+            authUri = getStringOrNull("authUri")
+            isRegistered = optBoolean("registered")
+            providerId = getStringOrNull("providerId")
+            isForExistingProvider = optBoolean("forExistingProvider")
+            for (i in 0 until getJSONArrayLength("allProviders")) {
+                stringList.values.add(getJSONArray("allProviders").getString(i))
+            }
+            for (i in 0 until getJSONArrayLength("signinMethods")) {
+                signInMethods.add(getJSONArray("signinMethods").getString(i))
+            }
         }
-        for (i in 0 until getJSONArrayLength("signinMethods")) {
-            signInMethods.add(getJSONArray("signinMethods").getString(i))
-        }
-    }
 
-    override fun applyActionCode(request: ApplyActionCodeAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun applyActionCode(
+        request: ApplyActionCodeAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: applyActionCode")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
@@ -166,22 +191,36 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun changeEmailCompat(cachedState: String?, email: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun changeEmailCompat(
+        cachedState: String?,
+        email: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: changeEmailCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun changePassword(request: ChangePasswordAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun changePassword(
+        request: ChangePasswordAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: changePassword")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun changePasswordCompat(cachedState: String?, password: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun changePasswordCompat(
+        cachedState: String?,
+        password: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: changePasswordCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun checkActionCode(request: CheckActionCodeAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun checkActionCode(
+        request: CheckActionCodeAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: checkActionCode")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
@@ -191,25 +230,42 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun confirmPasswordReset(request: ConfirmPasswordResetAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun confirmPasswordReset(
+        request: ConfirmPasswordResetAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: confirmPasswordReset")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun confirmPasswordResetCompat(code: String?, newPassword: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun confirmPasswordResetCompat(
+        code: String?,
+        newPassword: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: confirmPasswordResetCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun createUserWithEmailAndPassword(request: CreateUserWithEmailAndPasswordAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun createUserWithEmailAndPassword(
+        request: CreateUserWithEmailAndPasswordAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "createUserWithEmailAndPassword")
             try {
-                val tokenResult = client.signupNewUser(email = request.email, password = request.password, tenantId = request.tenantId)
+                val tokenResult = client.signupNewUser(
+                    email = request.email,
+                    password = request.password,
+                    tenantId = request.tenantId
+                )
                 val idToken = tokenResult.getString("idToken")
                 val refreshToken = tokenResult.getString("refreshToken")
-                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
-                val accountInfoResult = client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser().apply { this.isNewUser = true }
+                val getTokenResponse =
+                    client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0)
+                        .toGetAccountInfoUser().apply { this.isNewUser = true }
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -219,8 +275,14 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun createUserWithEmailAndPasswordCompat(email: String?, password: String?, callbacks: IFirebaseAuthCallbacks) {
-        createUserWithEmailAndPassword(CreateUserWithEmailAndPasswordAidlRequest().apply { this.email = email; this.password = password }, callbacks)
+    override fun createUserWithEmailAndPasswordCompat(
+        email: String?,
+        password: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        createUserWithEmailAndPassword(CreateUserWithEmailAndPasswordAidlRequest().apply {
+            this.email = email; this.password = password
+        }, callbacks)
     }
 
     override fun delete(request: DeleteAidlRequest, callbacks: IFirebaseAuthCallbacks) {
@@ -233,21 +295,32 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun finalizeMfaEnrollment(request: FinalizeMfaEnrollmentAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun finalizeMfaEnrollment(
+        request: FinalizeMfaEnrollmentAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: finalizeMfaEnrollment")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun finalizeMfaSignIn(request: FinalizeMfaSignInAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun finalizeMfaSignIn(
+        request: FinalizeMfaSignInAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: finalizeMfaSignIn")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun getAccessToken(request: GetAccessTokenAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun getAccessToken(
+        request: GetAccessTokenAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "getAccessToken")
             try {
-                callbacks.onGetTokenResponse(client.getTokenByRefreshToken(request.refreshToken).toGetTokenResponse())
+                callbacks.onGetTokenResponse(
+                    client.getTokenByRefreshToken(request.refreshToken).toGetTokenResponse()
+                )
             } catch (e: Exception) {
                 Log.w(TAG, "callback: onFailure", e)
                 callbacks.onFailure(Status(CommonStatusCodes.INTERNAL_ERROR, e.message))
@@ -256,14 +329,25 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
     }
 
     override fun getAccessTokenCompat(refreshToken: String?, callbacks: IFirebaseAuthCallbacks) {
-        getAccessToken(GetAccessTokenAidlRequest().apply { this.refreshToken = refreshToken }, callbacks)
+        getAccessToken(
+            GetAccessTokenAidlRequest().apply { this.refreshToken = refreshToken },
+            callbacks
+        )
     }
 
-    override fun getProvidersForEmail(request: GetProvidersForEmailAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun getProvidersForEmail(
+        request: GetProvidersForEmailAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "getProvidersForEmail")
             try {
-                callbacks.onCreateAuthUriResponse(client.createAuthUri(identifier = request.email, tenantId = request.tenantId).toCreateAuthUriResponse())
+                callbacks.onCreateAuthUriResponse(
+                    client.createAuthUri(
+                        identifier = request.email,
+                        tenantId = request.tenantId
+                    ).toCreateAuthUriResponse()
+                )
             } catch (e: Exception) {
                 Log.w(TAG, "callback: onFailure", e)
                 callbacks.onFailure(Status(CommonStatusCodes.INTERNAL_ERROR, e.message))
@@ -272,16 +356,29 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
     }
 
     override fun getProvidersForEmailCompat(email: String?, callbacks: IFirebaseAuthCallbacks) {
-        getProvidersForEmail(GetProvidersForEmailAidlRequest().apply { this.email = email }, callbacks)
+        getProvidersForEmail(
+            GetProvidersForEmailAidlRequest().apply { this.email = email },
+            callbacks
+        )
     }
 
-    override fun linkEmailAuthCredential(request: LinkEmailAuthCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun linkEmailAuthCredential(
+        request: LinkEmailAuthCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "linkEmailAuthCredential")
             try {
                 val getTokenResponse = refreshTokenResponse(request.cachedState)
-                val accountInfoResult = client.getAccountInfo(idToken = getTokenResponse.accessToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
-                val setAccountInfo = client.setAccountInfo(idToken = getTokenResponse.accessToken, localId = accountInfoResult.localId, email = request.email, password = request.password).toGetAccountInfoUser()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = getTokenResponse.accessToken)
+                        .getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
+                val setAccountInfo = client.setAccountInfo(
+                    idToken = getTokenResponse.accessToken,
+                    localId = accountInfoResult.localId,
+                    email = request.email,
+                    password = request.password
+                ).toGetAccountInfoUser()
                 accountInfoResult.email = setAccountInfo.email
                 accountInfoResult.isEmailVerified = setAccountInfo.isEmailVerified
                 accountInfoResult.providerInfoList = setAccountInfo.providerInfoList
@@ -293,26 +390,47 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun linkEmailAuthCredentialCompat(email: String?, password: String?, cachedState: String?, callbacks: IFirebaseAuthCallbacks) {
-        linkEmailAuthCredential(LinkEmailAuthCredentialAidlRequest().apply { this.email = email; this.password = password; this.cachedState = cachedState }, callbacks)
+    override fun linkEmailAuthCredentialCompat(
+        email: String?,
+        password: String?,
+        cachedState: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        linkEmailAuthCredential(LinkEmailAuthCredentialAidlRequest().apply {
+            this.email = email; this.password = password; this.cachedState = cachedState
+        }, callbacks)
     }
 
-    override fun linkFederatedCredential(request: LinkFederatedCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun linkFederatedCredential(
+        request: LinkFederatedCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: linkFederatedCredential")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun linkFederatedCredentialCompat(cachedState: String?, verifyAssertionRequest: VerifyAssertionRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun linkFederatedCredentialCompat(
+        cachedState: String?,
+        verifyAssertionRequest: VerifyAssertionRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: linkFederatedCredentialCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun linkPhoneAuthCredential(request: LinkPhoneAuthCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun linkPhoneAuthCredential(
+        request: LinkPhoneAuthCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: linkPhoneAuthCredential")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun linkPhoneAuthCredentialCompat(cachedState: String?, credential: PhoneAuthCredential?, callbacks: IFirebaseAuthCallbacks) {
+    override fun linkPhoneAuthCredentialCompat(
+        cachedState: String?,
+        credential: PhoneAuthCredential?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: linkPhoneAuthCredentialCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
@@ -322,7 +440,9 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
             try {
                 Log.d(TAG, "reload")
                 val getTokenResponse = refreshTokenResponse(request.cachedState)
-                val accountInfoResult = client.getAccountInfo(idToken = getTokenResponse.accessToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = getTokenResponse.accessToken)
+                        .getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -336,20 +456,23 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         reload(ReloadAidlRequest().apply { this.cachedState = cachedState }, callbacks)
     }
 
-    override fun sendEmailVerification(request: SendEmailVerificationWithSettingsAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun sendEmailVerification(
+        request: SendEmailVerificationWithSettingsAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             try {
                 Log.d(TAG, "sendEmailVerification")
                 client.getOobConfirmationCode(
-                        requestType = "VERIFY_EMAIL",
-                        idToken = request.token,
-                        iOSBundleId = request.settings?.iOSBundle,
-                        iOSAppStoreId = request.settings?.iOSAppStoreId,
-                        continueUrl = request.settings?.url,
-                        androidInstallApp = request.settings?.androidInstallApp,
-                        androidMinimumVersion = request.settings?.androidMinimumVersion,
-                        androidPackageName = request.settings?.androidPackageName,
-                        canHandleCodeInApp = request.settings?.handleCodeInApp
+                    requestType = "VERIFY_EMAIL",
+                    idToken = request.token,
+                    iOSBundleId = request.settings?.iOSBundle,
+                    iOSAppStoreId = request.settings?.iOSAppStoreId,
+                    continueUrl = request.settings?.url,
+                    androidInstallApp = request.settings?.androidInstallApp,
+                    androidMinimumVersion = request.settings?.androidMinimumVersion,
+                    androidPackageName = request.settings?.androidPackageName,
+                    canHandleCodeInApp = request.settings?.handleCodeInApp
                 )
                 callbacks.onEmailVerificationResponse()
             } catch (e: Exception) {
@@ -359,18 +482,37 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun sendEmailVerificationCompat(token: String?, actionCodeSettings: ActionCodeSettings?, callbacks: IFirebaseAuthCallbacks) {
-        sendEmailVerification(SendEmailVerificationWithSettingsAidlRequest().apply { this.token = token; this.settings = actionCodeSettings }, callbacks)
+    override fun sendEmailVerificationCompat(
+        token: String?,
+        actionCodeSettings: ActionCodeSettings?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        sendEmailVerification(SendEmailVerificationWithSettingsAidlRequest().apply {
+            this.token = token; this.settings = actionCodeSettings
+        }, callbacks)
     }
 
-    override fun sendVerificationCode(request: SendVerificationCodeAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun sendVerificationCode(
+        request: SendVerificationCodeAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             try {
                 Log.d(TAG, "sendVerificationCode")
                 val reCaptchaToken = when {
                     request.request.recaptchaToken != null -> request.request.recaptchaToken
-                    ReCaptchaOverlay.isSupported(context) -> ReCaptchaOverlay.awaitToken(context, apiKey, getAuthorizedDomain())
-                    ReCaptchaActivity.isSupported(context) -> ReCaptchaActivity.awaitToken(context, apiKey, getAuthorizedDomain())
+                    ReCaptchaOverlay.isSupported(context) -> ReCaptchaOverlay.awaitToken(
+                        context,
+                        apiKey,
+                        getAuthorizedDomain()
+                    )
+
+                    ReCaptchaActivity.isSupported(context) -> ReCaptchaActivity.awaitToken(
+                        context,
+                        apiKey,
+                        getAuthorizedDomain()
+                    )
+
                     else -> throw RuntimeException("No recaptcha token available")
                 }
                 var sessionInfo: String? = null
@@ -379,7 +521,8 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
                     override fun onReceive(context: Context, intent: Intent) {
                         var smsCode: String? = null
                         for (message in intent.getSmsMessages()) {
-                            smsCode = Regex("\\b([0-9]{6})\\b").find(message.messageBody)?.groups?.get(1)?.value
+                            smsCode =
+                                Regex("\\b([0-9]{6})\\b").find(message.messageBody)?.groups?.get(1)?.value
                                     ?: continue
                             Log.d(TAG, "Received SMS verification code: $smsCode")
                             break
@@ -399,7 +542,10 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
                         }
                     }
                 }
-                context.registerReceiver(receiver, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
+                context.registerReceiver(
+                    receiver,
+                    IntentFilter("android.provider.Telephony.SMS_RECEIVED")
+                )
                 var timeout = request.request.timeoutInSeconds * 1000L
                 if (timeout <= 0L) timeout = 120000L
                 Handler().postDelayed({
@@ -410,7 +556,10 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
                         Log.d(TAG, "callback: onVerificationAutoTimeOut")
                     }
                 }, timeout)
-                sessionInfo = client.sendVerificationCode(phoneNumber = request.request.phoneNumber, reCaptchaToken = reCaptchaToken).getString("sessionInfo")
+                sessionInfo = client.sendVerificationCode(
+                    phoneNumber = request.request.phoneNumber,
+                    reCaptchaToken = reCaptchaToken
+                ).getString("sessionInfo")
                 callbacks.onSendVerificationCodeResponse(sessionInfo)
                 Log.d(TAG, "callback: onSendVerificationCodeResponse")
             } catch (e: Exception) {
@@ -420,24 +569,34 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun sendVerificationCodeCompat(request: SendVerificationCodeRequest, callbacks: IFirebaseAuthCallbacks) {
-        sendVerificationCode(SendVerificationCodeAidlRequest().apply { this.request = request }, callbacks)
+    override fun sendVerificationCodeCompat(
+        request: SendVerificationCodeRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        sendVerificationCode(
+            SendVerificationCodeAidlRequest().apply { this.request = request },
+            callbacks
+        )
     }
 
-    override fun sendGetOobConfirmationCodeEmail(request: SendGetOobConfirmationCodeEmailAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun sendGetOobConfirmationCodeEmail(
+        request: SendGetOobConfirmationCodeEmailAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             try {
                 Log.d(TAG, "sendGetOobConfirmationCodeEmail")
                 client.getOobConfirmationCode(
-                        requestType = request.settings?.requestTypeAsString ?: "OOB_REQ_TYPE_UNSPECIFIED",
-                        email = request.email,
-                        iOSBundleId = request.settings?.iOSBundle,
-                        iOSAppStoreId = request.settings?.iOSAppStoreId,
-                        continueUrl = request.settings?.url,
-                        androidInstallApp = request.settings?.androidInstallApp,
-                        androidMinimumVersion = request.settings?.androidMinimumVersion,
-                        androidPackageName = request.settings?.androidPackageName,
-                        canHandleCodeInApp = request.settings?.handleCodeInApp
+                    requestType = request.settings?.requestTypeAsString
+                        ?: "OOB_REQ_TYPE_UNSPECIFIED",
+                    email = request.email,
+                    iOSBundleId = request.settings?.iOSBundle,
+                    iOSAppStoreId = request.settings?.iOSAppStoreId,
+                    continueUrl = request.settings?.url,
+                    androidInstallApp = request.settings?.androidInstallApp,
+                    androidMinimumVersion = request.settings?.androidMinimumVersion,
+                    androidPackageName = request.settings?.androidPackageName,
+                    canHandleCodeInApp = request.settings?.handleCodeInApp
                 )
                 Log.d(TAG, "callback: onResetPasswordResponse")
                 callbacks.onResetPasswordResponse(null)
@@ -448,29 +607,47 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun sendGetOobConfirmationCodeEmailCompat(email: String?, actionCodeSettings: ActionCodeSettings?, callbacks: IFirebaseAuthCallbacks) {
-        sendGetOobConfirmationCodeEmail(SendGetOobConfirmationCodeEmailAidlRequest().apply { this.email = email; this.settings = actionCodeSettings }, callbacks)
+    override fun sendGetOobConfirmationCodeEmailCompat(
+        email: String?,
+        actionCodeSettings: ActionCodeSettings?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        sendGetOobConfirmationCodeEmail(SendGetOobConfirmationCodeEmailAidlRequest().apply {
+            this.email = email; this.settings = actionCodeSettings
+        }, callbacks)
     }
 
-    override fun setFirebaseUiVersion(request: SetFirebaseUiVersionAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun setFirebaseUiVersion(
+        request: SetFirebaseUiVersionAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: setFirebaseUiVersion")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun setFirebaseUIVersionCompat(firebaseUiVersion: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun setFirebaseUIVersionCompat(
+        firebaseUiVersion: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: setFirebaseUIVersionCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun signInAnonymously(request: SignInAnonymouslyAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInAnonymously(
+        request: SignInAnonymouslyAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "signInAnonymously")
             try {
                 val tokenResult = client.signupNewUser(tenantId = request.tenantId)
                 val idToken = tokenResult.getString("idToken")
                 val refreshToken = tokenResult.getString("refreshToken")
-                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
-                val accountInfoResult = client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser().apply { this.isNewUser = true }
+                val getTokenResponse =
+                    client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0)
+                        .toGetAccountInfoUser().apply { this.isNewUser = true }
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -484,17 +661,26 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         signInAnonymously(SignInAnonymouslyAidlRequest(), callbacks)
     }
 
-    override fun signInWithCredential(request: SignInWithCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithCredential(
+        request: SignInWithCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: signInWithCredential")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun signInWithCredentialCompat(verifyAssertionRequest: VerifyAssertionRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithCredentialCompat(
+        verifyAssertionRequest: VerifyAssertionRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: signInWithCredentialCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun signInWithCustomToken(request: SignInWithCustomTokenAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithCustomToken(
+        request: SignInWithCustomTokenAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "signInWithCustomToken")
             try {
@@ -502,8 +688,11 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
                 val idToken = tokenResult.getString("idToken")
                 val refreshToken = tokenResult.getString("refreshToken")
                 val isNewUser = tokenResult.optBoolean("isNewUser")
-                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
-                val accountInfoResult = client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser().apply { this.isNewUser = isNewUser }
+                val getTokenResponse =
+                    client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0)
+                        .toGetAccountInfoUser().apply { this.isNewUser = isNewUser }
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -514,18 +703,31 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
     }
 
     override fun signInWithCustomTokenCompat(token: String, callbacks: IFirebaseAuthCallbacks) {
-        signInWithCustomToken(SignInWithCustomTokenAidlRequest().apply { this.token = token }, callbacks)
+        signInWithCustomToken(
+            SignInWithCustomTokenAidlRequest().apply { this.token = token },
+            callbacks
+        )
     }
 
-    override fun signInWithEmailAndPassword(request: SignInWithEmailAndPasswordAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithEmailAndPassword(
+        request: SignInWithEmailAndPasswordAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "signInWithEmailAndPassword")
             try {
-                val tokenResult = client.verifyPassword(email = request.email, password = request.password, tenantId = request.tenantId)
+                val tokenResult = client.verifyPassword(
+                    email = request.email,
+                    password = request.password,
+                    tenantId = request.tenantId
+                )
                 val idToken = tokenResult.getString("idToken")
                 val refreshToken = tokenResult.getString("refreshToken")
-                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
-                val accountInfoResult = client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
+                val getTokenResponse =
+                    client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0)
+                        .toGetAccountInfoUser()
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -535,35 +737,53 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun signInWithEmailAndPasswordCompat(email: String?, password: String?, callbacks: IFirebaseAuthCallbacks) {
-        signInWithEmailAndPassword(SignInWithEmailAndPasswordAidlRequest().apply { this.email = email; this.password = password }, callbacks)
+    override fun signInWithEmailAndPasswordCompat(
+        email: String?,
+        password: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        signInWithEmailAndPassword(SignInWithEmailAndPasswordAidlRequest().apply {
+            this.email = email; this.password = password
+        }, callbacks)
     }
 
-    override fun signInWithEmailLink(request: SignInWithEmailLinkAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithEmailLink(
+        request: SignInWithEmailLinkAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: signInWithEmailLink")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun signInWithEmailLinkCompat(credential: EmailAuthCredential?, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithEmailLinkCompat(
+        credential: EmailAuthCredential?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: signInWithEmailLinkCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun signInWithPhoneNumber(request: SignInWithPhoneNumberAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun signInWithPhoneNumber(
+        request: SignInWithPhoneNumberAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "signInWithPhoneNumber")
             try {
                 val tokenResult = client.verifyPhoneNumber(
-                        phoneNumber = request.credential.phoneNumber,
-                        temporaryProof = request.credential.temporaryProof,
-                        sessionInfo = request.credential.sessionInfo,
-                        code = request.credential.smsCode
+                    phoneNumber = request.credential.phoneNumber,
+                    temporaryProof = request.credential.temporaryProof,
+                    sessionInfo = request.credential.sessionInfo,
+                    code = request.credential.smsCode
                 )
                 val idToken = tokenResult.getString("idToken")
                 val refreshToken = tokenResult.getString("refreshToken")
                 val isNewUser = tokenResult.optBoolean("isNewUser")
-                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
-                val accountInfoResult = client.getAccountInfo(idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser().apply { this.isNewUser = isNewUser }
+                val getTokenResponse =
+                    client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken).getJSONArray("users").getJSONObject(0)
+                        .toGetAccountInfoUser().apply { this.isNewUser = isNewUser }
                 Log.d(TAG, "callback: onGetTokenResponseAndUser")
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
             } catch (e: Exception) {
@@ -573,16 +793,27 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun signInWithPhoneNumberCompat(credential: PhoneAuthCredential?, callbacks: IFirebaseAuthCallbacks) {
-        signInWithPhoneNumber(SignInWithPhoneNumberAidlRequest().apply { this.credential = credential }, callbacks)
+    override fun signInWithPhoneNumberCompat(
+        credential: PhoneAuthCredential?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        signInWithPhoneNumber(SignInWithPhoneNumberAidlRequest().apply {
+            this.credential = credential
+        }, callbacks)
     }
 
-    override fun startMfaEnrollmentWithPhoneNumber(request: StartMfaPhoneNumberEnrollmentAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun startMfaEnrollmentWithPhoneNumber(
+        request: StartMfaPhoneNumberEnrollmentAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: startMfaEnrollmentWithPhoneNumber")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun startMfaSignInWithPhoneNumber(request: StartMfaPhoneNumberSignInAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun startMfaSignInWithPhoneNumber(
+        request: StartMfaPhoneNumberSignInAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: startMfaSignInWithPhoneNumber")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
@@ -592,33 +823,57 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun unlinkEmailCredential(request: UnlinkEmailCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun unlinkEmailCredential(
+        request: UnlinkEmailCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: unlinkEmailCredential")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun unlinkEmailCredentialCompat(cachedState: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun unlinkEmailCredentialCompat(
+        cachedState: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: unlinkEmailCredentialCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun unlinkFederatedCredential(request: UnlinkFederatedCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun unlinkFederatedCredential(
+        request: UnlinkFederatedCredentialAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: unlinkFederatedCredential")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun unlinkFederatedCredentialCompat(provider: String?, cachedState: String?, callbacks: IFirebaseAuthCallbacks) {
+    override fun unlinkFederatedCredentialCompat(
+        provider: String?,
+        cachedState: String?,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: unlinkFederatedCredentialCompat")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }
 
-    override fun updateProfile(request: UpdateProfileAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun updateProfile(
+        request: UpdateProfileAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         lifecycleScope.launchWhenStarted {
             Log.d(TAG, "updateProfile")
             try {
                 val getTokenResponse = refreshTokenResponse(request.cachedState)
-                val accountInfoResult = client.getAccountInfo(idToken = getTokenResponse.accessToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
-                val setAccountInfo = client.setAccountInfo(idToken = getTokenResponse.accessToken, localId = accountInfoResult.localId, displayName = request.request.displayName, photoUrl = request.request.photoUrl, deleteAttribute = request.request.deleteAttributeList).toGetAccountInfoUser()
+                val accountInfoResult =
+                    client.getAccountInfo(idToken = getTokenResponse.accessToken)
+                        .getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
+                val setAccountInfo = client.setAccountInfo(
+                    idToken = getTokenResponse.accessToken,
+                    localId = accountInfoResult.localId,
+                    displayName = request.request.displayName,
+                    photoUrl = request.request.photoUrl,
+                    deleteAttribute = request.request.deleteAttributeList
+                ).toGetAccountInfoUser()
                 accountInfoResult.photoUrl = setAccountInfo.photoUrl
                 accountInfoResult.displayName = setAccountInfo.displayName
                 callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
@@ -629,11 +884,20 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         }
     }
 
-    override fun updateProfileCompat(cachedState: String?, userProfileChangeRequest: UserProfileChangeRequest, callbacks: IFirebaseAuthCallbacks) {
-        updateProfile(UpdateProfileAidlRequest().apply { this.cachedState = cachedState; this.request = userProfileChangeRequest}, callbacks)
+    override fun updateProfileCompat(
+        cachedState: String?,
+        userProfileChangeRequest: UserProfileChangeRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
+        updateProfile(UpdateProfileAidlRequest().apply {
+            this.cachedState = cachedState; this.request = userProfileChangeRequest
+        }, callbacks)
     }
 
-    override fun verifyBeforeUpdateEmail(request: VerifyBeforeUpdateEmailAidlRequest, callbacks: IFirebaseAuthCallbacks) {
+    override fun verifyBeforeUpdateEmail(
+        request: VerifyBeforeUpdateEmailAidlRequest,
+        callbacks: IFirebaseAuthCallbacks
+    ) {
         Log.d(TAG, "Not yet implemented: verifyBeforeUpdateEmail")
         callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
     }

@@ -18,7 +18,11 @@ import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
 class TransportSelectionFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoTransportSelectionFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FidoTransportSelectionFragmentBinding.inflate(inflater, container, false)
         binding.data = data
         binding.setOnBluetoothClick {

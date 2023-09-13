@@ -10,7 +10,9 @@ package com.google.android.gms.location;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParcelUtil;
@@ -39,7 +41,8 @@ public class ActivityTransitionResult extends AutoSafeParcelable {
      * @throws IllegalArgumentException if the events in {@code transitionEvents} are not in ascending order of time
      */
     public ActivityTransitionResult(List<ActivityTransitionEvent> transitionEvents) {
-        if (transitionEvents == null) throw new NullPointerException("transitionEvents list can't be null.");
+        if (transitionEvents == null)
+            throw new NullPointerException("transitionEvents list can't be null.");
         for (int i = 1; i < transitionEvents.size(); i++) {
             if (transitionEvents.get(i).getElapsedRealTimeNanos() < transitionEvents.get(i - 1).getElapsedRealTimeNanos())
                 throw new IllegalArgumentException();

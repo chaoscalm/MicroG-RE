@@ -21,7 +21,11 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "CredentialService"
 
 class CredentialsService : BaseService(TAG, GmsService.CREDENTIALS) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, CredentialsServiceImpl(), Bundle())
     }
 }
@@ -47,10 +51,21 @@ class CredentialsServiceImpl : ICredentialsService.Stub() {
         callbacks.onStatus(Status.SUCCESS)
     }
 
-    override fun generatePassword(callbacks: ICredentialsCallbacks, request: GeneratePasswordRequest) {
+    override fun generatePassword(
+        callbacks: ICredentialsCallbacks,
+        request: GeneratePasswordRequest
+    ) {
         Log.d(TAG, "generatePassword($request)")
         callbacks.onStatus(Status.SUCCESS)
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

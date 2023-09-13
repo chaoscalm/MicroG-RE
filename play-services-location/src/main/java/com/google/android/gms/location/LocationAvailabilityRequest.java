@@ -6,7 +6,9 @@
 package com.google.android.gms.location;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.location.internal.ClientIdentity;
+
 import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 

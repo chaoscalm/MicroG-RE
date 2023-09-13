@@ -18,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
     private NavController getNavController() {
-        return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
+        return ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
     }
 
     @Override

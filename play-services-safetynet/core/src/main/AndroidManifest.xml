@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2021 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -8,7 +7,8 @@
     package="org.microg.gms.safetynet.core">
 
     <application>
-        <service android:name="org.microg.gms.safetynet.SafetyNetClientService"
+        <service
+            android:name="org.microg.gms.safetynet.SafetyNetClientService"
             android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.safetynet.service.START" />

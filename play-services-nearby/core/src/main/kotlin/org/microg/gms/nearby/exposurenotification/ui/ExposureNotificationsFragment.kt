@@ -55,17 +55,30 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        switchBarPreference = preferenceScreen.findPreference("pref_exposure_enabled") ?: switchBarPreference
-        exposureEnableInfo = preferenceScreen.findPreference("pref_exposure_enable_info") ?: exposureEnableInfo
-        exposureBluetoothOff = preferenceScreen.findPreference("pref_exposure_error_bluetooth_off") ?: exposureBluetoothOff
-        exposureLocationOff = preferenceScreen.findPreference("pref_exposure_error_location_off") ?: exposureLocationOff
-        exposureNearbyNotGranted = preferenceScreen.findPreference("pref_exposure_error_nearby_not_granted") ?: exposureNearbyNotGranted
-        exposureBluetoothUnsupported = preferenceScreen.findPreference("pref_exposure_error_bluetooth_unsupported") ?: exposureBluetoothUnsupported
-        exposureBluetoothNoAdvertisement = preferenceScreen.findPreference("pref_exposure_error_bluetooth_no_advertise") ?: exposureBluetoothNoAdvertisement
+        switchBarPreference =
+            preferenceScreen.findPreference("pref_exposure_enabled") ?: switchBarPreference
+        exposureEnableInfo =
+            preferenceScreen.findPreference("pref_exposure_enable_info") ?: exposureEnableInfo
+        exposureBluetoothOff = preferenceScreen.findPreference("pref_exposure_error_bluetooth_off")
+            ?: exposureBluetoothOff
+        exposureLocationOff = preferenceScreen.findPreference("pref_exposure_error_location_off")
+            ?: exposureLocationOff
+        exposureNearbyNotGranted =
+            preferenceScreen.findPreference("pref_exposure_error_nearby_not_granted")
+                ?: exposureNearbyNotGranted
+        exposureBluetoothUnsupported =
+            preferenceScreen.findPreference("pref_exposure_error_bluetooth_unsupported")
+                ?: exposureBluetoothUnsupported
+        exposureBluetoothNoAdvertisement =
+            preferenceScreen.findPreference("pref_exposure_error_bluetooth_no_advertise")
+                ?: exposureBluetoothNoAdvertisement
         exposureApps = preferenceScreen.findPreference("prefcat_exposure_apps") ?: exposureApps
-        exposureAppsNone = preferenceScreen.findPreference("pref_exposure_apps_none") ?: exposureAppsNone
-        collectedRpis = preferenceScreen.findPreference("pref_exposure_collected_rpis") ?: collectedRpis
-        advertisingId = preferenceScreen.findPreference("pref_exposure_advertising_id") ?: advertisingId
+        exposureAppsNone =
+            preferenceScreen.findPreference("pref_exposure_apps_none") ?: exposureAppsNone
+        collectedRpis =
+            preferenceScreen.findPreference("pref_exposure_collected_rpis") ?: collectedRpis
+        advertisingId =
+            preferenceScreen.findPreference("pref_exposure_advertising_id") ?: advertisingId
 
         switchBarPreference.setOnPreferenceChangeListener { _, newValue ->
             val newStatus = newValue as Boolean
@@ -97,7 +110,10 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
         }
 
         exposureNearbyNotGranted.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
+            val nearbyPermissions = arrayOf(
+                "android.permission.BLUETOOTH_ADVERTISE",
+                "android.permission.BLUETOOTH_SCAN"
+            )
             requestPermissions(nearbyPermissions, ++permissionRequestCode)
             true
         }
@@ -108,7 +124,11 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.permissionRequestCode) {
             updateStatus()
@@ -140,18 +160,30 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
             exposureEnableInfo.isVisible = !enabled
 
             val bluetoothSupported = ScannerService.isSupported(appContext)
-            val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(appContext) else bluetoothSupported
+            val advertisingSupported =
+                if (bluetoothSupported == true) AdvertiserService.isSupported(appContext) else bluetoothSupported
 
-            val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
+            val nearbyPermissions = arrayOf(
+                "android.permission.BLUETOOTH_ADVERTISE",
+                "android.permission.BLUETOOTH_SCAN"
+            )
             // Expresses implication (API 31+ → all new permissions granted) ≡ (¬API 31+ | all new permissions granted)
             val nearbyPermissionsGranted = Build.VERSION.SDK_INT < 31 || nearbyPermissions.all {
-                ContextCompat.checkSelfPermission(appContext, it) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    appContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
             }
             exposureNearbyNotGranted.isVisible = enabled && !nearbyPermissionsGranted
-            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !LocationManagerCompat.isLocationEnabled(appContext.getSystemService(LOCATION_SERVICE) as LocationManager)
-            exposureBluetoothOff.isVisible = enabled && bluetoothSupported == null && !turningBluetoothOn
+            exposureLocationOff.isVisible =
+                enabled && bluetoothSupported != false && !LocationManagerCompat.isLocationEnabled(
+                    appContext.getSystemService(LOCATION_SERVICE) as LocationManager
+                )
+            exposureBluetoothOff.isVisible =
+                enabled && bluetoothSupported == null && !turningBluetoothOn
             exposureBluetoothUnsupported.isVisible = enabled && bluetoothSupported == false
-            exposureBluetoothNoAdvertisement.isVisible = enabled && bluetoothSupported == true && advertisingSupported != true
+            exposureBluetoothNoAdvertisement.isVisible =
+                enabled && bluetoothSupported == true && advertisingSupported != true
 
             advertisingId.isVisible = enabled && advertisingSupported == true
         }
@@ -169,9 +201,11 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
                     pref.order = idx
                     pref.applicationInfo = applicationInfo
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(requireContext(), R.id.openExposureAppDetails, bundleOf(
+                        findNavController().navigate(
+                            requireContext(), R.id.openExposureAppDetails, bundleOf(
                                 "package" to applicationInfo.packageName
-                        ))
+                            )
+                        )
                         true
                     }
                     pref.key = "pref_exposure_app_" + applicationInfo.packageName
@@ -181,7 +215,8 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
                 val currentId = database.currentRpiId
                 Triple(apps, lastHourKeys, currentId)
             }
-            collectedRpis.summary = getString(R.string.pref_exposure_collected_rpis_summary, lastHourKeys)
+            collectedRpis.summary =
+                getString(R.string.pref_exposure_collected_rpis_summary, lastHourKeys)
             if (currentId != null) {
                 advertisingId.isVisible = true
                 advertisingId.summary = currentId.toString()

@@ -20,5 +20,6 @@ import org.oscim.map.Map;
 
 public interface CameraUpdate {
     void apply(Map map);
+
     void applyAnimated(Map map, int duration);
 }

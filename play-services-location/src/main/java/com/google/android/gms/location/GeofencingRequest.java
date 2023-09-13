@@ -11,7 +11,9 @@ package com.google.android.gms.location;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.location.internal.ParcelableGeofence;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.lang.annotation.ElementType;
@@ -102,7 +104,8 @@ public class GeofencingRequest extends AutoSafeParcelable {
         @NonNull
         public GeofencingRequest.Builder addGeofence(Geofence geofence) {
             if (geofence == null) throw new NullPointerException("geofence can't be null.");
-            if (!(geofence instanceof ParcelableGeofence)) throw new IllegalArgumentException("Geofence must be created using Geofence.Builder.");
+            if (!(geofence instanceof ParcelableGeofence))
+                throw new IllegalArgumentException("Geofence must be created using Geofence.Builder.");
             geofences.add(geofence);
             return this;
         }
@@ -145,7 +148,8 @@ public class GeofencingRequest extends AutoSafeParcelable {
          * @throws IllegalArgumentException if no geofence has been added to this list
          */
         public GeofencingRequest build() {
-            if (geofences.isEmpty()) throw new IllegalArgumentException("No geofence has been added to this request.");
+            if (geofences.isEmpty())
+                throw new IllegalArgumentException("No geofence has been added to this request.");
             GeofencingRequest request = new GeofencingRequest();
             request.geofences = geofences;
             request.initialTrigger = initialTrigger;

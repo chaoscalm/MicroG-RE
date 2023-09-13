@@ -39,14 +39,17 @@ public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     public void onRouteAdded(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: onRouteAdded");
     }
+
     @Override
     public void onRouteChanged(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: onRouteChanged");
     }
+
     @Override
     public void onRouteRemoved(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: onRouteRemoved");
     }
+
     @Override
     public void onRouteSelected(String routeId, Bundle extras) throws RemoteException {
         CastDevice castDevice = CastDevice.getFromBundle(extras);
@@ -57,10 +60,12 @@ public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
             session.start(this.castContext, castDevice, routeId, routeInfoExtras);
         }
     }
+
     @Override
     public void unknown(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: unknown");
     }
+
     @Override
     public void onRouteUnselected(String routeId, Bundle extras, int reason) {
         Log.d(TAG, "unimplemented Method: onRouteUnselected");

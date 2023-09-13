@@ -30,26 +30,31 @@ import com.google.android.gms.maps.model.LatLngBounds as GmsLatLngBounds
 import com.google.android.gms.maps.model.VisibleRegion as GmsVisibleRegion
 
 fun GmsLatLng.toMapbox(): LatLng =
-        LatLng(latitude, longitude)
+    LatLng(latitude, longitude)
 
 fun GmsLatLng.toPoint() = Point.fromLngLat(latitude, longitude)
 
 fun GmsLatLngBounds.toMapbox(): LatLngBounds =
-        LatLngBounds.from(this.northeast.latitude, this.northeast.longitude, this.southwest.latitude, this.southwest.longitude)
+    LatLngBounds.from(
+        this.northeast.latitude,
+        this.northeast.longitude,
+        this.southwest.latitude,
+        this.southwest.longitude
+    )
 
 fun GmsCameraPosition.toMapbox(): CameraPosition =
-        CameraPosition.Builder()
-                .target(target.toMapbox())
-                .zoom(zoom.toDouble() - 1.0)
-                .tilt(tilt.toDouble())
-                .bearing(bearing.toDouble())
-                .build()
+    CameraPosition.Builder()
+        .target(target.toMapbox())
+        .zoom(zoom.toDouble() - 1.0)
+        .tilt(tilt.toDouble())
+        .bearing(bearing.toDouble())
+        .build()
 
 fun ICancelableCallback.toMapbox(): MapboxMap.CancelableCallback =
-        object : MapboxMap.CancelableCallback {
-            override fun onFinish() = this@toMapbox.onFinish()
-            override fun onCancel() = this@toMapbox.onCancel()
-        }
+    object : MapboxMap.CancelableCallback {
+        override fun onFinish() = this@toMapbox.onFinish()
+        override fun onCancel() = this@toMapbox.onCancel()
+    }
 
 
 fun Bundle.toMapbox(): Bundle {
@@ -76,7 +81,7 @@ fun LatLng.toPoint(): Point = Point.fromLngLat(latitude, longitude)
 fun LatLngBounds.toGms(): GmsLatLngBounds = GmsLatLngBounds(southWest.toGms(), northEast.toGms())
 
 fun CameraPosition.toGms(): GmsCameraPosition =
-        GmsCameraPosition(target?.toGms(), zoom.toFloat() + 1.0f, tilt.toFloat(), bearing.toFloat())
+    GmsCameraPosition(target?.toGms(), zoom.toFloat() + 1.0f, tilt.toFloat(), bearing.toFloat())
 
 fun Bundle.toGms(): Bundle {
     val newBundle = Bundle(this)
@@ -96,4 +101,10 @@ fun Bundle.toGms(): Bundle {
 }
 
 fun VisibleRegion.toGms(): GmsVisibleRegion =
-        GmsVisibleRegion(nearLeft?.toGms(), nearRight?.toGms(), farLeft?.toGms(), farRight?.toGms(), latLngBounds.toGms())
+    GmsVisibleRegion(
+        nearLeft?.toGms(),
+        nearRight?.toGms(),
+        farLeft?.toGms(),
+        farRight?.toGms(),
+        latLngBounds.toGms()
+    )

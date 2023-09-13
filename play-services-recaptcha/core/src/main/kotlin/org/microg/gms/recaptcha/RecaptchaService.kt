@@ -32,12 +32,21 @@ private const val TAG = "RecaptchaService"
 
 class RecaptchaService : BaseService(TAG, GmsService.RECAPTCHA) {
     private fun getRecaptchaImpl(packageName: String) = when {
-        SafetyNetPreferences.isEnabled(this) && SDK_INT >= 19 -> RecaptchaWebImpl(this, packageName, lifecycle)
+        SafetyNetPreferences.isEnabled(this) && SDK_INT >= 19 -> RecaptchaWebImpl(
+            this,
+            packageName,
+            lifecycle
+        )
+
         DroidGuardPreferences.isEnabled(this) -> RecaptchaGuardImpl(this, packageName)
         else -> RecaptchaImpl.Unsupported
     }
 
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)!!
         val impl = getRecaptchaImpl(packageName)
         callback.onPostInitCompleteWithConnectionInfo(
@@ -62,7 +71,11 @@ class RecaptchaServiceImpl(
     private val impl: RecaptchaImpl
 ) : IRecaptchaService.Stub(), LifecycleOwner {
 
-    override fun verifyWithRecaptcha(callback: IExecuteCallback, siteKey: String, packageName: String) {
+    override fun verifyWithRecaptcha(
+        callback: IExecuteCallback,
+        siteKey: String,
+        packageName: String
+    ) {
         Log.d(TAG, "Not yet implemented: verifyWithRecaptcha($siteKey, $packageName)")
     }
 
@@ -73,7 +86,11 @@ class RecaptchaServiceImpl(
         })
     }
 
-    override fun execute(callback: IExecuteCallback, handle: RecaptchaHandle, action: RecaptchaAction) {
+    override fun execute(
+        callback: IExecuteCallback,
+        handle: RecaptchaHandle,
+        action: RecaptchaAction
+    ) {
         execute2(callback, ExecuteParams().also {
             it.handle = handle
             it.action = action

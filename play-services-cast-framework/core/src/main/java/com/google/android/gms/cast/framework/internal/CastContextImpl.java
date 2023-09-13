@@ -67,10 +67,10 @@ public class CastContextImpl extends ICastContext.Stub {
 
         // TODO: This should incorporate passed options
         this.mergedSelector = new MediaRouteSelector.Builder()
-            .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
-            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-            .addControlCategory(defaultCategory)
-            .build();
+                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .addControlCategory(defaultCategory)
+                .build();
     }
 
     @Override

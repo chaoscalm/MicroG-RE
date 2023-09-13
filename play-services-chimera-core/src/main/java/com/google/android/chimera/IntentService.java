@@ -25,7 +25,7 @@ public abstract class IntentService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            onHandleIntent((Intent)msg.obj);
+            onHandleIntent((Intent) msg.obj);
             stopSelf(msg.arg1);
         }
     }
@@ -75,6 +75,7 @@ public abstract class IntentService extends Service {
      * You should not override this method for your IntentService. Instead,
      * override {@link #onHandleIntent}, which the system calls when the IntentService
      * receives a start request.
+     *
      * @see Service#onStartCommand
      */
     @Override
@@ -91,6 +92,7 @@ public abstract class IntentService extends Service {
     /**
      * Unless you provide binding for your service, you don't need to implement this
      * method, because the default implementation returns null.
+     *
      * @see Service#onBind
      */
     @Override

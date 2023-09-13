@@ -23,7 +23,10 @@ import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
 
-fun PackageManager.getApplicationInfoIfExists(packageName: String?, flags: Int = 0): ApplicationInfo? = packageName?.let {
+fun PackageManager.getApplicationInfoIfExists(
+    packageName: String?,
+    flags: Int = 0
+): ApplicationInfo? = packageName?.let {
     try {
         getApplicationInfo(it, flags)
     } catch (e: Exception) {
@@ -48,11 +51,27 @@ val Context.systemAnimationsEnabled: Boolean
         val duration: Float
         val transition: Float
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            duration = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
-            transition = Settings.Global.getFloat(contentResolver, Settings.Global.TRANSITION_ANIMATION_SCALE, 1f)
+            duration = Settings.Global.getFloat(
+                contentResolver,
+                Settings.Global.ANIMATOR_DURATION_SCALE,
+                1f
+            )
+            transition = Settings.Global.getFloat(
+                contentResolver,
+                Settings.Global.TRANSITION_ANIMATION_SCALE,
+                1f
+            )
         } else {
-            duration = Settings.System.getFloat(contentResolver, Settings.System.ANIMATOR_DURATION_SCALE, 1f)
-            transition = Settings.System.getFloat(contentResolver, Settings.System.TRANSITION_ANIMATION_SCALE, 1f)
+            duration = Settings.System.getFloat(
+                contentResolver,
+                Settings.System.ANIMATOR_DURATION_SCALE,
+                1f
+            )
+            transition = Settings.System.getFloat(
+                contentResolver,
+                Settings.System.TRANSITION_ANIMATION_SCALE,
+                1f
+            )
         }
         return duration != 0f && transition != 0f
     }
@@ -67,4 +86,5 @@ fun Context.resolveColor(@AttrRes resid: Int): Int? {
 }
 
 @BindingAdapter("app:backgroundColorAttr")
-fun View.setBackgroundColorAttribute(@AttrRes resId: Int) = context.resolveColor(resId)?.let { setBackgroundColor(it) }
+fun View.setBackgroundColorAttribute(@AttrRes resId: Int) =
+    context.resolveColor(resId)?.let { setBackgroundColor(it) }

@@ -34,7 +34,10 @@ import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusExcept
 import org.microg.gms.utils.toBase64
 
 @RequiresApi(21)
-class UsbTransportHandler(private val context: Context, callback: TransportHandlerCallback? = null) :
+class UsbTransportHandler(
+    private val context: Context,
+    callback: TransportHandlerCallback? = null
+) :
     TransportHandler(Transport.USB, callback) {
     override val isSupported: Boolean
         get() = context.packageManager.hasSystemFeature("android.hardware.usb.host") && context.usbManager != null
@@ -60,8 +63,21 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
             val match = context.usbManager?.openDevice(device)?.use { connection ->
                 if (connection.claimInterface(iface, true)) {
                     val buf = ByteArray(256)
-                    val read = connection.controlTransfer(0x81, 0x06, 0x2200, iface.id, buf, buf.size, 5000)
-                    Log.d(TAG, "Signature: ${buf.slice(0 until read).toByteArray().toBase64(Base64.NO_WRAP)}")
+                    val read = connection.controlTransfer(
+                        0x81,
+                        0x06,
+                        0x2200,
+                        iface.id,
+                        buf,
+                        buf.size,
+                        5000
+                    )
+                    Log.d(
+                        TAG,
+                        "Signature: ${
+                            buf.slice(0 until read).toByteArray().toBase64(Base64.NO_WRAP)
+                        }"
+                    )
                     read >= 5 && buf.slice(0 until 5) eq CTAPHID_SIGNATURE
                 } else {
                     Log.d(TAG, "Failed claiming interface")
@@ -135,7 +151,10 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         }
     }
 
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse {
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String
+    ): AuthenticatorResponse {
         for (device in context.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {

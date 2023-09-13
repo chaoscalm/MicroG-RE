@@ -16,7 +16,11 @@ import org.microg.gms.location.FEATURES
 
 class ReportingAndroidService : BaseService("GmsLocReportingSvc", GmsService.LOCATION_REPORTING) {
     @Throws(RemoteException::class)
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
         callback.onPostInitCompleteWithConnectionInfo(

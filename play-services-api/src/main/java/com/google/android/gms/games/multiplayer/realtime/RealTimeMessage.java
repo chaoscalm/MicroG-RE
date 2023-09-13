@@ -43,6 +43,7 @@ public final class RealTimeMessage implements Parcelable {
         public RealTimeMessage createFromParcel(Parcel in) {
             return new RealTimeMessage(in);
         }
+
         @Override
         public RealTimeMessage[] newArray(int size) {
             return new RealTimeMessage[size];
@@ -60,7 +61,7 @@ public final class RealTimeMessage implements Parcelable {
     public boolean isReliable() {
         return this.mIsReliable == RELIABLE;
     }
-    
+
     @Override
     public void writeToParcel(Parcel parcel, int flag) {
         parcel.writeString(this.mSenderParticipantId);

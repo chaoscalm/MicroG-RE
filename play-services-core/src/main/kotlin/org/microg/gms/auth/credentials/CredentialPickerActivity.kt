@@ -28,11 +28,21 @@ class CredentialPickerActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val extras = intent.extras ?: Bundle()
-        val callingPackage = callingActivity?.packageName?.takeIf { extras.getString("claimedCallingPackage", it) == it }
+        val callingPackage = callingActivity?.packageName?.takeIf {
+            extras.getString(
+                "claimedCallingPackage",
+                it
+            ) == it
+        }
         val logSessionId = extras.getString("logSessionId")
-        val credentialRequest = extras.getByteArray("credentialRequest")?.let { CredentialRequest.CREATOR.createFromBytes(it) }
-        val hintRequest = extras.getByteArray("com.google.android.gms.credentials.HintRequest")?.let { HintRequest.CREATOR.createFromBytes(it) }
-        Log.d("GmsCredentialPicker", "Not implemented. callingPackage=$callingPackage, logSessionId=$logSessionId, credentialsRequest=$credentialRequest, hintRequest=$hintRequest")
+        val credentialRequest = extras.getByteArray("credentialRequest")
+            ?.let { CredentialRequest.CREATOR.createFromBytes(it) }
+        val hintRequest = extras.getByteArray("com.google.android.gms.credentials.HintRequest")
+            ?.let { HintRequest.CREATOR.createFromBytes(it) }
+        Log.d(
+            "GmsCredentialPicker",
+            "Not implemented. callingPackage=$callingPackage, logSessionId=$logSessionId, credentialsRequest=$credentialRequest, hintRequest=$hintRequest"
+        )
         finish()
     }
 }

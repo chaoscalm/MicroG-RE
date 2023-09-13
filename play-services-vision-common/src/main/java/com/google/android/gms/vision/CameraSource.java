@@ -309,9 +309,15 @@ public class CameraSource {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             int displayRotation = 0;
             switch (windowManager.getDefaultDisplay().getRotation()) {
-                case Surface.ROTATION_90: displayRotation = 90; break;
-                case Surface.ROTATION_180: displayRotation = 180; break;
-                case Surface.ROTATION_270: displayRotation = 270; break;
+                case Surface.ROTATION_90:
+                    displayRotation = 90;
+                    break;
+                case Surface.ROTATION_180:
+                    displayRotation = 180;
+                    break;
+                case Surface.ROTATION_270:
+                    displayRotation = 270;
+                    break;
             }
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(cameraId, cameraInfo);
@@ -368,7 +374,8 @@ public class CameraSource {
                 selectedPreviewFpsOffset = previewFpsOffset;
             }
         }
-        if (selectedFpsRange == null) throw new IOException("Could not find suitable preview frames per second range.");
+        if (selectedFpsRange == null)
+            throw new IOException("Could not find suitable preview frames per second range.");
         return selectedFpsRange;
     }
 

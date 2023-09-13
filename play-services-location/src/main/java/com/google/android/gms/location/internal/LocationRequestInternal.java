@@ -7,11 +7,13 @@ package com.google.android.gms.location.internal;
 
 import android.annotation.SuppressLint;
 import android.os.WorkSource;
+
 import com.google.android.gms.common.internal.ClientIdentity;
 import com.google.android.gms.location.Granularity;
 import com.google.android.gms.location.LocationRequest;
 
 import com.google.android.gms.location.ThrottleBehavior;
+
 import org.microg.gms.common.Hide;
 import org.microg.gms.utils.WorkSourceUtil;
 import org.microg.safeparcel.AutoSafeParcelable;

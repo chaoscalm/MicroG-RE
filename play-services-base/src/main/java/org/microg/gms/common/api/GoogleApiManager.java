@@ -143,7 +143,8 @@ public class GoogleApiManager {
 
             WaitingApiCall<?> that = (WaitingApiCall<?>) o;
 
-            if (apiCall != null ? !apiCall.equals(that.apiCall) : that.apiCall != null) return false;
+            if (apiCall != null ? !apiCall.equals(that.apiCall) : that.apiCall != null)
+                return false;
             return completionSource != null ? completionSource.equals(that.completionSource) : that.completionSource == null;
         }
 
@@ -175,7 +176,8 @@ public class GoogleApiManager {
 
             ApiInstance that = (ApiInstance) o;
 
-            if (apiClass != null ? !apiClass.equals(that.apiClass) : that.apiClass != null) return false;
+            if (apiClass != null ? !apiClass.equals(that.apiClass) : that.apiClass != null)
+                return false;
             return apiOptions != null ? apiOptions.equals(that.apiOptions) : that.apiOptions == null;
         }
 

@@ -103,14 +103,18 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         if (rp != null ? !rp.equals(that.rp) : that.rp != null) return false;
         if (user != null ? !user.equals(that.user) : that.user != null) return false;
         if (!Arrays.equals(challenge, that.challenge)) return false;
-        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
+        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null)
+            return false;
         if (timeoutSeconds != null ? !timeoutSeconds.equals(that.timeoutSeconds) : that.timeoutSeconds != null)
             return false;
-        if (excludeList != null ? !excludeList.equals(that.excludeList) : that.excludeList != null) return false;
+        if (excludeList != null ? !excludeList.equals(that.excludeList) : that.excludeList != null)
+            return false;
         if (authenticatorSelection != null ? !authenticatorSelection.equals(that.authenticatorSelection) : that.authenticatorSelection != null)
             return false;
-        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
-        if (tokenBinding != null ? !tokenBinding.equals(that.tokenBinding) : that.tokenBinding != null) return false;
+        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null)
+            return false;
+        if (tokenBinding != null ? !tokenBinding.equals(that.tokenBinding) : that.tokenBinding != null)
+            return false;
         if (attestationConveyancePreference != that.attestationConveyancePreference) return false;
         return authenticationExtensions != null ? authenticationExtensions.equals(that.authenticationExtensions) : that.authenticationExtensions == null;
     }

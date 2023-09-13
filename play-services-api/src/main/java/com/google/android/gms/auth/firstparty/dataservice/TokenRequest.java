@@ -23,7 +23,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 // TODO
-public class TokenRequest extends AutoSafeParcelable{
+public class TokenRequest extends AutoSafeParcelable {
 
     @SafeParceled(1)
     private int versionCode = 4;

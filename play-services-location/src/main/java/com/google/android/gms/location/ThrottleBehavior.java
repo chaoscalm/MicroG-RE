@@ -6,6 +6,7 @@
 package com.google.android.gms.location;
 
 import androidx.annotation.IntDef;
+
 import org.microg.gms.common.Hide;
 
 import java.lang.annotation.ElementType;

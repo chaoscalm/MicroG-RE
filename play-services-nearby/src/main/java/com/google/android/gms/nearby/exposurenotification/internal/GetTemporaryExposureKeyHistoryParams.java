@@ -11,7 +11,8 @@ public class GetTemporaryExposureKeyHistoryParams extends AutoSafeParcelable {
     @Field(2)
     public ITemporaryExposureKeyListCallback callback;
 
-    private GetTemporaryExposureKeyHistoryParams() {}
+    private GetTemporaryExposureKeyHistoryParams() {
+    }
 
     public GetTemporaryExposureKeyHistoryParams(ITemporaryExposureKeyListCallback callback) {
         this.callback = callback;

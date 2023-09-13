@@ -9,8 +9,11 @@
 package com.google.android.gms.location;
 
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.internal.ClientIdentity;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParcelUtil;
@@ -59,10 +62,12 @@ public class ActivityTransitionRequest extends AutoSafeParcelable {
      */
     public ActivityTransitionRequest(List<ActivityTransition> transitions) {
         if (transitions == null) throw new NullPointerException("transitions can't be null");
-        if (transitions.isEmpty()) throw new IllegalArgumentException("transitions can't be empty.");
+        if (transitions.isEmpty())
+            throw new IllegalArgumentException("transitions can't be empty.");
         Set<ActivityTransition> set = new TreeSet<ActivityTransition>(IS_SAME_TRANSITION);
         set.addAll(transitions);
-        if (transitions.size() != set.size()) throw new IllegalArgumentException("Found duplicated transition");
+        if (transitions.size() != set.size())
+            throw new IllegalArgumentException("Found duplicated transition");
         this.activityTransitions = Collections.unmodifiableList(transitions);
     }
 

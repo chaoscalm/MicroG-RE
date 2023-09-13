@@ -6,6 +6,7 @@
 package com.google.android.gms.tapandpay.firstparty;
 
 import androidx.annotation.Nullable;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetActiveAccountResponse extends AutoSafeParcelable {

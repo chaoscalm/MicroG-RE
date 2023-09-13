@@ -50,27 +50,45 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
         val selfApplicationInfo = packageManager.getApplicationInfoIfExists(packageName)
         when (action) {
             CONFIRM_ACTION_START -> {
-                findViewById<TextView>(android.R.id.title).text = getString(R.string.exposure_confirm_start_title)
-                findViewById<TextView>(android.R.id.summary).text = getString(R.string.exposure_confirm_start_summary, applicationInfo?.loadLabel(packageManager)
-                        ?: targetPackageName)
-                findViewById<Button>(android.R.id.button1).text = getString(R.string.exposure_confirm_start_button)
-                findViewById<TextView>(R.id.grant_permission_summary).text = getString(R.string.exposure_confirm_permission_description, selfApplicationInfo?.loadLabel(packageManager)
-                        ?: packageName)
+                findViewById<TextView>(android.R.id.title).text =
+                    getString(R.string.exposure_confirm_start_title)
+                findViewById<TextView>(android.R.id.summary).text = getString(
+                    R.string.exposure_confirm_start_summary,
+                    applicationInfo?.loadLabel(packageManager)
+                        ?: targetPackageName
+                )
+                findViewById<Button>(android.R.id.button1).text =
+                    getString(R.string.exposure_confirm_start_button)
+                findViewById<TextView>(R.id.grant_permission_summary).text = getString(
+                    R.string.exposure_confirm_permission_description,
+                    selfApplicationInfo?.loadLabel(packageManager)
+                        ?: packageName
+                )
                 checkPermissions()
                 checkBluetooth()
                 checkLocation()
             }
+
             CONFIRM_ACTION_STOP -> {
-                findViewById<TextView>(android.R.id.title).text = getString(R.string.exposure_confirm_stop_title)
-                findViewById<TextView>(android.R.id.summary).text = getString(R.string.exposure_confirm_stop_summary)
-                findViewById<Button>(android.R.id.button1).text = getString(R.string.exposure_confirm_stop_button)
+                findViewById<TextView>(android.R.id.title).text =
+                    getString(R.string.exposure_confirm_stop_title)
+                findViewById<TextView>(android.R.id.summary).text =
+                    getString(R.string.exposure_confirm_stop_summary)
+                findViewById<Button>(android.R.id.button1).text =
+                    getString(R.string.exposure_confirm_stop_button)
             }
+
             CONFIRM_ACTION_KEYS -> {
-                findViewById<TextView>(android.R.id.title).text = getString(R.string.exposure_confirm_keys_title, applicationInfo?.loadLabel(packageManager)
-                        ?: targetPackageName)
-                findViewById<TextView>(android.R.id.summary).text = getString(R.string.exposure_confirm_keys_summary)
-                findViewById<Button>(android.R.id.button1).text = getString(R.string.exposure_confirm_keys_button)
+                findViewById<TextView>(android.R.id.title).text = getString(
+                    R.string.exposure_confirm_keys_title, applicationInfo?.loadLabel(packageManager)
+                        ?: targetPackageName
+                )
+                findViewById<TextView>(android.R.id.summary).text =
+                    getString(R.string.exposure_confirm_keys_summary)
+                findViewById<Button>(android.R.id.button1).text =
+                    getString(R.string.exposure_confirm_keys_button)
             }
+
             else -> {
                 resultCode = RESULT_CANCELED
                 finish()
@@ -121,8 +139,10 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                 // location. Otherwise, we also need LOCATION permissions. See
                 // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions#assert-never-for-location
                 try {
-                    val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
-                    val bluetoothScanIndex = packageInfo.requestedPermissions.indexOf(BLUETOOTH_SCAN)
+                    val packageInfo =
+                        packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
+                    val bluetoothScanIndex =
+                        packageInfo.requestedPermissions.indexOf(BLUETOOTH_SCAN)
                     if (packageInfo.requestedPermissionsFlags[bluetoothScanIndex] and REQUESTED_PERMISSION_NEVER_FOR_LOCATION > 0) {
                         return arrayOf(BLUETOOTH_ADVERTISE, BLUETOOTH_SCAN)
                     }
@@ -136,6 +156,7 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                     ACCESS_FINE_LOCATION
                 )
             }
+
             Build.VERSION.SDK_INT == 29 -> {
                 // We only can directly request background location permission on 29.
                 // We need it on 30 (and possibly later) as well, but it has to be requested in a two
@@ -146,6 +167,7 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                     ACCESS_FINE_LOCATION
                 )
             }
+
             else -> {
                 // Below 29 or equals 30
                 arrayOf(
@@ -186,7 +208,11 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.permissionRequestCode) checkPermissions()
     }
@@ -197,7 +223,8 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private fun checkBluetooth() {
         val adapter = BluetoothAdapter.getDefaultAdapter()
         bluetoothNeedsHandling = adapter?.isEnabled != true
-        findViewById<View>(R.id.enable_bluetooth_view).visibility = if (adapter?.isEnabled == false) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.enable_bluetooth_view).visibility =
+            if (adapter?.isEnabled == false) View.VISIBLE else View.GONE
         updateButton()
     }
 
@@ -230,8 +257,10 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var locationNeedsHandling: Boolean = false
     private var locationRequestCode = 231
     private fun checkLocation() {
-        locationNeedsHandling = !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
-        findViewById<View>(R.id.enable_location_view).visibility = if (locationNeedsHandling) View.VISIBLE else View.GONE
+        locationNeedsHandling =
+            !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        findViewById<View>(R.id.enable_location_view).visibility =
+            if (locationNeedsHandling) View.VISIBLE else View.GONE
         updateButton()
     }
 

@@ -11,4 +11,5 @@ import androidx.databinding.BindingAdapter
 import org.microg.gms.ui.resolveColor
 
 @BindingAdapter("app:backgroundColorAttr")
-fun View.setBackgroundColorAttribute(@AttrRes resId: Int) = context.resolveColor(resId)?.let { setBackgroundColor(it) }
+fun View.setBackgroundColorAttribute(@AttrRes resId: Int) =
+    context.resolveColor(resId)?.let { setBackgroundColor(it) }

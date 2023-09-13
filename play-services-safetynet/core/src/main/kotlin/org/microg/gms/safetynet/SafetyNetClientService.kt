@@ -45,8 +45,16 @@ private const val TAG = "GmsSafetyNet"
 private const val DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
 
 class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET_CLIENT) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(0, SafetyNetClientServiceImpl(this, Constants.GOOGLE_GMS_PACKAGE_NAME, lifecycle), null)
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
+        callback.onPostInitComplete(
+            0,
+            SafetyNetClientServiceImpl(this, Constants.GOOGLE_GMS_PACKAGE_NAME, lifecycle),
+            null
+        )
     }
 }
 
@@ -64,9 +72,18 @@ class SafetyNetClientServiceImpl(
         attestWithApiKey(callbacks, nonce, DEFAULT_API_KEY)
     }
 
-    override fun attestWithApiKey(callbacks: ISafetyNetCallbacks, nonce: ByteArray?, apiKey: String) {
+    override fun attestWithApiKey(
+        callbacks: ISafetyNetCallbacks,
+        nonce: ByteArray?,
+        apiKey: String
+    ) {
         if (nonce == null) {
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "Nonce missing"), null)
+            callbacks.onAttestationResult(
+                Status(
+                    SafetyNetStatusCodes.DEVELOPER_ERROR,
+                    "Nonce missing"
+                ), null
+            )
             return
         }
 
@@ -97,7 +114,13 @@ class SafetyNetClientServiceImpl(
                 )
 
                 val data = mapOf("contentBinding" to attestation.payloadHashBase64)
-                val dg = withContext(Dispatchers.IO) { DroidGuardResultCreator.getResults(context, "attest", data) }
+                val dg = withContext(Dispatchers.IO) {
+                    DroidGuardResultCreator.getResults(
+                        context,
+                        "attest",
+                        data
+                    )
+                }
                 attestation.setDroidGuardResult(dg)
                 val jwsResult = withContext(Dispatchers.IO) { attestation.attest(apiKey) }
 
@@ -145,7 +168,13 @@ class SafetyNetClientServiceImpl(
         callbacks.onString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
     }
 
-    override fun lookupUri(callbacks: ISafetyNetCallbacks, apiKey: String, threatTypes: IntArray, i: Int, s2: String) {
+    override fun lookupUri(
+        callbacks: ISafetyNetCallbacks,
+        apiKey: String,
+        threatTypes: IntArray,
+        i: Int,
+        s2: String
+    ) {
         Log.d(TAG, "unimplemented Method: lookupUri")
         callbacks.onSafeBrowsingData(Status.SUCCESS, SafeBrowsingData())
     }
@@ -162,7 +191,12 @@ class SafetyNetClientServiceImpl(
 
     override fun verifyWithRecaptcha(callbacks: ISafetyNetCallbacks, siteKey: String?) {
         if (siteKey == null) {
-            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.RECAPTCHA_INVALID_SITEKEY, "SiteKey missing"), null)
+            callbacks.onRecaptchaResult(
+                Status(
+                    SafetyNetStatusCodes.RECAPTCHA_INVALID_SITEKEY,
+                    "SiteKey missing"
+                ), null
+            )
             return
         }
 
@@ -205,12 +239,24 @@ class SafetyNetClientServiceImpl(
                     Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
                 ),
                 Attestation.getPackageSignatures(context, packageName)
-                    .map { Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING) }
+                    .map {
+                        Base64.encodeToString(
+                            it,
+                            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+                        )
+                    }
             )
         } catch (e: Exception) {
-            db.insertRecentRequestEnd(requestID, Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
+            db.insertRecentRequestEnd(
+                requestID,
+                Status(SafetyNetStatusCodes.ERROR, e.localizedMessage),
+                null
+            )
             db.close()
-            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
+            callbacks.onRecaptchaResult(
+                Status(SafetyNetStatusCodes.ERROR, e.localizedMessage),
+                null
+            )
             return
         }
 
@@ -243,7 +289,11 @@ class SafetyNetClientServiceImpl(
                         null
                     )
                 } else {
-                    db.insertRecentRequestEnd(requestID, Status.SUCCESS, resultData.getString("token"))
+                    db.insertRecentRequestEnd(
+                        requestID,
+                        Status.SUCCESS,
+                        resultData.getString("token")
+                    )
                     db.close()
                     callbacks.onRecaptchaResult(
                         Status.SUCCESS,

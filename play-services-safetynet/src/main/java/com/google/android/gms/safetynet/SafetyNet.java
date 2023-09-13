@@ -30,7 +30,8 @@ public class SafetyNet {
      * @deprecated use {@link #getClient(Context)} or {@link #getClient(Activity)}.
      */
     @Deprecated
-    public static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new SafetyNetGmsClient(context, callbacks, connectionFailedListener));;
+    public static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new SafetyNetGmsClient(context, callbacks, connectionFailedListener));
+    ;
 
     /**
      * The entry point for interacting with the SafetyNet APIs which help assess the health and safety of an Android device.

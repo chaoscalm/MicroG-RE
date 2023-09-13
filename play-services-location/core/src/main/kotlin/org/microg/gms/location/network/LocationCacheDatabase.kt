@@ -17,7 +17,8 @@ import org.microg.gms.location.network.wifi.WifiDetails
 import org.microg.gms.utils.toHexString
 import java.nio.ByteBuffer
 
-internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(context, "geocache.db", null, 2) {
+internal class LocationCacheDatabase(context: Context?) :
+    SQLiteOpenHelper(context, "geocache.db", null, 2) {
     fun getCellLocation(cell: CellDetails): Location? {
         readableDatabase.query(
             TABLE_CELLS,
@@ -32,7 +33,15 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
                 cursor.getLocation(MAX_CELL_AGE).let { return it }
             }
         }
-        readableDatabase.query(TABLE_CELLS_PRE, arrayOf(FIELD_TIME), CELLS_PRE_SELECTION, getCellPreSelectionArgs(cell), null, null, null).use { cursor ->
+        readableDatabase.query(
+            TABLE_CELLS_PRE,
+            arrayOf(FIELD_TIME),
+            CELLS_PRE_SELECTION,
+            getCellPreSelectionArgs(cell),
+            null,
+            null,
+            null
+        ).use { cursor ->
             if (cursor.moveToNext()) {
                 if (cursor.getLong(1) > System.currentTimeMillis() - MAX_CELL_AGE) {
                     return NEGATIVE_CACHE_ENTRY
@@ -53,7 +62,12 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             put(FIELD_PSC, cell.psc ?: 0)
             putLocation(location)
         }
-        writableDatabase.insertWithOnConflict(TABLE_CELLS, null, cv, SQLiteDatabase.CONFLICT_REPLACE)
+        writableDatabase.insertWithOnConflict(
+            TABLE_CELLS,
+            null,
+            cv,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
     }
 
     fun getWifiScanLocation(wifis: List<WifiDetails>): Location? {
@@ -79,7 +93,12 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             put(FIELD_SCAN_HASH, wifis.hash())
             putLocation(location)
         }
-        writableDatabase.insertWithOnConflict(TABLE_WIFI_SCANS, null, cv, SQLiteDatabase.CONFLICT_REPLACE)
+        writableDatabase.insertWithOnConflict(
+            TABLE_WIFI_SCANS,
+            null,
+            cv,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -98,10 +117,26 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
     }
 
     fun cleanup(db: SQLiteDatabase) {
-        db.delete(TABLE_CELLS, "$FIELD_TIME < ?", arrayOf((System.currentTimeMillis() - MAX_CELL_AGE).toString()))
-        db.delete(TABLE_CELLS_PRE, "$FIELD_TIME < ?", arrayOf((System.currentTimeMillis() - MAX_CELL_AGE).toString()))
-        db.delete(TABLE_WIFIS, "$FIELD_TIME < ?", arrayOf((System.currentTimeMillis() - MAX_WIFI_AGE).toString()))
-        db.delete(TABLE_WIFI_SCANS, "$FIELD_TIME < ?", arrayOf((System.currentTimeMillis() - MAX_WIFI_AGE).toString()))
+        db.delete(
+            TABLE_CELLS,
+            "$FIELD_TIME < ?",
+            arrayOf((System.currentTimeMillis() - MAX_CELL_AGE).toString())
+        )
+        db.delete(
+            TABLE_CELLS_PRE,
+            "$FIELD_TIME < ?",
+            arrayOf((System.currentTimeMillis() - MAX_CELL_AGE).toString())
+        )
+        db.delete(
+            TABLE_WIFIS,
+            "$FIELD_TIME < ?",
+            arrayOf((System.currentTimeMillis() - MAX_WIFI_AGE).toString())
+        )
+        db.delete(
+            TABLE_WIFI_SCANS,
+            "$FIELD_TIME < ?",
+            arrayOf((System.currentTimeMillis() - MAX_WIFI_AGE).toString())
+        )
     }
 
     override fun onOpen(db: SQLiteDatabase) {
@@ -137,7 +172,8 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
         private const val FIELD_PRECISION = "prec"
         private const val FIELD_MAC = "mac"
         private const val FIELD_SCAN_HASH = "hash"
-        private const val CELLS_SELECTION = "$FIELD_MCC = ? AND $FIELD_MNC = ? AND $FIELD_TYPE = ? AND $FIELD_LAC_TAC = ? AND $FIELD_CID = ? AND $FIELD_PSC = ?"
+        private const val CELLS_SELECTION =
+            "$FIELD_MCC = ? AND $FIELD_MNC = ? AND $FIELD_TYPE = ? AND $FIELD_LAC_TAC = ? AND $FIELD_CID = ? AND $FIELD_PSC = ?"
         private const val CELLS_PRE_SELECTION = "$FIELD_MCC = ? AND $FIELD_MNC = ?"
         private fun getCellSelectionArgs(cell: CellDetails): Array<String> {
             return arrayOf(

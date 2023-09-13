@@ -17,7 +17,8 @@ public class RecaptchaActionType extends AutoSafeParcelable {
     @Field(1)
     String name;
 
-    private RecaptchaActionType() {}
+    private RecaptchaActionType() {
+    }
 
     public RecaptchaActionType(String action) {
         this.name = action;
@@ -28,7 +29,8 @@ public class RecaptchaActionType extends AutoSafeParcelable {
     /**
      * User interaction that needs to be verified while the user is performing the workflow you would like to protect.
      */
-    public @interface Action {}
+    public @interface Action {
+    }
 
     /**
      * Indicates that the protected action is a login workflow.

@@ -47,7 +47,8 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             val intervalMillis: Long
             if (currentRequest?.reportLocation == true) {
                 forceNow = true
-                intervalMillis = max(currentRequest?.interval ?: Long.MAX_VALUE, MIN_INTERVAL_MILLIS)
+                intervalMillis =
+                    max(currentRequest?.interval ?: Long.MAX_VALUE, MIN_INTERVAL_MILLIS)
             } else {
                 forceNow = false
                 intervalMillis = Long.MAX_VALUE
@@ -58,11 +59,20 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             intent.putExtra(NetworkLocationService.EXTRA_INTERVAL_MILLIS, intervalMillis)
             intent.putExtra(NetworkLocationService.EXTRA_FORCE_NOW, forceNow)
             if (SDK_INT >= 31) {
-                intent.putExtra(NetworkLocationService.EXTRA_LOW_POWER, currentRequest?.isLowPower ?: false)
-                intent.putExtra(NetworkLocationService.EXTRA_WORK_SOURCE, currentRequest?.workSource)
+                intent.putExtra(
+                    NetworkLocationService.EXTRA_LOW_POWER,
+                    currentRequest?.isLowPower ?: false
+                )
+                intent.putExtra(
+                    NetworkLocationService.EXTRA_WORK_SOURCE,
+                    currentRequest?.workSource
+                )
             }
             if (SDK_INT >= 29) {
-                intent.putExtra(NetworkLocationService.EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
+                intent.putExtra(
+                    NetworkLocationService.EXTRA_BYPASS,
+                    currentRequest?.isLocationSettingsIgnored ?: false
+                )
             }
             context.startService(intent)
         }
@@ -86,7 +96,12 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             if (enabled) throw IllegalStateException()
             val intent = Intent(context, NetworkLocationProviderService::class.java)
             intent.action = ACTION_REPORT_LOCATION
-            pendingIntent = PendingIntent.getService(context, 0, intent, (if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE) or FLAG_UPDATE_CURRENT)
+            pendingIntent = PendingIntent.getService(
+                context,
+                0,
+                intent,
+                (if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE) or FLAG_UPDATE_CURRENT
+            )
             currentRequest = null
             enabled = true
             when {
@@ -119,6 +134,16 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
 
     companion object {
         private const val MIN_INTERVAL_MILLIS = 20000L
-        private val properties = ProviderPropertiesUnbundled.create(false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
+        private val properties = ProviderPropertiesUnbundled.create(
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            Criteria.POWER_LOW,
+            Criteria.ACCURACY_COARSE
+        )
     }
 }

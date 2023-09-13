@@ -47,13 +47,18 @@ class LocationAppFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        appHeadingPreference = preferenceScreen.findPreference("pref_location_app_heading") ?: appHeadingPreference
-        lastLocationCategory = preferenceScreen.findPreference("prefcat_location_app_last_location") ?: lastLocationCategory
-        lastLocation = preferenceScreen.findPreference("pref_location_app_last_location") ?: lastLocation
-        lastLocationMap = preferenceScreen.findPreference("pref_location_app_last_location_map") ?: lastLocationMap
-        forceCoarse = preferenceScreen.findPreference("pref_location_app_force_coarse") ?: forceCoarse
+        appHeadingPreference =
+            preferenceScreen.findPreference("pref_location_app_heading") ?: appHeadingPreference
+        lastLocationCategory = preferenceScreen.findPreference("prefcat_location_app_last_location")
+            ?: lastLocationCategory
+        lastLocation =
+            preferenceScreen.findPreference("pref_location_app_last_location") ?: lastLocation
+        lastLocationMap = preferenceScreen.findPreference("pref_location_app_last_location_map")
+            ?: lastLocationMap
+        forceCoarse =
+            preferenceScreen.findPreference("pref_location_app_force_coarse") ?: forceCoarse
         forceCoarse.setOnPreferenceChangeListener { _, newValue ->
-            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true} == true
+            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true } == true
         }
     }
 
@@ -84,16 +89,29 @@ class LocationAppFragment : PreferenceFragmentCompat() {
             if (location != null) {
                 lastLocationCategory.isVisible = true
                 lastLocation.title = DateUtils.getRelativeTimeSpanString(location.time)
-                lastLocation.intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
+                lastLocation.intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("geo:${location.latitude},${location.longitude}")
+                )
                 lastLocationMap.location = location
                 val address = if (SDK_INT > 33) {
                     suspendCoroutine { continuation ->
-                        Geocoder(context).getFromLocation(location.latitude, location.longitude, 1) {
+                        Geocoder(context).getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            1
+                        ) {
                             continuation.resume(it.firstOrNull())
                         }
                     }
                 } else {
-                    withContext(Dispatchers.IO) { Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull() }
+                    withContext(Dispatchers.IO) {
+                        Geocoder(context).getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            1
+                        )?.firstOrNull()
+                    }
                 }
                 if (address != null) {
                     val addressLine = StringBuilder()
@@ -106,7 +124,9 @@ class LocationAppFragment : PreferenceFragmentCompat() {
                     }
                     lastLocation.summary = addressLine.toString()
                 } else {
-                    lastLocation.summary =  "${location.latitude.toStringWithDigits(6)}, ${location.longitude.toStringWithDigits(6)}"
+                    lastLocation.summary = "${location.latitude.toStringWithDigits(6)}, ${
+                        location.longitude.toStringWithDigits(6)
+                    }"
                 }
             } else {
                 lastLocationCategory.isVisible = false

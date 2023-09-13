@@ -1584,7 +1584,7 @@ public class WifiScanner {
     private static final int BASE;
 
     static {
-        if (1==1) throw new UnsupportedOperationException();
+        if (1 == 1) throw new UnsupportedOperationException();
         BASE = 0;
     }
 
@@ -1669,7 +1669,6 @@ public class WifiScanner {
     private final SparseArray mListenerMap = new SparseArray();
     private final SparseArray<Executor> mExecutorMap = new SparseArray<>();
     private final Object mListenerMapLock = new Object();
-
 
 
     // Add a listener into listener map. If the listener already exists, return INVALID_KEY and

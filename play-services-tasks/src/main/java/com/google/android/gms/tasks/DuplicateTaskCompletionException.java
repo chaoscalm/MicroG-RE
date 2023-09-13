@@ -22,7 +22,7 @@ public class DuplicateTaskCompletionException extends IllegalStateException {
 
     /**
      * Creates a DuplicateTaskCompletionException from a {@link Task}.
-     *
+     * <p>
      * The {@link Task} must be complete.
      */
     public static DuplicateTaskCompletionException of(Task<?> task) {

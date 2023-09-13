@@ -12,7 +12,8 @@ import java.util.*
 const val TAG = "ExposureNotification"
 val SERVICE_UUID = ParcelUuid(UUID.fromString("0000FD6F-0000-1000-8000-00805F9B34FB"))
 
-const val SCANNING_INTERVAL = 3 * 60 // Google uses 5m, but we use a slightly different scanning and reporting system
+const val SCANNING_INTERVAL =
+    3 * 60 // Google uses 5m, but we use a slightly different scanning and reporting system
 const val SCANNING_INTERVAL_MS = SCANNING_INTERVAL * 1000L
 const val SCANNING_TIME = 20 // Google uses 4s + 13s (if Bluetooth is used by something else)
 const val SCANNING_TIME_MS = SCANNING_TIME * 1000L
@@ -33,7 +34,8 @@ const val CONFIRM_ACTION_STOP = "stop"
 const val CONFIRM_ACTION_KEYS = "keys"
 const val CONFIRM_PERMISSION_VALIDITY = 60 * 60 * 1000L
 
-const val PERMISSION_EXPOSURE_CALLBACK = "com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
+const val PERMISSION_EXPOSURE_CALLBACK =
+    "com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
 
 const val TX_POWER_LOW = -15
 

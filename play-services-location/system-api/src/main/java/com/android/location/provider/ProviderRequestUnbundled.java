@@ -8,8 +8,10 @@ package com.android.location.provider;
 
 import android.os.Build;
 import android.os.WorkSource;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+
 import com.android.internal.location.ProviderRequest;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 public final class ProviderRequestUnbundled {
     public static long INTERVAL_DISABLED;
+
     public ProviderRequestUnbundled(ProviderRequest request) {
     }
 

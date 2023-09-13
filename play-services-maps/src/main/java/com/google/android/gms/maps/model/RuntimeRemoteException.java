@@ -6,6 +6,7 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
+
 import androidx.annotation.NonNull;
 
 /**

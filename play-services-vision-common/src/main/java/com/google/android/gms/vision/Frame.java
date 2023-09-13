@@ -57,7 +57,7 @@ public class Frame {
         byte[] values = new byte[width * height];
 
         for (int i = 0; i < pixels.length; i++) {
-            values[i] = (byte)((int)((float) Color.red(pixels[i]) * 0.299F + (float)Color.green(pixels[i]) * 0.587F + (float)Color.blue(pixels[i]) * 0.114F));
+            values[i] = (byte) ((int) ((float) Color.red(pixels[i]) * 0.299F + (float) Color.green(pixels[i]) * 0.587F + (float) Color.blue(pixels[i]) * 0.114F));
         }
 
         return ByteBuffer.wrap(values);
@@ -122,7 +122,8 @@ public class Frame {
          */
         public Builder setImageData(ByteBuffer data, int width, int height, int format) {
             if (data == null) throw new IllegalArgumentException("Null image data supplied");
-            if (data.capacity() < width * height) throw new IllegalArgumentException("Invalid image data size");
+            if (data.capacity() < width * height)
+                throw new IllegalArgumentException("Invalid image data size");
             if (format != ImageFormat.NV16 && format != ImageFormat.NV21 && format != ImageFormat.YV12)
                 throw new IllegalArgumentException("Unsupported image format: " + format);
             this.frame.imageData = data;

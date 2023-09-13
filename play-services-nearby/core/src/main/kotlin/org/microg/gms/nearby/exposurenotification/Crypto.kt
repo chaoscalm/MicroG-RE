@@ -41,7 +41,9 @@ val currentIntervalNumber: Int
 val currentDayRollingStartNumber: Int
     get() = getDayRollingStartNumber(currentIntervalNumber)
 
-fun getDayRollingStartNumber(intervalNumber: Int) = (floor(intervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD).toInt()
+fun getDayRollingStartNumber(intervalNumber: Int) =
+    (floor(intervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD).toInt()
+
 fun getPeriodInDay(intervalNumber: Int) = intervalNumber - getDayRollingStartNumber(intervalNumber)
 
 val nextKeyMillis: Long
@@ -51,25 +53,35 @@ val nextKeyMillis: Long
         return (currentWindowEnd - System.currentTimeMillis()).coerceAtLeast(0)
     }
 
-fun generateTemporaryExposureKey(intervalNumber: Int): TemporaryExposureKey.TemporaryExposureKeyBuilder = TemporaryExposureKey.TemporaryExposureKeyBuilder().apply {
-    var keyData = ByteArray(16)
-    SecureRandom().nextBytes(keyData)
-    setKeyData(keyData)
-    setRollingStartIntervalNumber(intervalNumber)
-    setRollingPeriod((ROLLING_PERIOD - getPeriodInDay(intervalNumber)))
-}
+fun generateTemporaryExposureKey(intervalNumber: Int): TemporaryExposureKey.TemporaryExposureKeyBuilder =
+    TemporaryExposureKey.TemporaryExposureKeyBuilder().apply {
+        var keyData = ByteArray(16)
+        SecureRandom().nextBytes(keyData)
+        setKeyData(keyData)
+        setRollingStartIntervalNumber(intervalNumber)
+        setRollingPeriod((ROLLING_PERIOD - getPeriodInDay(intervalNumber)))
+    }
 
-fun generateCurrentDayTemporaryExposureKey(): TemporaryExposureKey = generateTemporaryExposureKey(currentDayRollingStartNumber).build()
-fun generateIntraDayTemporaryExposureKey(intervalNumber: Int = currentIntervalNumber): TemporaryExposureKey = generateTemporaryExposureKey(intervalNumber).build()
+fun generateCurrentDayTemporaryExposureKey(): TemporaryExposureKey =
+    generateTemporaryExposureKey(currentDayRollingStartNumber).build()
+
+fun generateIntraDayTemporaryExposureKey(intervalNumber: Int = currentIntervalNumber): TemporaryExposureKey =
+    generateTemporaryExposureKey(intervalNumber).build()
 
 @TargetApi(21)
 fun TemporaryExposureKey.generateRpiKey(): SecretKeySpec {
-    return SecretKeySpec(hkdf(keyData, null, RPIK_HKDF_INFO.toByteArray(StandardCharsets.UTF_8)), RPIK_ALGORITHM)
+    return SecretKeySpec(
+        hkdf(keyData, null, RPIK_HKDF_INFO.toByteArray(StandardCharsets.UTF_8)),
+        RPIK_ALGORITHM
+    )
 }
 
 @TargetApi(21)
 fun TemporaryExposureKey.generateAemKey(): SecretKeySpec {
-    return SecretKeySpec(hkdf(keyData, null, AEMK_HKDF_INFO.toByteArray(StandardCharsets.UTF_8)), AEMK_ALGORITHM)
+    return SecretKeySpec(
+        hkdf(keyData, null, AEMK_HKDF_INFO.toByteArray(StandardCharsets.UTF_8)),
+        AEMK_ALGORITHM
+    )
 }
 
 @TargetApi(21)
@@ -88,14 +100,15 @@ fun TemporaryExposureKey.generateRpiId(intervalNumber: Int): ByteArray {
 fun TemporaryExposureKey.generateAllRpiIds(): ByteArray {
     val cipher = Cipher.getInstance(RPID_ALGORITHM)
     cipher.init(Cipher.ENCRYPT_MODE, generateRpiKey())
-    val data = ByteBuffer.allocate(AES_BLOCK_SIZE * rollingPeriod).order(ByteOrder.LITTLE_ENDIAN).apply {
-        val prefix = RPID_PREFIX.toByteArray(StandardCharsets.UTF_8)
-        for (i in 0 until rollingPeriod) {
-            put(prefix)
-            position(i * 16 + 12)
-            putInt(rollingStartIntervalNumber + i)
-        }
-    }.array()
+    val data =
+        ByteBuffer.allocate(AES_BLOCK_SIZE * rollingPeriod).order(ByteOrder.LITTLE_ENDIAN).apply {
+            val prefix = RPID_PREFIX.toByteArray(StandardCharsets.UTF_8)
+            for (i in 0 until rollingPeriod) {
+                put(prefix)
+                position(i * 16 + 12)
+                putInt(rollingStartIntervalNumber + i)
+            }
+        }.array()
     return cipher.doFinal(data)
 }
 
@@ -111,7 +124,11 @@ fun TemporaryExposureKey.generatePayload(intervalNumber: Int, metadata: ByteArra
     return rpi + aem
 }
 
-private fun hkdf(inputKeyingMaterial: ByteArray, inputSalt: ByteArray?, info: ByteArray): ByteArray {
+private fun hkdf(
+    inputKeyingMaterial: ByteArray,
+    inputSalt: ByteArray?,
+    info: ByteArray
+): ByteArray {
     val mac = Mac.getInstance(HKDF_ALGORITHM)
     val salt = if (inputSalt == null || inputSalt.isEmpty()) ByteArray(HASH_LENGTH) else inputSalt
     mac.init(SecretKeySpec(salt, HKDF_ALGORITHM))

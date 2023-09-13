@@ -86,9 +86,12 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         if (timeoutSeconds != null ? !timeoutSeconds.equals(that.timeoutSeconds) : that.timeoutSeconds != null)
             return false;
         if (rpId != null ? !rpId.equals(that.rpId) : that.rpId != null) return false;
-        if (allowList != null ? !allowList.equals(that.allowList) : that.allowList != null) return false;
-        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
-        if (tokenBinding != null ? !tokenBinding.equals(that.tokenBinding) : that.tokenBinding != null) return false;
+        if (allowList != null ? !allowList.equals(that.allowList) : that.allowList != null)
+            return false;
+        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null)
+            return false;
+        if (tokenBinding != null ? !tokenBinding.equals(that.tokenBinding) : that.tokenBinding != null)
+            return false;
         if (requireUserVerification != that.requireUserVerification) return false;
         return authenticationExtensions != null ? authenticationExtensions.equals(that.authenticationExtensions) : that.authenticationExtensions == null;
     }

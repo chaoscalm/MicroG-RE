@@ -11,7 +11,8 @@ public class GetPackageConfigurationParams extends AutoSafeParcelable {
     @Field(1)
     public IPackageConfigurationCallback callback;
 
-    private GetPackageConfigurationParams() {}
+    private GetPackageConfigurationParams() {
+    }
 
     public GetPackageConfigurationParams(IPackageConfigurationCallback callback) {
         this.callback = callback;

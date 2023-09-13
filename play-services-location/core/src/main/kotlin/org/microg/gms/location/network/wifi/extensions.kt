@@ -17,7 +17,16 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
     frequency = frequency,
     channel = frequencyToChannel(frequency),
     signalStrength = level,
-    open = setOf("WEP", "WPA", "PSK", "EAP", "IEEE8021X", "PEAP", "TLS", "TTLS").none { capabilities.contains(it) }
+    open = setOf(
+        "WEP",
+        "WPA",
+        "PSK",
+        "EAP",
+        "IEEE8021X",
+        "PEAP",
+        "TLS",
+        "TTLS"
+    ).none { capabilities.contains(it) }
 )
 
 private const val BAND_24_GHZ_FIRST_CH_NUM = 1

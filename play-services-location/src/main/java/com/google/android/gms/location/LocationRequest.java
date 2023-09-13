@@ -12,10 +12,13 @@ import android.Manifest;
 import android.os.SystemClock;
 
 import android.os.WorkSource;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.location.internal.ClientIdentity;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.location.GranularityUtil;
 import org.microg.gms.location.PriorityUtil;
@@ -402,7 +405,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setExpirationDuration(long durationMillis) {
-        if (durationMillis <= 0) throw new IllegalArgumentException("durationMillis must be greater than 0");
+        if (durationMillis <= 0)
+            throw new IllegalArgumentException("durationMillis must be greater than 0");
         this.durationMillis = durationMillis;
         return this;
     }
@@ -424,7 +428,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setFastestInterval(long fastestIntervalMillis) throws IllegalArgumentException {
-        if (fastestIntervalMillis < 0) throw new IllegalArgumentException("illegal fastest interval: " + fastestIntervalMillis);
+        if (fastestIntervalMillis < 0)
+            throw new IllegalArgumentException("illegal fastest interval: " + fastestIntervalMillis);
         this.minUpdateIntervalMillis = fastestIntervalMillis;
         explicitFastestInterval = true; // FIXME: Remove
         return this;
@@ -436,7 +441,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setInterval(long intervalMillis) throws IllegalArgumentException {
-        if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+        if (intervalMillis < 0)
+            throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
         if (this.minUpdateIntervalMillis == this.intervalMillis / 6) {
             this.minUpdateIntervalMillis = intervalMillis / 6;
         }
@@ -453,7 +459,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setMaxWaitTime(long maxWaitTimeMillis) throws IllegalArgumentException {
-        if (maxWaitTimeMillis < 0) throw new IllegalArgumentException("illegal max wait time: " + maxWaitTimeMillis);
+        if (maxWaitTimeMillis < 0)
+            throw new IllegalArgumentException("illegal max wait time: " + maxWaitTimeMillis);
         maxUpdateDelayMillis = maxWaitTimeMillis;
         return this;
     }
@@ -464,7 +471,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setNumUpdates(int maxUpdates) throws IllegalArgumentException {
-        if (maxUpdates <= 0) throw new IllegalArgumentException("invalid numUpdates: " + maxUpdates);
+        if (maxUpdates <= 0)
+            throw new IllegalArgumentException("invalid numUpdates: " + maxUpdates);
         this.maxUpdates = maxUpdates;
         return this;
     }
@@ -486,7 +494,8 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     @NonNull
     public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
-        if (smallestDisplacementMeters < 0) throw new IllegalArgumentException("invalid displacement: " + smallestDisplacementMeters);
+        if (smallestDisplacementMeters < 0)
+            throw new IllegalArgumentException("invalid displacement: " + smallestDisplacementMeters);
         this.minUpdateDistanceMeters = smallestDisplacementMeters;
         return this;
     }
@@ -591,7 +600,8 @@ public class LocationRequest extends AutoSafeParcelable {
          * Constructs a Builder with the given priority and interval, and default values for all other fields.
          */
         public Builder(@Priority int priority, long intervalMillis) {
-            if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+            if (intervalMillis < 0)
+                throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
             PriorityUtil.checkValidPriority(priority);
             this.priority = priority;
             this.intervalMillis = intervalMillis;
@@ -675,7 +685,8 @@ public class LocationRequest extends AutoSafeParcelable {
          */
         @NonNull
         public Builder setDurationMillis(long durationMillis) {
-            if (durationMillis <= 0) throw new IllegalArgumentException("intervalMillis must be greater than 0");
+            if (durationMillis <= 0)
+                throw new IllegalArgumentException("intervalMillis must be greater than 0");
             this.durationMillis = durationMillis;
             return this;
         }
@@ -700,7 +711,8 @@ public class LocationRequest extends AutoSafeParcelable {
          */
         @NonNull
         public Builder setIntervalMillis(long intervalMillis) {
-            if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+            if (intervalMillis < 0)
+                throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
             this.intervalMillis = intervalMillis;
             return this;
         }
@@ -745,7 +757,8 @@ public class LocationRequest extends AutoSafeParcelable {
          */
         @NonNull
         public Builder setMaxUpdateDelayMillis(long maxUpdateDelayMillis) {
-            if (maxUpdateDelayMillis < 0) throw new IllegalArgumentException("maxUpdateDelayMillis must be greater than or equal to 0");
+            if (maxUpdateDelayMillis < 0)
+                throw new IllegalArgumentException("maxUpdateDelayMillis must be greater than or equal to 0");
             this.maxUpdateDelayMillis = maxUpdateDelayMillis;
             return this;
         }
@@ -759,7 +772,8 @@ public class LocationRequest extends AutoSafeParcelable {
          */
         @NonNull
         public Builder setMaxUpdates(int maxUpdates) {
-            if (maxUpdates <= 0) throw new IllegalArgumentException("maxUpdates must be greater than 0");
+            if (maxUpdates <= 0)
+                throw new IllegalArgumentException("maxUpdates must be greater than 0");
             this.maxUpdates = maxUpdates;
             return this;
         }
@@ -773,7 +787,8 @@ public class LocationRequest extends AutoSafeParcelable {
          */
         @NonNull
         public Builder setMinUpdateDistanceMeters(float minUpdateDistanceMeters) {
-            if (minUpdateDistanceMeters < 0) throw new IllegalArgumentException("minUpdateDistanceMeters must be greater than or equal to 0");
+            if (minUpdateDistanceMeters < 0)
+                throw new IllegalArgumentException("minUpdateDistanceMeters must be greater than or equal to 0");
             this.minUpdateDistanceMeters = minUpdateDistanceMeters;
             return this;
         }

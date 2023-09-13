@@ -10,6 +10,7 @@ package com.google.android.gms.maps;
 
 import android.view.View;
 import android.view.ViewTreeObserver;
+
 import com.google.android.gms.maps.model.LatLngBounds;
 
 /**

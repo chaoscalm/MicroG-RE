@@ -26,7 +26,8 @@ class DroidGuardPreferencesFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        modeEmbedded = preferenceScreen.findPreference("pref_droidguard_mode_embedded") ?: modeEmbedded
+        modeEmbedded =
+            preferenceScreen.findPreference("pref_droidguard_mode_embedded") ?: modeEmbedded
         modeNetwork = preferenceScreen.findPreference("pref_droidguard_mode_network") ?: modeNetwork
         modeEmbedded.setOnPreferenceClickListener {
             DroidGuardPreferences.setMode(it.context, Embedded)

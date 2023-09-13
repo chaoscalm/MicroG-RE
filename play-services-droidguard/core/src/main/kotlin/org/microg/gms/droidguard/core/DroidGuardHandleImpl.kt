@@ -17,7 +17,12 @@ import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import org.microg.gms.droidguard.GuardCallback
 import java.io.FileNotFoundException
 
-class DroidGuardHandleImpl(private val context: Context, private val packageName: String, private val factory: HandleProxyFactory, private val callback: GuardCallback) : IDroidGuardHandle.Stub() {
+class DroidGuardHandleImpl(
+    private val context: Context,
+    private val packageName: String,
+    private val factory: HandleProxyFactory,
+    private val callback: GuardCallback
+) : IDroidGuardHandle.Stub() {
     private val condition = ConditionVariable()
 
     private var flow: String? = null
@@ -30,7 +35,10 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     }
 
     @SuppressLint("SetWorldReadable")
-    override fun initWithRequest(flow: String?, request: DroidGuardResultsRequest?): DroidGuardInitReply {
+    override fun initWithRequest(
+        flow: String?,
+        request: DroidGuardResultsRequest?
+    ): DroidGuardInitReply {
         Log.d(TAG, "initWithRequest($flow, $request)")
         this.flow = flow
         var handleProxy: HandleProxy? = null
@@ -61,13 +69,19 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         this.condition.open()
         if (handleInitError == null) {
             try {
-                val `object` = handleProxy!!.handle.javaClass.getDeclaredMethod("rb").invoke(handleProxy.handle) as? Parcelable?
+                val `object` = handleProxy!!.handle.javaClass.getDeclaredMethod("rb")
+                    .invoke(handleProxy.handle) as? Parcelable?
                 if (`object` != null) {
                     val vmKey = handleProxy.vmKey
                     val theApk = factory.getTheApkFile(vmKey)
                     try {
                         theApk.setReadable(true, false)
-                        return DroidGuardInitReply(ParcelFileDescriptor.open(theApk, ParcelFileDescriptor.MODE_READ_ONLY), `object`)
+                        return DroidGuardInitReply(
+                            ParcelFileDescriptor.open(
+                                theApk,
+                                ParcelFileDescriptor.MODE_READ_ONLY
+                            ), `object`
+                        )
                     } catch (e: FileNotFoundException) {
                         throw Exception("Files for VM $vmKey not found on disk")
                     }
@@ -84,9 +98,15 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         Log.d(TAG, "snapshot()")
         condition.block()
         handleInitError?.let { return FallbackCreator.create(flow, context, map, it) }
-        val handleProxy = this.handleProxy ?: return FallbackCreator.create(flow, context, map, IllegalStateException())
+        val handleProxy = this.handleProxy ?: return FallbackCreator.create(
+            flow,
+            context,
+            map,
+            IllegalStateException()
+        )
         return try {
-            handleProxy.handle::class.java.getDeclaredMethod("ss", Map::class.java).invoke(handleProxy.handle, map) as ByteArray
+            handleProxy.handle::class.java.getDeclaredMethod("ss", Map::class.java)
+                .invoke(handleProxy.handle, map) as ByteArray
         } catch (e: Exception) {
             try {
                 throw BytesException(handleProxy.extra, e)
@@ -111,6 +131,13 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     companion object {
         private const val TAG = "GmsGuardHandleImpl"
         private val LOW_LATENCY_ENABLED = false
-        private val NOT_LOW_LATENCY_FLOWS = setOf("ad_attest", "attest", "checkin", "federatedMachineLearningReduced", "msa-f", "ad-event-attest-token")
+        private val NOT_LOW_LATENCY_FLOWS = setOf(
+            "ad_attest",
+            "attest",
+            "checkin",
+            "federatedMachineLearningReduced",
+            "msa-f",
+            "ad-event-attest-token"
+        )
     }
 }

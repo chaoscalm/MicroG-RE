@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight"/>
-    <style name="Theme.AppCompat.DayNight" parent="Theme.AppCompat"/>
+
+    <style name="ActionBarTheme" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">?android:colorBackground</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <item name="actionBarStyle">@style/ActionBarTheme</item>
+        <item name="android:colorBackground">@color/theme_background_dark</item>
+        <item name="android:actionBarSize">48.0dip</item>
+        <item name="android:colorAccent">@color/theme_accent_dark</item>
+        <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+    </style>
+
+    <style name="Theme.LoginBlue" parent="Theme.LoginBlue.Base" />
+
+    <style name="Theme.LoginBlue.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/theme_background_dark</item>
+        <item name="android:colorAccent">@color/theme_accent_dark</item>
+        <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="colorAccent">?android:colorAccent</item>
+        <item name="colorPrimary">?android:colorBackground</item>
+        <item name="colorPrimaryDark">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+    </style>
+
 </resources>

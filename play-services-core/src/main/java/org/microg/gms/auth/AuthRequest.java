@@ -78,7 +78,7 @@ public class AuthRequest extends HttpFormClient.Request {
     public boolean getAccountId;
     @RequestContent("ACCESS_TOKEN")
     public boolean isAccessToken;
-//    @RequestContent("droidguard_results")
+    //    @RequestContent("droidguard_results")
 //    public String droidguardResults;
     @RequestContent("has_permission")
     public boolean hasPermission;

@@ -7,10 +7,13 @@ package com.google.android.gms.location.internal;
 
 import android.app.PendingIntent;
 import android.os.IBinder;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.location.ILocationCallback;
 import com.google.android.gms.location.ILocationListener;
+
 import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 

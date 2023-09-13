@@ -43,8 +43,12 @@ fun ILocationListener.asCallback(): ILocationCallback {
 fun ILocationCallback.redirectCancel(fusedCallback: IFusedLocationProviderCallback?): ILocationCallback {
     if (fusedCallback == null) return this
     return object : ILocationCallback.Stub() {
-        override fun onLocationResult(result: LocationResult) = this@redirectCancel.onLocationResult(result)
-        override fun onLocationAvailability(availability: LocationAvailability) = this@redirectCancel.onLocationAvailability(availability)
+        override fun onLocationResult(result: LocationResult) =
+            this@redirectCancel.onLocationResult(result)
+
+        override fun onLocationAvailability(availability: LocationAvailability) =
+            this@redirectCancel.onLocationAvailability(availability)
+
         override fun cancel() = fusedCallback.cancel()
     }
 }
@@ -53,35 +57,57 @@ fun ClientIdentity.isGoogle(context: Context) = PackageUtils.isGooglePackage(con
 
 fun ClientIdentity.isSelfProcess() = pid == Process.myPid()
 
-fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granularity Int = when (PackageManager.PERMISSION_GRANTED) {
-    packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, clientIdentity.packageName) -> Granularity.GRANULARITY_FINE
-    packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, clientIdentity.packageName) -> Granularity.GRANULARITY_COARSE
-    else -> Granularity.GRANULARITY_PERMISSION_LEVEL
-}
+fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granularity Int =
+    when (PackageManager.PERMISSION_GRANTED) {
+        packageManager.checkPermission(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            clientIdentity.packageName
+        ) -> Granularity.GRANULARITY_FINE
+
+        packageManager.checkPermission(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            clientIdentity.packageName
+        ) -> Granularity.GRANULARITY_COARSE
+
+        else -> Granularity.GRANULARITY_PERMISSION_LEVEL
+    }
 
 fun LocationRequest.verify(context: Context, clientIdentity: ClientIdentity) {
     GranularityUtil.checkValidGranularity(granularity)
     if (isBypass) {
-        val permission = if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
-        if (context.checkPermission(permission, clientIdentity.pid, clientIdentity.uid) != PackageManager.PERMISSION_GRANTED) {
+        val permission =
+            if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
+        if (context.checkPermission(
+                permission,
+                clientIdentity.pid,
+                clientIdentity.uid
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             throw SecurityException("Caller must hold $permission for location bypass")
         }
     }
     if (impersonation != null) {
-        Log.w(TAG, "${clientIdentity.packageName} wants to impersonate ${impersonation!!.packageName}. Ignoring.")
+        Log.w(
+            TAG,
+            "${clientIdentity.packageName} wants to impersonate ${impersonation!!.packageName}. Ignoring."
+        )
     }
 
 }
 
 @RequiresApi(19)
-fun appOpFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
-    Granularity.GRANULARITY_FINE -> AppOpsManager.OPSTR_FINE_LOCATION
-    Granularity.GRANULARITY_COARSE -> AppOpsManager.OPSTR_COARSE_LOCATION
-    else -> throw IllegalArgumentException()
-}
+fun appOpFromEffectiveGranularity(effectiveGranularity: @Granularity Int) =
+    when (effectiveGranularity) {
+        Granularity.GRANULARITY_FINE -> AppOpsManager.OPSTR_FINE_LOCATION
+        Granularity.GRANULARITY_COARSE -> AppOpsManager.OPSTR_COARSE_LOCATION
+        else -> throw IllegalArgumentException()
+    }
 
 
-fun getEffectiveGranularity(requestGranularity: @Granularity Int, permissionGranularity: @Granularity Int) = when {
+fun getEffectiveGranularity(
+    requestGranularity: @Granularity Int,
+    permissionGranularity: @Granularity Int
+) = when {
     requestGranularity == Granularity.GRANULARITY_PERMISSION_LEVEL && permissionGranularity == Granularity.GRANULARITY_PERMISSION_LEVEL -> Granularity.GRANULARITY_FINE
     requestGranularity == Granularity.GRANULARITY_PERMISSION_LEVEL -> permissionGranularity
     else -> requestGranularity
@@ -105,7 +131,10 @@ fun Context.noteAppOpForEffectiveGranularity(
     }
 }
 
-fun Context.checkAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int): Boolean {
+fun Context.checkAppOpForEffectiveGranularity(
+    clientIdentity: ClientIdentity,
+    effectiveGranularity: @Granularity Int
+): Boolean {
     return if (SDK_INT >= 19) {
         try {
             val op = appOpFromEffectiveGranularity(effectiveGranularity)
@@ -119,7 +148,10 @@ fun Context.checkAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, ef
     }
 }
 
-fun Context.startAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int): Boolean {
+fun Context.startAppOpForEffectiveGranularity(
+    clientIdentity: ClientIdentity,
+    effectiveGranularity: @Granularity Int
+): Boolean {
     return if (SDK_INT >= 19) {
         try {
             val op = appOpFromEffectiveGranularity(effectiveGranularity)
@@ -133,7 +165,10 @@ fun Context.startAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, ef
     }
 }
 
-fun Context.finishAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int) {
+fun Context.finishAppOpForEffectiveGranularity(
+    clientIdentity: ClientIdentity,
+    effectiveGranularity: @Granularity Int
+) {
     if (SDK_INT >= 19) {
         try {
             val op = appOpFromEffectiveGranularity(effectiveGranularity)
@@ -150,9 +185,17 @@ private fun Context.checkAppOp(
     clientIdentity: ClientIdentity
 ) = try {
     if (SDK_INT >= 29) {
-        getSystemService<AppOpsManager>()?.unsafeCheckOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName) == AppOpsManager.MODE_ALLOWED
+        getSystemService<AppOpsManager>()?.unsafeCheckOpNoThrow(
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName
+        ) == AppOpsManager.MODE_ALLOWED
     } else {
-        getSystemService<AppOpsManager>()?.checkOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName) == AppOpsManager.MODE_ALLOWED
+        getSystemService<AppOpsManager>()?.checkOpNoThrow(
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName
+        ) == AppOpsManager.MODE_ALLOWED
     }
 } catch (e: SecurityException) {
     true
@@ -165,13 +208,29 @@ private fun Context.startAppOp(
     message: String?
 ) = try {
     if (SDK_INT >= 30 && clientIdentity.attributionTag != null) {
-        getSystemService<AppOpsManager>()?.startOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag!!, message)
+        getSystemService<AppOpsManager>()?.startOpNoThrow(
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName,
+            clientIdentity.attributionTag!!,
+            message
+        )
     } else {
-        getSystemService<AppOpsManager>()?.startOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName)
+        getSystemService<AppOpsManager>()?.startOpNoThrow(
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName
+        )
     }
 } catch (e: SecurityException) {
     if (SDK_INT >= 31) {
-        getSystemService<AppOpsManager>()?.startProxyOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag, message)
+        getSystemService<AppOpsManager>()?.startProxyOpNoThrow(
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName,
+            clientIdentity.attributionTag,
+            message
+        )
     } else {
         AppOpsManager.MODE_ALLOWED
     }
@@ -184,13 +243,27 @@ private fun Context.finishAppOp(
 ) {
     try {
         if (SDK_INT >= 30 && clientIdentity.attributionTag != null) {
-            getSystemService<AppOpsManager>()?.finishOp(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag!!)
+            getSystemService<AppOpsManager>()?.finishOp(
+                op,
+                clientIdentity.uid,
+                clientIdentity.packageName,
+                clientIdentity.attributionTag!!
+            )
         } else {
-            getSystemService<AppOpsManager>()?.finishOp(op, clientIdentity.uid, clientIdentity.packageName)
+            getSystemService<AppOpsManager>()?.finishOp(
+                op,
+                clientIdentity.uid,
+                clientIdentity.packageName
+            )
         }
     } catch (e: SecurityException) {
         if (SDK_INT >= 31) {
-            getSystemService<AppOpsManager>()?.finishProxyOp(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag)
+            getSystemService<AppOpsManager>()?.finishProxyOp(
+                op,
+                clientIdentity.uid,
+                clientIdentity.packageName,
+                clientIdentity.attributionTag
+            )
         }
     }
 }
@@ -203,16 +276,35 @@ private fun Context.noteAppOp(
 ) = try {
     if (SDK_INT >= 30) {
         getSystemService<AppOpsManager>()
-            ?.noteOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag, message) == AppOpsManager.MODE_ALLOWED
+            ?.noteOpNoThrow(
+                op,
+                clientIdentity.uid,
+                clientIdentity.packageName,
+                clientIdentity.attributionTag,
+                message
+            ) == AppOpsManager.MODE_ALLOWED
     } else {
-        AppOpsManagerCompat.noteOpNoThrow(this, op, clientIdentity.uid, clientIdentity.packageName) == AppOpsManager.MODE_ALLOWED
+        AppOpsManagerCompat.noteOpNoThrow(
+            this,
+            op,
+            clientIdentity.uid,
+            clientIdentity.packageName
+        ) == AppOpsManager.MODE_ALLOWED
     }
 } catch (e: SecurityException) {
     if (Binder.getCallingUid() == clientIdentity.uid) {
-        AppOpsManagerCompat.noteProxyOpNoThrow(this, op, clientIdentity.packageName) == AppOpsManager.MODE_ALLOWED
+        AppOpsManagerCompat.noteProxyOpNoThrow(
+            this,
+            op,
+            clientIdentity.packageName
+        ) == AppOpsManager.MODE_ALLOWED
     } else if (SDK_INT >= 29) {
         getSystemService<AppOpsManager>()
-            ?.noteProxyOpNoThrow(op, clientIdentity.packageName, clientIdentity.uid) == AppOpsManager.MODE_ALLOWED
+            ?.noteProxyOpNoThrow(
+                op,
+                clientIdentity.packageName,
+                clientIdentity.uid
+            ) == AppOpsManager.MODE_ALLOWED
     } else {
         true
     }

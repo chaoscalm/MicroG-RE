@@ -13,6 +13,7 @@ import android.os.SystemClock;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
+
 import com.google.android.gms.location.internal.ParcelableGeofence;
 
 import java.lang.annotation.ElementType;
@@ -86,7 +87,8 @@ public interface Geofence {
     /**
      * Returns the transition types of interest as a bitwise-OR of {@code GEOFENCE_TRANSITION_} flags.
      */
-    @TransitionTypes int getTransitionTypes();
+    @TransitionTypes
+    int getTransitionTypes();
 
     /**
      * A builder that builds {@link Geofence}.

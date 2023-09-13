@@ -71,6 +71,7 @@ public class Conditions {
             .summaryPlurals(R.plurals.cond_perm_summary)
             .evaluation(new Condition.Evaluation() {
                 int count = 0;
+
                 @Override
                 public boolean isActive(Context context) {
                     count = 0;

@@ -47,7 +47,15 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
     val recentApps: List<Pair<String, Long>>
         get() {
             val db = readableDatabase
-            val cursor = db.query(TABLE_RECENTS, arrayOf(FIELD_PACKAGE_NAME, "MAX($FIELD_TIMESTAMP)"), null, null, FIELD_PACKAGE_NAME, null, "MAX($FIELD_TIMESTAMP) DESC")
+            val cursor = db.query(
+                TABLE_RECENTS,
+                arrayOf(FIELD_PACKAGE_NAME, "MAX($FIELD_TIMESTAMP)"),
+                null,
+                null,
+                FIELD_PACKAGE_NAME,
+                null,
+                "MAX($FIELD_TIMESTAMP) DESC"
+            )
             if (cursor != null) {
                 val result = ArrayList<Pair<String, Long>>()
                 while (cursor.moveToNext()) {
@@ -61,7 +69,15 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
 
     fun getRecentRequests(packageName: String): List<SafetyNetSummary> {
         val db = readableDatabase
-        val cursor = db.query(TABLE_RECENTS, null, "$FIELD_PACKAGE_NAME = ?", arrayOf(packageName), null, null, "$FIELD_TIMESTAMP DESC")
+        val cursor = db.query(
+            TABLE_RECENTS,
+            null,
+            "$FIELD_PACKAGE_NAME = ?",
+            arrayOf(packageName),
+            null,
+            null,
+            "$FIELD_TIMESTAMP DESC"
+        )
         if (cursor != null) {
             val result: MutableList<SafetyNetSummary> = ArrayList()
             while (cursor.moveToNext()) {
@@ -107,7 +123,8 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
                     "(SELECT $FIELD_ID FROM $TABLE_RECENTS ORDER BY $FIELD_TIMESTAMP LIMIT $maxRequests)"
         ).executeUpdateDelete()
 
-        val sqLiteStatement = db.compileStatement("DELETE FROM $TABLE_RECENTS WHERE $FIELD_TIMESTAMP + ? < ?")
+        val sqLiteStatement =
+            db.compileStatement("DELETE FROM $TABLE_RECENTS WHERE $FIELD_TIMESTAMP + ? < ?")
         sqLiteStatement.bindLong(1, timeout.toLong())
         sqLiteStatement.bindLong(2, System.currentTimeMillis())
         rows += sqLiteStatement.executeUpdateDelete()

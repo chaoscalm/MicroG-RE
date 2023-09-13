@@ -24,6 +24,7 @@ public final class Gap extends PatternItem {
 
     /**
      * Constructs a {@code Gap}.
+     *
      * @param length Length in pixels. Negative value will be clamped to zero.
      */
     public Gap(float length) {

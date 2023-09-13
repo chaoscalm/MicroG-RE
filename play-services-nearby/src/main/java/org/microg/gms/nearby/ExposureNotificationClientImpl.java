@@ -206,7 +206,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     public Task<Void> provideDiagnosisKeys(List<File> keyFiles, ExposureConfiguration configuration, String token) {
         return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
             List<ParcelFileDescriptor> fds = new ArrayList<>(keyFiles.size());
-            for (File kf: keyFiles) {
+            for (File kf : keyFiles) {
                 ParcelFileDescriptor fd;
                 try {
                     fd = ParcelFileDescriptor.open(kf, ParcelFileDescriptor.MODE_READ_ONLY);

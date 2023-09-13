@@ -35,7 +35,15 @@ class FontsProvider : ContentProvider() {
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor {
-        Log.e(TAG, "query: $uri ${projection?.toList()} $selection ${selectionArgs?.joinToString(prefix = "[", postfix = "]")}")
+        Log.e(
+            TAG,
+            "query: $uri ${projection?.toList()} $selection ${
+                selectionArgs?.joinToString(
+                    prefix = "[",
+                    postfix = "]"
+                )
+            }"
+        )
         val cursor = MatrixCursor(COLUMNS)
         // We could also return an empty cursor here, but some apps have been reported to crash
         // when their expected font is not returned by Google's font provider.

@@ -24,6 +24,7 @@ public final class Dash extends PatternItem {
 
     /**
      * Constructs a {@code Dash}.
+     *
      * @param length Length in pixels. Negative value will be clamped to zero.
      */
     public Dash(float length) {

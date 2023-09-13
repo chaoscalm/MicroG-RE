@@ -6,38 +6,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_width="fill_parent"
+    android:layout_height="64.0dip"
+    android:background="?colorAccent"
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingStart="?attr/listPreferredItemPaddingStart"
     android:paddingLeft="?attr/listPreferredItemPaddingLeft"
     android:paddingEnd="?attr/listPreferredItemPaddingEnd"
-    android:paddingRight="?attr/listPreferredItemPaddingRight"
-    android:background="@null"
-    tools:background="?attr/colorControlActivated">
+    android:paddingRight="?attr/listPreferredItemPaddingRight">
 
     <TextView
         android:id="@android:id/title"
+        tools:text="Enabled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingStart="56dp"
         android:paddingLeft="56dp"
-        android:textSize="20sp"
-        android:textAppearance="@style/TextAppearance.M3.Sys.Typescale.HeadlineSmall"
-        tools:text="Enabled" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="18sp" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_widget"
+        tools:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@null"
         app:thumbTint="?android:attr/textColorPrimaryInverse"
-        app:trackTint="?android:attr/textColorSecondaryInverse"
-        tools:checked="true" />
+        app:trackTint="?android:attr/textColorTertiaryInverse" />
 </LinearLayout>

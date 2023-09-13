@@ -17,6 +17,7 @@
 package com.google.android.gms.location;
 
 import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 /**

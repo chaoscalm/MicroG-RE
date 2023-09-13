@@ -13,8 +13,10 @@ import java.io.InputStream
 abstract class Ctap1Command<Q : Ctap1Request, S : Ctap1Response>(val request: Q) {
     val commandByte: Byte
         get() = request.commandByte
+
     fun decodeResponse(statusCode: Short, bytes: ByteArray, offset: Int = 0): S =
         decodeResponse(statusCode, ByteArrayInputStream(bytes, offset, bytes.size - offset))
+
     abstract fun decodeResponse(statusCode: Short, i: InputStream): S
 }
 

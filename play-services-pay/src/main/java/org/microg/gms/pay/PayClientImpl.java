@@ -8,6 +8,7 @@ package org.microg.gms.pay;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.pay.PayApiAvailabilityStatus;

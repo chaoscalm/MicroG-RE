@@ -28,15 +28,16 @@ private val receiver = object : BroadcastReceiver() {
         }
     }
 
-    fun addDeferred(device: UsbDevice, deferred: CompletableDeferred<Boolean>) = synchronized(this) {
-        if (pendingRequests.containsKey(device)) {
-            pendingRequests[device]!!.add(deferred)
-            false
-        } else {
-            pendingRequests[device] = arrayListOf(deferred)
-            true
+    fun addDeferred(device: UsbDevice, deferred: CompletableDeferred<Boolean>) =
+        synchronized(this) {
+            if (pendingRequests.containsKey(device)) {
+                pendingRequests[device]!!.add(deferred)
+                false
+            } else {
+                pendingRequests[device] = arrayListOf(deferred)
+                true
+            }
         }
-    }
 
     fun unregister(context: Context) = synchronized(this) {
         if (registered) {

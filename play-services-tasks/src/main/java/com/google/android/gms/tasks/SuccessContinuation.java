@@ -12,6 +12,7 @@ import org.microg.gms.common.PublicApi;
 
 /**
  * A function that is called to continue execution then a {@link Task} succeeds.
+ *
  * @see Task#onSuccessTask
  */
 @PublicApi

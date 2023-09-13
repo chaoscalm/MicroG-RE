@@ -45,10 +45,13 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         locationApps = preferenceScreen.findPreference("prefcat_location_apps") ?: locationApps
-        locationAppsAll = preferenceScreen.findPreference("pref_location_apps_all") ?: locationAppsAll
-        locationAppsNone = preferenceScreen.findPreference("pref_location_apps_none") ?: locationAppsNone
+        locationAppsAll =
+            preferenceScreen.findPreference("pref_location_apps_all") ?: locationAppsAll
+        locationAppsNone =
+            preferenceScreen.findPreference("pref_location_apps_none") ?: locationAppsNone
         wifiMls = preferenceScreen.findPreference("pref_location_wifi_mls_enabled") ?: wifiMls
-        wifiMoving = preferenceScreen.findPreference("pref_location_wifi_moving_enabled") ?: wifiMoving
+        wifiMoving =
+            preferenceScreen.findPreference("pref_location_wifi_moving_enabled") ?: wifiMoving
         cellMls = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellMls
 
         locationAppsAll.setOnPreferenceClickListener {
@@ -96,7 +99,11 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
                     pref.order = idx
                     pref.applicationInfo = applicationInfo
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(requireContext(), R.id.openLocationAppDetails, bundleOf("package" to app.first))
+                        findNavController().navigate(
+                            requireContext(),
+                            R.id.openLocationAppDetails,
+                            bundleOf("package" to app.first)
+                        )
                         true
                     }
                     pref.key = "pref_location_app_" + app.first

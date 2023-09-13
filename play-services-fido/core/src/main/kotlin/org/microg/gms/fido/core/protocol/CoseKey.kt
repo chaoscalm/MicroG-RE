@@ -16,7 +16,13 @@ class CoseKey(
     val y: ByteArray,
     val curveId: Int
 ) {
-    constructor(algorithm: Algorithm, x: BigInteger, y: BigInteger, curveId: Int, curvePointSize: Int) :
+    constructor(
+        algorithm: Algorithm,
+        x: BigInteger,
+        y: BigInteger,
+        curveId: Int,
+        curvePointSize: Int
+    ) :
             this(algorithm, x.toByteArray(curvePointSize), y.toByteArray(curvePointSize), curveId)
 
     fun encode(): ByteArray = CBORObject.NewMap().apply {

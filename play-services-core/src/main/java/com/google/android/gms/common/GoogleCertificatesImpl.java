@@ -19,7 +19,9 @@ package com.google.android.gms.common;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
+
 import androidx.annotation.Keep;
+
 import android.util.Log;
 
 import com.google.android.gms.common.internal.CertData;
@@ -34,7 +36,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @Keep
-public class GoogleCertificatesImpl extends IGoogleCertificatesApi.Stub  {
+public class GoogleCertificatesImpl extends IGoogleCertificatesApi.Stub {
     private static final String TAG = "GmsCertImpl";
     private Set<CertData> googleCertificates = Collections.emptySet();
     private Set<CertData> googleReleaseCertificates = Collections.emptySet();

@@ -45,7 +45,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 
     public static class AccountSettingsFragment extends ResourceSettingsFragment {
         public AccountSettingsFragment() {
-            preferencesResource =  R.xml.preferences_account;
+            preferencesResource = R.xml.preferences_account;
         }
 
         @Override

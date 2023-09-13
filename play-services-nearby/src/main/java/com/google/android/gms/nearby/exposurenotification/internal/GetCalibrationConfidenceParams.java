@@ -11,7 +11,8 @@ public class GetCalibrationConfidenceParams extends AutoSafeParcelable {
     @Field(1)
     public IIntCallback callback;
 
-    private GetCalibrationConfidenceParams() {}
+    private GetCalibrationConfidenceParams() {
+    }
 
     public GetCalibrationConfidenceParams(IIntCallback callback) {
         this.callback = callback;

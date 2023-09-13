@@ -7,16 +7,18 @@ A big thanks to [Shadow578](https://github.com/shadow578) for its first implemen
 
 <b>
 
-* Note 1: This repository was not created (and will not be maintained) with the cooperation of MicroG lead developer.
+* Note 1: This repository was not created (and will not be maintained) with the cooperation of
+  MicroG lead developer.
 
-* Note 2: No features or changes will be implemented that are not strictly related to the repository update.
+* Note 2: No features or changes will be implemented that are not strictly related to the repository
+  update.
 
-* Note 3: Where 'Play Services' version code values are stored?  ---><br />
-{<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;build.gradle (ext.appVersionCode)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;play-services-droidguard-core.build.gradle (versionName)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;play-services-basement (version.xml)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RecaptchaClientImpl.kt (params.version)
-<br />}
+* Note 3: Where 'Play Services' version code values are stored? ---><br />
+  {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;build.gradle (ext.appVersionCode)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;play-services-droidguard-core.build.gradle (versionName)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;play-services-basement (version.xml)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RecaptchaClientImpl.kt (params.version)
+  <br />}
 
 </b>

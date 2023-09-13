@@ -24,9 +24,28 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import java.util.*
 
-internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: Int, val height: Int, val padding: IntArray) : LiteModeCameraUpdate, CameraUpdate {
+internal class CameraBoundsWithSizeUpdate(
+    val bounds: LatLngBounds,
+    val width: Int,
+    val height: Int,
+    val padding: IntArray
+) : LiteModeCameraUpdate, CameraUpdate {
 
-    constructor(bounds: LatLngBounds, width: Int, height: Int, paddingLeft: Int, paddingTop: Int = paddingLeft, paddingRight: Int = paddingLeft, paddingBottom: Int = paddingTop) : this(bounds, width, height, intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)) {}
+    constructor(
+        bounds: LatLngBounds,
+        width: Int,
+        height: Int,
+        paddingLeft: Int,
+        paddingTop: Int = paddingLeft,
+        paddingRight: Int = paddingLeft,
+        paddingBottom: Int = paddingTop
+    ) : this(
+        bounds,
+        width,
+        height,
+        intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
+    ) {
+    }
 
     override fun getLiteModeCameraPosition(map: IGoogleMapDelegate) = null
 
@@ -49,7 +68,10 @@ internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: I
         padding[2] += widthPadding
         padding[3] += heightPadding
 
-        Log.d(TAG, "map ${map.width} ${map.height}, set $width $height -> ${Arrays.toString(padding)}")
+        Log.d(
+            TAG,
+            "map ${map.width} ${map.height}, set $width $height -> ${Arrays.toString(padding)}"
+        )
         return map.getCameraForLatLngBounds(bounds, padding)?.let {
             CameraPosition.Builder(it)
                 .apply {

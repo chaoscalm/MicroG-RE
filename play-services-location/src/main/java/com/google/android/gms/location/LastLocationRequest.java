@@ -10,7 +10,9 @@ package com.google.android.gms.location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.location.internal.ClientIdentity;
+
 import org.microg.gms.common.Hide;
 import org.microg.gms.location.GranularityUtil;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -104,7 +106,8 @@ public class LastLocationRequest extends AutoSafeParcelable {
          * The default value is {@link Long#MAX_VALUE}.
          */
         public LastLocationRequest.Builder setMaxUpdateAgeMillis(long maxUpdateAgeMillis) {
-            if (maxUpdateAgeMillis <= 0) throw new IllegalArgumentException("maxUpdateAgeMillis must be greater than 0");
+            if (maxUpdateAgeMillis <= 0)
+                throw new IllegalArgumentException("maxUpdateAgeMillis must be greater than 0");
             this.maxUpdateAgeMillis = maxUpdateAgeMillis;
             return this;
         }

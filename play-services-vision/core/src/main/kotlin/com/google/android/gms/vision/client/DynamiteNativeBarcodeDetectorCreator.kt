@@ -16,7 +16,10 @@ import org.microg.gms.vision.barcode.BarcodeDetector
 
 @Keep
 class DynamiteNativeBarcodeDetectorCreator : INativeBarcodeDetectorCreator.Stub() {
-    override fun create(context: IObjectWrapper, options: BarcodeDetectorOptions): INativeBarcodeDetector {
+    override fun create(
+        context: IObjectWrapper,
+        options: BarcodeDetectorOptions
+    ): INativeBarcodeDetector {
         return BarcodeDetector(context.unwrap<Context>()!!, options)
     }
 }

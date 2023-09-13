@@ -62,7 +62,8 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
 
         AuthenticatorErrorResponse that = (AuthenticatorErrorResponse) o;
 
-        if (errorCode != null ? !errorCode.equals(that.errorCode) : that.errorCode != null) return false;
+        if (errorCode != null ? !errorCode.equals(that.errorCode) : that.errorCode != null)
+            return false;
         return errorMessage != null ? errorMessage.equals(that.errorMessage) : that.errorMessage == null;
     }
 

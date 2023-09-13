@@ -193,7 +193,8 @@ public class GoogleCloudMessaging {
     public String register(String... senderIds) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) throw new IOException(ERROR_MAIN_THREAD);
 
-        if (senderIds == null || senderIds.length == 0) throw new IllegalArgumentException("No sender ids");
+        if (senderIds == null || senderIds.length == 0)
+            throw new IllegalArgumentException("No sender ids");
         StringBuilder sb = new StringBuilder(senderIds[0]);
         for (int i = 1; i < senderIds.length; i++) {
             sb.append(',').append(senderIds[i]);

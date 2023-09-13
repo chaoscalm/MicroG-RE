@@ -115,7 +115,7 @@ public class ConnectionResult {
      * Using the API on the device should be avoided.
      */
     public static final int API_UNAVAILABLE = 16;
-    
+
     /**
      * Service doesn't have one or more required permissions.
      */
@@ -234,7 +234,7 @@ public class ConnectionResult {
         } else if (!(o instanceof ConnectionResult)) {
             return false;
         } else {
-            ConnectionResult r = (ConnectionResult)o;
+            ConnectionResult r = (ConnectionResult) o;
             return statusCode == r.statusCode && pendingIntent == null ? r.pendingIntent == null : pendingIntent.equals(r.pendingIntent) && TextUtils.equals(message, r.message);
         }
     }

@@ -44,7 +44,11 @@ import org.microg.gms.utils.warnOnTransactionIssues
 const val TAG = "Fido2Privileged"
 
 class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest,
+        service: GmsService
+    ) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             Fido2PrivilegedServiceImpl(this, lifecycle).asBinder(),
@@ -60,7 +64,10 @@ class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
 
 class Fido2PrivilegedServiceImpl(private val context: Context, override val lifecycle: Lifecycle) :
     IFido2PrivilegedService.Stub(), LifecycleOwner {
-    override fun register(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialCreationOptions) {
+    override fun register(
+        callbacks: IFido2PrivilegedCallbacks,
+        options: BrowserPublicKeyCredentialCreationOptions
+    ) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
                 .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
@@ -69,12 +76,20 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntent.getActivity(
+                    context,
+                    options.hashCode(),
+                    intent,
+                    FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+                )
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }
 
-    override fun sign(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialRequestOptions) {
+    override fun sign(
+        callbacks: IFido2PrivilegedCallbacks,
+        options: BrowserPublicKeyCredentialRequestOptions
+    ) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
                 .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
@@ -83,7 +98,12 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntent.getActivity(
+                    context,
+                    options.hashCode(),
+                    intent,
+                    FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+                )
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }
@@ -93,12 +113,20 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
             if (Build.VERSION.SDK_INT < 24) {
                 callbacks.onBoolean(false)
             } else {
-                val keyguardManager = context.getSystemService(KEYGUARD_SERVICE) as? KeyguardManager?
+                val keyguardManager =
+                    context.getSystemService(KEYGUARD_SERVICE) as? KeyguardManager?
                 callbacks.onBoolean(keyguardManager?.isDeviceSecure == true)
             }
         }
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

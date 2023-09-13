@@ -26,8 +26,19 @@ import kotlin.math.min
 
 class DotChartView : View {
     @TargetApi(21)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
 
@@ -42,12 +53,16 @@ class DotChartView : View {
             val dateFormat = DateFormat.getMediumDateFormat(context)
             val hourFormat = SimpleDateFormat("H")
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
-            fun formatDateForView(date: Date) = DateUtils.formatDateTime(context, date.time, DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_NO_YEAR)
+            fun formatDateForView(date: Date) = DateUtils.formatDateTime(
+                context,
+                date.time,
+                DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_NO_YEAR
+            )
             for (day in 0 until 15) {
                 date.time = now - (14 - day) * 24 * 60 * 60 * 1000L
                 displayData[day] = formatDateForView(date) to hashMapOf()
             }
-            fun dayByDate(date: Date) : Int? {
+            fun dayByDate(date: Date): Int? {
                 val dateString = formatDateForView(date)
                 return displayData.entries.firstOrNull { it.value.first == dateString }?.key
             }
@@ -59,7 +74,10 @@ class DotChartView : View {
                     date.time = summary.time
                     val day = dayByDate(date) ?: (totalHours / 24)
                     val hour = hourFormat.format(date).toIntOrNull() ?: (totalHours % 24)
-                    displayData[day]?.second?.set(hour, (displayData[day]?.second?.get(hour) ?: 0) + summary.rpis)
+                    displayData[day]?.second?.set(
+                        hour,
+                        (displayData[day]?.second?.get(hour) ?: 0) + summary.rpis
+                    )
                 }
             }
             for (hour in 0..((min - lowest) / 1000 / 60 / 60).toInt()) {
@@ -81,7 +99,12 @@ class DotChartView : View {
     private val fontTempRect = Rect()
 
     fun Canvas.drawMyRect(x: Float, y: Float, width: Float, height: Float, color: Int) {
-        drawTempRect.set(x + drawPaint.strokeWidth, y + drawPaint.strokeWidth, x + width - drawPaint.strokeWidth, y + height - drawPaint.strokeWidth)
+        drawTempRect.set(
+            x + drawPaint.strokeWidth,
+            y + drawPaint.strokeWidth,
+            x + width - drawPaint.strokeWidth,
+            y + height - drawPaint.strokeWidth
+        )
         if (Color.alpha(color) >= 80) {
             drawPaint.style = Paint.Style.FILL_AND_STROKE
             drawPaint.color = color
@@ -97,7 +120,8 @@ class DotChartView : View {
         }
     }
 
-    private fun <T> List<T>.relativePosition(element: T): Double? = indexOf(element).takeIf { it >= 0 }?.toDouble()?.let { it / size.toDouble() }
+    private fun <T> List<T>.relativePosition(element: T): Double? =
+        indexOf(element).takeIf { it >= 0 }?.toDouble()?.let { it / size.toDouble() }
 
     private var focusPoint: PointF? = null
     override fun onDraw(canvas: Canvas) {
@@ -120,8 +144,10 @@ class DotChartView : View {
         val legendBottom = maxTextHeight + 8 * d
         val subHeight = maxTextHeight + 4 * d + paddingBottom
 
-        val distHeight = (height - innerPadding * 14 - paddingTop - paddingBottom - legendBottom - subHeight).toDouble()
-        val distWidth = (width - innerPadding * 23 - paddingLeft - paddingRight - legendLeft).toDouble()
+        val distHeight =
+            (height - innerPadding * 14 - paddingTop - paddingBottom - legendBottom - subHeight).toDouble()
+        val distWidth =
+            (width - innerPadding * 23 - paddingLeft - paddingRight - legendLeft).toDouble()
         val perHeight = distHeight / 15.0
         val perWidth = distWidth / 24.0
 
@@ -137,7 +163,12 @@ class DotChartView : View {
             val (dateString, hours) = displayData[day] ?: "" to emptyMap()
             val top = day * (perHeight + innerPadding) + paddingTop
             if (day % 2 == 0) {
-                canvas.drawText(dateString, (paddingLeft + legendLeft - 8 * d), (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(), fontPaint)
+                canvas.drawText(
+                    dateString,
+                    (paddingLeft + legendLeft - 8 * d),
+                    (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(),
+                    fontPaint
+                )
             }
             focusPoint?.let { if (it.y > top && it.y < top + perHeight) focusDay = day }
             for (hour in 0 until 24) {
@@ -145,22 +176,49 @@ class DotChartView : View {
                 val left = hour * (perWidth + innerPadding) + paddingLeft + legendLeft
                 when {
                     value == null -> {
-                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), grayBoxColor)
+                        canvas.drawMyRect(
+                            left.toFloat(),
+                            top.toFloat(),
+                            perWidth.toFloat(),
+                            perHeight.toFloat(),
+                            grayBoxColor
+                        )
                     }
+
                     maxValue == 0 -> {
-                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
+                        canvas.drawMyRect(
+                            left.toFloat(),
+                            top.toFloat(),
+                            perWidth.toFloat(),
+                            perHeight.toFloat(),
+                            accentColor and 0xffffff
+                        )
                     }
+
                     value >= 0 -> {
-                        val byBucket = ((displayDataList.relativePosition(value) ?: 0.0) * 180.0).toInt()
+                        val byBucket =
+                            ((displayDataList.relativePosition(value) ?: 0.0) * 180.0).toInt()
                         val byMax = (value.toDouble() / maxValue.toDouble() * 80.0).toInt()
                         val alpha = max(0, min(byBucket + byMax, 255))
-                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (alpha shl 24 or 0xffffff))
+                        canvas.drawMyRect(
+                            left.toFloat(),
+                            top.toFloat(),
+                            perWidth.toFloat(),
+                            perHeight.toFloat(),
+                            accentColor and (alpha shl 24 or 0xffffff)
+                        )
                     }
                 }
                 if (focusDay == day && (value == null || value >= 0)) focusPoint?.let {
                     if (it.x > left && it.x < left + perWidth) {
                         focusHour = hour
-                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
+                        canvas.drawMyRect(
+                            left.toFloat(),
+                            top.toFloat(),
+                            perWidth.toFloat(),
+                            perHeight.toFloat(),
+                            accentColor and 0xffffff
+                        )
                     }
                 }
             }
@@ -169,7 +227,8 @@ class DotChartView : View {
         fontPaint.textAlign = Paint.Align.CENTER
         for (hour in 0 until 24) {
             if (hour % 3 == 0) {
-                val left = hour * (perWidth + innerPadding) + paddingLeft + legendLeft + perWidth / 2.0
+                val left =
+                    hour * (perWidth + innerPadding) + paddingLeft + legendLeft + perWidth / 2.0
                 canvas.drawText("${hour}:00", left.toFloat(), legendTop.toFloat(), fontPaint)
             }
         }
@@ -177,28 +236,78 @@ class DotChartView : View {
         val subTop = legendTop + paddingBottom
         val subLeft = paddingLeft + legendLeft
 
-        canvas.drawMyRect(subLeft, subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), grayBoxColor)
+        canvas.drawMyRect(
+            subLeft,
+            subTop.toFloat(),
+            perWidth.toFloat(),
+            perHeight.toFloat(),
+            grayBoxColor
+        )
 
-        val strNoRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_no_records)
+        val strNoRecords =
+            context.getString(R.string.pref_exposure_rpis_histogram_legend_no_records)
         fontPaint.textAlign = Paint.Align.LEFT
         fontPaint.getTextBounds(strNoRecords, 0, strNoRecords.length, fontTempRect)
-        canvas.drawText(strNoRecords, (subLeft + perWidth + 4 * d).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
+        canvas.drawText(
+            strNoRecords,
+            (subLeft + perWidth + 4 * d).toFloat(),
+            (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(),
+            fontPaint
+        )
 
         if (maxValue >= 0) {
-            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 1 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
-            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (80 shl 24 or 0xffffff))
-            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (170 shl 24 or 0xffffff))
-            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 4 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor)
+            canvas.drawMyRect(
+                (subLeft + (perWidth + innerPadding) * 1 + 12 * d + fontTempRect.width()).toFloat(),
+                subTop.toFloat(),
+                perWidth.toFloat(),
+                perHeight.toFloat(),
+                accentColor and 0xffffff
+            )
+            canvas.drawMyRect(
+                (subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(),
+                subTop.toFloat(),
+                perWidth.toFloat(),
+                perHeight.toFloat(),
+                accentColor and (80 shl 24 or 0xffffff)
+            )
+            canvas.drawMyRect(
+                (subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(),
+                subTop.toFloat(),
+                perWidth.toFloat(),
+                perHeight.toFloat(),
+                accentColor and (170 shl 24 or 0xffffff)
+            )
+            canvas.drawMyRect(
+                (subLeft + (perWidth + innerPadding) * 4 + 12 * d + fontTempRect.width()).toFloat(),
+                subTop.toFloat(),
+                perWidth.toFloat(),
+                perHeight.toFloat(),
+                accentColor
+            )
 
-            val strRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_records, "0 - $maxValue")
-            canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 4 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
+            val strRecords = context.getString(
+                R.string.pref_exposure_rpis_histogram_legend_records,
+                "0 - $maxValue"
+            )
+            canvas.drawText(
+                strRecords,
+                (subLeft + (perWidth + innerPadding) * 4 + 16 * d + fontTempRect.width() + perWidth).toFloat(),
+                (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(),
+                fontPaint
+            )
         }
 
         if (focusHour != -1 && Build.VERSION.SDK_INT >= 23) {
-            val floatingColor = context.resolveColor(androidx.appcompat.R.attr.colorBackgroundFloating) ?: 0
+            val floatingColor =
+                context.resolveColor(androidx.appcompat.R.attr.colorBackgroundFloating) ?: 0
             val line1 = "${displayData[focusDay]?.first}, $focusHour:00"
-            val line2 = displayData[focusDay]?.second?.get(focusHour)?.let { context.getString(R.string.pref_exposure_rpis_histogram_legend_records, it.toString()) }
-                    ?: strNoRecords
+            val line2 = displayData[focusDay]?.second?.get(focusHour)?.let {
+                context.getString(
+                    R.string.pref_exposure_rpis_histogram_legend_records,
+                    it.toString()
+                )
+            }
+                ?: strNoRecords
             fontPaint.textSize = 14 * d
             fontPaint.isFakeBoldText = true
             fontPaint.getTextBounds(line1, 0, line1.length, fontTempRect)
@@ -214,12 +323,27 @@ class DotChartView : View {
             val refLeft = focusHour * (perWidth + innerPadding) + paddingLeft + legendLeft
             if (refLeft - fontWidth < 50 * d) {
                 // To the right
-                drawTempRect.set((refLeft + perWidth + innerPadding).toFloat(), (refTop - innerPadding - 5 * d - totalHeight / 2f).toFloat(), (refLeft + perWidth + innerPadding + 10 * d + fontWidth).toFloat(), (refTop + innerPadding + 5 * d + totalHeight / 2f).toFloat())
+                drawTempRect.set(
+                    (refLeft + perWidth + innerPadding).toFloat(),
+                    (refTop - innerPadding - 5 * d - totalHeight / 2f).toFloat(),
+                    (refLeft + perWidth + innerPadding + 10 * d + fontWidth).toFloat(),
+                    (refTop + innerPadding + 5 * d + totalHeight / 2f).toFloat()
+                )
             } else {
                 // To the left
-                drawTempRect.set((refLeft - innerPadding - 10 * d - fontWidth).toFloat(), (refTop - innerPadding - 5 * d - totalHeight / 2f).toFloat(), (refLeft - innerPadding).toFloat(), (refTop + innerPadding + 5 * d + totalHeight / 2f).toFloat())
+                drawTempRect.set(
+                    (refLeft - innerPadding - 10 * d - fontWidth).toFloat(),
+                    (refTop - innerPadding - 5 * d - totalHeight / 2f).toFloat(),
+                    (refLeft - innerPadding).toFloat(),
+                    (refTop + innerPadding + 5 * d + totalHeight / 2f).toFloat()
+                )
             }
-            canvas.drawRoundRect(drawTempRect, drawPaint.strokeWidth, drawPaint.strokeWidth, drawPaint)
+            canvas.drawRoundRect(
+                drawTempRect,
+                drawPaint.strokeWidth,
+                drawPaint.strokeWidth,
+                drawPaint
+            )
             val path = Path()
             if (refLeft - fontWidth < 50 * d) {
                 // To the right
@@ -238,7 +362,12 @@ class DotChartView : View {
             }
             drawPaint.style = Paint.Style.STROKE
             drawPaint.color = accentColor and (130 shl 24 or 0xffffff)
-            canvas.drawRoundRect(drawTempRect, drawPaint.strokeWidth, drawPaint.strokeWidth, drawPaint)
+            canvas.drawRoundRect(
+                drawTempRect,
+                drawPaint.strokeWidth,
+                drawPaint.strokeWidth,
+                drawPaint
+            )
 
             drawPaint.color = floatingColor
             drawPaint.style = Paint.Style.FILL_AND_STROKE
@@ -249,9 +378,19 @@ class DotChartView : View {
             path.fillType = Path.FillType.EVEN_ODD
             canvas.drawPath(path, drawPaint)
 
-            canvas.drawText(line2, drawTempRect.left + 5 * d, drawTempRect.top + 5 * d + totalHeight, fontPaint)
+            canvas.drawText(
+                line2,
+                drawTempRect.left + 5 * d,
+                drawTempRect.top + 5 * d + totalHeight,
+                fontPaint
+            )
             fontPaint.isFakeBoldText = true
-            canvas.drawText(line1, drawTempRect.left + 5 * d, drawTempRect.top + 5 * d + line1Height, fontPaint)
+            canvas.drawText(
+                line1,
+                drawTempRect.left + 5 * d,
+                drawTempRect.top + 5 * d + line1Height,
+                fontPaint
+            )
             fontPaint.isFakeBoldText = false
         }
     }
@@ -269,6 +408,7 @@ class DotChartView : View {
                 postDelayed(removeFocusPoint, POPUP_DELAY)
                 return true
             }
+
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_MOVE -> {
                 removeCallbacks(removeFocusPoint)
                 focusPoint = PointF(event.x, event.y)

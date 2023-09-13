@@ -11,7 +11,8 @@ import org.microg.gms.fido.core.protocol.msgs.Ctap2Request
 import org.microg.gms.utils.toBase64
 import kotlin.random.Random
 
-abstract class CtapHidRequest(commandId: Byte, data: ByteArray = ByteArray(0)) : CtapHidMessage(commandId, data) {
+abstract class CtapHidRequest(commandId: Byte, data: ByteArray = ByteArray(0)) :
+    CtapHidMessage(commandId, data) {
     override fun toString(): String =
         "CtapHidRequest(commandId=0x${commandId.toString(16)}, data=${data.toBase64(Base64.NO_WRAP)})"
 }

@@ -96,6 +96,7 @@ class SettingsProvider : ContentProvider() {
             CheckIn.ANDROID_ID -> checkInPrefs.getLong(key, 0)
             CheckIn.DIGEST -> checkInPrefs.getString(key, CheckIn.INITIAL_DIGEST)
                 ?: CheckIn.INITIAL_DIGEST
+
             CheckIn.LAST_CHECK_IN -> checkInPrefs.getLong(key, 0)
             CheckIn.SECURITY_TOKEN -> checkInPrefs.getLong(key, 0)
             CheckIn.VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
@@ -351,13 +352,27 @@ class SettingsProvider : ContentProvider() {
         return listOf(preferences, systemDefaultPreferences).getBooleanAsInt(key, def)
     }
 
-    private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences).getString(key, def)
+    private fun getSettingsString(key: String, def: String? = null): String? =
+        listOf(preferences, systemDefaultPreferences).getString(key, def)
 //    private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences).getInt(key, def)
 //    private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences).getLong(key, def)
 
-    private fun List<SharedPreferences?>.getString(key: String, def: String?): String? = foldRight(def) { preferences, defValue -> preferences?.getString(key, defValue) ?: defValue }
-    private fun List<SharedPreferences?>.getInt(key: String, def: Int): Int = foldRight(def) { preferences, defValue -> preferences?.getInt(key, defValue) ?: defValue }
-    private fun List<SharedPreferences?>.getLong(key: String, def: Long): Long = foldRight(def) { preferences, defValue -> preferences?.getLong(key, defValue) ?: defValue }
-    private fun List<SharedPreferences?>.getBoolean(key: String, def: Boolean): Boolean = foldRight(def) { preferences, defValue -> preferences?.getBoolean(key, defValue) ?: defValue }
-    private fun List<SharedPreferences?>.getBooleanAsInt(key: String, def: Boolean): Int = if (getBoolean(key, def)) 1 else 0
+    private fun List<SharedPreferences?>.getString(key: String, def: String?): String? =
+        foldRight(def) { preferences, defValue ->
+            preferences?.getString(key, defValue) ?: defValue
+        }
+
+    private fun List<SharedPreferences?>.getInt(key: String, def: Int): Int =
+        foldRight(def) { preferences, defValue -> preferences?.getInt(key, defValue) ?: defValue }
+
+    private fun List<SharedPreferences?>.getLong(key: String, def: Long): Long =
+        foldRight(def) { preferences, defValue -> preferences?.getLong(key, defValue) ?: defValue }
+
+    private fun List<SharedPreferences?>.getBoolean(key: String, def: Boolean): Boolean =
+        foldRight(def) { preferences, defValue ->
+            preferences?.getBoolean(key, defValue) ?: defValue
+        }
+
+    private fun List<SharedPreferences?>.getBooleanAsInt(key: String, def: Boolean): Int =
+        if (getBoolean(key, def)) 1 else 0
 }

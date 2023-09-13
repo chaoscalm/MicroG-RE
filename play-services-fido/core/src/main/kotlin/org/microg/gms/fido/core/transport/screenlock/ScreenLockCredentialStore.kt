@@ -28,7 +28,8 @@ class ScreenLockCredentialStore(val context: Context) {
     private fun getAlias(rpId: String, keyId: ByteArray): String =
         "1." + keyId.toBase64(Base64.NO_PADDING, Base64.NO_WRAP) + "." + rpId
 
-    private fun getPrivateKey(rpId: String, keyId: ByteArray) = keyStore.getKey(getAlias(rpId, keyId), null) as? PrivateKey
+    private fun getPrivateKey(rpId: String, keyId: ByteArray) =
+        keyStore.getKey(getAlias(rpId, keyId), null) as? PrivateKey
 
     @RequiresApi(23)
     fun createKey(rpId: String, challenge: ByteArray): ByteArray {
@@ -64,7 +65,8 @@ class ScreenLockCredentialStore(val context: Context) {
         }
     }
 
-    fun containsKey(rpId: String, keyId: ByteArray): Boolean = keyStore.containsAlias(getAlias(rpId, keyId))
+    fun containsKey(rpId: String, keyId: ByteArray): Boolean =
+        keyStore.containsAlias(getAlias(rpId, keyId))
 
     companion object {
         const val TAG = "FidoLockStore"

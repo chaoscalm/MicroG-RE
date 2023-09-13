@@ -58,10 +58,21 @@ class LocationAllAppsFragment : PreferenceFragmentCompat() {
                 }.map { (app, applicationInfo) ->
                     val pref = AppIconPreference(context)
                     pref.title = applicationInfo?.loadLabel(context.packageManager) ?: app.first
-                    pref.summary = getString(R.string.location_app_last_access_at, DateUtils.getRelativeTimeSpanString(app.second))
-                    pref.icon = applicationInfo?.loadIcon(context.packageManager) ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
+                    pref.summary = getString(
+                        R.string.location_app_last_access_at,
+                        DateUtils.getRelativeTimeSpanString(app.second)
+                    )
+                    pref.icon = applicationInfo?.loadIcon(context.packageManager)
+                        ?: AppCompatResources.getDrawable(
+                            context,
+                            android.R.mipmap.sym_def_app_icon
+                        )
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(requireContext(), R.id.openLocationAppDetailsFromAll, bundleOf("package" to app.first))
+                        findNavController().navigate(
+                            requireContext(),
+                            R.id.openLocationAppDetailsFromAll,
+                            bundleOf("package" to app.first)
+                        )
                         true
                     }
                     pref.key = "pref_location_app_" + app.first

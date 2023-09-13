@@ -23,7 +23,14 @@ class AuthenticatorData(
         val extensions = extensions ?: ByteArray(0)
         return ByteBuffer.allocate(rpIdHash.size + 5 + attestedCredentialData.size + extensions.size)
             .put(rpIdHash)
-            .put(buildFlags(userPresent, userVerified, attestedCredentialData.isNotEmpty(), extensions.isNotEmpty()))
+            .put(
+                buildFlags(
+                    userPresent,
+                    userVerified,
+                    attestedCredentialData.isNotEmpty(),
+                    extensions.isNotEmpty()
+                )
+            )
             .order(ByteOrder.BIG_ENDIAN).putInt(signCount)
             .put(attestedCredentialData)
             .put(extensions)
@@ -51,7 +58,8 @@ class AuthenticatorData(
             get(rpIdHash)
             val flags = get()
             val signCount = order(ByteOrder.BIG_ENDIAN).int
-            val attestedCredentialData = if ((flags and FLAG_AT) == FLAG_AT) AttestedCredentialData.decode(this) else null
+            val attestedCredentialData =
+                if ((flags and FLAG_AT) == FLAG_AT) AttestedCredentialData.decode(this) else null
             val extensions = if ((flags and FLAG_ED) == FLAG_ED) {
                 val ed = ByteArray(remaining())
                 get(ed)
@@ -59,7 +67,14 @@ class AuthenticatorData(
             } else {
                 null
             }
-            return@run AuthenticatorData(rpIdHash, flags and FLAG_UP == FLAG_UP, flags and FLAG_UV == FLAG_UV, signCount, attestedCredentialData, extensions)
+            return@run AuthenticatorData(
+                rpIdHash,
+                flags and FLAG_UP == FLAG_UP,
+                flags and FLAG_UV == FLAG_UV,
+                signCount,
+                attestedCredentialData,
+                extensions
+            )
         }
     }
 }

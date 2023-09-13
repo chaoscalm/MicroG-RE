@@ -25,7 +25,8 @@ import kotlin.collections.HashMap
 
 private const val TAG = "RecaptchaGuard"
 
-class RecaptchaGuardImpl(private val context: Context, private val packageName: String) : RecaptchaImpl {
+class RecaptchaGuardImpl(private val context: Context, private val packageName: String) :
+    RecaptchaImpl {
     private val queue = Volley.newRequestQueue(context)
     private var lastToken: String? = null
 
@@ -40,11 +41,17 @@ class RecaptchaGuardImpl(private val context: Context, private val packageName: 
             ), RecaptchaInitResponse.ADAPTER
         ).sendAndAwait(queue)
         lastToken = response.token
-        return RecaptchaHandle(params.siteKey, packageName, response.acceptableAdditionalArgs.toList())
+        return RecaptchaHandle(
+            params.siteKey,
+            packageName,
+            response.acceptableAdditionalArgs.toList()
+        )
     }
 
     override suspend fun execute(params: ExecuteParams): RecaptchaResultData {
-        if (params.handle.clientPackageName != null && params.handle.clientPackageName != packageName) throw IllegalArgumentException("invalid handle")
+        if (params.handle.clientPackageName != null && params.handle.clientPackageName != packageName) throw IllegalArgumentException(
+            "invalid handle"
+        )
         val timestamp = System.currentTimeMillis()
         val additionalArgs = mutableMapOf<String, String>()
         val guardMap = mutableMapOf<String, String>()
@@ -81,20 +88,27 @@ class RecaptchaGuardImpl(private val context: Context, private val packageName: 
     }
 
     override suspend fun close(handle: RecaptchaHandle): Boolean {
-        if (handle.clientPackageName != null && handle.clientPackageName != packageName) throw IllegalArgumentException("invalid handle")
+        if (handle.clientPackageName != null && handle.clientPackageName != packageName) throw IllegalArgumentException(
+            "invalid handle"
+        )
         val closed = lastToken != null
         lastToken = null
         return closed
     }
 }
 
-class ProtobufPostRequest<I : Message<I, *>, O>(url: String, private val i: I, private val oAdapter: ProtoAdapter<O>) :
+class ProtobufPostRequest<I : Message<I, *>, O>(
+    url: String,
+    private val i: I,
+    private val oAdapter: ProtoAdapter<O>
+) :
     Request<O>(Request.Method.POST, url, null) {
     private val deferred = CompletableDeferred<O>()
 
     override fun getHeaders(): Map<String, String> {
         val headers = HashMap(super.getHeaders())
-        headers["Accept-Language"] = if (Build.VERSION.SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
+        headers["Accept-Language"] = if (Build.VERSION.SDK_INT >= 24) LocaleList.getDefault()
+            .toLanguageTags() else Locale.getDefault().language
         return headers
     }
 

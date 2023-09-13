@@ -27,17 +27,34 @@ import java.nio.IntBuffer
 
 private const val TAG = "GmsVisionBarcode"
 
-class BarcodeDetector(val context: Context, val options: BarcodeDetectorOptions) : INativeBarcodeDetector.Stub() {
-    override fun detectBitmap(wrappedBitmap: IObjectWrapper, metadata: FrameMetadataParcel): Array<Barcode> {
+class BarcodeDetector(val context: Context, val options: BarcodeDetectorOptions) :
+    INativeBarcodeDetector.Stub() {
+    override fun detectBitmap(
+        wrappedBitmap: IObjectWrapper,
+        metadata: FrameMetadataParcel
+    ): Array<Barcode> {
         val bitmap = wrappedBitmap.unwrap<Bitmap>() ?: return emptyArray()
         val frameBuf: IntBuffer = IntBuffer.allocate(bitmap.byteCount)
         bitmap.copyPixelsToBuffer(frameBuf)
-        return detectFromSource(RGBLuminanceSource(metadata.width, metadata.height, frameBuf.array()))
+        return detectFromSource(
+            RGBLuminanceSource(
+                metadata.width,
+                metadata.height,
+                frameBuf.array()
+            )
+        )
     }
 
-    override fun detectBytes(wrappedByteBuffer: IObjectWrapper, metadata: FrameMetadataParcel): Array<Barcode> {
-        return detectFromSource(DirectLuminanceSource(metadata.width, metadata.height, wrappedByteBuffer.unwrap<ByteBuffer>()
-                ?: return emptyArray()))
+    override fun detectBytes(
+        wrappedByteBuffer: IObjectWrapper,
+        metadata: FrameMetadataParcel
+    ): Array<Barcode> {
+        return detectFromSource(
+            DirectLuminanceSource(
+                metadata.width, metadata.height, wrappedByteBuffer.unwrap<ByteBuffer>()
+                    ?: return emptyArray()
+            )
+        )
     }
 
     private fun mayDecodeType(image: BinaryBitmap, type: Int, reader: () -> Reader): List<Barcode> {

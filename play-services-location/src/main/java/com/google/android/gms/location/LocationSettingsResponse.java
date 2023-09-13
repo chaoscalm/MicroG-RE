@@ -10,10 +10,12 @@ package com.google.android.gms.location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Response;
 import com.google.android.gms.tasks.Task;
+
 import org.microg.gms.common.PublicApi;
 
 /**

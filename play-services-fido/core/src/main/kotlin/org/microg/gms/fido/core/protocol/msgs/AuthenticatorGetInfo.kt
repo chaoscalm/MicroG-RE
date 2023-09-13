@@ -10,7 +10,10 @@ import org.microg.gms.fido.core.protocol.AsInt32Sequence
 import org.microg.gms.fido.core.protocol.AsStringSequence
 import org.microg.gms.utils.ToStringHelper
 
-class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(AuthenticatorGetInfoRequest()) {
+class AuthenticatorGetInfoCommand :
+    Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(
+        AuthenticatorGetInfoRequest()
+    ) {
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
 }
 
@@ -55,11 +58,13 @@ class AuthenticatorGetInfoResponse(
                     userPresence = map?.get("up")?.AsBoolean() != false,
                     userVerification = map?.get("uv")?.AsBoolean(),
                     pinUvAuthToken = map?.get("pinUvAuthToken")?.AsBoolean(),
-                    noMcGaPermissionsWithClientPin = map?.get("noMcGaPermissionsWithClientPin")?.AsBoolean() == true,
+                    noMcGaPermissionsWithClientPin = map?.get("noMcGaPermissionsWithClientPin")
+                        ?.AsBoolean() == true,
                     largeBlobs = map?.get("largeBlobs")?.AsBoolean(),
                     enterpriseAttestation = map?.get("ep")?.AsBoolean(),
                     bioEnroll = map?.get("bioEnroll")?.AsBoolean(),
-                    userVerificationMgmtPreview = map?.get("userVerificationMgmtPreview")?.AsBoolean(),
+                    userVerificationMgmtPreview = map?.get("userVerificationMgmtPreview")
+                        ?.AsBoolean(),
                     uvBioEnroll = map?.get("uvBioEnroll")?.AsBoolean(),
                     authenticatorConfigSupported = map?.get("authnrCfg")?.AsBoolean(),
                     uvAcfg = map?.get("uvAcfg")?.AsBoolean(),

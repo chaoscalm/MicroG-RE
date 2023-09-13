@@ -13,7 +13,8 @@ public class GetExposureInformationParams extends AutoSafeParcelable {
     @Field(3)
     public String token;
 
-    private GetExposureInformationParams() {}
+    private GetExposureInformationParams() {
+    }
 
     public GetExposureInformationParams(IExposureInformationListCallback callback, String token) {
         this.callback = callback;

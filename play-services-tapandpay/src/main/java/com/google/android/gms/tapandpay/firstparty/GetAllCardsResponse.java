@@ -6,7 +6,9 @@
 package com.google.android.gms.tapandpay.firstparty;
 
 import android.util.SparseArray;
+
 import androidx.annotation.Nullable;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAllCardsResponse extends AutoSafeParcelable {

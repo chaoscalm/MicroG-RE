@@ -95,6 +95,7 @@ public class Size {
 
     /**
      * Return the size represented as a string with the format {@code "WxH"}
+     *
      * @return string representation of the size
      */
     @Override

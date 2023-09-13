@@ -20,23 +20,37 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "GmsFacsCache"
 
 class FacsCacheService : BaseService(TAG, GmsService.FACS_CACHE) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
+    override fun handleServiceRequest(
+        callback: IGmsCallbacks,
+        request: GetServiceRequest?,
+        service: GmsService?
+    ) {
         callback.onPostInitComplete(0, FacsCacheServiceImpl().asBinder(), null)
     }
 }
 
 class FacsCacheServiceImpl : IFacsCacheService.Stub() {
-    override fun forceSettingsCacheRefresh(callbacks: IFacsCacheCallbacks, options: FacsCacheCallOptions) {
+    override fun forceSettingsCacheRefresh(
+        callbacks: IFacsCacheCallbacks,
+        options: FacsCacheCallOptions
+    ) {
         Log.d(TAG, "forceSettingsCacheRefresh")
         callbacks.onForceSettingsCacheRefreshResult(Status.CANCELED, null)
     }
 
-    override fun updateActivityControlsSettings(callbacks: IFacsCacheCallbacks, bytes: ByteArray, options: FacsCacheCallOptions) {
+    override fun updateActivityControlsSettings(
+        callbacks: IFacsCacheCallbacks,
+        bytes: ByteArray,
+        options: FacsCacheCallOptions
+    ) {
         Log.d(TAG, "updateActivityControlsSettings")
         callbacks.onUpdateActivityControlsSettingsResult(Status.CANCELED, null)
     }
 
-    override fun getActivityControlsSettings(callbacks: IFacsCacheCallbacks, options: FacsCacheCallOptions) {
+    override fun getActivityControlsSettings(
+        callbacks: IFacsCacheCallbacks,
+        options: FacsCacheCallOptions
+    ) {
         Log.d(TAG, "getActivityControlsSettings")
         callbacks.onGetActivityControlsSettingsResult(Status.CANCELED, null)
     }
@@ -51,5 +65,13 @@ class FacsCacheServiceImpl : IFacsCacheService.Stub() {
         callbacks.onWriteDeviceLevelSettingsResult(Status.CANCELED)
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) {
+            super.onTransact(
+                code,
+                data,
+                reply,
+                flags
+            )
+        }
 }

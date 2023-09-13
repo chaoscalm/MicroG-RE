@@ -43,18 +43,43 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     val options: RequestOptions?
         get() = when (intent.getStringExtra(KEY_SOURCE) to intent.getStringExtra(KEY_TYPE)) {
             SOURCE_BROWSER to TYPE_REGISTER ->
-                BrowserPublicKeyCredentialCreationOptions.deserializeFromBytes(intent.getByteArrayExtra(KEY_OPTIONS))
+                BrowserPublicKeyCredentialCreationOptions.deserializeFromBytes(
+                    intent.getByteArrayExtra(
+                        KEY_OPTIONS
+                    )
+                )
+
             SOURCE_BROWSER to TYPE_SIGN ->
-                BrowserPublicKeyCredentialRequestOptions.deserializeFromBytes(intent.getByteArrayExtra(KEY_OPTIONS))
+                BrowserPublicKeyCredentialRequestOptions.deserializeFromBytes(
+                    intent.getByteArrayExtra(
+                        KEY_OPTIONS
+                    )
+                )
+
             SOURCE_APP to TYPE_REGISTER ->
-                PublicKeyCredentialCreationOptions.deserializeFromBytes(intent.getByteArrayExtra(KEY_OPTIONS))
+                PublicKeyCredentialCreationOptions.deserializeFromBytes(
+                    intent.getByteArrayExtra(
+                        KEY_OPTIONS
+                    )
+                )
+
             SOURCE_APP to TYPE_SIGN ->
-                PublicKeyCredentialRequestOptions.deserializeFromBytes(intent.getByteArrayExtra(KEY_OPTIONS))
+                PublicKeyCredentialRequestOptions.deserializeFromBytes(
+                    intent.getByteArrayExtra(
+                        KEY_OPTIONS
+                    )
+                )
+
             else -> null
         }
 
     private val service: GmsService
-        get() = GmsService.byServiceId(intent.getIntExtra(KEY_SERVICE, GmsService.UNKNOWN.SERVICE_ID))
+        get() = GmsService.byServiceId(
+            intent.getIntExtra(
+                KEY_SERVICE,
+                GmsService.UNKNOWN.SERVICE_ID
+            )
+        )
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
@@ -85,21 +110,31 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 return finishWithError(UNKNOWN_ERR, "Extra missing from request")
             }
             if (Build.VERSION.SDK_INT < 24) {
-                return finishWithError(NOT_SUPPORTED_ERR, "FIDO2 API is not supported on devices below N")
+                return finishWithError(
+                    NOT_SUPPORTED_ERR,
+                    "FIDO2 API is not supported on devices below N"
+                )
             }
-            val options = options ?: return finishWithError(DATA_ERR, "The request options are not valid")
+            val options =
+                options ?: return finishWithError(DATA_ERR, "The request options are not valid")
             this.callerPackage = callerPackage
-            this.callerSignature = packageManager.getFirstSignatureDigest(callerPackage, "SHA-256")?.toBase64()
-                ?: return finishWithError(UNKNOWN_ERR, "Could not determine signature of app")
+            this.callerSignature =
+                packageManager.getFirstSignatureDigest(callerPackage, "SHA-256")?.toBase64()
+                    ?: return finishWithError(UNKNOWN_ERR, "Could not determine signature of app")
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options")
 
             val requiresPrivilege =
-                options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
+                options is BrowserRequestOptions && !database.isPrivileged(
+                    callerPackage,
+                    callerSignature
+                )
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
+                val instantTransport = transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options)
+                }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
                     window.setBackgroundDrawable(ColorDrawable(0))
                     window.statusBarColor = Color.TRANSPARENT
@@ -130,13 +165,18 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val callerName = packageManager.getApplicationLabel(callerPackage).toString()
 
             val requiresPrivilege =
-                options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
+                options is BrowserRequestOptions && !database.isPrivileged(
+                    callerPackage,
+                    callerSignature
+                )
 
             Log.d(TAG, "facetId=$facetId, appName=$appName")
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
+                val instantTransport = transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options)
+                }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
                     startTransportHandling(instantTransport.transport, true)
                     return
@@ -148,14 +188,22 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 this.isFirst = true
                 this.privilegedCallerName = callerName.takeIf { options is BrowserRequestOptions }
                 this.requiresPrivilege = requiresPrivilege
-                this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                this.supportedTransports =
+                    transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
             }.arguments
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList) {
-                        val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
+                        val knownTransport = database.getKnownRegistrationTransport(
+                            options.rpId,
+                            descriptor.id.toBase64(
+                                Base64.URL_SAFE,
+                                Base64.NO_WRAP,
+                                Base64.NO_PADDING
+                            )
+                        )
                         if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
                             knownRegistrationTransports.add(knownTransport)
                         if (descriptor.transports.isNullOrEmpty()) {
@@ -176,7 +224,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                         }
                     }
                 }
-                val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
+                val preselectedTransport =
+                    knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
                     when (preselectedTransport) {
                         USB -> R.id.usbFragment
@@ -193,7 +242,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             supportFragmentManager.commit {
                 replace(R.id.fragment_container, navHostFragment)
                 runOnCommit {
-                    val navGraph = navHostFragment.navController.navInflater.inflate(R.navigation.nav_fido_authenticator)
+                    val navGraph =
+                        navHostFragment.navController.navInflater.inflate(R.navigation.nav_fido_authenticator)
                     if (next != null) {
                         navGraph.setStartDestination(next)
                     }
@@ -211,22 +261,28 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     fun finishWithError(errorCode: ErrorCode, errorMessage: String) {
         Log.d(TAG, "Finish with error: $errorMessage ($errorCode)")
         finishWithCredential(
-            PublicKeyCredential.Builder().setResponse(AuthenticatorErrorResponse(errorCode, errorMessage)).build()
+            PublicKeyCredential.Builder()
+                .setResponse(AuthenticatorErrorResponse(errorCode, errorMessage)).build()
         )
     }
 
     fun finishWithSuccessResponse(response: AuthenticatorResponse, transport: Transport) {
         Log.d(TAG, "Finish with success response: $response")
-        if (options is BrowserRequestOptions) database.insertPrivileged(callerPackage, callerSignature)
+        if (options is BrowserRequestOptions) database.insertPrivileged(
+            callerPackage,
+            callerSignature
+        )
         val rpId = options?.rpId
-        val rawId = when(response) {
+        val rawId = when (response) {
             is AuthenticatorAttestationResponse -> response.keyHandle
             is AuthenticatorAssertionResponse -> response.keyHandle
             else -> null
         }
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
         if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
-        finishWithCredential(PublicKeyCredential.Builder().setResponse(response).setRawId(rawId).setId(id).build())
+        finishWithCredential(
+            PublicKeyCredential.Builder().setResponse(response).setRawId(rawId).setId(id).build()
+        )
     }
 
     private fun finishWithCredential(publicKeyCredential: PublicKeyCredential) {
@@ -243,7 +299,9 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     fun shouldStartTransportInstantly(transport: Transport): Boolean {
-        return getTransportHandler(transport)?.shouldBeUsedInstantly(options ?: return false) == true
+        return getTransportHandler(transport)?.shouldBeUsedInstantly(
+            options ?: return false
+        ) == true
     }
 
     fun isScreenLockSigner(): Boolean {
@@ -251,28 +309,34 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false): Job = lifecycleScope.launchWhenResumed {
-        val options = options ?: return@launchWhenResumed
-        try {
-            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
-        } catch (e: SecurityException) {
-            Log.w(TAG, e)
-            if (instant) {
-                handleRequest(options, false)
-            } else {
-                finishWithError(SECURITY_ERR, e.message ?: e.javaClass.simpleName)
+    fun startTransportHandling(transport: Transport, instant: Boolean = false): Job =
+        lifecycleScope.launchWhenResumed {
+            val options = options ?: return@launchWhenResumed
+            try {
+                finishWithSuccessResponse(
+                    getTransportHandler(transport)!!.start(
+                        options,
+                        callerPackage
+                    ), transport
+                )
+            } catch (e: SecurityException) {
+                Log.w(TAG, e)
+                if (instant) {
+                    handleRequest(options, false)
+                } else {
+                    finishWithError(SECURITY_ERR, e.message ?: e.javaClass.simpleName)
+                }
+            } catch (e: CancellationException) {
+                Log.w(TAG, e)
+                // Ignoring cancellation here
+            } catch (e: RequestHandlingException) {
+                Log.w(TAG, e)
+                finishWithError(e.errorCode, e.message ?: e.errorCode.name)
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
             }
-        } catch (e: CancellationException) {
-            Log.w(TAG, e)
-            // Ignoring cancellation here
-        } catch (e: RequestHandlingException) {
-            Log.w(TAG, e)
-            finishWithError(e.errorCode, e.message ?: e.errorCode.name)
-        } catch (e: Exception) {
-            Log.w(TAG, e)
-            finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
         }
-    }
 
     override fun onStatusChanged(transport: Transport, status: String, extras: Bundle?) {
         Log.d(TAG, "$transport status set to $status ($extras)")

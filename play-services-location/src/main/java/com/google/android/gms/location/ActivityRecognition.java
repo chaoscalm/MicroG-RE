@@ -44,14 +44,14 @@ public class ActivityRecognition {
     /**
      * Create a new instance of {@link ActivityRecognitionClient} for use in an {@link Activity}.
      */
-    public static ActivityRecognitionClient getClient (Activity activity) {
+    public static ActivityRecognitionClient getClient(Activity activity) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Create a new instance of {@link ActivityRecognitionClient} for use in a non-activity {@link Context}.
      */
-    public static ActivityRecognitionClient getClient (Context context) {
+    public static ActivityRecognitionClient getClient(Context context) {
         throw new UnsupportedOperationException();
     }
 }

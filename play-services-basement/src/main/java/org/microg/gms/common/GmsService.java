@@ -164,8 +164,7 @@ public enum GmsService {
     LOCATION_SHARING_REPORTER(277, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.locationsharingreporter.service.START"),
     OCR(279, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.ocr.service.START"),
     OCR_INTERNAL(281, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.ocr.service.internal.START"),
-    IN_APP_REACH(315, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.inappreach.service.START")
-    ;
+    IN_APP_REACH(315, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.inappreach.service.START");
 
     public int SERVICE_ID;
     public String ACTION;

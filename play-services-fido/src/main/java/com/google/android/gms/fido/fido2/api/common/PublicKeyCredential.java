@@ -143,7 +143,8 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         if (!Arrays.equals(rawId, that.rawId)) return false;
         if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null)
             return false;
-        if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null) return false;
+        if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null)
+            return false;
         if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null)
             return false;
         return clientExtensionResults != null ? clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults == null;

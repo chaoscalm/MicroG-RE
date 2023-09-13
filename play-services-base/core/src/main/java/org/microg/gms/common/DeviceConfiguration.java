@@ -70,7 +70,8 @@ public class DeviceConfiguration {
         PackageManager packageManager = context.getPackageManager();
         String[] systemSharedLibraryNames = packageManager.getSystemSharedLibraryNames();
         sharedLibraries = new ArrayList<String>();
-        if (systemSharedLibraryNames != null) sharedLibraries.addAll(Arrays.asList(systemSharedLibraryNames));
+        if (systemSharedLibraryNames != null)
+            sharedLibraries.addAll(Arrays.asList(systemSharedLibraryNames));
         for (String s : new String[]{"com.google.android.maps", "com.google.android.media.effects", "com.google.widevine.software.drm"}) {
             if (!sharedLibraries.contains(s)) {
                 sharedLibraries.add(s);
@@ -80,7 +81,8 @@ public class DeviceConfiguration {
         availableFeatures = new ArrayList<String>();
         if (packageManager.getSystemAvailableFeatures() != null) {
             for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
-                if (featureInfo != null && featureInfo.name != null) availableFeatures.add(featureInfo.name);
+                if (featureInfo != null && featureInfo.name != null)
+                    availableFeatures.add(featureInfo.name);
             }
         }
         Collections.sort(availableFeatures);

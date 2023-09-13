@@ -37,12 +37,20 @@ import kotlin.math.max
 import kotlin.math.min
 import android.location.LocationManager as SystemLocationManager
 
-class LocationManager(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner {
+class LocationManager(private val context: Context, override val lifecycle: Lifecycle) :
+    LifecycleOwner {
     private var coarsePendingIntent: PendingIntent? = null
     private val postProcessor by lazy { LocationPostProcessor() }
     private val lastLocationCapsule by lazy { LastLocationCapsule(context) }
     val database by lazy { LocationAppsDatabase(context) }
-    private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) { onRequestManagerUpdated() } }
+    private val requestManager by lazy {
+        LocationRequestManager(
+            context,
+            lifecycle,
+            postProcessor,
+            database
+        ) { onRequestManagerUpdated() }
+    }
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
 
     val deviceOrientationManager = DeviceOrientationManager(context, lifecycle)
@@ -50,27 +58,46 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     var started: Boolean = false
         private set
 
-    suspend fun getLastLocation(clientIdentity: ClientIdentity, request: LastLocationRequest): Location? {
+    suspend fun getLastLocation(
+        clientIdentity: ClientIdentity,
+        request: LastLocationRequest
+    ): Location? {
         if (request.maxUpdateAgeMillis < 0) throw IllegalArgumentException()
         GranularityUtil.checkValidGranularity(request.granularity)
         if (request.isBypass) {
-            val permission = if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
-            if (context.checkPermission(permission, clientIdentity.pid, clientIdentity.uid) != PackageManager.PERMISSION_GRANTED) {
+            val permission =
+                if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
+            if (context.checkPermission(
+                    permission,
+                    clientIdentity.pid,
+                    clientIdentity.uid
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 throw SecurityException("Caller must hold $permission for location bypass")
             }
         }
         if (request.impersonation != null) {
-            Log.w(TAG, "${clientIdentity.packageName} wants to impersonate ${request.impersonation!!.packageName}. Ignoring.")
+            Log.w(
+                TAG,
+                "${clientIdentity.packageName} wants to impersonate ${request.impersonation!!.packageName}. Ignoring."
+            )
         }
         val permissionGranularity = context.granularityFromPermission(clientIdentity)
-        var effectiveGranularity = getEffectiveGranularity(request.granularity, permissionGranularity)
-        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+        var effectiveGranularity =
+            getEffectiveGranularity(request.granularity, permissionGranularity)
+        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName)) effectiveGranularity =
+            GRANULARITY_COARSE
         val returnedLocation = if (effectiveGranularity > permissionGranularity) {
             // No last location available at requested granularity due to lack of permission
             null
         } else {
-            val preLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
-            val processedLocation = postProcessor.process(preLocation, effectiveGranularity, clientIdentity.isGoogle(context))
+            val preLocation =
+                lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
+            val processedLocation = postProcessor.process(
+                preLocation,
+                effectiveGranularity,
+                clientIdentity.isGoogle(context)
+            )
             if (!context.noteAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) {
                 // App Op denied
                 null
@@ -85,20 +112,37 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         return returnedLocation?.let { Location(it).apply { provider = "fused" } }
     }
 
-    fun getLocationAvailability(clientIdentity: ClientIdentity, request: LocationAvailabilityRequest): LocationAvailability {
+    fun getLocationAvailability(
+        clientIdentity: ClientIdentity,
+        request: LocationAvailabilityRequest
+    ): LocationAvailability {
         if (request.bypass) {
-            val permission = if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
-            if (context.checkPermission(permission, clientIdentity.pid, clientIdentity.uid) != PackageManager.PERMISSION_GRANTED) {
+            val permission =
+                if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
+            if (context.checkPermission(
+                    permission,
+                    clientIdentity.pid,
+                    clientIdentity.uid
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 throw SecurityException("Caller must hold $permission for location bypass")
             }
         }
         if (request.impersonation != null) {
-            Log.w(TAG, "${clientIdentity.packageName} wants to impersonate ${request.impersonation!!.packageName}. Ignoring.")
+            Log.w(
+                TAG,
+                "${clientIdentity.packageName} wants to impersonate ${request.impersonation!!.packageName}. Ignoring."
+            )
         }
         return lastLocationCapsule.locationAvailability
     }
 
-    suspend fun addBinderRequest(clientIdentity: ClientIdentity, binder: IBinder, callback: ILocationCallback, request: LocationRequest) {
+    suspend fun addBinderRequest(
+        clientIdentity: ClientIdentity,
+        binder: IBinder,
+        callback: ILocationCallback,
+        request: LocationRequest
+    ) {
         request.verify(context, clientIdentity)
         requestManager.add(binder, clientIdentity, callback, request, lastLocationCapsule)
     }
@@ -111,14 +155,25 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         request: LocationRequest
     ) {
         request.verify(context, clientIdentity)
-        requestManager.update(oldBinder, binder, clientIdentity, callback, request, lastLocationCapsule)
+        requestManager.update(
+            oldBinder,
+            binder,
+            clientIdentity,
+            callback,
+            request,
+            lastLocationCapsule
+        )
     }
 
     suspend fun removeBinderRequest(binder: IBinder) {
         requestManager.remove(binder)
     }
 
-    suspend fun addIntentRequest(clientIdentity: ClientIdentity, pendingIntent: PendingIntent, request: LocationRequest) {
+    suspend fun addIntentRequest(
+        clientIdentity: ClientIdentity,
+        pendingIntent: PendingIntent,
+        request: LocationRequest
+    ) {
         request.verify(context, clientIdentity)
         requestManager.add(pendingIntent, clientIdentity, request, lastLocationCapsule)
     }
@@ -134,7 +189,12 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
         val intent = Intent(context, LocationManagerService::class.java)
         intent.action = NetworkLocationService.ACTION_REPORT_LOCATION
-        coarsePendingIntent = PendingIntent.getService(context, 0, intent, (if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE) or FLAG_UPDATE_CURRENT)
+        coarsePendingIntent = PendingIntent.getService(
+            context,
+            0,
+            intent,
+            (if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE) or FLAG_UPDATE_CURRENT
+        )
         lastLocationCapsule.start()
         requestManager.start()
     }
@@ -176,7 +236,10 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         intent.putExtra(NetworkLocationService.EXTRA_PENDING_INTENT, coarsePendingIntent)
         intent.putExtra(NetworkLocationService.EXTRA_ENABLE, true)
         intent.putExtra(NetworkLocationService.EXTRA_INTERVAL_MILLIS, networkInterval)
-        intent.putExtra(NetworkLocationService.EXTRA_LOW_POWER, requestManager.granularity <= GRANULARITY_COARSE)
+        intent.putExtra(
+            NetworkLocationService.EXTRA_LOW_POWER,
+            requestManager.granularity <= GRANULARITY_COARSE
+        )
         intent.putExtra(NetworkLocationService.EXTRA_WORK_SOURCE, requestManager.workSource)
         context.startService(intent)
 
@@ -210,7 +273,10 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
         if (lastLocation == null ||
             lastLocation.accuracy > location.accuracy ||
-            lastLocation.elapsedMillis + min(requestManager.intervalMillis * 2, UPDATE_CLIFF_MS) < location.elapsedMillis ||
+            lastLocation.elapsedMillis + min(
+                requestManager.intervalMillis * 2,
+                UPDATE_CLIFF_MS
+            ) < location.elapsedMillis ||
             lastLocation.accuracy + ((location.elapsedMillis - lastLocation.elapsedMillis) / 1000.0) > location.accuracy
         ) {
             lastLocationCapsule.updateCoarseLocation(location)
@@ -227,7 +293,8 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         lifecycleScope.launchWhenStarted {
             requestManager.processNewLocation(lastLocationCapsule)
         }
-        lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)?.let { deviceOrientationManager.onLocationChanged(it) }
+        lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)
+            ?.let { deviceOrientationManager.onLocationChanged(it) }
     }
 
     fun dump(writer: PrintWriter) {

@@ -11,6 +11,7 @@ package com.google.android.gms.location;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.lang.annotation.ElementType;

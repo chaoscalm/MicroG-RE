@@ -22,11 +22,32 @@ private const val ACTION_SERVICE_INFO_RESPONSE = "org.microg.gms.gcm.SERVICE_INF
 private const val EXTRA_SERVICE_INFO = "org.microg.gms.gcm.SERVICE_INFO"
 private const val TAG = "GmsGcmStatusInfo"
 
-data class ServiceInfo(val configuration: ServiceConfiguration, val connected: Boolean, val startTimestamp: Long, val learntMobileInterval: Int, val learntWifiInterval: Int, val learntOtherInterval: Int) : Serializable
+data class ServiceInfo(
+    val configuration: ServiceConfiguration,
+    val connected: Boolean,
+    val startTimestamp: Long,
+    val learntMobileInterval: Int,
+    val learntWifiInterval: Int,
+    val learntOtherInterval: Int
+) : Serializable
 
-data class ServiceConfiguration(val enabled: Boolean, val confirmNewApps: Boolean, val mobile: Int, val wifi: Int, val roaming: Int, val other: Int) : Serializable
+data class ServiceConfiguration(
+    val enabled: Boolean,
+    val confirmNewApps: Boolean,
+    val mobile: Int,
+    val wifi: Int,
+    val roaming: Int,
+    val other: Int
+) : Serializable
 
-private fun GcmPrefs.toConfiguration(): ServiceConfiguration = ServiceConfiguration(isEnabled, confirmNewApps, networkMobile, networkWifi, networkRoaming, networkOther)
+private fun GcmPrefs.toConfiguration(): ServiceConfiguration = ServiceConfiguration(
+    isEnabled,
+    confirmNewApps,
+    networkMobile,
+    networkWifi,
+    networkRoaming,
+    networkOther
+)
 
 class ServiceInfoReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -50,36 +71,39 @@ class ServiceInfoReceiver : BroadcastReceiver() {
     }
 }
 
-private suspend fun sendToServiceInfoReceiver(intent: Intent, context: Context): ServiceInfo = suspendCoroutine {
-    context.registerReceiver(object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            context.unregisterReceiver(this)
-            val serviceInfo = try {
-                intent.getSerializableExtra(EXTRA_SERVICE_INFO) as ServiceInfo
-            } catch (e: Exception) {
-                it.resumeWithException(e)
-                return
+private suspend fun sendToServiceInfoReceiver(intent: Intent, context: Context): ServiceInfo =
+    suspendCoroutine {
+        context.registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                context.unregisterReceiver(this)
+                val serviceInfo = try {
+                    intent.getSerializableExtra(EXTRA_SERVICE_INFO) as ServiceInfo
+                } catch (e: Exception) {
+                    it.resumeWithException(e)
+                    return
+                }
+                try {
+                    it.resume(serviceInfo)
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
+                }
             }
-            try {
-                it.resume(serviceInfo)
-            } catch (e: Exception) {
-                Log.w(TAG, e)
-            }
+        }, IntentFilter(ACTION_SERVICE_INFO_RESPONSE))
+        try {
+            context.sendOrderedBroadcast(intent, null)
+        } catch (e: Exception) {
+            it.resumeWithException(e)
         }
-    }, IntentFilter(ACTION_SERVICE_INFO_RESPONSE))
-    try {
-        context.sendOrderedBroadcast(intent, null)
-    } catch (e: Exception) {
-        it.resumeWithException(e)
     }
-}
 
 suspend fun getGcmServiceInfo(context: Context): ServiceInfo = sendToServiceInfoReceiver(
     // this is still using a broadcast, because it calls into McsService in the persistent process
-        Intent(context, ServiceInfoReceiver::class.java).apply {
-            action = ACTION_SERVICE_INFO_REQUEST
-        }, context)
+    Intent(context, ServiceInfoReceiver::class.java).apply {
+        action = ACTION_SERVICE_INFO_REQUEST
+    }, context
+)
 
-suspend fun setGcmServiceConfiguration(context: Context, configuration: ServiceConfiguration) = withContext(Dispatchers.IO) {
-    GcmPrefs.write(context, configuration)
-}
+suspend fun setGcmServiceConfiguration(context: Context, configuration: ServiceConfiguration) =
+    withContext(Dispatchers.IO) {
+        GcmPrefs.write(context, configuration)
+    }

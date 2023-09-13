@@ -33,7 +33,7 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
 
     /**
      * The default value for {@link #getDaysSinceOnsetOfSymptoms()}.
-     *
+     * <p>
      * See {@link DiagnosisKeysDataMapping#getDaysSinceOnsetToInfectiousness()} for more information.
      */
     public static final int DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN = Integer.MAX_VALUE;

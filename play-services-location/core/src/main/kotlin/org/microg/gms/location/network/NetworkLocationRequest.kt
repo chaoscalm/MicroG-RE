@@ -23,6 +23,9 @@ class NetworkLocationRequest(
 
     fun send(context: Context, location: Location) {
         lastRealtime = SystemClock.elapsedRealtime()
-        pendingIntent.send(context, 0, Intent().apply { putExtra(NetworkLocationService.EXTRA_LOCATION, location) })
+        pendingIntent.send(
+            context,
+            0,
+            Intent().apply { putExtra(NetworkLocationService.EXTRA_LOCATION, location) })
     }
 }

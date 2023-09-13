@@ -95,8 +95,10 @@ public class PeopleManager {
             if (info.has("id")) contentValues.put("gaia_id", info.getString("id"));
             if (info.has("picture")) contentValues.put("avatar", info.getString("picture"));
             if (info.has("name")) contentValues.put("display_name", info.getString("name"));
-            if (info.has("given_name")) contentValues.put("given_name", info.getString("given_name"));
-            if (info.has("family_name")) contentValues.put("family_name", info.getString("family_name"));
+            if (info.has("given_name"))
+                contentValues.put("given_name", info.getString("given_name"));
+            if (info.has("family_name"))
+                contentValues.put("family_name", info.getString("family_name"));
             contentValues.put("last_sync_start_time", System.currentTimeMillis());
             contentValues.put("last_sync_finish_time", System.currentTimeMillis());
             contentValues.put("last_successful_sync_time", System.currentTimeMillis());

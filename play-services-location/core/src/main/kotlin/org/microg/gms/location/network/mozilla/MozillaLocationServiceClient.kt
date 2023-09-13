@@ -31,11 +31,12 @@ class MozillaLocationServiceClient(context: Context) {
     suspend fun retrieveMultiWifiLocation(wifis: List<WifiDetails>): Location = geoLocate(
         GeolocateRequest(
             considerIp = false,
-            wifiAccessPoints = wifis.filter { it.ssid?.endsWith("_nomap") != true && !it.isMoving }.map(WifiDetails::toWifiAccessPoint),
+            wifiAccessPoints = wifis.filter { it.ssid?.endsWith("_nomap") != true && !it.isMoving }
+                .map(WifiDetails::toWifiAccessPoint),
             fallbacks = Fallback(lacf = false, ipf = false)
         )
     ).apply {
-        precision = WIFI_BASE_PRECISION_COUNT/wifis.size.toDouble()
+        precision = WIFI_BASE_PRECISION_COUNT / wifis.size.toDouble()
     }
 
     suspend fun retrieveSingleCellLocation(cell: CellDetails): Location = geoLocate(
@@ -48,7 +49,8 @@ class MozillaLocationServiceClient(context: Context) {
             )
         )
     ).apply {
-        precision = if (extras?.getString(LOCATION_EXTRA_FALLBACK) != null) CELL_FALLBACK_PRECISION else CELL_DEFAULT_PRECISION
+        precision =
+            if (extras?.getString(LOCATION_EXTRA_FALLBACK) != null) CELL_FALLBACK_PRECISION else CELL_DEFAULT_PRECISION
     }
 
     private suspend fun geoLocate(request: GeolocateRequest): Location {
@@ -59,7 +61,8 @@ class MozillaLocationServiceClient(context: Context) {
                 latitude = response.location.lat
                 longitude = response.location.lng
                 if (response.accuracy != null) accuracy = response.accuracy.toFloat()
-                if (response.fallback != null) extras = Bundle().apply { putString(LOCATION_EXTRA_FALLBACK, response.fallback) }
+                if (response.fallback != null) extras =
+                    Bundle().apply { putString(LOCATION_EXTRA_FALLBACK, response.fallback) }
             }
         } else if (response.error != null) {
             throw ServiceException(response.error)
@@ -68,15 +71,16 @@ class MozillaLocationServiceClient(context: Context) {
         }
     }
 
-    private suspend fun rawGeoLocate(request: GeolocateRequest): GeolocateResponse = suspendCoroutine { continuation ->
-        queue.add(JsonObjectRequest(Method.POST, Uri.parse(GEOLOCATE_URL).buildUpon().apply {
-            if (API_KEY != null) appendQueryParameter("key", API_KEY)
-        }.build().toString(), request.toJson(), {
-            continuation.resume(it.toGeolocateResponse())
-        }, {
-            continuation.resumeWithException(it)
-        }))
-    }
+    private suspend fun rawGeoLocate(request: GeolocateRequest): GeolocateResponse =
+        suspendCoroutine { continuation ->
+            queue.add(JsonObjectRequest(Method.POST, Uri.parse(GEOLOCATE_URL).buildUpon().apply {
+                if (API_KEY != null) appendQueryParameter("key", API_KEY)
+            }.build().toString(), request.toJson(), {
+                continuation.resume(it.toGeolocateResponse())
+            }, {
+                continuation.resumeWithException(it)
+            }))
+        }
 
     companion object {
         private const val TAG = "MozillaLocation"

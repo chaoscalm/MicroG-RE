@@ -30,13 +30,14 @@ class VersionUtil(private val context: Context) {
                 "arm", "armeabi", "armeabi-v7a" -> "03"
                 else -> "00"
             }
-            val dpiCode = when (context.resources.displayMetrics.densityDpi) { // TODO: Also something to get from profile
-                160 -> "02"
-                240 -> "04"
-                320 -> "06"
-                480 -> "08"
-                else -> "00"
-            }
+            val dpiCode =
+                when (context.resources.displayMetrics.densityDpi) { // TODO: Also something to get from profile
+                    160 -> "02"
+                    240 -> "04"
+                    320 -> "06"
+                    480 -> "08"
+                    else -> "00"
+                }
             val type = "$versionCode$architectureCode$dpiCode"
             if (isKnown(type)) return type
             val nodpi = "$versionCode${architectureCode}00"
@@ -55,7 +56,8 @@ class VersionUtil(private val context: Context) {
         val v2 = type.substring(2, 4)
         val v3 = type.substring(4, 6)
         val i1 = BUILD_MAP.indexOfFirst { it.first == v1 }.takeIf { it >= 0 } ?: return null
-        val i2 = BUILD_MAP[i1].second.indexOfFirst { it.first == v2 }.takeIf { it >= 0 } ?: return null
+        val i2 =
+            BUILD_MAP[i1].second.indexOfFirst { it.first == v2 }.takeIf { it >= 0 } ?: return null
         val i3 = BUILD_MAP[i1].second[i2].second.indexOf(v3).takeIf { it > 0 } ?: return null
         val o1 = BUILD_MAP.subList(0, i1).map { it.second.map { it.second.size }.sum() }.sum()
         val o2 = BUILD_MAP[i1].second.subList(0, i2).map { it.second.size }.sum()
@@ -64,13 +66,43 @@ class VersionUtil(private val context: Context) {
 
     companion object {
         val BUILD_MAP = listOf(
-                "00" to listOf("03" to listOf("00", "02", "04", "06", "08"), "07" to listOf("00")),
-                "02" to listOf("03" to listOf("00", "04", "06", "08"), "04" to listOf("00", "06", "08"), "07" to listOf("00"), "08" to listOf("00")),
-                "04" to listOf("03" to listOf("00", "04", "06", "08"), "04" to listOf("00", "06", "08"), "07" to listOf("00"), "08" to listOf("00")),
-                "10" to listOf("03" to listOf("00", "04", "06", "08"), "04" to listOf("00", "06", "08"), "07" to listOf("00"), "08" to listOf("00")),
-                "12" to listOf("03" to listOf("00", "04", "06", "08"), "04" to listOf("00", "06", "08"), "07" to listOf("00"), "08" to listOf("00")),
-                "15" to listOf("03" to listOf("00", "04", "06", "08"), "04" to listOf("00", "06", "08"), "07" to listOf("00"), "08" to listOf("00")),
-                "19" to listOf("03" to listOf("00", "08"), "04" to listOf("00", "08"), "07" to listOf("00"), "08" to listOf("00")),
+            "00" to listOf("03" to listOf("00", "02", "04", "06", "08"), "07" to listOf("00")),
+            "02" to listOf(
+                "03" to listOf("00", "04", "06", "08"),
+                "04" to listOf("00", "06", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
+            "04" to listOf(
+                "03" to listOf("00", "04", "06", "08"),
+                "04" to listOf("00", "06", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
+            "10" to listOf(
+                "03" to listOf("00", "04", "06", "08"),
+                "04" to listOf("00", "06", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
+            "12" to listOf(
+                "03" to listOf("00", "04", "06", "08"),
+                "04" to listOf("00", "06", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
+            "15" to listOf(
+                "03" to listOf("00", "04", "06", "08"),
+                "04" to listOf("00", "06", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
+            "19" to listOf(
+                "03" to listOf("00", "08"),
+                "04" to listOf("00", "08"),
+                "07" to listOf("00"),
+                "08" to listOf("00")
+            ),
         )
     }
 }

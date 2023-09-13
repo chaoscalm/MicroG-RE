@@ -11,7 +11,8 @@ public class GetDiagnosisKeysDataMappingParams extends AutoSafeParcelable {
     @Field(1)
     public IDiagnosisKeysDataMappingCallback callback;
 
-    private GetDiagnosisKeysDataMappingParams() {}
+    private GetDiagnosisKeysDataMappingParams() {
+    }
 
     public GetDiagnosisKeysDataMappingParams(IDiagnosisKeysDataMappingCallback callback) {
         this.callback = callback;

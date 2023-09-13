@@ -49,7 +49,10 @@ internal fun GeolocateRequest.toJson() = JSONObject().apply {
     if (homeMobileNetworkCode != null) put("homeMobileNetworkCode", homeMobileNetworkCode)
     if (radioType != null) put("radioType", radioType.toString())
     if (!cellTowers.isNullOrEmpty()) put("cellTowers", JSONArray(cellTowers.map(CellTower::toJson)))
-    if (!wifiAccessPoints.isNullOrEmpty()) put("wifiAccessPoints", JSONArray(wifiAccessPoints.map(WifiAccessPoint::toJson)))
+    if (!wifiAccessPoints.isNullOrEmpty()) put(
+        "wifiAccessPoints",
+        JSONArray(wifiAccessPoints.map(WifiAccessPoint::toJson))
+    )
     if (fallbacks != null) put("fallbacks", fallbacks.toJson())
 }
 

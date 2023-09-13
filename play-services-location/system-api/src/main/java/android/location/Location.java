@@ -119,7 +119,7 @@ public class Location implements Parcelable {
     }
 
     private static void computeDistanceAndBearing(double lat1, double lon1,
-            double lat2, double lon2, float[] results) {
+                                                  double lat2, double lon2, float[] results) {
     }
 
     /**
@@ -140,7 +140,7 @@ public class Location implements Parcelable {
      * @throws IllegalArgumentException if results is null or has length < 1
      */
     public static void distanceBetween(double startLatitude, double startLongitude,
-            double endLatitude, double endLongitude, float[] results) {
+                                       double endLatitude, double endLongitude, float[] results) {
     }
 
     /**

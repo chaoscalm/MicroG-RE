@@ -12,9 +12,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.util.SparseArray;
+
 import com.google.android.gms.common.internal.safeparcel.SafeParcelReader;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+
 import org.microg.gms.common.Hide;
 
 import java.lang.reflect.*;
@@ -281,7 +283,8 @@ public final class SafeParcelReflectionUtil {
                     } catch (Exception ignored) {
                     }
                 }
-                if (!hasStub) throw new RuntimeException("Field has broken interface: " + descriptor.field);
+                if (!hasStub)
+                    throw new RuntimeException("Field has broken interface: " + descriptor.field);
                 break;
             }
             case StringList:
@@ -477,10 +480,12 @@ public final class SafeParcelReflectionUtil {
                 Class<?> clazz = field.getType();
                 Class<?> component = clazz.getComponentType();
                 if (clazz.isArray() && component != null) {
-                    if (Parcelable.class.isAssignableFrom(component)) return SafeParcelType.ParcelableArray;
+                    if (Parcelable.class.isAssignableFrom(component))
+                        return SafeParcelType.ParcelableArray;
                     if (String.class.isAssignableFrom(component)) return SafeParcelType.StringArray;
                     if (byte.class.isAssignableFrom(component)) return SafeParcelType.ByteArray;
-                    if (byte[].class.isAssignableFrom(component)) return SafeParcelType.ByteArrayArray;
+                    if (byte[].class.isAssignableFrom(component))
+                        return SafeParcelType.ByteArrayArray;
                     if (float.class.isAssignableFrom(component)) return SafeParcelType.FloatArray;
                     if (int.class.isAssignableFrom(component)) return SafeParcelType.IntArray;
                 }
@@ -494,12 +499,18 @@ public final class SafeParcelReflectionUtil {
                     return SafeParcelType.Interface;
                 if (clazz == List.class || clazz == ArrayList.class) {
                     listItemClass = getListItemClass(field);
-                    if (listItemClass == String.class && !useValueParcel) return SafeParcelType.StringList;
-                    if (listItemClass == Integer.class && annotation.useDirectList()) return SafeParcelType.IntegerList;
-                    if (listItemClass == Boolean.class && annotation.useDirectList()) return SafeParcelType.BooleanList;
-                    if (listItemClass == Long.class && annotation.useDirectList()) return SafeParcelType.LongList;
-                    if (listItemClass == Float.class && annotation.useDirectList()) return SafeParcelType.FloatList;
-                    if (listItemClass == Double.class && annotation.useDirectList()) return SafeParcelType.DoubleList;
+                    if (listItemClass == String.class && !useValueParcel)
+                        return SafeParcelType.StringList;
+                    if (listItemClass == Integer.class && annotation.useDirectList())
+                        return SafeParcelType.IntegerList;
+                    if (listItemClass == Boolean.class && annotation.useDirectList())
+                        return SafeParcelType.BooleanList;
+                    if (listItemClass == Long.class && annotation.useDirectList())
+                        return SafeParcelType.LongList;
+                    if (listItemClass == Float.class && annotation.useDirectList())
+                        return SafeParcelType.FloatList;
+                    if (listItemClass == Double.class && annotation.useDirectList())
+                        return SafeParcelType.DoubleList;
                     return SafeParcelType.List;
                 }
                 if (clazz == Map.class || clazz == HashMap.class)

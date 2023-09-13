@@ -155,7 +155,7 @@ public final class CameraPosition extends AutoSafeParcelable {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[] { target, zoom, tilt, bearing });
+        return Arrays.hashCode(new Object[]{target, zoom, tilt, bearing});
     }
 
     @Override

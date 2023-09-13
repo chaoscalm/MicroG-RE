@@ -6,6 +6,7 @@
 package org.microg.safeparcel;
 
 import android.os.Parcel;
+
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 import java.lang.reflect.Array;

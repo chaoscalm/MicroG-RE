@@ -102,9 +102,12 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         }
 
         private void verify(Context context) throws Exception {
-            if (accountName == null || accountType == null || account == null) throw new IllegalArgumentException("Required account information missing");
-            if (packageName == null || service == null) throw new IllegalArgumentException("Required request information missing");
-            if (callerUid == 0) throw new IllegalArgumentException("Required caller information missing");
+            if (accountName == null || accountType == null || account == null)
+                throw new IllegalArgumentException("Required account information missing");
+            if (packageName == null || service == null)
+                throw new IllegalArgumentException("Required request information missing");
+            if (callerUid == 0)
+                throw new IllegalArgumentException("Required caller information missing");
             PackageUtils.getAndCheckPackage(context, packageName, callerUid, callerPid);
 
             PackageManager packageManager = context.getPackageManager();

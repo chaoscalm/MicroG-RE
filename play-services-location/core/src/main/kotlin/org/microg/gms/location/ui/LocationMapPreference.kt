@@ -27,8 +27,19 @@ import org.microg.gms.ui.resolveColor
 import kotlin.math.log2
 
 class LocationMapPreference : Preference {
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context) : super(context)
 
@@ -53,12 +64,19 @@ class LocationMapPreference : Preference {
         if (location != null) {
             if (isAvailable) {
                 val latLng = LatLng(location!!.latitude, location!!.longitude)
-                val camera = CameraPosition.fromLatLngZoom(latLng, (21 - log2(location!!.accuracy)).coerceIn(2f, 22f))
+                val camera = CameraPosition.fromLatLngZoom(
+                    latLng,
+                    (21 - log2(location!!.accuracy)).coerceIn(2f, 22f)
+                )
                 val container = holder.itemView as ViewGroup
                 if (mapView == null) {
-                    val options = GoogleMapOptions().liteMode(true).scrollGesturesEnabled(false).zoomGesturesEnabled(false).camera(camera)
+                    val options = GoogleMapOptions().liteMode(true).scrollGesturesEnabled(false)
+                        .zoomGesturesEnabled(false).camera(camera)
                     mapView = MapView(context, options)
-                    mapView?.layoutParams = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, (height * context.resources.displayMetrics.density).toInt())
+                    mapView?.layoutParams = FrameLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        (height * context.resources.displayMetrics.density).toInt()
+                    )
                     container.addView(mapView)
                     (mapView as MapView).onCreate(null)
                 } else {
@@ -69,10 +87,17 @@ class LocationMapPreference : Preference {
                 (circle1 as? Circle?)?.remove()
                 (circle2 as? Circle?)?.remove()
                 (mapView as MapView).getMapAsync {
-                    val strokeColor = (context.resolveColor(androidx.appcompat.R.attr.colorAccent) ?: 0xff009688L.toInt())
+                    val strokeColor = (context.resolveColor(androidx.appcompat.R.attr.colorAccent)
+                        ?: 0xff009688L.toInt())
                     val fillColor = strokeColor and 0x60ffffff
-                    circle1 = it.addCircle(CircleOptions().center(latLng).radius(location!!.accuracy.toDouble()).fillColor(fillColor).strokeWidth(1f).strokeColor(strokeColor))
-                    circle2 = it.addCircle(CircleOptions().center(latLng).radius(location!!.accuracy.toDouble() * 2).fillColor(fillColor).strokeWidth(1f).strokeColor(strokeColor))
+                    circle1 = it.addCircle(
+                        CircleOptions().center(latLng).radius(location!!.accuracy.toDouble())
+                            .fillColor(fillColor).strokeWidth(1f).strokeColor(strokeColor)
+                    )
+                    circle2 = it.addCircle(
+                        CircleOptions().center(latLng).radius(location!!.accuracy.toDouble() * 2)
+                            .fillColor(fillColor).strokeWidth(1f).strokeColor(strokeColor)
+                    )
                 }
             } else {
                 Log.d(TAG, "MapView not available")

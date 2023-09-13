@@ -45,9 +45,12 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_push_notifications_all_apps)
         registered = preferenceScreen.findPreference("prefcat_push_apps_registered") ?: registered
-        unregistered = preferenceScreen.findPreference("prefcat_push_apps_unregistered") ?: unregistered
-        registeredNone = preferenceScreen.findPreference("pref_push_apps_registered_none") ?: registeredNone
-        unregisteredNone = preferenceScreen.findPreference("pref_push_apps_unregistered_none") ?: unregisteredNone
+        unregistered =
+            preferenceScreen.findPreference("prefcat_push_apps_unregistered") ?: unregistered
+        registeredNone =
+            preferenceScreen.findPreference("pref_push_apps_registered_none") ?: registeredNone
+        unregisteredNone =
+            preferenceScreen.findPreference("pref_push_apps_unregistered_none") ?: unregisteredNone
         progress = preferenceScreen.findPreference("pref_push_apps_all_progress") ?: progress
     }
 
@@ -59,13 +62,19 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                     val pref = AppIconPreference(context)
                     pref.packageName = app.packageName
                     pref.summary = when {
-                        app.lastMessageTimestamp > 0 -> getString(R.string.gcm_last_message_at, DateUtils.getRelativeTimeSpanString(app.lastMessageTimestamp))
+                        app.lastMessageTimestamp > 0 -> getString(
+                            R.string.gcm_last_message_at,
+                            DateUtils.getRelativeTimeSpanString(app.lastMessageTimestamp)
+                        )
+
                         else -> null
                     }
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(requireContext(), R.id.openGcmAppDetailsFromAll, bundleOf(
+                        findNavController().navigate(
+                            requireContext(), R.id.openGcmAppDetailsFromAll, bundleOf(
                                 "package" to app.packageName
-                        ))
+                            )
+                        )
                         true
                     }
                     pref.key = "pref_push_app_" + app.packageName

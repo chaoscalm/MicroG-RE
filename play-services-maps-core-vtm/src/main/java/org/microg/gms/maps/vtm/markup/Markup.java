@@ -22,7 +22,9 @@ public interface Markup {
     boolean onClick();
 
     void onDragStart();
+
     void onDragStop();
+
     void onDragProgress();
 
     interface MarkupListener {

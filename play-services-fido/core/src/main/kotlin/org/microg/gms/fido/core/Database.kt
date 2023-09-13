@@ -17,13 +17,26 @@ import org.microg.gms.fido.core.transport.Transport
 class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VERSION) {
 
     fun isPrivileged(packageName: String, signatureDigest: String): Boolean = readableDatabase.use {
-        it.count(TABLE_PRIVILEGED_APPS, "$COLUMN_PACKAGE_NAME = ? AND $COLUMN_SIGNATURE_DIGEST = ?", packageName, signatureDigest) > 0
+        it.count(
+            TABLE_PRIVILEGED_APPS,
+            "$COLUMN_PACKAGE_NAME = ? AND $COLUMN_SIGNATURE_DIGEST = ?",
+            packageName,
+            signatureDigest
+        ) > 0
     }
 
     fun wasUsed(): Boolean = readableDatabase.use { it.count(TABLE_KNOWN_REGISTRATIONS) > 0 }
 
     fun getKnownRegistrationTransport(rpId: String, credentialId: String) = readableDatabase.use {
-        it.query(TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_TRANSPORT), "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId), null, null, null).use {
+        it.query(
+            TABLE_KNOWN_REGISTRATIONS,
+            arrayOf(COLUMN_TRANSPORT),
+            "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?",
+            arrayOf(rpId, credentialId),
+            null,
+            null,
+            null
+        ).use {
             if (it.moveToFirst()) Transport.valueOf(it.getString(0)) else null
         }
     }
@@ -36,14 +49,15 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
         }, CONFLICT_REPLACE)
     }
 
-    fun insertKnownRegistration(rpId: String, credentialId: String, transport: Transport) = writableDatabase.use {
-        it.insertWithOnConflict(TABLE_KNOWN_REGISTRATIONS, null, ContentValues().apply {
-            put(COLUMN_RP_ID, rpId)
-            put(COLUMN_CREDENTIAL_ID, credentialId)
-            put(COLUMN_TRANSPORT, transport.name)
-            put(COLUMN_TIMESTAMP, System.currentTimeMillis())
-        }, CONFLICT_REPLACE)
-    }
+    fun insertKnownRegistration(rpId: String, credentialId: String, transport: Transport) =
+        writableDatabase.use {
+            it.insertWithOnConflict(TABLE_KNOWN_REGISTRATIONS, null, ContentValues().apply {
+                put(COLUMN_RP_ID, rpId)
+                put(COLUMN_CREDENTIAL_ID, credentialId)
+                put(COLUMN_TRANSPORT, transport.name)
+                put(COLUMN_TIMESTAMP, System.currentTimeMillis())
+            }, CONFLICT_REPLACE)
+        }
 
     override fun onCreate(db: SQLiteDatabase) {
         onUpgrade(db, 0, VERSION)

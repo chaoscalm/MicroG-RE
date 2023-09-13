@@ -12,6 +12,7 @@ import android.app.PendingIntent;
 
 /**
  * Status codes that can be returned to listeners to indicate the success or failure of an operation.
+ *
  * @deprecated Use {@link GeofenceStatusCodes}
  */
 @Deprecated

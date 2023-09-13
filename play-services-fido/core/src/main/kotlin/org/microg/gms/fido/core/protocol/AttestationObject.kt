@@ -19,4 +19,8 @@ abstract class AttestationObject(val authData: ByteArray) {
     }.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
 }
 
-class AnyAttestationObject(authData: ByteArray, override val fmt: String, override val attStmt: CBORObject) : AttestationObject(authData)
+class AnyAttestationObject(
+    authData: ByteArray,
+    override val fmt: String,
+    override val attStmt: CBORObject
+) : AttestationObject(authData)

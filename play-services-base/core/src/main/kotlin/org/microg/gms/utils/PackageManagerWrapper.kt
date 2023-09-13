@@ -62,7 +62,10 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.getPermissionInfo(permName, flags)
     }
 
-    override fun queryPermissionsByGroup(permissionGroup: String?, flags: Int): MutableList<PermissionInfo> {
+    override fun queryPermissionsByGroup(
+        permissionGroup: String?,
+        flags: Int
+    ): MutableList<PermissionInfo> {
         return wrapped.queryPermissionsByGroup(permissionGroup, flags)
     }
 
@@ -104,7 +107,10 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
     }
 
     @TargetApi(18)
-    override fun getPackagesHoldingPermissions(permissions: Array<out String>, flags: Int): MutableList<PackageInfo> {
+    override fun getPackagesHoldingPermissions(
+        permissions: Array<out String>,
+        flags: Int
+    ): MutableList<PackageInfo> {
         return wrapped.getPackagesHoldingPermissions(permissions, flags)
     }
 
@@ -215,7 +221,12 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.queryIntentActivities(intent, flags)
     }
 
-    override fun queryIntentActivityOptions(caller: ComponentName?, specifics: Array<out Intent>?, intent: Intent, flags: Int): MutableList<ResolveInfo> {
+    override fun queryIntentActivityOptions(
+        caller: ComponentName?,
+        specifics: Array<out Intent>?,
+        intent: Intent,
+        flags: Int
+    ): MutableList<ResolveInfo> {
         return wrapped.queryIntentActivityOptions(caller, specifics, intent, flags)
     }
 
@@ -240,7 +251,11 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.resolveContentProvider(authority, flags)
     }
 
-    override fun queryContentProviders(processName: String?, uid: Int, flags: Int): MutableList<ProviderInfo> {
+    override fun queryContentProviders(
+        processName: String?,
+        uid: Int,
+        flags: Int
+    ): MutableList<ProviderInfo> {
         return wrapped.queryContentProviders(processName, uid, flags)
     }
 
@@ -248,11 +263,18 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.getInstrumentationInfo(className, flags)
     }
 
-    override fun queryInstrumentation(targetPackage: String, flags: Int): MutableList<InstrumentationInfo> {
+    override fun queryInstrumentation(
+        targetPackage: String,
+        flags: Int
+    ): MutableList<InstrumentationInfo> {
         return wrapped.queryInstrumentation(targetPackage, flags)
     }
 
-    override fun getDrawable(packageName: String, resid: Int, appInfo: ApplicationInfo?): Drawable? {
+    override fun getDrawable(
+        packageName: String,
+        resid: Int,
+        appInfo: ApplicationInfo?
+    ): Drawable? {
         return wrapped.getDrawable(packageName, resid, appInfo)
     }
 
@@ -318,7 +340,12 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
     }
 
     @TargetApi(21)
-    override fun getUserBadgedDrawableForDensity(drawable: Drawable, user: UserHandle, badgeLocation: Rect?, badgeDensity: Int): Drawable {
+    override fun getUserBadgedDrawableForDensity(
+        drawable: Drawable,
+        user: UserHandle,
+        badgeLocation: Rect?,
+        badgeDensity: Int
+    ): Drawable {
         return wrapped.getUserBadgedDrawableForDensity(drawable, user, badgeLocation, badgeDensity)
     }
 
@@ -327,11 +354,19 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.getUserBadgedLabel(label, user)
     }
 
-    override fun getText(packageName: String, resid: Int, appInfo: ApplicationInfo?): CharSequence? {
+    override fun getText(
+        packageName: String,
+        resid: Int,
+        appInfo: ApplicationInfo?
+    ): CharSequence? {
         return wrapped.getText(packageName, resid, appInfo)
     }
 
-    override fun getXml(packageName: String, resid: Int, appInfo: ApplicationInfo?): XmlResourceParser? {
+    override fun getXml(
+        packageName: String,
+        resid: Int,
+        appInfo: ApplicationInfo?
+    ): XmlResourceParser? {
         return wrapped.getXml(packageName, resid, appInfo)
     }
 
@@ -356,7 +391,11 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
     }
 
     @TargetApi(17)
-    override fun extendVerificationTimeout(id: Int, verificationCodeAtTimeout: Int, millisecondsToDelay: Long) {
+    override fun extendVerificationTimeout(
+        id: Int,
+        verificationCodeAtTimeout: Int,
+        millisecondsToDelay: Long
+    ) {
         return wrapped.extendVerificationTimeout(id, verificationCodeAtTimeout, millisecondsToDelay)
     }
 
@@ -380,7 +419,12 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.getPreferredPackages(flags)
     }
 
-    override fun addPreferredActivity(filter: IntentFilter, match: Int, set: Array<out ComponentName>?, activity: ComponentName) {
+    override fun addPreferredActivity(
+        filter: IntentFilter,
+        match: Int,
+        set: Array<out ComponentName>?,
+        activity: ComponentName
+    ) {
         return wrapped.addPreferredActivity(filter, match, set, activity)
     }
 
@@ -388,11 +432,19 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.clearPackagePreferredActivities(packageName)
     }
 
-    override fun getPreferredActivities(outFilters: MutableList<IntentFilter>, outActivities: MutableList<ComponentName>, packageName: String?): Int {
+    override fun getPreferredActivities(
+        outFilters: MutableList<IntentFilter>,
+        outActivities: MutableList<ComponentName>,
+        packageName: String?
+    ): Int {
         return wrapped.getPreferredActivities(outFilters, outActivities, packageName)
     }
 
-    override fun setComponentEnabledSetting(componentName: ComponentName, newState: Int, flags: Int) {
+    override fun setComponentEnabledSetting(
+        componentName: ComponentName,
+        newState: Int,
+        flags: Int
+    ) {
         return wrapped.setComponentEnabledSetting(componentName, newState, flags)
     }
 
@@ -429,7 +481,11 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
 
 
     @TargetApi(29)
-    override fun addWhitelistedRestrictedPermission(packageName: String, permName: String, whitelistFlags: Int): Boolean {
+    override fun addWhitelistedRestrictedPermission(
+        packageName: String,
+        permName: String,
+        whitelistFlags: Int
+    ): Boolean {
         return wrapped.addWhitelistedRestrictedPermission(packageName, permName, whitelistFlags)
     }
 
@@ -468,12 +524,19 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
     }
 
     @TargetApi(29)
-    override fun getWhitelistedRestrictedPermissions(packageName: String, whitelistFlag: Int): MutableSet<String> {
+    override fun getWhitelistedRestrictedPermissions(
+        packageName: String,
+        whitelistFlag: Int
+    ): MutableSet<String> {
         return wrapped.getWhitelistedRestrictedPermissions(packageName, whitelistFlag)
     }
 
     @TargetApi(28)
-    override fun hasSigningCertificate(packageName: String, certificate: ByteArray, type: Int): Boolean {
+    override fun hasSigningCertificate(
+        packageName: String,
+        certificate: ByteArray,
+        type: Int
+    ): Boolean {
         return wrapped.hasSigningCertificate(packageName, certificate, type)
     }
 
@@ -513,7 +576,11 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
     }
 
     @TargetApi(29)
-    override fun removeWhitelistedRestrictedPermission(packageName: String, permName: String, whitelistFlags: Int): Boolean {
+    override fun removeWhitelistedRestrictedPermission(
+        packageName: String,
+        permName: String,
+        whitelistFlags: Int
+    ): Boolean {
         return wrapped.removeWhitelistedRestrictedPermission(packageName, permName, whitelistFlags)
     }
 

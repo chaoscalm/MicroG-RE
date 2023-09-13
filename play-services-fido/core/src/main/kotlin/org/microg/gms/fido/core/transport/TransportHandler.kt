@@ -37,7 +37,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         descriptor: PublicKeyCredentialDescriptor
     ): Boolean {
         try {
-            connection.runCommand(U2fAuthenticationCommand(0x07, challenge, application, descriptor.id))
+            connection.runCommand(
+                U2fAuthenticationCommand(
+                    0x07,
+                    challenge,
+                    application,
+                    descriptor.id
+                )
+            )
             return true
         } catch (e: CtapHidMessageStatusException) {
             return e.status == 0x6985;
@@ -85,7 +92,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray> {
         val rpIdHash = options.rpId.toByteArray().digest("SHA-256")
         val appIdHash =
-            options.authenticationExtensions?.fidoAppIdExtension?.appId?.toByteArray()?.digest("SHA-256")
+            options.authenticationExtensions?.fidoAppIdExtension?.appId?.toByteArray()
+                ?.digest("SHA-256")
         if (!options.registerOptions.parameters.isNullOrEmpty() && options.registerOptions.parameters.all { it.algorithmIdAsInteger != -7 })
             throw IllegalArgumentException("Can't use CTAP1 protocol for non ES256 requests")
         if (options.registerOptions.authenticatorSelection.requireResidentKey == true)
@@ -100,7 +108,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         }
         while (true) {
             try {
-                val response = connection.runCommand(U2fRegistrationCommand(clientDataHash, rpIdHash))
+                val response =
+                    connection.runCommand(U2fRegistrationCommand(clientDataHash, rpIdHash))
                 if (hasCredential) throw RequestHandlingException(
                     ErrorCode.NOT_ALLOWED_ERR,
                     "An excluded credential has already been registered with the device"
@@ -124,7 +133,11 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 val attestationObject = if (options.registerOptions.skipAttestation) {
                     NoneAttestationObject(authData)
                 } else {
-                    FidoU2fAttestationObject(authData, response.signature, response.attestationCertificate)
+                    FidoU2fAttestationObject(
+                        authData,
+                        response.signature,
+                        response.attestationCertificate
+                    )
                 }
                 val ctap2Response = AuthenticatorMakeCredentialResponse(
                     authData.encode(),
@@ -161,6 +174,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                     ctap2register(connection, options, clientDataHash)
                 }
             }
+
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
@@ -182,7 +196,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-            extensions["appid"] = options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
+            extensions["appid"] =
+                options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
         }
         if (options.authenticationExtensions?.userVerificationMethodExtension?.uvm != null) {
             extensions["uvm"] =
@@ -211,8 +226,16 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
 
         while (true) {
             try {
-                val response = connection.runCommand(U2fAuthenticationCommand(0x03, clientDataHash, rpIdHash, cred.id))
-                val authData = AuthenticatorData(rpIdHash, response.userPresence, false, response.counter)
+                val response = connection.runCommand(
+                    U2fAuthenticationCommand(
+                        0x03,
+                        clientDataHash,
+                        rpIdHash,
+                        cred.id
+                    )
+                )
+                val authData =
+                    AuthenticatorData(rpIdHash, response.userPresence, false, response.counter)
                 val ctap2Response = AuthenticatorGetAssertionResponse(
                     cred,
                     authData.encode(),
@@ -241,8 +264,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         } catch (e: Exception) {
             try {
                 if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-                    val appIdHash = options.authenticationExtensions.fidoAppIdExtension.appId.toByteArray()
-                        .digest("SHA-256")
+                    val appIdHash =
+                        options.authenticationExtensions.fidoAppIdExtension.appId.toByteArray()
+                            .digest("SHA-256")
                     return ctap1sign(connection, options, clientDataHash, appIdHash)
                 }
             } catch (e2: Exception) {
@@ -281,6 +305,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                     }
                 }
             }
+
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }

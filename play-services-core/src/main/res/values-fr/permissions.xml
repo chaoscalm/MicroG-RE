@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,4 +38,4 @@
     <string name="permission_service_finance_description">Permets aux applications d\'accéder à Google Finance par le biais de tous comptes associés à Google.</string>
     <string name="permission_service_gbase_label">Google Base -  Google a mis officiellement en ligne ce service le 16 novembre 2005 et permet de mettre en ligne et de référencer tout type de contenu en termes d\'information. </string>
     <string name="permission_service_gbase_description">Permets aux applications d\'accéder à Google Base par le biais de tous comptes associés à Google.</string>
-    </resources>
+</resources>

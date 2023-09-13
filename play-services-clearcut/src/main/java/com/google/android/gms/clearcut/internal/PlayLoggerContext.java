@@ -54,7 +54,7 @@ public class PlayLoggerContext extends AutoSafeParcelable {
         isAnonymous = logAndroidId = scrubMccMnc = false;
     }
 
-    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String logSourceName, String uploadAccount, String loggingId, boolean isAnonymous,  int qosTier, boolean scrubMccMnc, int piiLevelset) {
+    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String logSourceName, String uploadAccount, String loggingId, boolean isAnonymous, int qosTier, boolean scrubMccMnc, int piiLevelset) {
         this.packageName = packageName;
         this.packageVersionCode = packageVersionCode;
         this.logSource = logSource;

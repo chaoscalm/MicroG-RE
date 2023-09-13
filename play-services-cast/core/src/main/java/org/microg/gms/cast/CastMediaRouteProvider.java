@@ -69,9 +69,11 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         DISCOVERING,
         DISCOVERY_STOP_REQUESTED,
     }
+
     private State state = State.NOT_DISCOVERING;
 
     private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<IntentFilter>();
+
     static {
         IntentFilter filter;
 
@@ -85,35 +87,35 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         filter.addDataScheme("http");
         filter.addDataScheme("https");
         String[] types = {
-            "image/jpeg",
-            "image/pjpeg",
-            "image/jpg",
-            "image/webp",
-            "image/png",
-            "image/gif",
-            "image/bmp",
-            "image/vnd.microsoft.icon",
-            "image/x-icon",
-            "image/x-xbitmap",
-            "audio/wav",
-            "audio/x-wav",
-            "audio/mp3",
-            "audio/x-mp3",
-            "audio/x-m4a",
-            "audio/mpeg",
-            "audio/webm",
-            "audio/ogg",
-            "audio/x-matroska",
-            "video/mp4",
-            "video/x-m4v",
-            "video/mp2t",
-            "video/webm",
-            "video/ogg",
-            "video/x-matroska",
-            "application/x-mpegurl",
-            "application/vnd.apple.mpegurl",
-            "application/dash+xml",
-            "application/vnd.ms-sstr+xml",
+                "image/jpeg",
+                "image/pjpeg",
+                "image/jpg",
+                "image/webp",
+                "image/png",
+                "image/gif",
+                "image/bmp",
+                "image/vnd.microsoft.icon",
+                "image/x-icon",
+                "image/x-xbitmap",
+                "audio/wav",
+                "audio/x-wav",
+                "audio/mp3",
+                "audio/x-mp3",
+                "audio/x-m4a",
+                "audio/mpeg",
+                "audio/webm",
+                "audio/ogg",
+                "audio/x-matroska",
+                "video/mp4",
+                "video/x-m4v",
+                "video/mp2t",
+                "video/webm",
+                "video/ogg",
+                "video/x-matroska",
+                "application/x-mpegurl",
+                "application/vnd.apple.mpegurl",
+                "application/dash+xml",
+                "application/vnd.ms-sstr+xml",
         };
         for (String type : types) {
             try {
@@ -184,7 +186,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             return;
         }
 
-        mNsdManager = (NsdManager)context.getSystemService(Context.NSD_SERVICE);
+        mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
 
         mDiscoveryListener = new NsdManager.DiscoveryListener() {
 
@@ -257,7 +259,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private void onChromeCastDiscovered(
             String id, String name, InetAddress host, int port, String
             deviceVersion, String friendlyName, String modelName, String
-            iconPath, int status) {
+                    iconPath, int status) {
         if (!this.castDevices.containsKey(id)) {
             // TODO: Capabilities
             int capabilities = CastDevice.CAPABILITY_VIDEO_OUT | CastDevice.CAPABILITY_AUDIO_OUT;
@@ -340,19 +342,19 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             Bundle extras = new Bundle();
             castDevice.putInBundle(extras);
             MediaRouteDescriptor route = new MediaRouteDescriptor.Builder(
-                castDevice.getDeviceId(),
-                castDevice.getFriendlyName())
-                .setDescription(castDevice.getModelName())
-                .addControlFilters(controlFilters)
-                .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
-                .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
-                .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
-                .setVolumeMax(20)
-                .setVolume(0)
-                .setEnabled(true)
-                .setExtras(extras)
-                .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
-                .build();
+                    castDevice.getDeviceId(),
+                    castDevice.getFriendlyName())
+                    .setDescription(castDevice.getModelName())
+                    .addControlFilters(controlFilters)
+                    .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
+                    .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
+                    .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                    .setVolumeMax(20)
+                    .setVolume(0)
+                    .setEnabled(true)
+                    .setExtras(extras)
+                    .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
+                    .build();
             builder.addRoute(route);
         }
         this.setDescriptor(builder.build());

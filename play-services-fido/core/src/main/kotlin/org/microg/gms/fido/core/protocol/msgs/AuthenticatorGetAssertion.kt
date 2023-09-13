@@ -16,7 +16,9 @@ import org.microg.gms.utils.toBase64
 
 class AuthenticatorGetAssertionCommand(request: AuthenticatorGetAssertionRequest) :
     Ctap2Command<AuthenticatorGetAssertionRequest, AuthenticatorGetAssertionResponse>(request) {
-    override fun decodeResponse(obj: CBORObject) = AuthenticatorGetAssertionResponse.decodeFromCbor(obj)
+    override fun decodeResponse(obj: CBORObject) =
+        AuthenticatorGetAssertionResponse.decodeFromCbor(obj)
+
     override val timeout: Long
         get() = 60000
 }

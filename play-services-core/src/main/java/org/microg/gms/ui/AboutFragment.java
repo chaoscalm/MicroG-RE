@@ -32,8 +32,7 @@ public class AboutFragment extends AbstractAboutFragment {
         if (BuildConfig.FLAVOR.toLowerCase().contains("vtm")) {
             libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));
             libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
-        }
-        else {
+        } else {
             libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "Mapbox Maps SDK for Android", "Three-Clause BSD, Mapbox"));
         }
         libraries.add(new AbstractAboutFragment.Library("androidx", "Android Jetpack", "Apache License 2.0, The Android Open Source Project"));

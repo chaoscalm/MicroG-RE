@@ -38,7 +38,7 @@ import org.microg.gms.tasks.TaskImpl;
  *     }
  * }
  * </pre>
- *
+ * <p>
  * and later complete it by either
  * calling {@link #setResult(TResult)} or {@link #setException(Exception)}.
  */

@@ -22,7 +22,11 @@ import android.util.Log
 import androidx.core.content.getSystemService
 import java.util.UUID
 
-class IntentCacheManager<S : Service, T : Parcelable>(private val context: Context, private val clazz: Class<S>, private val type: Int) {
+class IntentCacheManager<S : Service, T : Parcelable>(
+    private val context: Context,
+    private val clazz: Class<S>,
+    private val type: Int
+) {
     private val lock = Any()
     private lateinit var content: ArrayList<T>
     private lateinit var id: String
@@ -30,12 +34,26 @@ class IntentCacheManager<S : Service, T : Parcelable>(private val context: Conte
     private val pendingActions: MutableList<() -> Unit> = arrayListOf()
 
     init {
-        val pendingIntent = PendingIntent.getService(context, type, getIntent(), if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getService(
+            context,
+            type,
+            getIntent(),
+            if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE
+        )
         val alarmManager = context.getSystemService<AlarmManager>()
         if (SDK_INT >= 19) {
-            alarmManager?.setWindow(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + TEN_YEARS, -1, pendingIntent)
+            alarmManager?.setWindow(
+                ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + TEN_YEARS,
+                -1,
+                pendingIntent
+            )
         } else {
-            alarmManager?.set(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + TEN_YEARS, pendingIntent)
+            alarmManager?.set(
+                ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + TEN_YEARS,
+                pendingIntent
+            )
         }
         pendingIntent.send()
     }
@@ -117,9 +135,17 @@ class IntentCacheManager<S : Service, T : Parcelable>(private val context: Conte
                     putExtra(EXTRA_ID, id)
                     putParcelableArrayListExtra(EXTRA_DATA, content)
                 }
-                val pendingIntent = PendingIntent.getService(context, type, intent, FLAG_NO_CREATE or FLAG_UPDATE_CURRENT or if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE)
+                val pendingIntent = PendingIntent.getService(
+                    context,
+                    type,
+                    intent,
+                    FLAG_NO_CREATE or FLAG_UPDATE_CURRENT or if (SDK_INT >= 31) FLAG_MUTABLE else FLAG_IMMUTABLE
+                )
                 if (pendingIntent == null) {
-                    Log.w(TAG, "Failed to update existing pending intent, will likely have a loss of information")
+                    Log.w(
+                        TAG,
+                        "Failed to update existing pending intent, will likely have a loss of information"
+                    )
                 }
             }
         }
@@ -134,7 +160,8 @@ class IntentCacheManager<S : Service, T : Parcelable>(private val context: Conte
         private const val EXTRA_ID = "org.microg.gms.IntentCacheManager.id"
         private const val EXTRA_DATA = "org.microg.gms.IntentCacheManager.data"
 
-        inline fun<reified S: Service, T: Parcelable> create(context: Context, type: Int) = IntentCacheManager<S, T>(context, S::class.java, type)
+        inline fun <reified S : Service, T : Parcelable> create(context: Context, type: Int) =
+            IntentCacheManager<S, T>(context, S::class.java, type)
 
         fun isCache(intent: Intent): Boolean = try {
             intent.getBooleanExtra(EXTRA_IS_CACHE, false)

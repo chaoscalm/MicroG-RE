@@ -20,7 +20,12 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.Stub() {
 
-    override fun addGeofencesList(geofences: List<ParcelableGeofence>, pendingIntent: PendingIntent, callbacks: IGeofencerCallbacks, packageName: String) {
+    override fun addGeofencesList(
+        geofences: List<ParcelableGeofence>,
+        pendingIntent: PendingIntent,
+        callbacks: IGeofencerCallbacks,
+        packageName: String
+    ) {
         val request = GeofencingRequest.Builder()
             .addGeofences(geofences)
             .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_DWELL)
@@ -28,7 +33,11 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
         addGeofences(request, pendingIntent, callbacks)
     }
 
-    override fun requestActivityUpdates(detectionIntervalMillis: Long, triggerUpdates: Boolean, callbackIntent: PendingIntent) {
+    override fun requestActivityUpdates(
+        detectionIntervalMillis: Long,
+        triggerUpdates: Boolean,
+        callbackIntent: PendingIntent
+    ) {
         requestActivityUpdatesWithCallback(ActivityRecognitionRequest().apply {
             intervalMillis = detectionIntervalMillis
             triggerUpdate = triggerUpdates
@@ -38,18 +47,27 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
     override fun getLocationAvailabilityWithPackage(packageName: String?): LocationAvailability {
         val reference = AtomicReference(LocationAvailability.UNAVAILABLE)
         val latch = CountDownLatch(1)
-        getLocationAvailabilityWithReceiver(LocationAvailabilityRequest(), LocationReceiver(object : ILocationAvailabilityStatusCallback.Stub() {
-            override fun onLocationAvailabilityStatus(status: Status, location: LocationAvailability) {
-                if (status.isSuccess) {
-                    reference.set(location)
+        getLocationAvailabilityWithReceiver(
+            LocationAvailabilityRequest(),
+            LocationReceiver(object : ILocationAvailabilityStatusCallback.Stub() {
+                override fun onLocationAvailabilityStatus(
+                    status: Status,
+                    location: LocationAvailability
+                ) {
+                    if (status.isSuccess) {
+                        reference.set(location)
+                    }
+                    latch.countDown()
                 }
-                latch.countDown()
-            }
-        }))
+            })
+        )
         return reference.get()
     }
 
-    override fun getCurrentLocation(request: CurrentLocationRequest, callback: ILocationStatusCallback): ICancelToken {
+    override fun getCurrentLocation(
+        request: CurrentLocationRequest,
+        callback: ILocationStatusCallback
+    ): ICancelToken {
         return getCurrentLocationWithReceiver(request, LocationReceiver(callback))
     }
 
@@ -58,22 +76,29 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
     override fun getLastLocation(): Location? {
         val reference = AtomicReference<Location>()
         val latch = CountDownLatch(1)
-        val request = LastLocationRequest.Builder().setMaxUpdateAgeMillis(Long.MAX_VALUE).setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL).build()
-        getLastLocationWithReceiver(request, LocationReceiver(object : ILocationStatusCallback.Stub() {
-            override fun onLocationStatus(status: Status, location: Location?) {
-                if (status.isSuccess) {
-                    reference.set(location)
+        val request = LastLocationRequest.Builder().setMaxUpdateAgeMillis(Long.MAX_VALUE)
+            .setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL).build()
+        getLastLocationWithReceiver(
+            request,
+            LocationReceiver(object : ILocationStatusCallback.Stub() {
+                override fun onLocationStatus(status: Status, location: Location?) {
+                    if (status.isSuccess) {
+                        reference.set(location)
+                    }
+                    latch.countDown()
                 }
-                latch.countDown()
-            }
-        }))
+            })
+        )
         if (latch.await(30, TimeUnit.SECONDS)) {
             return reference.get()
         }
         return null
     }
 
-    override fun getLastLocationWithRequest(request: LastLocationRequest, callback: ILocationStatusCallback) {
+    override fun getLastLocationWithRequest(
+        request: LastLocationRequest,
+        callback: ILocationStatusCallback
+    ) {
         getLastLocationWithReceiver(request, LocationReceiver(callback))
     }
 
@@ -121,11 +146,23 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
         statusCallback: IStatusCallback
     )
 
-    abstract fun registerLocationUpdates(pendingIntent: PendingIntent, request: LocationRequest, statusCallback: IStatusCallback)
-    abstract fun unregisterLocationUpdates(binder: IBinder, statusCallback: IStatusCallback)
-    abstract fun unregisterLocationUpdates(pendingIntent: PendingIntent, statusCallback: IStatusCallback)
+    abstract fun registerLocationUpdates(
+        pendingIntent: PendingIntent,
+        request: LocationRequest,
+        statusCallback: IStatusCallback
+    )
 
-    override fun requestLocationUpdatesWithCallback(receiver: LocationReceiver, request: LocationRequest, callback: IStatusCallback) {
+    abstract fun unregisterLocationUpdates(binder: IBinder, statusCallback: IStatusCallback)
+    abstract fun unregisterLocationUpdates(
+        pendingIntent: PendingIntent,
+        statusCallback: IStatusCallback
+    )
+
+    override fun requestLocationUpdatesWithCallback(
+        receiver: LocationReceiver,
+        request: LocationRequest,
+        callback: IStatusCallback
+    ) {
         when (receiver.type) {
             LocationReceiver.TYPE_LISTENER -> registerLocationUpdates(
                 receiver.oldBinderReceiver,
@@ -143,16 +180,36 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
                 callback
             )
 
-            LocationReceiver.TYPE_PENDING_INTENT -> registerLocationUpdates(receiver.pendingIntentReceiver!!, request, callback)
+            LocationReceiver.TYPE_PENDING_INTENT -> registerLocationUpdates(
+                receiver.pendingIntentReceiver!!,
+                request,
+                callback
+            )
+
             else -> throw IllegalArgumentException("unknown location receiver type");
         }
     }
 
-    override fun removeLocationUpdatesWithCallback(receiver: LocationReceiver, callback: IStatusCallback) {
+    override fun removeLocationUpdatesWithCallback(
+        receiver: LocationReceiver,
+        callback: IStatusCallback
+    ) {
         when (receiver.type) {
-            LocationReceiver.TYPE_LISTENER -> unregisterLocationUpdates(receiver.binderReceiver!!, callback)
-            LocationReceiver.TYPE_CALLBACK -> unregisterLocationUpdates(receiver.binderReceiver!!, callback)
-            LocationReceiver.TYPE_PENDING_INTENT -> unregisterLocationUpdates(receiver.pendingIntentReceiver!!, callback)
+            LocationReceiver.TYPE_LISTENER -> unregisterLocationUpdates(
+                receiver.binderReceiver!!,
+                callback
+            )
+
+            LocationReceiver.TYPE_CALLBACK -> unregisterLocationUpdates(
+                receiver.binderReceiver!!,
+                callback
+            )
+
+            LocationReceiver.TYPE_PENDING_INTENT -> unregisterLocationUpdates(
+                receiver.pendingIntentReceiver!!,
+                callback
+            )
+
             else -> throw IllegalArgumentException("unknown location receiver type");
         }
     }
@@ -160,7 +217,9 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
     override fun updateLocationRequest(data: LocationRequestUpdateData) {
         val statusCallback = object : IStatusCallback.Stub() {
             override fun onResult(status: Status) {
-                data.fusedLocationProviderCallback?.onFusedLocationProviderResult(FusedLocationProviderResult.create(status))
+                data.fusedLocationProviderCallback?.onFusedLocationProviderResult(
+                    FusedLocationProviderResult.create(status)
+                )
             }
         }
         when (data.opCode) {
@@ -169,7 +228,8 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
                     data.listener != null -> registerLocationUpdates(
                         null,
                         data.listener.asBinder(),
-                        data.listener.asCallback().redirectCancel(data.fusedLocationProviderCallback),
+                        data.listener.asCallback()
+                            .redirectCancel(data.fusedLocationProviderCallback),
                         data.request.request,
                         statusCallback
                     )
@@ -182,42 +242,98 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
                         statusCallback
                     )
 
-                    data.pendingIntent != null -> registerLocationUpdates(data.pendingIntent, data.request.request, statusCallback)
+                    data.pendingIntent != null -> registerLocationUpdates(
+                        data.pendingIntent,
+                        data.request.request,
+                        statusCallback
+                    )
                 }
             }
 
             LocationRequestUpdateData.REMOVE_UPDATES -> {
                 when {
-                    data.listener != null -> unregisterLocationUpdates(data.listener.asBinder(), statusCallback)
-                    data.callback != null -> unregisterLocationUpdates(data.callback.asBinder(), statusCallback)
-                    data.pendingIntent != null -> unregisterLocationUpdates(data.pendingIntent, statusCallback)
+                    data.listener != null -> unregisterLocationUpdates(
+                        data.listener.asBinder(),
+                        statusCallback
+                    )
+
+                    data.callback != null -> unregisterLocationUpdates(
+                        data.callback.asBinder(),
+                        statusCallback
+                    )
+
+                    data.pendingIntent != null -> unregisterLocationUpdates(
+                        data.pendingIntent,
+                        statusCallback
+                    )
                 }
             }
 
             else -> {
-                statusCallback.onResult(Status(CommonStatusCodes.ERROR, "invalid location request update operation: " + data.opCode))
+                statusCallback.onResult(
+                    Status(
+                        CommonStatusCodes.ERROR,
+                        "invalid location request update operation: " + data.opCode
+                    )
+                )
             }
         }
     }
 
-    override fun requestLocationUpdatesWithListener(request: LocationRequest, listener: ILocationListener) {
-        requestLocationUpdatesWithCallback(LocationReceiver(listener), request, EmptyStatusCallback())
+    override fun requestLocationUpdatesWithListener(
+        request: LocationRequest,
+        listener: ILocationListener
+    ) {
+        requestLocationUpdatesWithCallback(
+            LocationReceiver(listener),
+            request,
+            EmptyStatusCallback()
+        )
     }
 
-    override fun requestLocationUpdatesWithPackage(request: LocationRequest, listener: ILocationListener, packageName: String?) {
-        requestLocationUpdatesWithCallback(LocationReceiver(listener), request, EmptyStatusCallback())
+    override fun requestLocationUpdatesWithPackage(
+        request: LocationRequest,
+        listener: ILocationListener,
+        packageName: String?
+    ) {
+        requestLocationUpdatesWithCallback(
+            LocationReceiver(listener),
+            request,
+            EmptyStatusCallback()
+        )
     }
 
-    override fun requestLocationUpdatesWithIntent(request: LocationRequest, callbackIntent: PendingIntent) {
-        requestLocationUpdatesWithCallback(LocationReceiver(callbackIntent), request, EmptyStatusCallback())
+    override fun requestLocationUpdatesWithIntent(
+        request: LocationRequest,
+        callbackIntent: PendingIntent
+    ) {
+        requestLocationUpdatesWithCallback(
+            LocationReceiver(callbackIntent),
+            request,
+            EmptyStatusCallback()
+        )
     }
 
-    override fun requestLocationUpdatesInternalWithListener(request: LocationRequestInternal, listener: ILocationListener) {
-        requestLocationUpdatesWithCallback(LocationReceiver(listener), request.request, EmptyStatusCallback())
+    override fun requestLocationUpdatesInternalWithListener(
+        request: LocationRequestInternal,
+        listener: ILocationListener
+    ) {
+        requestLocationUpdatesWithCallback(
+            LocationReceiver(listener),
+            request.request,
+            EmptyStatusCallback()
+        )
     }
 
-    override fun requestLocationUpdatesInternalWithIntent(request: LocationRequestInternal, callbackIntent: PendingIntent) {
-        requestLocationUpdatesWithCallback(LocationReceiver(callbackIntent), request.request, EmptyStatusCallback())
+    override fun requestLocationUpdatesInternalWithIntent(
+        request: LocationRequestInternal,
+        callbackIntent: PendingIntent
+    ) {
+        requestLocationUpdatesWithCallback(
+            LocationReceiver(callbackIntent),
+            request.request,
+            EmptyStatusCallback()
+        )
     }
 
     override fun removeLocationUpdatesWithListener(listener: ILocationListener) {

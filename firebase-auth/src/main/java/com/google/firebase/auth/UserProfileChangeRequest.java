@@ -53,6 +53,7 @@ public class UserProfileChangeRequest extends AutoSafeParcelable {
 
         /**
          * Sets the updated display name.
+         *
          * @return the {@link UserProfileChangeRequest.Builder} for chaining
          */
         public Builder setDisplayName(String displayName) {
@@ -63,6 +64,7 @@ public class UserProfileChangeRequest extends AutoSafeParcelable {
 
         /**
          * Sets the updated photo {@link Uri}.
+         *
          * @return the {@link UserProfileChangeRequest.Builder} for chaining
          */
         public Builder setPhotoUri(Uri photoUri) {

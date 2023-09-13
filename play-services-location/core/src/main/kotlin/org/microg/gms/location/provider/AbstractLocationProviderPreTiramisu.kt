@@ -22,7 +22,11 @@ abstract class AbstractLocationProviderPreTiramisu : LocationProviderBase, Gener
     constructor(properties: ProviderPropertiesUnbundled) : super(TAG, properties)
 
     @RequiresApi(31)
-    constructor(context: Context, properties: ProviderPropertiesUnbundled) : super(context, TAG, properties)
+    constructor(context: Context, properties: ProviderPropertiesUnbundled) : super(
+        context,
+        TAG,
+        properties
+    )
 
     private var statusUpdateTime = SystemClock.elapsedRealtime()
 

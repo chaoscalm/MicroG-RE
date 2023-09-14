@@ -74,7 +74,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="54dip"
-            android:layout_marginBottom="18.0dip">
+            android:layout_marginBottom="18dip">
 
             <Button
                 android:id="@+id/back_button"

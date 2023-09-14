@@ -20,8 +20,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingTop="12dip"
-    android:paddingBottom="36dip">
+    android:paddingTop="16dip"
+    android:paddingBottom="32dip">
 
     <ImageView
         android:id="@android:id/icon"
@@ -56,7 +56,19 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dip"
         android:text="@string/about_root_version"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="?android:textColorSecondary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dip"
+        android:singleLine="true"
+        android:text="gms 23.38.15"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="?android:textColorTertiary" />
 
     <TextView
         android:id="@android:id/title"
@@ -64,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dip"
         android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingTop="20dp"
+        android:paddingTop="32dp"
         android:paddingRight="?attr/listPreferredItemPaddingRight"
         android:text="@string/about_root_libraries"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"

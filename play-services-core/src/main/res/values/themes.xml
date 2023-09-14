@@ -23,10 +23,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <item name="actionBarStyle">@style/ActionBarTheme</item>
         <item name="android:colorBackground">@color/theme_background_light</item>
-        <item name="android:actionBarSize">48.0dip</item>
+        <item name="android:actionBarSize">48dip</item>
         <item name="android:colorAccent">@color/theme_accent_light</item>
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:forceDarkAllowed">false</item>

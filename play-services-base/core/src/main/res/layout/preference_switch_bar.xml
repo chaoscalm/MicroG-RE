@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="64.0dip"
+    android:layout_height="64dip"
     android:background="?colorAccent"
     android:gravity="center"
     android:orientation="horizontal"
@@ -18,7 +18,6 @@
 
     <TextView
         android:id="@android:id/title"
-        tools:text="Enabled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -29,15 +28,16 @@
         android:paddingLeft="56dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:text="Enabled" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_widget"
-        tools:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@null"
         app:thumbTint="?android:attr/textColorPrimaryInverse"
-        app:trackTint="?android:attr/textColorTertiaryInverse" />
+        app:trackTint="?android:attr/textColorTertiaryInverse"
+        tools:checked="true" />
 </LinearLayout>

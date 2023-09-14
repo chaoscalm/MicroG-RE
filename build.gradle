@@ -40,21 +40,17 @@ buildscript {
     ext.androidTargetSdk = 33
     ext.androidCompileSdk = 33
 
-    ext.includeProjects = [
-            ':play-services-base-core',
-            ':play-services-cast-core',
-            ':play-services-cast-framework-core',
-            ':play-services-conscrypt-provider-core',
-            ':play-services-core-proto', // deprecated
-            ':play-services-core:microg-ui-tools',
-            ':play-services-api',
+    ext.includeProjects = [':play-services-base-core',
+                           ':play-services-cast-core',
+                           ':play-services-cast-framework-core',
+                           ':play-services-conscrypt-provider-core',
+                           ':play-services-core-proto', // deprecated
+                           ':play-services-core:microg-ui-tools',
+                           ':play-services-api',
 //            ':play-services-tasks-ktx',
-            ':play-services-auth'
-    ]
+                           ':play-services-auth']
 
-    ext.excludes = [
-            '**/AppMeasurementDynamiteService.kt'
-    ]
+    ext.excludes = ['**/AppMeasurementDynamiteService.kt']
     ext.localProperties = new Properties()
 
     try {
@@ -78,7 +74,6 @@ buildscript {
 
 allprojects {
     apply plugin: 'idea'
-
     group = 'org.microg.gms'
     ext.appVersionCode = 233415000
     ext.baseVersion = ext.appVersionCode.toString()[0..1] + '.' + ext.appVersionCode.toString()[2..3] + '.' + ext.appVersionCode.toString()[4..5]

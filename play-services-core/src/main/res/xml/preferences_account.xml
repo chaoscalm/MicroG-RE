@@ -16,20 +16,33 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/account_manager_title">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="auth_manager_trust_google"
-            android:summary="@string/pref_auth_trust_google_summary"
-            android:title="@string/pref_auth_trust_google_title" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="auth_manager_visible"
-            android:summary="@string/pref_auth_visible_summary"
-            android:title="@string/pref_auth_visible_title" />
-    </PreferenceCategory>
-
     <Preference
-        android:selectable="false"
-        android:summary="Google account settings not yet implemented." />
+        android:icon="@drawable/ic_manage_google"
+        android:summary="@string/manage_google_account_summary"
+        android:title="@string/manage_google_account">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://myaccount.google.com" />
+    </Preference>
+    <Preference
+        android:icon="@drawable/ic_manage_youtube"
+        android:summary="@string/manage_yt_activities_summary"
+        android:title="@string/manage_yt_activities">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://myactivity.google.com/product/youtube" />
+    </Preference>
+    <SwitchPreference
+        android:layout_height="wrap_content"
+        android:defaultValue="true"
+        android:icon="@drawable/ic_google_permissions"
+        android:key="auth_manager_trust_google"
+        android:summary="@string/pref_auth_trust_google_summary"
+        android:title="@string/pref_auth_trust_google_title" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_find_account"
+        android:key="auth_manager_visible"
+        android:summary="@string/pref_auth_visible_summary"
+        android:title="@string/pref_auth_visible_title" />
 </PreferenceScreen>

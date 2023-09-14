@@ -43,6 +43,13 @@
             android:icon="@drawable/ic_cloud_bell"
             android:key="pref_gcm"
             android:title="@string/service_name_mcs" />
+        <Preference
+            android:icon="@drawable/ic_manage_accounts"
+            android:title="@string/account_manager_title">
+            <intent
+                android:targetClass="org.microg.gms.ui.AccountSettingsActivity"
+                android:targetPackage="com.mgoogle.android.gms" />
+        </Preference>
         <!--        <Preference-->
         <!--            android:icon="@drawable/ic_certificate"-->
         <!--            android:key="pref_snet"-->
@@ -69,6 +76,14 @@
     <!--            app:isPreferenceVisible="false" />-->
     <!--    </PreferenceCategory>-->
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:icon="@drawable/ic_developer"
+            android:summary="@string/developer"
+            android:title="@string/wstxda">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/developer_link" />
+        </Preference>
         <Preference
             android:icon="@drawable/ic_info_outline"
             android:key="pref_about"

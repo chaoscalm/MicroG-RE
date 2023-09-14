@@ -11,7 +11,11 @@ import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.measurement.internal.*
+import com.google.android.gms.measurement.internal.AppMetadata
+import com.google.android.gms.measurement.internal.ConditionalUserPropertyParcel
+import com.google.android.gms.measurement.internal.EventParcel
+import com.google.android.gms.measurement.internal.IMeasurementService
+import com.google.android.gms.measurement.internal.UserAttributeParcel
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.utils.warnOnTransactionIssues

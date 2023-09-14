@@ -39,8 +39,6 @@ import java.util.Locale;
 
 public abstract class AbstractAboutFragment extends Fragment {
 
-    protected abstract void collectLibraries(List<Library> libraries);
-
     public static Drawable getIcon(Context context) {
         try {
             PackageManager pm = context.getPackageManager();
@@ -63,10 +61,6 @@ public abstract class AbstractAboutFragment extends Fragment {
         }
     }
 
-    protected String getAppName() {
-        return getAppName(getContext());
-    }
-
     public static String getLibVersion(String packageName) {
         try {
             String versionName = (String) Class.forName(packageName + ".BuildConfig").getField("VERSION_NAME").get(null);
@@ -79,6 +73,12 @@ public abstract class AbstractAboutFragment extends Fragment {
 
     public static String getSelfVersion(Context context) {
         return getLibVersion(BuildConfig.GMS_APPLICATION_NAMESPACE);
+    }
+
+    protected abstract void collectLibraries(List<Library> libraries);
+
+    protected String getAppName() {
+        return getAppName(getContext());
     }
 
     protected String getSelfVersion() {
@@ -110,21 +110,6 @@ public abstract class AbstractAboutFragment extends Fragment {
         return aboutRoot;
     }
 
-    private class LibraryAdapter extends ArrayAdapter<Library> {
-
-        public LibraryAdapter(Context context, Library[] libraries) {
-            super(context, android.R.layout.simple_list_item_2, android.R.id.text1, libraries);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = super.getView(position, convertView, parent);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, getItem(position).name, getLibVersion(getItem(position).packageName)));
-            ((TextView) v.findViewById(android.R.id.text2)).setText(getItem(position).copyright != null ? getItem(position).copyright : getString(R.string.about_default_license));
-            return v;
-        }
-    }
-
     protected static class Library implements Comparable<Library> {
         private final String packageName;
         private final String name;
@@ -144,6 +129,21 @@ public abstract class AbstractAboutFragment extends Fragment {
         @Override
         public int compareTo(Library another) {
             return name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
+        }
+    }
+
+    private class LibraryAdapter extends ArrayAdapter<Library> {
+
+        public LibraryAdapter(Context context, Library[] libraries) {
+            super(context, android.R.layout.simple_list_item_2, android.R.id.text1, libraries);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, getItem(position).name, getLibVersion(getItem(position).packageName)));
+            ((TextView) v.findViewById(android.R.id.text2)).setText(getItem(position).copyright != null ? getItem(position).copyright : getString(R.string.about_default_license));
+            return v;
         }
     }
 }

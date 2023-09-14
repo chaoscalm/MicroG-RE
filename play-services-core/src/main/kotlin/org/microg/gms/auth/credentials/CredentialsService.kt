@@ -9,7 +9,11 @@ import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.auth.api.credentials.CredentialRequest
-import com.google.android.gms.auth.api.credentials.internal.*
+import com.google.android.gms.auth.api.credentials.internal.DeleteRequest
+import com.google.android.gms.auth.api.credentials.internal.GeneratePasswordRequest
+import com.google.android.gms.auth.api.credentials.internal.ICredentialsCallbacks
+import com.google.android.gms.auth.api.credentials.internal.ICredentialsService
+import com.google.android.gms.auth.api.credentials.internal.SaveRequest
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest

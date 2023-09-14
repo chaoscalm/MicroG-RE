@@ -16,6 +16,12 @@
 
 package org.microg.tools.ui;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,12 +38,6 @@ import org.microg.tools.selfcheck.SelfCheckGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 public abstract class AbstractSelfCheckFragment extends Fragment {
     private static final String TAG = "SelfCheck";

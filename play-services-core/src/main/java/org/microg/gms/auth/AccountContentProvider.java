@@ -17,6 +17,11 @@
 package org.microg.gms.auth;
 
 import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
+import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_ACCOUNTS;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_CLEAR_PASSWORD;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_CLEAR_PASSWORD;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_GET_ACCOUNTS;
 
 import android.Manifest;
 import android.accounts.Account;
@@ -36,12 +41,6 @@ import androidx.annotation.Nullable;
 import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
-
-import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
-import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_ACCOUNTS;
-import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_CLEAR_PASSWORD;
-import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_CLEAR_PASSWORD;
-import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_GET_ACCOUNTS;
 
 public class AccountContentProvider extends ContentProvider {
     private static final String TAG = "GmsAuthProvider";

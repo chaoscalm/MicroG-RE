@@ -16,6 +16,10 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,19 +33,9 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.microg.gms.common.HttpFormClient.RequestContent;
-import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
-import static org.microg.gms.common.HttpFormClient.RequestHeader;
-
 public class RegisterRequest extends HttpFormClient.Request {
     private static final String SERVICE_URL = "https://android.clients.google.com/c2dm/register3";
     private static final String USER_AGENT = "Android-GCM/1.5 (%s %s)";
-
-    @RequestHeader("Authorization")
-    private String auth;
-    @RequestHeader("User-Agent")
-    private String userAgent;
-
     @RequestHeader("app")
     @RequestContent("app")
     public String app;
@@ -62,8 +56,16 @@ public class RegisterRequest extends HttpFormClient.Request {
     public String buildVersion;
     @RequestContent("target_ver")
     public Integer sdkVersion;
+    @RequestHeader("Authorization")
+    private String auth;
+    @RequestHeader("User-Agent")
+    private String userAgent;
     @RequestContentDynamic
     private Map<String, String> extraParams = new LinkedHashMap<>();
+
+    private static String extraParamKey(String key) {
+        return "X-" + key;
+    }
 
     @Override
     public void prepare() {
@@ -140,10 +142,6 @@ public class RegisterRequest extends HttpFormClient.Request {
 
     public boolean hasExtraParam(String key) {
         return extraParams.containsKey(extraParamKey(key));
-    }
-
-    private static String extraParamKey(String key) {
-        return "X-" + key;
     }
 
     public RegisterResponse getResponse() throws IOException {

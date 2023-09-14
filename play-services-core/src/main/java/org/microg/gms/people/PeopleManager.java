@@ -17,7 +17,6 @@
 package org.microg.gms.people;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -25,10 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthManager;
-import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.Utils;
@@ -40,10 +37,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class PeopleManager {
-    private static final String TAG = "GmsPeopleManager";
     public static final String USERINFO_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
     public static final String USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     public static final String REGEX_SEARCH_USER_PHOTO = "https?\\:\\/\\/lh([0-9]*)\\.googleusercontent\\.com/";
+    private static final String TAG = "GmsPeopleManager";
 
     public static File getOwnerAvatarFile(Context context, String accountName, boolean network) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);

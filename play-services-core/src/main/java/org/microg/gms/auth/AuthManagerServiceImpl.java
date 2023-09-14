@@ -16,10 +16,18 @@
 
 package org.microg.gms.auth;
 
+import static android.accounts.AccountManager.KEY_ACCOUNTS;
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
+import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
+import static android.accounts.AccountManager.get;
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -52,13 +60,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.accounts.AccountManager.*;
-import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
-
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
-    private static final String TAG = "GmsAuthManagerSvc";
-
     public static final String KEY_ACCOUNT_FEATURES = "account_features";
     public static final String KEY_AUTHORITY = "authority";
     public static final String KEY_CALLBACK_INTENT = "callback_intent";
@@ -70,14 +72,21 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_REQUEST_VISIBLE_ACTIVITIES = "request_visible_actions";
     public static final String KEY_SUPPRESS_PROGRESS_SCREEN = "suppressProgressScreen";
     public static final String KEY_SYNC_EXTRAS = "sync_extras";
-
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
-
+    private static final String TAG = "GmsAuthManagerSvc";
     private final Context context;
 
     public AuthManagerServiceImpl(Context context) {
         this.context = context;
+    }
+
+    private static CharSequence getPackageLabel(String packageName, PackageManager pm) {
+        try {
+            return pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0));
+        } catch (PackageManager.NameNotFoundException e) {
+            return packageName;
+        }
     }
 
     @Override
@@ -93,14 +102,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             res.add(new Scope(string));
         }
         return res;
-    }
-
-    private static CharSequence getPackageLabel(String packageName, PackageManager pm) {
-        try {
-            return pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0));
-        } catch (PackageManager.NameNotFoundException e) {
-            return packageName;
-        }
     }
 
     @Override

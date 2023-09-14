@@ -22,9 +22,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.Set;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
+    public static final String OWNERS_TABLE = "owners";
+    public static final String CIRCLES_TABLE = "circles";
     private static final int DB_VERSION = 5;
     private static final String DB_NAME = "pluscontacts.db";
     private static final String CREATE_OWNERS = "CREATE TABLE owners (" +
@@ -72,8 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ALTER_OWNERS_4_1 = "ALTER TABLE owners ADD COLUMN given_name TEXT;";
     private static final String ALTER_OWNERS_4_2 = "ALTER TABLE owners ADD COLUMN family_name TEXT;";
     private static final String ALTER_OWNERS_5_1 = "ALTER TABLE owners ADD COLUMN contacts_backup_and_sync INTEGER NOT NULL DEFAULT 0;";
-    public static final String OWNERS_TABLE = "owners";
-    public static final String CIRCLES_TABLE = "circles";
 
 
     public DatabaseHelper(Context context) {

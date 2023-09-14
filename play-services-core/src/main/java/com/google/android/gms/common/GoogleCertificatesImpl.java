@@ -19,10 +19,9 @@ package com.google.android.gms.common;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import androidx.annotation.Keep;
-
-import android.util.Log;
 
 import com.google.android.gms.common.internal.CertData;
 import com.google.android.gms.common.internal.GoogleCertificatesQuery;

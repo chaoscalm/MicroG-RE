@@ -16,6 +16,12 @@
 
 package org.microg.tools.selfcheck;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 
@@ -26,12 +32,6 @@ import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 public class RomSpoofSignatureChecks implements SelfCheckGroup {
 

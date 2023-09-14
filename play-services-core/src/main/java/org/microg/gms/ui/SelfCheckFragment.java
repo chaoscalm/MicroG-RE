@@ -18,42 +18,22 @@ package org.microg.gms.ui;
 
 //import android.content.Context;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Intent;
-//import android.content.pm.PackageManager;
-//import android.content.pm.PermissionGroupInfo;
-//import android.content.pm.PermissionInfo;
-//import android.net.Uri;
 import android.os.Build;
-//import android.provider.Settings;
-//import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
-//import org.microg.tools.selfcheck.NlpOsCompatChecks;
-//import org.microg.tools.selfcheck.NlpStatusChecks;
-//import org.microg.tools.selfcheck.PermissionCheckGroup;
-//import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
 import org.microg.tools.selfcheck.SelfCheckGroup;
 import org.microg.tools.selfcheck.SystemChecks;
 import org.microg.tools.ui.AbstractSelfCheckFragment;
 import org.microg.tools.ui.AbstractSettingsActivity;
 
-import java.util.ArrayList;
 import java.util.List;
-
-//import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
-//import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-//import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-//import static android.Manifest.permission.GET_ACCOUNTS;
-//import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-//import static android.Manifest.permission.READ_PHONE_STATE;
-//import static android.Manifest.permission.READ_SMS;
-//import static android.Manifest.permission.RECEIVE_SMS;
-//import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.os.Build.VERSION.SDK_INT;
 //import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
 
 public class SelfCheckFragment extends AbstractSelfCheckFragment {

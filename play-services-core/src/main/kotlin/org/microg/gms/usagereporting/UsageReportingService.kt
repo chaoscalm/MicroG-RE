@@ -5,7 +5,6 @@
 
 package org.microg.gms.usagereporting
 
-import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.Feature

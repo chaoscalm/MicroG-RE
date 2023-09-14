@@ -25,6 +25,10 @@ public interface SelfCheckGroup {
 
     void doChecks(Context context, ResultCollector collector);
 
+    enum Result {
+        Positive, Negative, Unknown
+    }
+
     interface ResultCollector {
         void addResult(String name, Result value, String resolution);
 
@@ -33,9 +37,5 @@ public interface SelfCheckGroup {
 
     interface CheckResolver {
         void tryResolve(Fragment fragment);
-    }
-
-    enum Result {
-        Positive, Negative, Unknown
     }
 }

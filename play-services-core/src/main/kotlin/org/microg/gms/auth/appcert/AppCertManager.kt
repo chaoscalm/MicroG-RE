@@ -5,9 +5,9 @@
 
 package org.microg.gms.auth.appcert
 
+//import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import android.content.Context
 import android.database.Cursor
-import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import com.android.volley.NetworkResponse
@@ -23,7 +23,6 @@ import okio.ByteString.Companion.of
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.PackageUtils
-//import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.gcm.GcmConstants
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.RegisterRequest

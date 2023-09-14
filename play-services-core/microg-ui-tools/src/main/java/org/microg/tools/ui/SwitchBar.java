@@ -17,6 +17,8 @@
 
 package org.microg.tools.ui;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
@@ -31,34 +33,18 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedChangeListener,
         View.OnClickListener {
 
-    public static interface OnSwitchChangeListener {
-        /**
-         * Called when the checked state of the Switch has changed.
-         *
-         * @param switchView The Switch view whose state has changed.
-         * @param isChecked  The new checked state of switchView.
-         */
-        void onSwitchChanged(SwitchMaterial switchView, boolean isChecked);
-    }
-
     private final TextAppearanceSpan mSummarySpan;
-
     private ToggleSwitch mSwitch;
     private TextView mTextView;
     private String mLabel;
     private String mSummary;
-
     private ArrayList<OnSwitchChangeListener> mSwitchChangeListeners =
             new ArrayList<OnSwitchChangeListener>();
 
@@ -123,11 +109,6 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
         mTextView.setText(ssb);
     }
 
-    public void setChecked(boolean checked) {
-        setTextViewLabel(checked);
-        mSwitch.setChecked(checked);
-    }
-
     public void setCheckedInternal(boolean checked) {
         setTextViewLabel(checked);
         mSwitch.setCheckedInternal(checked);
@@ -135,6 +116,11 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
     public boolean isChecked() {
         return mSwitch.isChecked();
+    }
+
+    public void setChecked(boolean checked) {
+        setTextViewLabel(checked);
+        mSwitch.setChecked(checked);
     }
 
     public void setEnabled(boolean enabled) {
@@ -197,7 +183,51 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
         mSwitchChangeListeners.remove(listener);
     }
 
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+
+        SavedState ss = new SavedState(superState);
+        ss.checked = mSwitch.isChecked();
+        ss.visible = isShowing();
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        mSwitch.setCheckedInternal(ss.checked);
+        setTextViewLabel(ss.checked);
+        setVisibility(ss.visible ? View.VISIBLE : View.GONE);
+        mSwitch.setOnCheckedChangeListener(ss.visible ? this : null);
+
+        requestLayout();
+    }
+
+    public static interface OnSwitchChangeListener {
+        /**
+         * Called when the checked state of the Switch has changed.
+         *
+         * @param switchView The Switch view whose state has changed.
+         * @param isChecked  The new checked state of switchView.
+         */
+        void onSwitchChanged(SwitchMaterial switchView, boolean isChecked);
+    }
+
     static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         boolean checked;
         boolean visible;
 
@@ -228,40 +258,5 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
                     + " checked=" + checked
                     + " visible=" + visible + "}";
         }
-
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
-    }
-
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-
-        SavedState ss = new SavedState(superState);
-        ss.checked = mSwitch.isChecked();
-        ss.visible = isShowing();
-        return ss;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-
-        super.onRestoreInstanceState(ss.getSuperState());
-
-        mSwitch.setCheckedInternal(ss.checked);
-        setTextViewLabel(ss.checked);
-        setVisibility(ss.visible ? View.VISIBLE : View.GONE);
-        mSwitch.setOnCheckedChangeListener(ss.visible ? this : null);
-
-        requestLayout();
     }
 }

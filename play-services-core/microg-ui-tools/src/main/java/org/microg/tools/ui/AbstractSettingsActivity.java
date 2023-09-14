@@ -11,9 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 public abstract class AbstractSettingsActivity extends AppCompatActivity {
     protected boolean showHomeAsUp = false;
     protected int preferencesResource = 0;
-    private ViewGroup customBarContainer;
     protected int customBarLayout = 0;
     protected SwitchBar switchBar;
+    private ViewGroup customBarContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

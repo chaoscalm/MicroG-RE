@@ -15,34 +15,34 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:padding="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
 
     <ImageView
-        android:src="@drawable/proprietary_auth_ic_scope_icon_default"
         android:id="@android:id/icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/proprietary_auth_ic_scope_icon_default" />
 
     <LinearLayout
-        android:padding="6dp"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
 
         <TextView
-            android:textSize="16sp"
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
 
         <TextView
-            android:textSize="12sp"
-            android:visibility="gone"
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

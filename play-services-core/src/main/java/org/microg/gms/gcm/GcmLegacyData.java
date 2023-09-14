@@ -25,12 +25,10 @@ import java.util.Set;
 
 @Deprecated
 public class GcmLegacyData {
-    private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
-    private static final String GCM_MESSAGES_PREF = "gcm_messages";
-
     static final String REMOVED = "%%REMOVED%%";
     static final String ERROR = "%%ERROR%%";
-
+    private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
+    private static final String GCM_MESSAGES_PREF = "gcm_messages";
     private Context context;
 
     public GcmLegacyData(Context context) {
@@ -38,14 +36,41 @@ public class GcmLegacyData {
     }
 
     @Deprecated
-    public static class LegacyAppInfo implements Comparable<LegacyAppInfo> {
-        public String app = null;
-        public String appSignature = null;
-        public String registerID = null;
+    public int getAppMessageCount(String app) {
+        return getStatsSharedPreferences().getInt(app, 0);
+    }
 
+    @Deprecated
+    public List<LegacyAppInfo> getAppsInfo() {
+        ArrayList<LegacyAppInfo> ret = new ArrayList<>();
+        Set<String> keys = getInfoSharedPreferences().getAll().keySet();
+        for (String key : keys) {
+            ret.add(getAppInfo(key));
+        }
+        return ret;
+    }
+
+    @Deprecated
+    private LegacyAppInfo getAppInfo(String key) {
+        return new LegacyAppInfo(key, getInfoSharedPreferences().getString(key, ""));
+    }
+
+    private SharedPreferences getInfoSharedPreferences() {
+        return context.getSharedPreferences(GCM_REGISTRATION_PREF, Context.MODE_PRIVATE);
+    }
+
+    private SharedPreferences getStatsSharedPreferences() {
+        return context.getSharedPreferences(GCM_MESSAGES_PREF, Context.MODE_PRIVATE);
+    }
+
+    @Deprecated
+    public static class LegacyAppInfo implements Comparable<LegacyAppInfo> {
         private final int STATE_ERROR = 1;
         private final int STATE_REMOVED = 2;
         private final int STATE_REGISTERED = 3;
+        public String app = null;
+        public String appSignature = null;
+        public String registerID = null;
         private int state;
 
         public LegacyAppInfo(String key, String value) {
@@ -78,33 +103,5 @@ public class GcmLegacyData {
         public int compareTo(LegacyAppInfo another) {
             return app.compareTo(another.app);
         }
-    }
-
-    @Deprecated
-    public int getAppMessageCount(String app) {
-        return getStatsSharedPreferences().getInt(app, 0);
-    }
-
-    @Deprecated
-    public List<LegacyAppInfo> getAppsInfo() {
-        ArrayList<LegacyAppInfo> ret = new ArrayList<>();
-        Set<String> keys = getInfoSharedPreferences().getAll().keySet();
-        for (String key : keys) {
-            ret.add(getAppInfo(key));
-        }
-        return ret;
-    }
-
-    @Deprecated
-    private LegacyAppInfo getAppInfo(String key) {
-        return new LegacyAppInfo(key, getInfoSharedPreferences().getString(key, ""));
-    }
-
-    private SharedPreferences getInfoSharedPreferences() {
-        return context.getSharedPreferences(GCM_REGISTRATION_PREF, Context.MODE_PRIVATE);
-    }
-
-    private SharedPreferences getStatsSharedPreferences() {
-        return context.getSharedPreferences(GCM_MESSAGES_PREF, Context.MODE_PRIVATE);
     }
 }

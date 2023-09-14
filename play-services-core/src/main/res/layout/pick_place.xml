@@ -52,10 +52,10 @@
             android:layout_width="32dip"
             android:layout_height="72dp"
             android:layout_gravity="top"
-            android:layout_marginEnd="16dip"
-            android:layout_marginLeft="16dip"
-            android:layout_marginRight="16dip"
             android:layout_marginStart="16dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginEnd="16dip"
+            android:layout_marginRight="16dip"
             android:src="@drawable/ic_map_marker" />
 
         <FrameLayout

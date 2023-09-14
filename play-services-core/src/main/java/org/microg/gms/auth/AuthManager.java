@@ -16,6 +16,10 @@
 
 package org.microg.gms.auth;
 
+import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
+import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -23,24 +27,19 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
+import com.google.android.gms.common.BuildConfig;
+
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
 import java.io.IOException;
 
-import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
-import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
-
-import com.google.android.gms.common.BuildConfig;
-
 public class AuthManager {
 
-    private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = BuildConfig.BASE_PACKAGE_NAME + ".android.googleapps.permission.GOOGLE_AUTH.";
     public static final String PREF_AUTH_VISIBLE = SettingsContract.Auth.VISIBLE;
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
-
+    private static final String TAG = "GmsAuthManager";
     private final Context context;
     private final String accountName;
     private final String packageName;
@@ -93,14 +92,6 @@ public class AuthManager {
         return "perm." + buildTokenKey();
     }
 
-    public void setPermitted(boolean value) {
-        setUserData(buildPermKey(), value ? "1" : "0");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && value && packageName != null) {
-            // Make account persistently visible as we already granted access
-            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
-        }
-    }
-
     public boolean isPermitted() {
         if (!service.startsWith("oauth")) {
             if (context.getPackageManager().checkPermission(PERMISSION_TREE_BASE + service, packageName) == PackageManager.PERMISSION_GRANTED) {
@@ -111,8 +102,12 @@ public class AuthManager {
         return "1".equals(perm);
     }
 
-    public void setExpiry(long expiry) {
-        setUserData(buildExpireKey(), Long.toString(expiry));
+    public void setPermitted(boolean value) {
+        setUserData(buildPermKey(), value ? "1" : "0");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && value && packageName != null) {
+            // Make account persistently visible as we already granted access
+            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
+        }
     }
 
     public String getUserData(String key) {
@@ -144,6 +139,10 @@ public class AuthManager {
         return peekAuthToken();
     }
 
+    public void setAuthToken(String auth) {
+        setAuthToken(service, auth);
+    }
+
     public String buildExpireKey() {
         return "EXP." + buildTokenKey();
     }
@@ -154,8 +153,8 @@ public class AuthManager {
         return Long.parseLong(exp);
     }
 
-    public void setAuthToken(String auth) {
-        setAuthToken(service, auth);
+    public void setExpiry(long expiry) {
+        setUserData(buildExpireKey(), Long.toString(expiry));
     }
 
     public void setAuthToken(String service, String auth) {

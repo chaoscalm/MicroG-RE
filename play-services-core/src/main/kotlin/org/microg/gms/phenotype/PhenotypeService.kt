@@ -10,7 +10,11 @@ import android.util.Log
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.phenotype.*
+import com.google.android.gms.phenotype.Configurations
+import com.google.android.gms.phenotype.DogfoodsToken
+import com.google.android.gms.phenotype.ExperimentTokens
+import com.google.android.gms.phenotype.FlagOverrides
+import com.google.android.gms.phenotype.RegistrationInfo
 import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeService
 import org.microg.gms.BaseService

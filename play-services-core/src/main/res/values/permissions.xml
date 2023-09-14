@@ -31,7 +31,8 @@
     <string name="permission_service_cl_label">Google Calendar</string>
     <string name="permission_service_cl_description">Allows app to access Google Calendar through any associated Google account</string>
     <string name="permission_service_cp_label">Contacts</string>
-    <string name="permission_service_cp_description">Allows app to access Contacts through any associated Google account/string>
+    <string name="permission_service_cp_description">Allows app to access Contacts through any
+    associated Google account</string>
     <string name="permission_service_dodgeball_label">Dodgeball</string>
     <string name="permission_service_dodgeball_description">Allows app to access Dodgeball through any associated Google account</string>
     <string name="permission_service_finance_label">Google Finance</string>

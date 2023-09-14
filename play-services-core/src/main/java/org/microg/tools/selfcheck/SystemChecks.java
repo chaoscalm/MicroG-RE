@@ -16,6 +16,9 @@
 
 package org.microg.tools.selfcheck;
 
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +29,6 @@ import android.provider.Settings;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.R;
-
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
 @TargetApi(23)
 public class SystemChecks implements SelfCheckGroup, SelfCheckGroup.CheckResolver {

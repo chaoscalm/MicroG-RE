@@ -28,10 +28,6 @@ public class ToggleSwitch extends SwitchMaterial {
 
     private ToggleSwitch.OnBeforeCheckedChangeListener mOnBeforeListener;
 
-    public interface OnBeforeCheckedChangeListener {
-        boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
-    }
-
     public ToggleSwitch(Context context) {
         super(context);
     }
@@ -59,5 +55,9 @@ public class ToggleSwitch extends SwitchMaterial {
 
     public void setCheckedInternal(boolean checked) {
         super.setChecked(checked);
+    }
+
+    public interface OnBeforeCheckedChangeListener {
+        boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked);
     }
 }

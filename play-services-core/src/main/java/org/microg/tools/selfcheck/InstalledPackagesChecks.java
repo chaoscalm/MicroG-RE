@@ -16,6 +16,9 @@
 
 package org.microg.tools.selfcheck;
 
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,9 +31,6 @@ import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
-
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
-import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
 public class InstalledPackagesChecks implements SelfCheckGroup {
 

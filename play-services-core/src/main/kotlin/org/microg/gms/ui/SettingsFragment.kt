@@ -5,17 +5,14 @@
 
 package org.microg.gms.ui
 
-import android.content.Context
+//import org.microg.gms.safetynet.SafetyNetPreferences
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.gcm.getGcmServiceInfo
-//import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.tools.ui.ResourceSettingsFragment
 
 class SettingsFragment : ResourceSettingsFragment() {

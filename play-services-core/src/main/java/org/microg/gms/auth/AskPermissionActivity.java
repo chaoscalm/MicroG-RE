@@ -16,6 +16,15 @@
 
 package org.microg.gms.auth;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
+import static android.accounts.AccountManager.KEY_CALLER_UID;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -45,15 +54,6 @@ import org.microg.gms.people.PeopleManager;
 
 import java.io.IOException;
 
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_CALLER_PID;
-import static android.accounts.AccountManager.KEY_CALLER_UID;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 public class AskPermissionActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_FROM_ACCOUNT_MANAGER = "from_account_manager";
     public static final String EXTRA_CONSENT_DATA = "consent_data";
@@ -61,61 +61,6 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     private static final String TAG = "GmsAuthAskPermission";
     private AuthManager authManager;
     private IntentData data;
-
-    private static class IntentData {
-        private String accountName;
-        private String accountType;
-        private Account account;
-
-        private String packageName;
-        private String service;
-
-        private int callerUid;
-        private int callerPid;
-
-        private ConsentData consentData;
-        private boolean fromAccountManager = false;
-
-        private CharSequence appLabel;
-        private Drawable appIcon;
-
-        private IntentData(Intent intent) {
-            if (intent != null) {
-                accountName = intent.getStringExtra(KEY_ACCOUNT_NAME);
-                accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE);
-                packageName = intent.getStringExtra(KEY_ANDROID_PACKAGE_NAME);
-                service = intent.getStringExtra(KEY_AUTHTOKEN);
-                callerUid = intent.getIntExtra(KEY_CALLER_UID, 0);
-                callerPid = intent.getIntExtra(KEY_CALLER_PID, 0);
-                fromAccountManager = intent.hasExtra(EXTRA_FROM_ACCOUNT_MANAGER);
-                if (intent.hasExtra(EXTRA_CONSENT_DATA)) {
-                    try {
-                        consentData = ConsentData.ADAPTER.decode(intent.getByteArrayExtra(EXTRA_CONSENT_DATA));
-                    } catch (Exception e) {
-                        // Ignore
-                    }
-                }
-            }
-            if (accountName != null && accountType != null) {
-                account = new Account(accountName, accountType);
-            }
-        }
-
-        private void verify(Context context) throws Exception {
-            if (accountName == null || accountType == null || account == null)
-                throw new IllegalArgumentException("Required account information missing");
-            if (packageName == null || service == null)
-                throw new IllegalArgumentException("Required request information missing");
-            if (callerUid == 0)
-                throw new IllegalArgumentException("Required caller information missing");
-            PackageUtils.getAndCheckPackage(context, packageName, callerUid, callerPid);
-
-            PackageManager packageManager = context.getPackageManager();
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-            appLabel = packageManager.getApplicationLabel(applicationInfo);
-            appIcon = packageManager.getApplicationIcon(applicationInfo);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,6 +190,61 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
             return getString(labelResource);
         }
         return "unknown";
+    }
+
+    private static class IntentData {
+        private String accountName;
+        private String accountType;
+        private Account account;
+
+        private String packageName;
+        private String service;
+
+        private int callerUid;
+        private int callerPid;
+
+        private ConsentData consentData;
+        private boolean fromAccountManager = false;
+
+        private CharSequence appLabel;
+        private Drawable appIcon;
+
+        private IntentData(Intent intent) {
+            if (intent != null) {
+                accountName = intent.getStringExtra(KEY_ACCOUNT_NAME);
+                accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE);
+                packageName = intent.getStringExtra(KEY_ANDROID_PACKAGE_NAME);
+                service = intent.getStringExtra(KEY_AUTHTOKEN);
+                callerUid = intent.getIntExtra(KEY_CALLER_UID, 0);
+                callerPid = intent.getIntExtra(KEY_CALLER_PID, 0);
+                fromAccountManager = intent.hasExtra(EXTRA_FROM_ACCOUNT_MANAGER);
+                if (intent.hasExtra(EXTRA_CONSENT_DATA)) {
+                    try {
+                        consentData = ConsentData.ADAPTER.decode(intent.getByteArrayExtra(EXTRA_CONSENT_DATA));
+                    } catch (Exception e) {
+                        // Ignore
+                    }
+                }
+            }
+            if (accountName != null && accountType != null) {
+                account = new Account(accountName, accountType);
+            }
+        }
+
+        private void verify(Context context) throws Exception {
+            if (accountName == null || accountType == null || account == null)
+                throw new IllegalArgumentException("Required account information missing");
+            if (packageName == null || service == null)
+                throw new IllegalArgumentException("Required request information missing");
+            if (callerUid == 0)
+                throw new IllegalArgumentException("Required caller information missing");
+            PackageUtils.getAndCheckPackage(context, packageName, callerUid, callerPid);
+
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+            appLabel = packageManager.getApplicationLabel(applicationInfo);
+            appIcon = packageManager.getApplicationIcon(applicationInfo);
+        }
     }
 
     private class PermissionAdapter extends BaseAdapter {

@@ -36,14 +36,13 @@ import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.ForegroundServiceContext;
+import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
 @ForegroundServiceInfo(value = "Google device registration", res = R.string.service_name_checkin)
 public class CheckinService extends IntentService {
-    private static final String TAG = "GmsCheckinSvc";
     public static final long MAX_VALID_CHECKIN_AGE = 24 * 60 * 60 * 1000; // 12 hours
     public static final long REGULAR_CHECKIN_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours
     public static final long BACKUP_CHECKIN_DELAY = 3 * 60 * 60 * 1000; // 3 hours
@@ -53,7 +52,7 @@ public class CheckinService extends IntentService {
     public static final String EXTRA_CALLBACK_INTENT = "callback";
     public static final String EXTRA_RESULT_RECEIVER = "receiver";
     public static final String EXTRA_NEW_CHECKIN_TIME = "checkin_time";
-
+    private static final String TAG = "GmsCheckinSvc";
     private ICheckinService iface = new ICheckinService.Stub() {
         @Override
         public String getDeviceDataVersionInfo() throws RemoteException {
@@ -73,6 +72,12 @@ public class CheckinService extends IntentService {
 
     public CheckinService() {
         super(TAG);
+    }
+
+    static void schedule(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(context, TriggerReceiver.class.getName().hashCode(), new Intent(context, TriggerReceiver.class), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.set(AlarmManager.RTC, Math.max(LastCheckinInfo.read(context).getLastCheckin() + REGULAR_CHECKIN_INTERVAL, System.currentTimeMillis() + BACKUP_CHECKIN_DELAY), pendingIntent);
     }
 
     @SuppressWarnings("MissingPermission")
@@ -120,11 +125,5 @@ public class CheckinService extends IntentService {
         } else {
             return super.onBind(intent);
         }
-    }
-
-    static void schedule(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(context, TriggerReceiver.class.getName().hashCode(), new Intent(context, TriggerReceiver.class), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        alarmManager.set(AlarmManager.RTC, Math.max(LastCheckinInfo.read(context).getLastCheckin() + REGULAR_CHECKIN_INTERVAL, System.currentTimeMillis() + BACKUP_CHECKIN_DELAY), pendingIntent);
     }
 }

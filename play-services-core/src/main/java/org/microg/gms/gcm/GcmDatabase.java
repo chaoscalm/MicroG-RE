@@ -18,9 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GcmDatabase extends SQLiteOpenHelper {
-    private static final String TAG = GcmDatabase.class.getSimpleName();
     public static final String DB_NAME = "gcmstatus";
-    private static int DB_VERSION = 1;
+    private static final String TAG = GcmDatabase.class.getSimpleName();
     private static final String CREATE_TABLE_APPS = "CREATE TABLE apps (" +
             "package_name TEXT," +
             "last_error TEXT DEFAULT ''," +
@@ -38,7 +37,6 @@ public class GcmDatabase extends SQLiteOpenHelper {
     private static final String FIELD_TOTAL_MESSAGE_BYTES = "total_message_bytes";
     private static final String FIELD_ALLOW_REGISTER = "allow_register";
     private static final String FIELD_WAKE_FOR_DELIVERY = "wake_for_delivery";
-
     private static final String CREATE_TABLE_REGISTRATIONS = "CREATE TABLE registrations (" +
             "package_name TEXT," +
             "signature TEXT," +
@@ -49,7 +47,7 @@ public class GcmDatabase extends SQLiteOpenHelper {
     private static final String FIELD_SIGNATURE = "signature";
     private static final String FIELD_TIMESTAMP = "timestamp";
     private static final String FIELD_REGISTER_ID = "register_id";
-
+    private static int DB_VERSION = 1;
     private Context context;
 
     public GcmDatabase(Context context) {
@@ -57,44 +55,6 @@ public class GcmDatabase extends SQLiteOpenHelper {
         this.context = context;
         if (Build.VERSION.SDK_INT >= 16) {
             this.setWriteAheadLoggingEnabled(true);
-        }
-    }
-
-    public static class App {
-        public final String packageName;
-        public final String lastError;
-        public final long lastMessageTimestamp;
-        public final long totalMessageCount;
-        public final long totalMessageBytes;
-        public final boolean allowRegister;
-        public final boolean wakeForDelivery;
-
-        private App(Cursor cursor) {
-            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
-            lastError = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_LAST_ERROR));
-            lastMessageTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_LAST_MESSAGE_TIMESTAMP));
-            totalMessageCount = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_COUNT));
-            totalMessageBytes = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_BYTES));
-            allowRegister = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_ALLOW_REGISTER)) == 1;
-            wakeForDelivery = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_WAKE_FOR_DELIVERY)) == 1;
-        }
-
-        public boolean hasError() {
-            return !TextUtils.isEmpty(lastError);
-        }
-    }
-
-    public static class Registration {
-        public final String packageName;
-        public final String signature;
-        public final long timestamp;
-        public final String registerId;
-
-        public Registration(Cursor cursor) {
-            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
-            signature = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_SIGNATURE));
-            timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TIMESTAMP));
-            registerId = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_REGISTER_ID));
         }
     }
 
@@ -133,7 +93,6 @@ public class GcmDatabase extends SQLiteOpenHelper {
         return Collections.emptyList();
     }
 
-
     public synchronized List<Registration> getRegistrationsByApp(String packageName) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_REGISTRATIONS, null, FIELD_PACKAGE_NAME + " LIKE ?", new String[]{packageName}, null, null, null);
@@ -161,7 +120,6 @@ public class GcmDatabase extends SQLiteOpenHelper {
         cv.put(FIELD_WAKE_FOR_DELIVERY, wakeForDelivery ? 1 : 0);
         db.update(TABLE_APPS, cv, FIELD_PACKAGE_NAME + " LIKE ?", new String[]{packageName});
     }
-
 
     public synchronized void removeApp(String packageName) {
         SQLiteDatabase db = getWritableDatabase();
@@ -283,7 +241,6 @@ public class GcmDatabase extends SQLiteOpenHelper {
         return null;
     }
 
-
     @SuppressWarnings("deprecation")
     private void importLegacyData(SQLiteDatabase db) {
         db.beginTransaction();
@@ -311,6 +268,44 @@ public class GcmDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         throw new IllegalStateException("Upgrades not supported");
+    }
+
+    public static class App {
+        public final String packageName;
+        public final String lastError;
+        public final long lastMessageTimestamp;
+        public final long totalMessageCount;
+        public final long totalMessageBytes;
+        public final boolean allowRegister;
+        public final boolean wakeForDelivery;
+
+        private App(Cursor cursor) {
+            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
+            lastError = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_LAST_ERROR));
+            lastMessageTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_LAST_MESSAGE_TIMESTAMP));
+            totalMessageCount = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_COUNT));
+            totalMessageBytes = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_BYTES));
+            allowRegister = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_ALLOW_REGISTER)) == 1;
+            wakeForDelivery = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_WAKE_FOR_DELIVERY)) == 1;
+        }
+
+        public boolean hasError() {
+            return !TextUtils.isEmpty(lastError);
+        }
+    }
+
+    public static class Registration {
+        public final String packageName;
+        public final String signature;
+        public final long timestamp;
+        public final String registerId;
+
+        public Registration(Cursor cursor) {
+            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
+            signature = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_SIGNATURE));
+            timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TIMESTAMP));
+            registerId = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_REGISTER_ID));
+        }
     }
 
 }

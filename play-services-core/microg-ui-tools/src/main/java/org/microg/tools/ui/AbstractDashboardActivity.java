@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractDashboardActivity extends AppCompatActivity {
-    protected int preferencesResource = 0;
-
     private final List<Condition> conditions = new ArrayList<Condition>();
+    protected int preferencesResource = 0;
     private ViewGroup conditionContainer;
 
     @Override

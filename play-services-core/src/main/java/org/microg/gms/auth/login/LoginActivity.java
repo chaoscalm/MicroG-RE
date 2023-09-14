@@ -16,61 +16,6 @@
 
 package org.microg.gms.auth.login;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.CookieManager;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-
-import androidx.webkit.WebViewFeature;
-import androidx.webkit.WebSettingsCompat;
-
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import androidx.annotation.StringRes;
-import androidx.core.app.OnNewIntentProvider;
-import androidx.webkit.WebViewClientCompat;
-
-import com.google.android.gms.R;
-
-import org.json.JSONArray;
-import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.auth.AuthManager;
-import org.microg.gms.auth.AuthRequest;
-import org.microg.gms.auth.AuthResponse;
-import org.microg.gms.checkin.CheckinManager;
-import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.HttpFormClient;
-import org.microg.gms.common.Utils;
-//import org.microg.gms.droidguard.core.DroidGuardResultCreator;
-import org.microg.gms.people.PeopleManager;
-import org.microg.gms.profile.Build;
-import org.microg.gms.profile.ProfileManager;
-
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.util.Collections;
-import java.util.Locale;
-
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
@@ -83,12 +28,57 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-//import static org.microg.gms.checkin.CheckinPreferences.hideLauncherIcon;
 import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
 import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.GOOGLE_GMS_PACKAGE_NAME;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.annotation.StringRes;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewClientCompat;
+import androidx.webkit.WebViewFeature;
+
+import com.google.android.gms.R;
+
+import org.json.JSONArray;
+import org.microg.gms.auth.AuthConstants;
+import org.microg.gms.auth.AuthManager;
+import org.microg.gms.auth.AuthRequest;
+import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.checkin.CheckinManager;
+import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.HttpFormClient;
+import org.microg.gms.common.Utils;
+import org.microg.gms.people.PeopleManager;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
+
+import java.io.IOException;
+import java.util.Locale;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -113,6 +103,61 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
+
+    private static WebView createWebView(Context context) {
+        WebView webView = new WebView(context);
+        if (SDK_INT < LOLLIPOP) {
+            webView.setVisibility(VISIBLE);
+        } else {
+            webView.setVisibility(INVISIBLE);
+        }
+        webView.setLayoutParams(new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        webView.setBackgroundColor(Color.TRANSPARENT);
+
+        if (SDK_INT < 32) {
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                boolean systemIsDark =
+                        (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) ==
+                                Configuration.UI_MODE_NIGHT_YES;
+                WebSettingsCompat.setForceDark(webView.getSettings(),
+                        systemIsDark ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
+            }
+        } else {
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.getSettings(), true);
+            }
+        }
+        prepareWebViewSettings(context, webView.getSettings());
+        return webView;
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private static void prepareWebViewSettings(Context context, WebSettings settings) {
+        ProfileManager.ensureInitialized(context);
+        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
+        settings.setJavaScriptEnabled(true);
+        settings.setSupportMultipleWindows(false);
+        settings.setSaveFormData(false);
+        settings.setAllowFileAccess(false);
+        settings.setDatabaseEnabled(false);
+        settings.setNeedInitialFocus(false);
+        settings.setUseWideViewPort(false);
+        settings.setSupportZoom(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+    }
+
+    private static String buildUrl(String tmpl, Locale locale) {
+        return Uri.parse(EMBEDDED_SETUP_URL).buildUpon()
+                .appendQueryParameter("source", "android")
+                .appendQueryParameter("xoauth_display_name", "Android Device")
+                .appendQueryParameter("lang", locale.getLanguage())
+                .appendQueryParameter("cc", locale.getCountry().toLowerCase(Locale.US))
+                .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
+                .appendQueryParameter("hl", locale.toString().replace("_", "-"))
+                .appendQueryParameter("tmpl", tmpl)
+                .build().toString();
+    }
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -229,49 +274,6 @@ public class LoginActivity extends AssistantActivity {
             CookieManager.getInstance().removeAllCookie();
             start();
         }
-    }
-
-    private static WebView createWebView(Context context) {
-        WebView webView = new WebView(context);
-        if (SDK_INT < LOLLIPOP) {
-            webView.setVisibility(VISIBLE);
-        } else {
-            webView.setVisibility(INVISIBLE);
-        }
-        webView.setLayoutParams(new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        webView.setBackgroundColor(Color.TRANSPARENT);
-
-        if (SDK_INT < 32) {
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                boolean systemIsDark =
-                        (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) ==
-                                Configuration.UI_MODE_NIGHT_YES;
-                WebSettingsCompat.setForceDark(webView.getSettings(),
-                        systemIsDark ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
-            }
-        } else {
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
-                WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.getSettings(), true);
-            }
-        }
-        prepareWebViewSettings(context, webView.getSettings());
-        return webView;
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    private static void prepareWebViewSettings(Context context, WebSettings settings) {
-        ProfileManager.ensureInitialized(context);
-        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
-        settings.setJavaScriptEnabled(true);
-        settings.setSupportMultipleWindows(false);
-        settings.setSaveFormData(false);
-        settings.setAllowFileAccess(false);
-        settings.setDatabaseEnabled(false);
-        settings.setNeedInitialFocus(false);
-        settings.setUseWideViewPort(false);
-        settings.setSupportZoom(false);
-        settings.setJavaScriptCanOpenWindowsAutomatically(false);
     }
 
     private void start() {
@@ -431,18 +433,6 @@ public class LoginActivity extends AssistantActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private static String buildUrl(String tmpl, Locale locale) {
-        return Uri.parse(EMBEDDED_SETUP_URL).buildUpon()
-                .appendQueryParameter("source", "android")
-                .appendQueryParameter("xoauth_display_name", "Android Device")
-                .appendQueryParameter("lang", locale.getLanguage())
-                .appendQueryParameter("cc", locale.getCountry().toLowerCase(Locale.US))
-                .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
-                .appendQueryParameter("hl", locale.toString().replace("_", "-"))
-                .appendQueryParameter("tmpl", tmpl)
-                .build().toString();
     }
 
     private class JsBridge {

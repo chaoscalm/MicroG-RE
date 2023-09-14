@@ -87,6 +87,14 @@ public class DialogPreference extends androidx.preference.DialogPreference imple
 
     public static class DialogPreferenceCompatDialogFragment extends PreferenceDialogFragmentCompat {
 
+        public static DialogFragment newInstance(String key) {
+            final DialogPreferenceCompatDialogFragment fragment = new DialogPreferenceCompatDialogFragment();
+            final Bundle b = new Bundle(1);
+            b.putString(ARG_KEY, key);
+            fragment.setArguments(b);
+            return fragment;
+        }
+
         @Override
         protected View onCreateDialogView(Context context) {
             if (getPreference() instanceof DialogPreference) {
@@ -101,14 +109,6 @@ public class DialogPreference extends androidx.preference.DialogPreference imple
             if (getPreference() instanceof DialogPreference) {
                 ((DialogPreference) getPreference()).onDialogClosed(positiveResult);
             }
-        }
-
-        public static DialogFragment newInstance(String key) {
-            final DialogPreferenceCompatDialogFragment fragment = new DialogPreferenceCompatDialogFragment();
-            final Bundle b = new Bundle(1);
-            b.putString(ARG_KEY, key);
-            fragment.setArguments(b);
-            return fragment;
         }
     }
 }

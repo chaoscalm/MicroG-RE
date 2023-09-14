@@ -16,6 +16,16 @@
 
 package org.microg.gms.auth.loginservice;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
+import static android.accounts.AccountManager.KEY_CALLER_UID;
+import static android.accounts.AccountManager.KEY_INTENT;
+
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
@@ -27,8 +37,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
-import com.google.android.gms.R;
-
 import org.microg.gms.auth.AskPermissionActivity;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
@@ -38,16 +46,6 @@ import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
-import static android.accounts.AccountManager.KEY_CALLER_PID;
-import static android.accounts.AccountManager.KEY_CALLER_UID;
-import static android.accounts.AccountManager.KEY_INTENT;
 
 class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";

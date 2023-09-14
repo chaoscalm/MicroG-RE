@@ -7,7 +7,6 @@ package org.microg.gms.chimera
 
 import android.content.ContentProvider
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.MatrixCursor
@@ -18,7 +17,6 @@ import androidx.core.os.bundleOf
 import com.google.android.gms.BuildConfig
 import org.microg.gms.DummyService
 import org.microg.gms.common.GmsService
-import org.microg.gms.common.RemoteListenerProxy
 
 class ServiceProvider : ContentProvider() {
 

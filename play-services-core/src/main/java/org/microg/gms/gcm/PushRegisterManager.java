@@ -16,6 +16,12 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_RETRY_AFTER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,15 +29,8 @@ import android.util.Log;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.common.Utils;
 
 import java.io.IOException;
-
-import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_RETRY_AFTER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 
 public class PushRegisterManager {
     private static final String TAG = "GmsGcmRegisterMgr";
@@ -58,10 +57,6 @@ public class PushRegisterManager {
         }
         database.close();
         return response;
-    }
-
-    public interface BundleCallback {
-        void onResult(Bundle bundle);
     }
 
     public static void completeRegisterRequest(Context context, GcmDatabase database, RegisterRequest request, BundleCallback callback) {
@@ -117,7 +112,6 @@ public class PushRegisterManager {
         });
     }
 
-
     private static Bundle handleResponse(GcmDatabase database, RegisterRequest request, RegisterResponse response, String requestId) {
         return handleResponse(database, request, response, null, requestId);
     }
@@ -167,5 +161,9 @@ public class PushRegisterManager {
     public static String attachRequestId(String msg, String requestId) {
         if (requestId == null) return msg;
         return "|ID|" + requestId + "|" + msg;
+    }
+
+    public interface BundleCallback {
+        void onResult(Bundle bundle);
     }
 }

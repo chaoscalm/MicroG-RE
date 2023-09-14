@@ -16,18 +16,6 @@
 
 package org.microg.gms.ui;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.preference.Preference;
-
-import com.google.android.gms.R;
-
-import org.microg.tools.ui.AbstractSettingsActivity;
-import org.microg.tools.ui.RadioButtonPreference;
-import org.microg.tools.ui.ResourceSettingsFragment;
-
 //import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_OFFICIAL;
 //import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_SELF_SIGNED;
 //import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_THIRD_PARTY;

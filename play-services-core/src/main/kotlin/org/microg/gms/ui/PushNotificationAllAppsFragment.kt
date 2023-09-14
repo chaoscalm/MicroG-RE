@@ -7,7 +7,6 @@ package org.microg.gms.ui
 
 import android.os.Bundle
 import android.text.format.DateUtils
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController

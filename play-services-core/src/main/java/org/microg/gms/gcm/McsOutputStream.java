@@ -16,6 +16,13 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -26,22 +33,14 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
-
 public class McsOutputStream extends Thread implements Handler.Callback, Closeable {
     private static final String TAG = "GmsGcmMcsOutput";
 
     private final OutputStream os;
+    private final Handler mainHandler;
     private boolean initialized;
     private int version = MCS_VERSION_CODE;
     private int streamId = 0;
-
-    private final Handler mainHandler;
     private Handler myHandler;
 
     private volatile boolean closed = false;

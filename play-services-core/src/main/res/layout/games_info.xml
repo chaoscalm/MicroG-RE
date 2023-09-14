@@ -15,9 +15,9 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
@@ -32,8 +32,8 @@
         android:id="@+id/no_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/dialog_border_color" />
 
     <LinearLayout
@@ -59,8 +59,8 @@
         <FrameLayout
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="-3dp"
             android:layout_marginStart="-3dp"
+            android:layout_marginLeft="-3dp"
             android:background="@drawable/circle_shape_background"
             android:padding="10dp">
 
@@ -93,9 +93,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
 
         <Button
             android:id="@android:id/button1"

@@ -1,23 +1,16 @@
 package org.microg.gms.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.SpannedString;
 import android.text.style.StyleSpan;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
@@ -25,11 +18,6 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
-import org.microg.gms.gcm.PushRegisterService;
-
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_KID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_PENDING_INTENT;
 
 public class AskPushPermission extends FragmentActivity {
     public static final String EXTRA_REQUESTED_PACKAGE = "package";

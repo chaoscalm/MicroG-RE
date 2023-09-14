@@ -16,6 +16,15 @@
 
 package org.microg.gms.ui;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,15 +41,6 @@ import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.GET_ACCOUNTS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.os.Build.VERSION.SDK_INT;
 
 public class Conditions {
     public static final Condition GCM_BATTERY_OPTIMIZATIONS = new Condition.Builder()

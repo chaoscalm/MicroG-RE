@@ -16,6 +16,17 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.os.Handler;
 import android.util.Log;
 
@@ -32,17 +43,6 @@ import org.microg.gms.gcm.mcs.LoginResponse;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 public class McsInputStream extends Thread implements Closeable {
     private static final String TAG = "GmsGcmMcsInput";
@@ -67,6 +67,33 @@ public class McsInputStream extends Thread implements Closeable {
         this.mainHandler = mainHandler;
         this.initialized = initialized;
         setName("McsInputStream");
+    }
+
+    private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
+        try {
+            switch (mcsTag) {
+                case MCS_HEARTBEAT_PING_TAG:
+                    return HeartbeatPing.ADAPTER.decode(bytes);
+                case MCS_HEARTBEAT_ACK_TAG:
+                    return HeartbeatAck.ADAPTER.decode(bytes);
+                case MCS_LOGIN_REQUEST_TAG:
+                    return LoginRequest.ADAPTER.decode(bytes);
+                case MCS_LOGIN_RESPONSE_TAG:
+                    return LoginResponse.ADAPTER.decode(bytes);
+                case MCS_CLOSE_TAG:
+                    return Close.ADAPTER.decode(bytes);
+                case MCS_IQ_STANZA_TAG:
+                    return IqStanza.ADAPTER.decode(bytes);
+                case MCS_DATA_MESSAGE_STANZA_TAG:
+                    return DataMessageStanza.ADAPTER.decode(bytes);
+                default:
+                    Log.w(TAG, "Unknown tag: " + mcsTag);
+                    return null;
+            }
+        } catch (IllegalStateException e) {
+            Log.w(TAG, "Error parsing tag: " + mcsTag, e);
+            return null;
+        }
     }
 
     @Override
@@ -146,33 +173,6 @@ public class McsInputStream extends Thread implements Closeable {
         Log.d(TAG, "Incoming message: " + message);
         streamId++;
         return mainHandler.obtainMessage(MSG_INPUT, mcsTag, streamId, message);
-    }
-
-    private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
-        try {
-            switch (mcsTag) {
-                case MCS_HEARTBEAT_PING_TAG:
-                    return HeartbeatPing.ADAPTER.decode(bytes);
-                case MCS_HEARTBEAT_ACK_TAG:
-                    return HeartbeatAck.ADAPTER.decode(bytes);
-                case MCS_LOGIN_REQUEST_TAG:
-                    return LoginRequest.ADAPTER.decode(bytes);
-                case MCS_LOGIN_RESPONSE_TAG:
-                    return LoginResponse.ADAPTER.decode(bytes);
-                case MCS_CLOSE_TAG:
-                    return Close.ADAPTER.decode(bytes);
-                case MCS_IQ_STANZA_TAG:
-                    return IqStanza.ADAPTER.decode(bytes);
-                case MCS_DATA_MESSAGE_STANZA_TAG:
-                    return DataMessageStanza.ADAPTER.decode(bytes);
-                default:
-                    Log.w(TAG, "Unknown tag: " + mcsTag);
-                    return null;
-            }
-        } catch (IllegalStateException e) {
-            Log.w(TAG, "Error parsing tag: " + mcsTag, e);
-            return null;
-        }
     }
 
     private int readVarint() throws IOException {

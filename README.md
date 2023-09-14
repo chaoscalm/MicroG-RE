@@ -3,7 +3,7 @@ Fork for [MicroG](https://github.com/microg/GmsCore) designed for ReVanced apps 
 
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square)](https://www.android.com) [![API](https://img.shields.io/badge/API-23%2B-orange.svg?logo=android&style=flat-square)](https://developer.android.com/studio/releases/platforms) [![Release](https://img.shields.io/github/v/release/WSTxda/MicroG-RE-Releases?color=blue&label=Release&style=flat-square)](https://github.com/WSTxda/MicroG-RE-Releases/releases) [![Downloads](https://img.shields.io/github/downloads/WSTxda/ViperFX-RE-Releases/total?color=brightgrey&style=flat-square)](https://github.com/WSTxda/MicroG-RE-Releases/releases)
  
-![alt text](https://raw.githubusercontent.com/WSTxda/MicroG-RE-Releases/main/Images/Banner.svg)
+![alt text](https://raw.githubusercontent.com/WSTxda/MicroG-RE/main/Images/Banner.svg)
 
 **Support list**
 

@@ -1,9 +1,31 @@
-[microG](https://github.com/microg/GmsCore) designed for ReVanced apps.
+# MicroG RE (MicroG Services Redesign)
+Fork for [MicroG](https://github.com/microg/GmsCore) designed for ReVanced apps with beautiful design.
 
-A big thanks to [Shadow578](https://github.com/shadow578) for its first implementation.
+[![Android](https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square)](https://www.android.com) [![API](https://img.shields.io/badge/API-23%2B-orange.svg?logo=android&style=flat-square)](https://developer.android.com/studio/releases/platforms) [![Release](https://img.shields.io/github/v/release/WSTxda/MicroG-RE-Releases?color=blue&label=Release&style=flat-square)](https://github.com/WSTxda/MicroG-RE-Releases/releases) [![Downloads](https://img.shields.io/github/downloads/WSTxda/ViperFX-RE-Releases/total?color=brightgrey&style=flat-square)](https://github.com/WSTxda/MicroG-RE-Releases/releases)
+ 
+![alt text](https://raw.githubusercontent.com/WSTxda/MicroG-RE/main/Images/Banner.svg)
 
->This repository was not created (and will not be maintained) with the cooperation of
-  MicroG lead developer
+**Support list**
 
->No features or changes will be implemented that are not strictly related to the repository
-  update
+[ReVanced](https://github.com/revanced)
+
+[ReVanced Extended (RVX)](https://github.com/inotia00/revanced-patches)
+
+[YT Advanced (REX)](https://github.com/YT-Advanced/ReX-patches)
+
+
+**Download MicroG**
+
+[<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/GitHub.svg"
+      alt='Get it on GitHub'
+      height="80">](https://github.com/WSTxda/MicroG-RE-Releases/releases) [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/Telegram.svg"
+      alt='Get it on Telegram'
+      height="80">](https://t.me/WSTprojects)
+
+**Donate**
+
+[<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/PayPal.svg"
+      alt='Donate with PayPal'
+      height="80">](https://bit.ly/2lV0E6u) [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/BMC.svg"
+      alt='Donate with BMC'
+      height="80">](https://www.buymeacoffee.com/wstxda)

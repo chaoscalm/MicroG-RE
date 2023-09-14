@@ -4,10 +4,10 @@
   -->
 <profile
     name="Google Nexus 5X (Android 8.1.0)"
-    product="bullhead"
-    sdk="27"
+    auto="true"
     id="bullhead_27"
-    auto="true">
+    product="bullhead"
+    sdk="27">
     <!-- Data from OPM3.171019.016, Mar 2018 -->
     <data
         key="Build.BOARD"

@@ -8,9 +8,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/safetynet_enable_switch"
         android:key="pref_safetynet_enabled"
-        android:persistent="false" />
+        android:persistent="false"
+        android:title="@string/safetynet_enable_switch" />
 
     <PreferenceCategory
         android:key="prefcat_safetynet_apps"
@@ -26,8 +26,8 @@
             android:title="@string/list_item_see_all" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:layout="@layout/preference_category_no_label"
-        android:dependency="pref_safetynet_enabled">
+        android:dependency="pref_safetynet_enabled"
+        android:layout="@layout/preference_category_no_label">
         <Preference
             android:key="pref_safetynet_run_attest"
             android:title="@string/pref_safetynet_test_title"

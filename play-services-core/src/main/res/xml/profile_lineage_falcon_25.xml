@@ -4,10 +4,10 @@
   -->
 <profile
     name="Motorola Moto G (LineageOS 14.1)"
-    product="lineage_falcon"
-    sdk="25"
+    auto="true"
     id="lineage_falcon_25"
-    auto="true">
+    product="lineage_falcon"
+    sdk="25">
     <!-- Data from LineageOS 14.1-20190207-NIGHTLY-falcon, Feb 2019 -->
     <data
         key="Build.BOARD"

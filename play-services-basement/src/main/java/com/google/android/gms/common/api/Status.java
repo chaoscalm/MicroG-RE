@@ -37,10 +37,7 @@ public final class Status extends AutoSafeParcelable implements Result {
     public static final Status CANCELED = new Status(CommonStatusCodes.CANCELED, "Cancelled");
     @PublicApi(exclude = true)
     public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS, "Success");
-
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<Status> CREATOR = new AutoCreator<Status>(Status.class);
     @SafeParceled(1)
     private final int statusCode;
 
@@ -49,6 +46,8 @@ public final class Status extends AutoSafeParcelable implements Result {
 
     @SafeParceled(3)
     private final PendingIntent resolution;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private Status() {
         statusCode = 0;
@@ -175,6 +174,4 @@ public final class Status extends AutoSafeParcelable implements Result {
             activity.startIntentSenderForResult(resolution.getIntentSender(), requestCode, null, 0, 0, 0);
         }
     }
-
-    public static final Creator<Status> CREATOR = new AutoCreator<Status>(Status.class);
 }

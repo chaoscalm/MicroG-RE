@@ -21,14 +21,14 @@ import org.microg.safeparcel.SafeParceled;
 
 public class GetCorpusStatusRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static Creator<GetCorpusStatusRequest> CREATOR = new AutoCreator<GetCorpusStatusRequest>(GetCorpusStatusRequest.class);
     @SafeParceled(1)
     public final String packageName;
 
     @SafeParceled(2)
     public final String corpus;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private GetCorpusStatusRequest() {
         packageName = null;
@@ -43,6 +43,4 @@ public class GetCorpusStatusRequest extends AutoSafeParcelable {
                 ", corpus='" + corpus + '\'' +
                 '}';
     }
-
-    public static Creator<GetCorpusStatusRequest> CREATOR = new AutoCreator<GetCorpusStatusRequest>(GetCorpusStatusRequest.class);
 }

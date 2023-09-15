@@ -30,8 +30,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public final class CameraPosition extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static Creator<CameraPosition> CREATOR = new AutoCreator<CameraPosition>(CameraPosition.class);
     /**
      * The location that the camera is pointing at.
      */
@@ -54,6 +53,8 @@ public final class CameraPosition extends AutoSafeParcelable {
      */
     @SafeParceled(5)
     public final float bearing;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     /**
      * This constructor is dirty setting the final fields to make the compiler happy.
@@ -118,6 +119,20 @@ public final class CameraPosition extends AutoSafeParcelable {
         return null; // TODO
     }
 
+    /**
+     * Constructs a CameraPosition pointed for a particular target and zoom level. The resultant
+     * bearing is North, and the viewing angle is perpendicular to the Earth's surface. i.e.,
+     * directly facing the Earth's surface, with the top of the screen pointing North.
+     *
+     * @param target The target location to align with the center of the screen.
+     * @param zoom   Zoom level at target. See {@link Builder#zoom(float)} for details on the range
+     *               the value will be clamped to. The larger the value the more zoomed in the
+     *               camera is.
+     */
+    public static final CameraPosition fromLatLngZoom(LatLng target, float zoom) {
+        return builder().target(target).zoom(zoom).build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -139,20 +154,6 @@ public final class CameraPosition extends AutoSafeParcelable {
         return true;
     }
 
-    /**
-     * Constructs a CameraPosition pointed for a particular target and zoom level. The resultant
-     * bearing is North, and the viewing angle is perpendicular to the Earth's surface. i.e.,
-     * directly facing the Earth's surface, with the top of the screen pointing North.
-     *
-     * @param target The target location to align with the center of the screen.
-     * @param zoom   Zoom level at target. See {@link Builder#zoom(float)} for details on the range
-     *               the value will be clamped to. The larger the value the more zoomed in the
-     *               camera is.
-     */
-    public static final CameraPosition fromLatLngZoom(LatLng target, float zoom) {
-        return builder().target(target).zoom(zoom).build();
-    }
-
     @Override
     public int hashCode() {
         return Arrays.hashCode(new Object[]{target, zoom, tilt, bearing});
@@ -167,8 +168,6 @@ public final class CameraPosition extends AutoSafeParcelable {
                 ", bearing=" + bearing +
                 '}';
     }
-
-    public static Creator<CameraPosition> CREATOR = new AutoCreator<CameraPosition>(CameraPosition.class);
 
     /**
      * Builds camera position.

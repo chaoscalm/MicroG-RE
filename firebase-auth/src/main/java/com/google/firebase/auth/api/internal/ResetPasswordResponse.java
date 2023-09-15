@@ -8,6 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ResetPasswordResponse extends AutoSafeParcelable {
+    public static final Creator<ResetPasswordResponse> CREATOR = new AutoCreator<>(ResetPasswordResponse.class);
     @Field(2)
     public String email;
     @Field(3)
@@ -16,5 +17,4 @@ public class ResetPasswordResponse extends AutoSafeParcelable {
     public String requestType;
     @Field(5)
     public MfaInfo mfaInfo;
-    public static final Creator<ResetPasswordResponse> CREATOR = new AutoCreator<>(ResetPasswordResponse.class);
 }

@@ -8,6 +8,7 @@ package com.google.android.gms.nearby.exposurenotification.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetCalibrationConfidenceParams extends AutoSafeParcelable {
+    public static final Creator<GetCalibrationConfidenceParams> CREATOR = new AutoCreator<>(GetCalibrationConfidenceParams.class);
     @Field(1)
     public IIntCallback callback;
 
@@ -17,6 +18,4 @@ public class GetCalibrationConfidenceParams extends AutoSafeParcelable {
     public GetCalibrationConfidenceParams(IIntCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<GetCalibrationConfidenceParams> CREATOR = new AutoCreator<>(GetCalibrationConfidenceParams.class);
 }

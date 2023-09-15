@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class AccountInfo extends AutoSafeParcelable {
+    public static final Creator<AccountInfo> CREATOR = new AutoCreator<>(AccountInfo.class);
     @Field(2)
     public final String accountId;
     @Field(3)
@@ -49,6 +50,4 @@ public class AccountInfo extends AutoSafeParcelable {
                 .field("accountName", accountName)
                 .end();
     }
-
-    public static final Creator<AccountInfo> CREATOR = new AutoCreator<>(AccountInfo.class);
 }

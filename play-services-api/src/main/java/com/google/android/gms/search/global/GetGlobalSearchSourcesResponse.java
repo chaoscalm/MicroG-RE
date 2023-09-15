@@ -27,14 +27,14 @@ import java.util.Arrays;
 
 public class GetGlobalSearchSourcesResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<GetGlobalSearchSourcesResponse> CREATOR = new AutoCreator<GetGlobalSearchSourcesResponse>(GetGlobalSearchSourcesResponse.class);
     @SafeParceled(1)
     public final Status status;
 
     @SafeParceled(2)
     public final Parcelable[] sources;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private GetGlobalSearchSourcesResponse() {
         status = null;
@@ -54,6 +54,4 @@ public class GetGlobalSearchSourcesResponse extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<GetGlobalSearchSourcesResponse> CREATOR = new AutoCreator<GetGlobalSearchSourcesResponse>(GetGlobalSearchSourcesResponse.class);
 }

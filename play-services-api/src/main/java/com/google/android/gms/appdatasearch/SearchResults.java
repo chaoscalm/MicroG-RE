@@ -20,8 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class SearchResults extends AutoSafeParcelable {
+    public static Creator<SearchResults> CREATOR = new AutoCreator<SearchResults>(SearchResults.class);
     @SafeParceled(1000)
     private int versionCode = 2;
-
-    public static Creator<SearchResults> CREATOR = new AutoCreator<SearchResults>(SearchResults.class);
 }

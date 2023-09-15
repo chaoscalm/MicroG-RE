@@ -38,16 +38,6 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         super(context, "connectionconfig.db", null, 2);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE connectionConfigurations (_id INTEGER PRIMARY KEY AUTOINCREMENT,androidId TEXT,name TEXT NOT NULL,pairedBtAddress TEXT NOT NULL,connectionType INTEGER NOT NULL,role INTEGER NOT NULL,connectionEnabled INTEGER NOT NULL,nodeId TEXT, UNIQUE(name) ON CONFLICT REPLACE);");
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-
     private static ConnectionConfiguration configFromCursor(final Cursor cursor) {
         String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
         String pairedBtAddress = cursor.getString(cursor.getColumnIndexOrThrow("pairedBtAddress"));
@@ -58,6 +48,16 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         if (NULL_STRING.equals(name)) name = null;
         if (NULL_STRING.equals(pairedBtAddress)) pairedBtAddress = null;
         return new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE connectionConfigurations (_id INTEGER PRIMARY KEY AUTOINCREMENT,androidId TEXT,name TEXT NOT NULL,pairedBtAddress TEXT NOT NULL,connectionType INTEGER NOT NULL,role INTEGER NOT NULL,connectionEnabled INTEGER NOT NULL,nodeId TEXT, UNIQUE(name) ON CONFLICT REPLACE);");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
     }
 
     public ConnectionConfiguration getConfiguration(String name) {

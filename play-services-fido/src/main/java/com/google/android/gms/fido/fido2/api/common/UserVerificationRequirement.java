@@ -15,10 +15,33 @@ public enum UserVerificationRequirement implements Parcelable {
     PREFERRED("preferred"),
     DISCOURAGED("discouraged");
 
+    public static Creator<UserVerificationRequirement> CREATOR = new Creator<UserVerificationRequirement>() {
+        @Override
+        public UserVerificationRequirement createFromParcel(Parcel source) {
+            try {
+                return UserVerificationRequirement.fromString(source.readString());
+            } catch (UnsupportedUserVerificationRequirementException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public UserVerificationRequirement[] newArray(int size) {
+            return new UserVerificationRequirement[size];
+        }
+    };
     private final String value;
 
     UserVerificationRequirement(String value) {
         this.value = value;
+    }
+
+    @PublicApi(exclude = true)
+    public static UserVerificationRequirement fromString(String attachment) throws UnsupportedUserVerificationRequirementException {
+        for (UserVerificationRequirement value : values()) {
+            if (value.value.equals(attachment)) return value;
+        }
+        throw new UnsupportedUserVerificationRequirementException("User verification requirement " + attachment + " not supported");
     }
 
     @Override
@@ -35,30 +58,6 @@ public enum UserVerificationRequirement implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(toString());
     }
-
-    @PublicApi(exclude = true)
-    public static UserVerificationRequirement fromString(String attachment) throws UnsupportedUserVerificationRequirementException {
-        for (UserVerificationRequirement value : values()) {
-            if (value.value.equals(attachment)) return value;
-        }
-        throw new UnsupportedUserVerificationRequirementException("User verification requirement " + attachment + " not supported");
-    }
-
-    public static Creator<UserVerificationRequirement> CREATOR = new Creator<UserVerificationRequirement>() {
-        @Override
-        public UserVerificationRequirement createFromParcel(Parcel source) {
-            try {
-                return UserVerificationRequirement.fromString(source.readString());
-            } catch (UnsupportedUserVerificationRequirementException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public UserVerificationRequirement[] newArray(int size) {
-            return new UserVerificationRequirement[size];
-        }
-    };
 
     public static class UnsupportedUserVerificationRequirementException extends Exception {
         public UnsupportedUserVerificationRequirementException(String message) {

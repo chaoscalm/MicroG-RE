@@ -8,9 +8,7 @@ package com.google.android.gms.location.reporting;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ReportingState extends AutoSafeParcelable {
-    @Field(1)
-    @Deprecated
-    private int versionCode = 2;
+    public static final Creator<ReportingState> CREATOR = new AutoCreator<ReportingState>(ReportingState.class);
     @Field(2)
     public int reportingEnabled;
     @Field(3)
@@ -29,6 +27,7 @@ public class ReportingState extends AutoSafeParcelable {
     public int expectedOptInResultAssumingLocationEnabled;
     @Field(10)
     public boolean canAccessSettings;
-
-    public static final Creator<ReportingState> CREATOR = new AutoCreator<ReportingState>(ReportingState.class);
+    @Field(1)
+    @Deprecated
+    private int versionCode = 2;
 }

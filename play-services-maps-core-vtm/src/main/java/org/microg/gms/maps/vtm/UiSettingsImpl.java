@@ -47,48 +47,6 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
-    public void setZoomControlsEnabled(boolean zoomControlsEnabled) throws RemoteException {
-        this.zoomControlsEnabled = zoomControlsEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setCompassEnabled(boolean compassEnabled) throws RemoteException {
-        this.compassEnabled = compassEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setMyLocationButtonEnabled(boolean myLocationButtonEnabled) throws RemoteException {
-        this.myLocationButtonEnabled = myLocationButtonEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setScrollGesturesEnabled(boolean scrollGesturesEnabled) throws RemoteException {
-        this.scrollGesturesEnabled = scrollGesturesEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setZoomGesturesEnabled(boolean zoomGestures) throws RemoteException {
-        this.zoomGesturesEnabled = zoomGestures;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setTiltGesturesEnabled(boolean tiltGesturesEnabled) throws RemoteException {
-        this.tiltGesturesEnabled = tiltGesturesEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
-    public void setRotateGesturesEnabled(boolean rotateGesturesEnabled) throws RemoteException {
-        this.rotateGesturesEnabled = rotateGesturesEnabled;
-        listener.onUiSettingsChanged(this);
-    }
-
-    @Override
     public void setAllGesturesEnabled(boolean gestures) throws RemoteException {
         scrollGesturesEnabled = gestures;
         zoomGesturesEnabled = gestures;
@@ -103,8 +61,20 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
+    public void setZoomControlsEnabled(boolean zoomControlsEnabled) throws RemoteException {
+        this.zoomControlsEnabled = zoomControlsEnabled;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
     public boolean isCompassEnabled() throws RemoteException {
         return compassEnabled;
+    }
+
+    @Override
+    public void setCompassEnabled(boolean compassEnabled) throws RemoteException {
+        this.compassEnabled = compassEnabled;
+        listener.onUiSettingsChanged(this);
     }
 
     @Override
@@ -113,8 +83,20 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
+    public void setMyLocationButtonEnabled(boolean myLocationButtonEnabled) throws RemoteException {
+        this.myLocationButtonEnabled = myLocationButtonEnabled;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
     public boolean isScrollGesturesEnabled() throws RemoteException {
         return scrollGesturesEnabled;
+    }
+
+    @Override
+    public void setScrollGesturesEnabled(boolean scrollGesturesEnabled) throws RemoteException {
+        this.scrollGesturesEnabled = scrollGesturesEnabled;
+        listener.onUiSettingsChanged(this);
     }
 
     @Override
@@ -123,8 +105,20 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
+    public void setZoomGesturesEnabled(boolean zoomGestures) throws RemoteException {
+        this.zoomGesturesEnabled = zoomGestures;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
     public boolean isTiltGesturesEnabled() throws RemoteException {
         return tiltGesturesEnabled;
+    }
+
+    @Override
+    public void setTiltGesturesEnabled(boolean tiltGesturesEnabled) throws RemoteException {
+        this.tiltGesturesEnabled = tiltGesturesEnabled;
+        listener.onUiSettingsChanged(this);
     }
 
     @Override
@@ -133,8 +127,8 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
-    public void setIndoorLevelPickerEnabled(boolean indoorLevelPicker) throws RemoteException {
-        this.indoorLevelPickerEnabled = indoorLevelPicker;
+    public void setRotateGesturesEnabled(boolean rotateGesturesEnabled) throws RemoteException {
+        this.rotateGesturesEnabled = rotateGesturesEnabled;
         listener.onUiSettingsChanged(this);
     }
 
@@ -144,8 +138,8 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
-    public void setMapToolbarEnabled(boolean mapToolbar) throws RemoteException {
-        this.mapToolbarEnabled = mapToolbar;
+    public void setIndoorLevelPickerEnabled(boolean indoorLevelPicker) throws RemoteException {
+        this.indoorLevelPickerEnabled = indoorLevelPicker;
         listener.onUiSettingsChanged(this);
     }
 
@@ -155,14 +149,20 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     }
 
     @Override
-    public void setScrollGesturesEnabledDuringRotateOrZoom(boolean scrollDuringZoom) throws RemoteException {
-        this.scrollGesturesEnabledDuringRotateOrZoom = scrollDuringZoom;
+    public void setMapToolbarEnabled(boolean mapToolbar) throws RemoteException {
+        this.mapToolbarEnabled = mapToolbar;
         listener.onUiSettingsChanged(this);
     }
 
     @Override
     public boolean isScrollGesturesEnabledDuringRotateOrZoom() throws RemoteException {
         return scrollGesturesEnabledDuringRotateOrZoom;
+    }
+
+    @Override
+    public void setScrollGesturesEnabledDuringRotateOrZoom(boolean scrollDuringZoom) throws RemoteException {
+        this.scrollGesturesEnabledDuringRotateOrZoom = scrollDuringZoom;
+        listener.onUiSettingsChanged(this);
     }
 
     public static interface UiSettingsListener {

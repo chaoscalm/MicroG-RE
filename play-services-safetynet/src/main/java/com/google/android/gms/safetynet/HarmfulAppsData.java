@@ -16,6 +16,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class HarmfulAppsData extends AutoSafeParcelable {
+    public static final Creator<HarmfulAppsData> CREATOR = new AutoCreator<HarmfulAppsData>(HarmfulAppsData.class);
     /**
      * The package name of the potentially harmful app.
      */
@@ -44,6 +45,4 @@ public class HarmfulAppsData extends AutoSafeParcelable {
         this.apkSha256 = apkSha256;
         this.apkCategory = apkCategory;
     }
-
-    public static final Creator<HarmfulAppsData> CREATOR = new AutoCreator<HarmfulAppsData>(HarmfulAppsData.class);
 }

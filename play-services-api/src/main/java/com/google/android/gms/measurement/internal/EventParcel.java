@@ -8,6 +8,7 @@ package com.google.android.gms.measurement.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class EventParcel extends AutoSafeParcelable {
+    public static final Creator<EventParcel> CREATOR = new AutoCreator<>(EventParcel.class);
     @Field(2)
     public String name;
     @Field(3)
@@ -16,6 +17,4 @@ public class EventParcel extends AutoSafeParcelable {
     public String origin;
     @Field(5)
     public long timestamp;
-
-    public static final Creator<EventParcel> CREATOR = new AutoCreator<>(EventParcel.class);
 }

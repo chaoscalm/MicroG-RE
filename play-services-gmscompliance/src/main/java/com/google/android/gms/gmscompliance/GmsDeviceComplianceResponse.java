@@ -10,12 +10,11 @@ import android.app.PendingIntent;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GmsDeviceComplianceResponse extends AutoSafeParcelable {
-    @Field(1)
-    private int versionCode = 1;
+    public static final Creator<GmsDeviceComplianceResponse> CREATOR = new AutoCreator<>(GmsDeviceComplianceResponse.class);
     @Field(2)
     public boolean compliant;
     @Field(3)
     public PendingIntent errorIntent;
-
-    public static final Creator<GmsDeviceComplianceResponse> CREATOR = new AutoCreator<>(GmsDeviceComplianceResponse.class);
+    @Field(1)
+    private int versionCode = 1;
 }

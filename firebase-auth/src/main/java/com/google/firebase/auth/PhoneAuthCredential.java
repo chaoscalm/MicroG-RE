@@ -15,6 +15,7 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public class PhoneAuthCredential extends AuthCredential {
+    public static final Creator<PhoneAuthCredential> CREATOR = new AutoCreator<>(PhoneAuthCredential.class);
     @Field(1)
     @PublicApi(exclude = true)
     public String sessionInfo;
@@ -59,6 +60,4 @@ public class PhoneAuthCredential extends AuthCredential {
     public String getSmsCode() {
         return smsCode;
     }
-
-    public static final Creator<PhoneAuthCredential> CREATOR = new AutoCreator<>(PhoneAuthCredential.class);
 }

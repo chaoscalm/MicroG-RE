@@ -22,7 +22,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
@@ -31,6 +30,11 @@ import java.util.Iterator;
 
 public class MultiListenerProxy<T extends IInterface> implements InvocationHandler {
     private static final String TAG = "GmsMultiListener";
+    private final ListenerPool<T> listeners;
+
+    private MultiListenerProxy(ListenerPool<T> listeners) {
+        this.listeners = listeners;
+    }
 
     public static <T extends IInterface> T get(Class<T> tClass, final Collection<T> listeners) {
         return get(tClass, new CollectionListenerPool<T>(listeners));
@@ -38,12 +42,6 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
 
     public static <T extends IInterface> T get(Class<T> tClass, final ListenerPool<T> listenerPool) {
         return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new MultiListenerProxy<T>(listenerPool));
-    }
-
-    private final ListenerPool<T> listeners;
-
-    private MultiListenerProxy(ListenerPool<T> listeners) {
-        this.listeners = listeners;
     }
 
     @Override

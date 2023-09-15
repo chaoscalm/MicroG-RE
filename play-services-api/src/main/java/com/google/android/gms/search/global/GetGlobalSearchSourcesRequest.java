@@ -21,11 +21,11 @@ import org.microg.safeparcel.SafeParceled;
 
 public class GetGlobalSearchSourcesRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<GetGlobalSearchSourcesRequest> CREATOR = new AutoCreator<GetGlobalSearchSourcesRequest>(GetGlobalSearchSourcesRequest.class);
     @SafeParceled(1)
     public boolean bool;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     @Override
     public String toString() {
@@ -34,6 +34,4 @@ public class GetGlobalSearchSourcesRequest extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<GetGlobalSearchSourcesRequest> CREATOR = new AutoCreator<GetGlobalSearchSourcesRequest>(GetGlobalSearchSourcesRequest.class);
 }

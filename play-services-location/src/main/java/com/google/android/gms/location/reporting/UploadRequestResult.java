@@ -20,6 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class UploadRequestResult extends AutoSafeParcelable {
+    public static final Creator<UploadRequestResult> CREATOR = new AutoCreator<UploadRequestResult>(UploadRequestResult.class);
     @SafeParceled(1)
     public int versionCode = 1;
     @SafeParceled(2)
@@ -29,6 +30,4 @@ public class UploadRequestResult extends AutoSafeParcelable {
 
     public UploadRequestResult() {
     }
-
-    public static final Creator<UploadRequestResult> CREATOR = new AutoCreator<UploadRequestResult>(UploadRequestResult.class);
 }

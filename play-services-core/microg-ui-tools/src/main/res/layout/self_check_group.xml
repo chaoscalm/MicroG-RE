@@ -28,7 +28,7 @@
         android:paddingTop="16dip"
         android:paddingRight="?attr/listPreferredItemPaddingRight"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="?attr/colorAccent" />
+        android:textColor="?android:textColorPrimary" />
 
     <LinearLayout
         android:id="@+id/group_content"

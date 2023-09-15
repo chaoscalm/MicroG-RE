@@ -20,7 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetAllCapabilitiesResponse extends AutoSafeParcelable {
+    public static final Creator<GetAllCapabilitiesResponse> CREATOR = new AutoCreator<GetAllCapabilitiesResponse>(GetAllCapabilitiesResponse.class);
     @SafeParceled(1)
     private int versionCode = 1;
-    public static final Creator<GetAllCapabilitiesResponse> CREATOR = new AutoCreator<GetAllCapabilitiesResponse>(GetAllCapabilitiesResponse.class);
 }

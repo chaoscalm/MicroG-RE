@@ -25,18 +25,15 @@ import org.microg.safeparcel.SafeParceled;
 @Hide
 public class FusedLocationProviderResult extends AutoSafeParcelable {
     public static final FusedLocationProviderResult SUCCESS = FusedLocationProviderResult.create(Status.SUCCESS);
-
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<FusedLocationProviderResult> CREATOR = new AutoCreator<FusedLocationProviderResult>(FusedLocationProviderResult.class);
     @SafeParceled(1)
     public Status status;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     public static FusedLocationProviderResult create(Status status) {
         FusedLocationProviderResult result = new FusedLocationProviderResult();
         result.status = status;
         return result;
     }
-
-    public static final Creator<FusedLocationProviderResult> CREATOR = new AutoCreator<FusedLocationProviderResult>(FusedLocationProviderResult.class);
 }

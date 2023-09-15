@@ -22,13 +22,6 @@ import java.util.Arrays;
  */
 @PublicApi
 public class LocationAvailability extends AutoSafeParcelable {
-    private static final String EXTRA_KEY = "com.google.android.gms.location.EXTRA_LOCATION_AVAILABILITY";
-
-    @Hide
-    public static LocationAvailability AVAILABLE = new LocationAvailability(0, 1, 1, 0, null);
-    @Hide
-    public static LocationAvailability UNAVAILABLE = new LocationAvailability(1000, 1, 1, 0, null);
-
     @Hide
     public static final int STATUS_SUCCESSFUL = 0;
     @Hide
@@ -47,10 +40,12 @@ public class LocationAvailability extends AutoSafeParcelable {
     public static final int STATUS_LOCATION_DISABLED_IN_SETTINGS = 7;
     @Hide
     public static final int STATUS_IN_PROGRESS = 8;
-
-    @Field(1000)
-    private int versionCode = 2;
-
+    public static final Creator<LocationAvailability> CREATOR = new AutoCreator<LocationAvailability>(LocationAvailability.class);
+    private static final String EXTRA_KEY = "com.google.android.gms.location.EXTRA_LOCATION_AVAILABILITY";
+    @Hide
+    public static LocationAvailability AVAILABLE = new LocationAvailability(0, 1, 1, 0, null);
+    @Hide
+    public static LocationAvailability UNAVAILABLE = new LocationAvailability(1000, 1, 1, 0, null);
     @Field(1)
     @Hide
     public int cellStatus;
@@ -70,6 +65,8 @@ public class LocationAvailability extends AutoSafeParcelable {
     @Field(5)
     @Hide
     public NetworkLocationStatus[] batchedStatus;
+    @Field(1000)
+    private int versionCode = 2;
 
     private LocationAvailability() {
     }
@@ -81,15 +78,6 @@ public class LocationAvailability extends AutoSafeParcelable {
         this.wifiStatus = wifiStatus;
         this.elapsedRealtimeNs = elapsedRealtimeNs;
         this.batchedStatus = batchedStatus;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof LocationAvailability) {
-            LocationAvailability other = (LocationAvailability) o;
-            return other.cellStatus == cellStatus && other.wifiStatus == wifiStatus && other.elapsedRealtimeNs == elapsedRealtimeNs && other.locationStatus == locationStatus;
-        }
-        return false;
     }
 
     /**
@@ -114,6 +102,15 @@ public class LocationAvailability extends AutoSafeParcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof LocationAvailability) {
+            LocationAvailability other = (LocationAvailability) o;
+            return other.cellStatus == cellStatus && other.wifiStatus == wifiStatus && other.elapsedRealtimeNs == elapsedRealtimeNs && other.locationStatus == locationStatus;
+        }
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         return Arrays.hashCode(new Object[]{locationStatus, cellStatus, wifiStatus, elapsedRealtimeNs});
     }
@@ -129,6 +126,4 @@ public class LocationAvailability extends AutoSafeParcelable {
     public String toString() {
         return "LocationAvailability[" + isLocationAvailable() + "]";
     }
-
-    public static final Creator<LocationAvailability> CREATOR = new AutoCreator<LocationAvailability>(LocationAvailability.class);
 }

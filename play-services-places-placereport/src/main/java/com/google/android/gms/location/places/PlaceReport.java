@@ -11,6 +11,7 @@ import org.microg.safeparcel.SafeParceled;
 
 @PublicApi
 public class PlaceReport extends AutoSafeParcelable {
+    public static final Creator<PlaceReport> CREATOR = new AutoCreator<PlaceReport>(PlaceReport.class);
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -27,6 +28,4 @@ public class PlaceReport extends AutoSafeParcelable {
     public String getTag() {
         return tag;
     }
-
-    public static final Creator<PlaceReport> CREATOR = new AutoCreator<PlaceReport>(PlaceReport.class);
 }

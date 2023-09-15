@@ -16,6 +16,16 @@
 
 package com.google.android.gms.gcm;
 
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.gcm.GcmConstants.ACTION_SCHEDULE;
+import static org.microg.gms.gcm.GcmConstants.ACTION_TASK_READY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_COMPONENT;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SCHEDULER_ACTION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_TAG;
+import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_CANCEL;
+import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_CANCEL_ALL;
+import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_SCHEDULE;
+
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,16 +36,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import java.util.List;
-
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.gcm.GcmConstants.ACTION_SCHEDULE;
-import static org.microg.gms.gcm.GcmConstants.ACTION_TASK_READY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_COMPONENT;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SCHEDULER_ACTION;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_TAG;
-import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_CANCEL;
-import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_CANCEL_ALL;
-import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_SCHEDULE;
 
 /**
  * Class to create apps with robust "send-to-sync", which is the mechanism to sync data with
@@ -139,6 +139,21 @@ public class GcmNetworkManager {
     }
 
     /**
+     * Use this function to access the GcmNetworkManager API.
+     *
+     * @param context Context of the calling app.
+     * @return GcmNetworkManager object.
+     */
+    public static GcmNetworkManager getInstance(Context context) {
+        synchronized (GcmNetworkManager.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new GcmNetworkManager(context);
+            }
+            return INSTANCE;
+        }
+    }
+
+    /**
      * Cancels all tasks previously scheduled against the provided GcmTaskService. Note that a
      * cancel will have no effect on an in-flight task.
      *
@@ -171,21 +186,6 @@ public class GcmNetworkManager {
             scheduleIntent.putExtra(EXTRA_TAG, tag);
             scheduleIntent.putExtra(EXTRA_COMPONENT, new ComponentName(context, gcmTaskService));
             context.sendBroadcast(scheduleIntent);
-        }
-    }
-
-    /**
-     * Use this function to access the GcmNetworkManager API.
-     *
-     * @param context Context of the calling app.
-     * @return GcmNetworkManager object.
-     */
-    public static GcmNetworkManager getInstance(Context context) {
-        synchronized (GcmNetworkManager.class) {
-            if (INSTANCE == null) {
-                INSTANCE = new GcmNetworkManager(context);
-            }
-            return INSTANCE;
         }
     }
 

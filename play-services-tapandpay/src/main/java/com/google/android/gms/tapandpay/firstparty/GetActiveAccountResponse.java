@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetActiveAccountResponse extends AutoSafeParcelable {
+    public static final Creator<GetActiveAccountResponse> CREATOR = new AutoCreator<>(GetActiveAccountResponse.class);
     @Field(2)
     @Nullable
     public final AccountInfo accountInfo;
@@ -21,6 +22,4 @@ public class GetActiveAccountResponse extends AutoSafeParcelable {
     public GetActiveAccountResponse(@Nullable AccountInfo accountInfo) {
         this.accountInfo = accountInfo;
     }
-
-    public static final Creator<GetActiveAccountResponse> CREATOR = new AutoCreator<>(GetActiveAccountResponse.class);
 }

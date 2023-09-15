@@ -23,12 +23,11 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class ConfirmCredentialsRequest extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<ConfirmCredentialsRequest> CREATOR = new AutoCreator<ConfirmCredentialsRequest>(ConfirmCredentialsRequest.class);
     @SafeParceled(2)
     public AccountCredentials accountCredentials;
     @SafeParceled(3)
     public CaptchaSolution captchaSolution;
-
-    public static final Creator<ConfirmCredentialsRequest> CREATOR = new AutoCreator<ConfirmCredentialsRequest>(ConfirmCredentialsRequest.class);
+    @SafeParceled(1)
+    private int versionCode = 1;
 }

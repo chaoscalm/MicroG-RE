@@ -126,14 +126,15 @@ class IdentityToolkitClient(context: Context, private val apiKey: String) {
         photoUrl: String? = null,
         deleteAttribute: List<String> = emptyList()
     ): JSONObject =
-        request("setAccountInfo", JSONObject()
-            .put("idToken", idToken)
-            .put("localId", localId)
-            .put("email", email)
-            .put("password", password)
-            .put("displayName", displayName)
-            .put("photoUrl", photoUrl)
-            .put("deleteAttribute", JSONArray().apply { deleteAttribute.forEach { put(it) } })
+        request(
+            "setAccountInfo", JSONObject()
+                .put("idToken", idToken)
+                .put("localId", localId)
+                .put("email", email)
+                .put("password", password)
+                .put("displayName", displayName)
+                .put("photoUrl", photoUrl)
+                .put("deleteAttribute", JSONArray().apply { deleteAttribute.forEach { put(it) } })
         )
 
     suspend fun signupNewUser(

@@ -21,6 +21,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class BinderWrapper implements Parcelable {
+    public static final Creator<BinderWrapper> CREATOR = new Creator<BinderWrapper>() {
+        @Override
+        public BinderWrapper createFromParcel(Parcel source) {
+            return new BinderWrapper(source.readStrongBinder());
+        }
+
+        @Override
+        public BinderWrapper[] newArray(int size) {
+            return new BinderWrapper[size];
+        }
+    };
     public IBinder binder;
 
     public BinderWrapper(IBinder binder) {
@@ -36,16 +47,4 @@ public class BinderWrapper implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStrongBinder(binder);
     }
-
-    public static final Creator<BinderWrapper> CREATOR = new Creator<BinderWrapper>() {
-        @Override
-        public BinderWrapper createFromParcel(Parcel source) {
-            return new BinderWrapper(source.readStrongBinder());
-        }
-
-        @Override
-        public BinderWrapper[] newArray(int size) {
-            return new BinderWrapper[size];
-        }
-    };
 }

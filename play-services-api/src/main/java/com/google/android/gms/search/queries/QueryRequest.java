@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 public class QueryRequest extends AutoSafeParcelable {
 
+    public static Creator<QueryRequest> CREATOR = new AutoCreator<QueryRequest>(QueryRequest.class);
     @SafeParceled(1000)
     public int versionCode = 1;
     @SafeParceled(1)
@@ -52,6 +53,4 @@ public class QueryRequest extends AutoSafeParcelable {
                 ", spec=" + spec +
                 '}';
     }
-
-    public static Creator<QueryRequest> CREATOR = new AutoCreator<QueryRequest>(QueryRequest.class);
 }

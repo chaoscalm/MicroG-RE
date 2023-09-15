@@ -20,7 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class CloseChannelResponse extends AutoSafeParcelable {
+    public static final Creator<CloseChannelResponse> CREATOR = new AutoCreator<CloseChannelResponse>(CloseChannelResponse.class);
     @SafeParceled(1)
     private int versionCode = 1;
-    public static final Creator<CloseChannelResponse> CREATOR = new AutoCreator<CloseChannelResponse>(CloseChannelResponse.class);
 }

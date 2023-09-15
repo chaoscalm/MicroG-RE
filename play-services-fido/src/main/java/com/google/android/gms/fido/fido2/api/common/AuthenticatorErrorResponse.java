@@ -19,6 +19,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class AuthenticatorErrorResponse extends AuthenticatorResponse {
+    public static final Creator<AuthenticatorErrorResponse> CREATOR = new AutoCreator<>(AuthenticatorErrorResponse.class);
     @Field(2)
     private ErrorCode errorCode;
     @Field(3)
@@ -31,6 +32,10 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
     public AuthenticatorErrorResponse(ErrorCode errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+    }
+
+    public static AuthenticatorErrorResponse deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
     }
 
     @Override
@@ -79,10 +84,4 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
                 .value(errorMessage)
                 .end();
     }
-
-    public static AuthenticatorErrorResponse deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    public static final Creator<AuthenticatorErrorResponse> CREATOR = new AutoCreator<>(AuthenticatorErrorResponse.class);
 }

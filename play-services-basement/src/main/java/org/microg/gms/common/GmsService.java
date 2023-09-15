@@ -176,11 +176,6 @@ public enum GmsService {
         this.SECONDARY_ACTIONS = actions;
     }
 
-    public interface ADVERTISING_ID {
-        // Has no service id
-        String ACTION = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.ads.identifier.service.START";
-    }
-
     public static GmsService byServiceId(int serviceId) {
         for (GmsService service : values()) {
             if (service.SERVICE_ID == serviceId) return service;
@@ -204,5 +199,10 @@ public enum GmsService {
     public String toString(int serviceId) {
         if (this != UNKNOWN) return toString();
         return "UNKNOWN(" + serviceId + ")";
+    }
+
+    public interface ADVERTISING_ID {
+        // Has no service id
+        String ACTION = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.ads.identifier.service.START";
     }
 }

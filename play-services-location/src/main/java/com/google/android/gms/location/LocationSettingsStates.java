@@ -22,26 +22,41 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class LocationSettingsStates extends AutoSafeParcelable {
 
+    public static final Creator<LocationSettingsStates> CREATOR = new AutoCreator<LocationSettingsStates>(LocationSettingsStates.class);
+    private static final String EXTRA_NAME = "com.google.android.gms.location.LOCATION_SETTINGS_STATES";
     @Field(1000)
     private int versionCode = 2;
-
     @Field(1)
     private boolean gpsUsable;
-
     @Field(2)
     private boolean networkLocationUsable;
-
     @Field(3)
     private boolean bleUsable;
-
     @Field(4)
     private boolean gpsPresent;
-
     @Field(5)
     private boolean networkLocationPresent;
-
     @Field(6)
     private boolean blePresent;
+
+    public LocationSettingsStates(boolean gpsUsable, boolean networkLocationUsable, boolean bleUsable, boolean gpsPresent, boolean networkLocationPresent, boolean blePresent) {
+        this.gpsUsable = gpsUsable;
+        this.networkLocationUsable = networkLocationUsable;
+        this.bleUsable = bleUsable;
+        this.gpsPresent = gpsPresent;
+        this.networkLocationPresent = networkLocationPresent;
+        this.blePresent = blePresent;
+    }
+
+    /**
+     * Retrieves the location settings states from the intent extras. When the location settings dialog finishes, you can use this method to retrieve the
+     * current location settings states from the intent in your {@link Activity#onActivityResult(int, int, Intent)};
+     */
+    public static LocationSettingsStates fromIntent(Intent intent) {
+        byte[] bytes = intent.getByteArrayExtra(EXTRA_NAME);
+        if (bytes == null) return null;
+        return SafeParcelUtil.fromByteArray(bytes, CREATOR);
+    }
 
     /**
      * Whether BLE is present on the device.
@@ -102,27 +117,4 @@ public class LocationSettingsStates extends AutoSafeParcelable {
     public boolean isNetworkLocationUsable() {
         return networkLocationUsable;
     }
-
-    public LocationSettingsStates(boolean gpsUsable, boolean networkLocationUsable, boolean bleUsable, boolean gpsPresent, boolean networkLocationPresent, boolean blePresent) {
-        this.gpsUsable = gpsUsable;
-        this.networkLocationUsable = networkLocationUsable;
-        this.bleUsable = bleUsable;
-        this.gpsPresent = gpsPresent;
-        this.networkLocationPresent = networkLocationPresent;
-        this.blePresent = blePresent;
-    }
-
-    /**
-     * Retrieves the location settings states from the intent extras. When the location settings dialog finishes, you can use this method to retrieve the
-     * current location settings states from the intent in your {@link Activity#onActivityResult(int, int, Intent)};
-     */
-    public static LocationSettingsStates fromIntent(Intent intent) {
-        byte[] bytes = intent.getByteArrayExtra(EXTRA_NAME);
-        if (bytes == null) return null;
-        return SafeParcelUtil.fromByteArray(bytes, CREATOR);
-    }
-
-    public static final Creator<LocationSettingsStates> CREATOR = new AutoCreator<LocationSettingsStates>(LocationSettingsStates.class);
-
-    private static final String EXTRA_NAME = "com.google.android.gms.location.LOCATION_SETTINGS_STATES";
 }

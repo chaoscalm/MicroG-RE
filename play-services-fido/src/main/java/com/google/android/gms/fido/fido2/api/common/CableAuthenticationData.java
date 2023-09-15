@@ -8,6 +8,7 @@ package com.google.android.gms.fido.fido2.api.common;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class CableAuthenticationData extends AutoSafeParcelable {
+    public static final Creator<CableAuthenticationData> CREATOR = new AutoCreator<>(CableAuthenticationData.class);
     @Field(1)
     private long version;
     @Field(2)
@@ -16,6 +17,4 @@ public class CableAuthenticationData extends AutoSafeParcelable {
     private byte[] authenticatorEid;
     @Field(4)
     private byte[] sessionPreKey;
-
-    public static final Creator<CableAuthenticationData> CREATOR = new AutoCreator<>(CableAuthenticationData.class);
 }

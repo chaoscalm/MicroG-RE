@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountChangeEventsResponse extends AutoSafeParcelable {
+    public static Creator<AccountChangeEventsResponse> CREATOR = new AutoCreator<AccountChangeEventsResponse>(AccountChangeEventsResponse.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(value = 2, subClass = AccountChangeEvent.class)
@@ -31,6 +32,4 @@ public class AccountChangeEventsResponse extends AutoSafeParcelable {
     public AccountChangeEventsResponse() {
         events = new ArrayList<AccountChangeEvent>();
     }
-
-    public static Creator<AccountChangeEventsResponse> CREATOR = new AutoCreator<AccountChangeEventsResponse>(AccountChangeEventsResponse.class);
 }

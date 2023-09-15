@@ -15,6 +15,7 @@ import java.util.Date;
 
 @Deprecated
 public class ExposureInformation extends AutoSafeParcelable {
+    public static final Creator<ExposureInformation> CREATOR = new AutoCreator<>(ExposureInformation.class);
     @Field(1)
     private long dateMillisSinceEpoch;
     @Field(2)
@@ -151,6 +152,4 @@ public class ExposureInformation extends AutoSafeParcelable {
             return new ExposureInformation(dateMillisSinceEpoch, durationMinutes, attenuationValue, transmissionRiskLevel, totalRiskScore, attenuationDurations);
         }
     }
-
-    public static final Creator<ExposureInformation> CREATOR = new AutoCreator<>(ExposureInformation.class);
 }

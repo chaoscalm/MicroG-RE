@@ -23,8 +23,7 @@ import java.util.List;
 
 public class QuerySpecification extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 2;
+    public static final Creator<QuerySpecification> CREATOR = new AutoCreator<QuerySpecification>(QuerySpecification.class);
     @SafeParceled(1)
     public final boolean b;
     //@SafeParceled(value = 2, subType = "TODO")
@@ -41,6 +40,8 @@ public class QuerySpecification extends AutoSafeParcelable {
     public final boolean h;
     @SafeParceled(8)
     public final int i;
+    @SafeParceled(1000)
+    private int versionCode = 2;
 
     private QuerySpecification() {
         b = false;
@@ -67,6 +68,4 @@ public class QuerySpecification extends AutoSafeParcelable {
                 ", i=" + i +
                 '}';
     }
-
-    public static final Creator<QuerySpecification> CREATOR = new AutoCreator<QuerySpecification>(QuerySpecification.class);
 }

@@ -8,9 +8,9 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetProvidersForEmailAidlRequest extends AutoSafeParcelable {
+    public static final Creator<GetProvidersForEmailAidlRequest> CREATOR = new AutoCreator<>(GetProvidersForEmailAidlRequest.class);
     @Field(1)
     public String email;
     @Field(2)
     public String tenantId;
-    public static final Creator<GetProvidersForEmailAidlRequest> CREATOR = new AutoCreator<>(GetProvidersForEmailAidlRequest.class);
 }

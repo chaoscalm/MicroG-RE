@@ -10,12 +10,11 @@ import android.accounts.Account;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAllCardsRequest extends AutoSafeParcelable {
+    public static final Creator<GetAllCardsRequest> CREATOR = new AutoCreator<>(GetAllCardsRequest.class);
     @Field(2)
     public boolean refreshSeCards;
     @Field(3)
     public Account account;
     @Field(4)
     public int sortOrderCollectionId;
-
-    public static final Creator<GetAllCardsRequest> CREATOR = new AutoCreator<>(GetAllCardsRequest.class);
 }

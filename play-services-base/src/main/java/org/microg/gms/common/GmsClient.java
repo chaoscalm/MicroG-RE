@@ -39,19 +39,17 @@ import org.microg.gms.common.api.OnConnectionFailedListener;
 
 public abstract class GmsClient<I extends IInterface> implements ApiClient {
     private static final String TAG = "GmsClient";
-
-    private final Context context;
     protected final ConnectionCallbacks callbacks;
     protected final OnConnectionFailedListener connectionFailedListener;
-    protected ConnectionState state = ConnectionState.NOT_CONNECTED;
-    private ServiceConnection serviceConnection;
-    private I serviceInterface;
+    private final Context context;
     private final String actionString;
     private final boolean requireMicrog;
-
+    protected ConnectionState state = ConnectionState.NOT_CONNECTED;
     protected int serviceId = -1;
     protected Account account = null;
     protected Bundle extras = new Bundle();
+    private ServiceConnection serviceConnection;
+    private I serviceInterface;
 
     public GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener, String actionString) {
         this(context, callbacks, connectionFailedListener, actionString, false);

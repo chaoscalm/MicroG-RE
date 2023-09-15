@@ -10,6 +10,7 @@ import com.google.android.gms.common.api.internal.IStatusCallback;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class RequestPreAuthorizedTemporaryExposureKeyReleaseParams extends AutoSafeParcelable {
+    public static final Creator<RequestPreAuthorizedTemporaryExposureKeyReleaseParams> CREATOR = new AutoCreator<>(RequestPreAuthorizedTemporaryExposureKeyReleaseParams.class);
     @Field(1)
     public IStatusCallback callback;
 
@@ -19,6 +20,4 @@ public class RequestPreAuthorizedTemporaryExposureKeyReleaseParams extends AutoS
     public RequestPreAuthorizedTemporaryExposureKeyReleaseParams(IStatusCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<RequestPreAuthorizedTemporaryExposureKeyReleaseParams> CREATOR = new AutoCreator<>(RequestPreAuthorizedTemporaryExposureKeyReleaseParams.class);
 }

@@ -42,6 +42,14 @@ public final class CastRemoteDisplay {
     private CastRemoteDisplay() {
     }
 
+    public interface CastRemoteDisplaySessionCallbacks {
+        void onRemoteDisplayEnded(Status status);
+    }
+
+    public interface CastRemoteDisplaySessionResult extends Result {
+        Display getPresentationDisplay();
+    }
+
     public static final class CastRemoteDisplayOptions implements Api.ApiOptions.HasOptions {
         private CastDevice castDevice;
         private CastRemoteDisplaySessionCallbacks callbacks;
@@ -64,13 +72,5 @@ public final class CastRemoteDisplay {
                 return new CastRemoteDisplayOptions(castDevice, callbacks);
             }
         }
-    }
-
-    public interface CastRemoteDisplaySessionCallbacks {
-        void onRemoteDisplayEnded(Status status);
-    }
-
-    public interface CastRemoteDisplaySessionResult extends Result {
-        Display getPresentationDisplay();
     }
 }

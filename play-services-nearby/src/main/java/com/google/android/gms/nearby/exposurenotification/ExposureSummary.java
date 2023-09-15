@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 @Deprecated
 public class ExposureSummary extends AutoSafeParcelable {
+    public static final Creator<ExposureSummary> CREATOR = new AutoCreator<>(ExposureSummary.class);
     @Field(1)
     private int daysSinceLastExposure;
     @Field(2)
@@ -127,6 +128,4 @@ public class ExposureSummary extends AutoSafeParcelable {
             return new ExposureSummary(daysSinceLastExposure, matchedKeyCount, maximumRiskScore, attenuationDurations, summationRiskScore);
         }
     }
-
-    public static final Creator<ExposureSummary> CREATOR = new AutoCreator<>(ExposureSummary.class);
 }

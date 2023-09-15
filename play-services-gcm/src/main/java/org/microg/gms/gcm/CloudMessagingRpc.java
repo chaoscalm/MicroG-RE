@@ -16,27 +16,6 @@
 
 package org.microg.gms.gcm;
 
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Messenger;
-import android.util.Log;
-
-import com.google.android.gms.iid.InstanceID;
-
-import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.google.android.gms.gcm.GoogleCloudMessaging.ERROR_SERVICE_NOT_AVAILABLE;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
@@ -52,6 +31,26 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 import static org.microg.gms.gcm.GcmConstants.PERMISSION_GTALK;
 import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE;
+
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
+
+import com.google.android.gms.iid.InstanceID;
+
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CloudMessagingRpc {
     private static final AtomicInteger messageIdCounter = new AtomicInteger(1);

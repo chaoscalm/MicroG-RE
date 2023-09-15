@@ -21,9 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SetIncludeInGlobalSearchRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<SetIncludeInGlobalSearchRequest> CREATOR = new AutoCreator<SetIncludeInGlobalSearchRequest>(SetIncludeInGlobalSearchRequest.class);
     @SafeParceled(1)
     public String packageName;
 
@@ -32,6 +30,8 @@ public class SetIncludeInGlobalSearchRequest extends AutoSafeParcelable {
 
     @SafeParceled(3)
     public boolean enabled;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     @Override
     public String toString() {
@@ -42,6 +42,4 @@ public class SetIncludeInGlobalSearchRequest extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<SetIncludeInGlobalSearchRequest> CREATOR = new AutoCreator<SetIncludeInGlobalSearchRequest>(SetIncludeInGlobalSearchRequest.class);
 }

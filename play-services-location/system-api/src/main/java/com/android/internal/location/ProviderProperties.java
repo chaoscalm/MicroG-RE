@@ -16,26 +16,35 @@ import android.os.Parcelable;
  * @hide
  */
 public final class ProviderProperties implements Parcelable {
+    public static final Parcelable.Creator<ProviderProperties> CREATOR =
+            new Parcelable.Creator<ProviderProperties>() {
+                @Override
+                public ProviderProperties createFromParcel(Parcel in) {
+                    return null;
+                }
+
+                @Override
+                public ProviderProperties[] newArray(int size) {
+                    return null;
+                }
+            };
     /**
      * True if provider requires access to a
      * data network (e.g., the Internet), false otherwise.
      */
     public final boolean mRequiresNetwork;
-
     /**
      * True if the provider requires access to a
      * satellite-based positioning system (e.g., GPS), false
      * otherwise.
      */
     public final boolean mRequiresSatellite;
-
     /**
      * True if the provider requires access to an appropriate
      * cellular network (e.g., to make use of cell tower IDs), false
      * otherwise.
      */
     public final boolean mRequiresCell;
-
     /**
      * True if the use of this provider may result in a
      * monetary charge to the user, false if use is free.  It is up to
@@ -43,7 +52,6 @@ public final class ProviderProperties implements Parcelable {
      * is not considered monetary cost.
      */
     public final boolean mHasMonetaryCost;
-
     /**
      * True if the provider is able to provide altitude
      * information, false otherwise.  A provider that reports altitude
@@ -51,7 +59,6 @@ public final class ProviderProperties implements Parcelable {
      * should return true.
      */
     public final boolean mSupportsAltitude;
-
     /**
      * True if the provider is able to provide speed
      * information, false otherwise.  A provider that reports speed
@@ -59,7 +66,6 @@ public final class ProviderProperties implements Parcelable {
      * should return true.
      */
     public final boolean mSupportsSpeed;
-
     /**
      * True if the provider is able to provide bearing
      * information, false otherwise.  A provider that reports bearing
@@ -67,7 +73,6 @@ public final class ProviderProperties implements Parcelable {
      * should return true.
      */
     public final boolean mSupportsBearing;
-
     /**
      * Power requirement for this provider.
      *
@@ -75,7 +80,6 @@ public final class ProviderProperties implements Parcelable {
      * constants Criteria.POWER_*.
      */
     public final int mPowerRequirement;
-
     /**
      * Constant describing the horizontal accuracy returned
      * by this provider.
@@ -99,19 +103,6 @@ public final class ProviderProperties implements Parcelable {
         this.mPowerRequirement = mPowerRequirement;
         this.mAccuracy = mAccuracy;
     }
-
-    public static final Parcelable.Creator<ProviderProperties> CREATOR =
-            new Parcelable.Creator<ProviderProperties>() {
-                @Override
-                public ProviderProperties createFromParcel(Parcel in) {
-                    return null;
-                }
-
-                @Override
-                public ProviderProperties[] newArray(int size) {
-                    return null;
-                }
-            };
 
     @Override
     public int describeContents() {

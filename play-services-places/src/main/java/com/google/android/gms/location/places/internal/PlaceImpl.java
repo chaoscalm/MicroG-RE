@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class PlaceImpl extends AutoSafeParcelable implements Place {
-    @SafeParceled(1000)
-    private int versionCode = 2;
+    public static final Creator<PlaceImpl> CREATOR = new AutoSafeParcelable.AutoCreator<PlaceImpl>(PlaceImpl.class);
     @SafeParceled(1)
     public String id;
     @SafeParceled(2)
@@ -70,6 +69,8 @@ public class PlaceImpl extends AutoSafeParcelable implements Place {
     public String name;
     @SafeParceled(value = 20, subClass = Integer.class)
     public List<Integer> placeTypes = new ArrayList<Integer>();
+    @SafeParceled(1000)
+    private int versionCode = 2;
 
     @Override
     public CharSequence getAddress() {
@@ -140,6 +141,4 @@ public class PlaceImpl extends AutoSafeParcelable implements Place {
     public boolean isDataValid() {
         return true;
     }
-
-    public static final Creator<PlaceImpl> CREATOR = new AutoSafeParcelable.AutoCreator<PlaceImpl>(PlaceImpl.class);
 }

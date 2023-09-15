@@ -15,83 +15,16 @@ import java.util.List;
 
 public class TestVectors {
 
-    public static byte[] asBytes(int... ints) {
-        byte[] bytes = new byte[ints.length];
-        for (int i = 0; i < ints.length; i++) {
-            int value = ints[i];
-            bytes[i] = (byte) value;
-        }
-        return bytes;
-    }
-
-    /**
-     * Class holding a matched pair of RPI and AEM values.
-     */
-    public static class AdvertisedData {
-        private final byte[] rollingProximityIndicator;
-        private final byte[] associatedEncryptedMetadata;
-
-        AdvertisedData(byte[] rollingProximityIndicator, byte[] associatedEncryptedMetadata) {
-            this.rollingProximityIndicator = rollingProximityIndicator;
-            this.associatedEncryptedMetadata = associatedEncryptedMetadata;
-        }
-
-        public byte[] get_RPI() {
-            return rollingProximityIndicator.clone();
-        }
-
-        public byte[] get_AEM() {
-            return associatedEncryptedMetadata.clone();
-        }
-
-        public byte[] get_merged() {
-            byte[] bytes = new byte[rollingProximityIndicator.length + associatedEncryptedMetadata.length];
-            System.arraycopy(rollingProximityIndicator, 0, bytes, 0, rollingProximityIndicator.length);
-            System.arraycopy(associatedEncryptedMetadata, 0, bytes, rollingProximityIndicator.length, associatedEncryptedMetadata.length);
-            return bytes;
-        }
-    }
-
-    public static byte[] get_TEMPORARY_TRACING_KEY() {
-        return TEMPORARY_TRACING_KEY.clone();
-    }
-
-    public static byte[] get_RPIK() {
-        return RPIK.clone();
-    }
-
-    public static byte[] get_AEMK() {
-        return AEMK.clone();
-    }
-
-    public static byte[] get_BLE_METADATA() {
-        return BLE_METADATA.clone();
-    }
-
-    public static String get_RPIK_HKDF_INFO_STRING() {
-        return "EN-RPIK";
-    }
-
-    public static String get_RPI_AES_PADDED_STRING() {
-        return "EN-RPI";
-    }
-
-    public static String get_AEMK_HKDF_INFO_STRING() {
-        return "EN-AEMK";
-    }
-
     // From TestVectors.h.txt
     // ------------------------------------------------------------------------------
     public static final int KEY_GENERATION_NSECONDS = 1585785600;
     public static final int CTINTERVAL_NUMBER_OF_GENERATED_KEY = 2642976;
     public static final int ID_ROLLING_PERIOD_MINUTES = 10;
     public static final int KEY_ROLLING_PERIOD_MULTIPLE_OF_ID_PERIOD = 144;
-
     private static final byte[] TEMPORARY_TRACING_KEY =
             asBytes(
                     0x75, 0xc7, 0x34, 0xc6, 0xdd, 0x1a, 0x78, 0x2d, 0xe7, 0xa9, 0x65, 0xda, 0x5e, 0xb9, 0x31,
                     0x25);
-
     private static final byte[] RPIK =
             asBytes(
                     0x18, 0x5a, 0xd9, 0x1d, 0xb6, 0x9e, 0xc7, 0xdd, 0x04, 0x89, 0x60, 0xf1, 0xf3, 0xba, 0x61,
@@ -821,8 +754,6 @@ public class TestVectors {
                     0xf4, 0x31, 0xb6, 0x2e, 0xcf, 0x44, 0x31, 0x02, 0xce, 0x4e, 0xd0, 0x40, 0x7d, 0xe5, 0x4b,
                     0xd4);
     private static final byte[] AEM143 = asBytes(0x12, 0x15, 0xe5, 0x7e);
-    // ------------------------------------------------------------------------------
-
     public static final List<AdvertisedData> ADVERTISED_DATA =
             Collections.unmodifiableList(Arrays.asList(
                     new AdvertisedData(RPI0, AEM0),
@@ -969,8 +900,73 @@ public class TestVectors {
                     new AdvertisedData(RPI141, AEM141),
                     new AdvertisedData(RPI142, AEM142),
                     new AdvertisedData(RPI143, AEM143)));
-
     private TestVectors() {
+    }
+
+    public static byte[] asBytes(int... ints) {
+        byte[] bytes = new byte[ints.length];
+        for (int i = 0; i < ints.length; i++) {
+            int value = ints[i];
+            bytes[i] = (byte) value;
+        }
+        return bytes;
+    }
+
+    public static byte[] get_TEMPORARY_TRACING_KEY() {
+        return TEMPORARY_TRACING_KEY.clone();
+    }
+
+    public static byte[] get_RPIK() {
+        return RPIK.clone();
+    }
+
+    public static byte[] get_AEMK() {
+        return AEMK.clone();
+    }
+
+    public static byte[] get_BLE_METADATA() {
+        return BLE_METADATA.clone();
+    }
+
+    public static String get_RPIK_HKDF_INFO_STRING() {
+        return "EN-RPIK";
+    }
+
+    public static String get_RPI_AES_PADDED_STRING() {
+        return "EN-RPI";
+    }
+    // ------------------------------------------------------------------------------
+
+    public static String get_AEMK_HKDF_INFO_STRING() {
+        return "EN-AEMK";
+    }
+
+    /**
+     * Class holding a matched pair of RPI and AEM values.
+     */
+    public static class AdvertisedData {
+        private final byte[] rollingProximityIndicator;
+        private final byte[] associatedEncryptedMetadata;
+
+        AdvertisedData(byte[] rollingProximityIndicator, byte[] associatedEncryptedMetadata) {
+            this.rollingProximityIndicator = rollingProximityIndicator;
+            this.associatedEncryptedMetadata = associatedEncryptedMetadata;
+        }
+
+        public byte[] get_RPI() {
+            return rollingProximityIndicator.clone();
+        }
+
+        public byte[] get_AEM() {
+            return associatedEncryptedMetadata.clone();
+        }
+
+        public byte[] get_merged() {
+            byte[] bytes = new byte[rollingProximityIndicator.length + associatedEncryptedMetadata.length];
+            System.arraycopy(rollingProximityIndicator, 0, bytes, 0, rollingProximityIndicator.length);
+            System.arraycopy(associatedEncryptedMetadata, 0, bytes, rollingProximityIndicator.length, associatedEncryptedMetadata.length);
+            return bytes;
+        }
     }
 }
 

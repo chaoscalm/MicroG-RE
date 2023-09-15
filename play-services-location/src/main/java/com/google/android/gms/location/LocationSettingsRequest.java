@@ -15,9 +15,7 @@ import java.util.List;
 
 @PublicApi
 public class LocationSettingsRequest extends AutoSafeParcelable {
-    @Field(1000)
-    private int versionCode = 2;
-
+    public static final Creator<LocationSettingsRequest> CREATOR = new AutoCreator<LocationSettingsRequest>(LocationSettingsRequest.class);
     @Field(value = 1, subClass = LocationRequest.class)
     @PublicApi(exclude = true)
     public List<LocationRequest> requests;
@@ -33,6 +31,8 @@ public class LocationSettingsRequest extends AutoSafeParcelable {
     @Field(5)
     @PublicApi(exclude = true)
     public LocationSettingsConfiguration configuration;
+    @Field(1000)
+    private int versionCode = 2;
 
     private LocationSettingsRequest() {
     }
@@ -99,6 +99,4 @@ public class LocationSettingsRequest extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<LocationSettingsRequest> CREATOR = new AutoCreator<LocationSettingsRequest>(LocationSettingsRequest.class);
 }

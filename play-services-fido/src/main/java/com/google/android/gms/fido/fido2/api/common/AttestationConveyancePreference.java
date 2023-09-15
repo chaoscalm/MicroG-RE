@@ -21,10 +21,33 @@ public enum AttestationConveyancePreference implements Parcelable {
     INDIRECT("indirect"),
     DIRECT("direct");
 
+    public static Creator<AttestationConveyancePreference> CREATOR = new Creator<AttestationConveyancePreference>() {
+        @Override
+        public AttestationConveyancePreference createFromParcel(Parcel source) {
+            try {
+                return AttestationConveyancePreference.fromString(source.readString());
+            } catch (UnsupportedAttestationConveyancePreferenceException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public AttestationConveyancePreference[] newArray(int size) {
+            return new AttestationConveyancePreference[size];
+        }
+    };
     private final String value;
 
     AttestationConveyancePreference(String value) {
         this.value = value;
+    }
+
+    @PublicApi(exclude = true)
+    public static AttestationConveyancePreference fromString(String attachment) throws UnsupportedAttestationConveyancePreferenceException {
+        for (AttestationConveyancePreference value : values()) {
+            if (value.value.equals(attachment)) return value;
+        }
+        throw new UnsupportedAttestationConveyancePreferenceException("Attestation conveyance preference " + attachment + " not supported");
     }
 
     @Override
@@ -41,30 +64,6 @@ public enum AttestationConveyancePreference implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(toString());
     }
-
-    @PublicApi(exclude = true)
-    public static AttestationConveyancePreference fromString(String attachment) throws UnsupportedAttestationConveyancePreferenceException {
-        for (AttestationConveyancePreference value : values()) {
-            if (value.value.equals(attachment)) return value;
-        }
-        throw new UnsupportedAttestationConveyancePreferenceException("Attestation conveyance preference " + attachment + " not supported");
-    }
-
-    public static Creator<AttestationConveyancePreference> CREATOR = new Creator<AttestationConveyancePreference>() {
-        @Override
-        public AttestationConveyancePreference createFromParcel(Parcel source) {
-            try {
-                return AttestationConveyancePreference.fromString(source.readString());
-            } catch (UnsupportedAttestationConveyancePreferenceException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public AttestationConveyancePreference[] newArray(int size) {
-            return new AttestationConveyancePreference[size];
-        }
-    };
 
     /**
      * Exception thrown when an unsupported or unrecognized attestation conveyance preference is encountered.

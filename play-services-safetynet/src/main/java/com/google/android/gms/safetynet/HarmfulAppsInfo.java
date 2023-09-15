@@ -8,6 +8,7 @@ package com.google.android.gms.safetynet;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class HarmfulAppsInfo extends AutoSafeParcelable {
+    public static final Creator<HarmfulAppsInfo> CREATOR = new AutoCreator<HarmfulAppsInfo>(HarmfulAppsInfo.class);
     @Field(2)
     public long field2;
     @Field(3)
@@ -16,6 +17,4 @@ public class HarmfulAppsInfo extends AutoSafeParcelable {
     public int field4;
     @Field(5)
     public boolean field5;
-
-    public static final Creator<HarmfulAppsInfo> CREATOR = new AutoCreator<HarmfulAppsInfo>(HarmfulAppsInfo.class);
 }

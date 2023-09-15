@@ -8,6 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SendVerificationCodeRequest extends AutoSafeParcelable {
+    public static final Creator<SendVerificationCodeRequest> CREATOR = new AutoCreator<>(SendVerificationCodeRequest.class);
     @Field(1)
     public String phoneNumber;
     @Field(2)
@@ -20,6 +21,4 @@ public class SendVerificationCodeRequest extends AutoSafeParcelable {
     public String tenantId;
     @Field(6)
     public String recaptchaToken;
-
-    public static final Creator<SendVerificationCodeRequest> CREATOR = new AutoCreator<>(SendVerificationCodeRequest.class);
 }

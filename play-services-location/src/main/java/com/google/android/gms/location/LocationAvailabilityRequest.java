@@ -14,10 +14,10 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
 public class LocationAvailabilityRequest extends AutoSafeParcelable {
+    public static final Creator<LocationAvailabilityRequest> CREATOR = new AutoCreator<>(LocationAvailabilityRequest.class);
     @Field(1)
     public boolean bypass;
     @Field(2)
     @Nullable
     public ClientIdentity impersonation;
-    public static final Creator<LocationAvailabilityRequest> CREATOR = new AutoCreator<>(LocationAvailabilityRequest.class);
 }

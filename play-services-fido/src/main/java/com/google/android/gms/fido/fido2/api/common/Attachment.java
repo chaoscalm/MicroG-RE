@@ -20,10 +20,33 @@ public enum Attachment implements Parcelable {
     PLATFORM("platform"),
     CROSS_PLATFORM("cross-platform");
 
+    public static Creator<Attachment> CREATOR = new Creator<Attachment>() {
+        @Override
+        public Attachment createFromParcel(Parcel source) {
+            try {
+                return Attachment.fromString(source.readString());
+            } catch (Attachment.UnsupportedAttachmentException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Attachment[] newArray(int size) {
+            return new Attachment[size];
+        }
+    };
     private final String value;
 
     Attachment(String value) {
         this.value = value;
+    }
+
+    @PublicApi(exclude = true)
+    public static Attachment fromString(String attachment) throws UnsupportedAttachmentException {
+        for (Attachment value : values()) {
+            if (value.value.equals(attachment)) return value;
+        }
+        throw new UnsupportedAttachmentException("Attachment " + attachment + " not supported");
     }
 
     @Override
@@ -40,30 +63,6 @@ public enum Attachment implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(toString());
     }
-
-    @PublicApi(exclude = true)
-    public static Attachment fromString(String attachment) throws UnsupportedAttachmentException {
-        for (Attachment value : values()) {
-            if (value.value.equals(attachment)) return value;
-        }
-        throw new UnsupportedAttachmentException("Attachment " + attachment + " not supported");
-    }
-
-    public static Creator<Attachment> CREATOR = new Creator<Attachment>() {
-        @Override
-        public Attachment createFromParcel(Parcel source) {
-            try {
-                return Attachment.fromString(source.readString());
-            } catch (Attachment.UnsupportedAttachmentException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public Attachment[] newArray(int size) {
-            return new Attachment[size];
-        }
-    };
 
     /**
      * Exception thrown when an unsupported or unrecognized attachment is encountered.

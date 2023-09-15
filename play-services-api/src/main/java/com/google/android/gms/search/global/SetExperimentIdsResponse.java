@@ -23,11 +23,11 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SetExperimentIdsResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<SetExperimentIdsResponse> CREATOR = new AutoCreator<SetExperimentIdsResponse>(SetExperimentIdsResponse.class);
     @SafeParceled(1)
     public final Status status;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private SetExperimentIdsResponse() {
         status = null;
@@ -44,6 +44,4 @@ public class SetExperimentIdsResponse extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<SetExperimentIdsResponse> CREATOR = new AutoCreator<SetExperimentIdsResponse>(SetExperimentIdsResponse.class);
 }

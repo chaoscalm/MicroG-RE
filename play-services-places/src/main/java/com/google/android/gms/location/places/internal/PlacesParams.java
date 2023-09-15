@@ -21,8 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class PlacesParams extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
+    public static final Creator<PlacesParams> CREATOR = new AutoCreator<PlacesParams>(PlacesParams.class);
     @SafeParceled(1)
     public final String clientPackageName;
     @SafeParceled(2)
@@ -31,10 +30,10 @@ public class PlacesParams extends AutoSafeParcelable {
     public final String accountName;
     @SafeParceled(4)
     public final String gCoreClientName;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private PlacesParams() {
         clientPackageName = locale = accountName = gCoreClientName = null;
     }
-
-    public static final Creator<PlacesParams> CREATOR = new AutoCreator<PlacesParams>(PlacesParams.class);
 }

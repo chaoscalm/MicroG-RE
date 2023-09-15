@@ -8,8 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAccessTokenAidlRequest extends AutoSafeParcelable {
+    public static final Creator<GetAccessTokenAidlRequest> CREATOR = new AutoCreator<>(GetAccessTokenAidlRequest.class);
     @Field(1)
     public String refreshToken;
-
-    public static final Creator<GetAccessTokenAidlRequest> CREATOR = new AutoCreator<>(GetAccessTokenAidlRequest.class);
 }

@@ -19,12 +19,9 @@ package org.microg.gms.cast;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -35,43 +32,18 @@ import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.List;
+import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
-
-    private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
-    private Map<String, String> serviceCastIds = new HashMap<String, String>();
-
-    private NsdManager mNsdManager;
-    private NsdManager.DiscoveryListener mDiscoveryListener;
-
-    private List<String> customCategories = new ArrayList<String>();
-
-    private enum State {
-        NOT_DISCOVERING,
-        DISCOVERY_REQUESTED,
-        DISCOVERING,
-        DISCOVERY_STOP_REQUESTED,
-    }
-
-    private State state = State.NOT_DISCOVERING;
-
     private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<IntentFilter>();
 
     static {
@@ -176,6 +148,13 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         filter.addAction(CastMediaControlIntent.ACTION_SYNC_STATUS);
         BASE_CONTROL_FILTERS.add(filter);
     }
+
+    private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
+    private Map<String, String> serviceCastIds = new HashMap<String, String>();
+    private NsdManager mNsdManager;
+    private NsdManager.DiscoveryListener mDiscoveryListener;
+    private List<String> customCategories = new ArrayList<String>();
+    private State state = State.NOT_DISCOVERING;
 
     @SuppressLint("NewApi")
     public CastMediaRouteProvider(Context context) {
@@ -358,5 +337,12 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             builder.addRoute(route);
         }
         this.setDescriptor(builder.build());
+    }
+
+    private enum State {
+        NOT_DISCOVERING,
+        DISCOVERY_REQUESTED,
+        DISCOVERING,
+        DISCOVERY_STOP_REQUESTED,
     }
 }

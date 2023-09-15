@@ -4,15 +4,15 @@
 
     <item
         android:bottom="8dp"
-        tools:width="100dp"
-        tools:height="50dp">
+        tools:height="50dp"
+        tools:width="100dp">
         <shape android:shape="rectangle">
             <solid android:color="#ffffff" />
             <corners
-                android:topLeftRadius="2dp"
-                android:topRightRadius="2dp"
+                android:bottomLeftRadius="2dp"
                 android:bottomRightRadius="2dp"
-                android:bottomLeftRadius="2dp" />
+                android:topLeftRadius="2dp"
+                android:topRightRadius="2dp" />
         </shape>
     </item>
 
@@ -23,8 +23,8 @@
             android:viewportWidth="50.0"
             android:viewportHeight="50.0">
             <path
-                android:pathData="M25,50 50,0 0,0z"
-                android:fillColor="#ffffff" />
+                android:fillColor="#ffffff"
+                android:pathData="M25,50 50,0 0,0z" />
         </vector>
     </item>
 

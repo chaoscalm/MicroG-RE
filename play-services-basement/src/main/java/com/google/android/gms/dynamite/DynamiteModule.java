@@ -7,7 +7,6 @@ package com.google.android.gms.dynamite;
 
 import android.content.Context;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,12 +15,9 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class DynamiteModule {
-    private static final String TAG = "DynamiteModule";
-
     public static final int NONE = 0;
     public static final int LOCAL = -1;
     public static final int REMOTE = 1;
-
     @NonNull
     public static final VersionPolicy PREFER_REMOTE = (context, moduleId, versions) -> {
         VersionPolicy.SelectionResult result = new VersionPolicy.SelectionResult();
@@ -50,55 +46,11 @@ public class DynamiteModule {
         }
         return result;
     };
-
-    public interface VersionPolicy {
-        interface IVersions {
-            /* renamed from: zza */
-            int getLocalVersion(@NonNull Context context, @NonNull String moduleId);
-
-            /* renamed from: zzb */
-            int getRemoteVersion(@NonNull Context context, @NonNull String moduleId, boolean forceStaging) throws LoadingException;
-
-            IVersions Default = new IVersions() {
-                @Override
-                public int getLocalVersion(@NonNull Context context, @NonNull String moduleId) {
-                    return DynamiteModule.getLocalVersion(context, moduleId);
-                }
-
-                @Override
-                public int getRemoteVersion(@NonNull Context context, @NonNull String moduleId, boolean forceStaging) throws LoadingException {
-                    return DynamiteModule.getRemoteVersion(context, moduleId, forceStaging);
-                }
-            };
-        }
-
-        class SelectionResult {
-            public int localVersion = 0;
-            public int remoteVersion = 0;
-            public int selection = NONE;
-        }
-
-        SelectionResult selectModule(@NonNull Context context, @NonNull String moduleId, @NonNull IVersions versions) throws LoadingException;
-    }
-
-    public static class LoadingException extends Exception {
-        public LoadingException(String message) {
-            super(message);
-        }
-
-        public LoadingException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
-
+    private static final String TAG = "DynamiteModule";
     private Context moduleContext;
 
     private DynamiteModule(Context moduleContext) {
         this.moduleContext = moduleContext;
-    }
-
-    public Context getModuleContext() {
-        return moduleContext;
     }
 
     public static int getLocalVersion(@NonNull Context context, @NonNull String moduleId) {
@@ -156,6 +108,10 @@ public class DynamiteModule {
         }
     }
 
+    public Context getModuleContext() {
+        return moduleContext;
+    }
+
     @NonNull
     public IBinder instantiate(@NonNull String className) throws LoadingException {
         try {
@@ -163,6 +119,46 @@ public class DynamiteModule {
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException |
                  RuntimeException e) {
             throw new LoadingException("Failed to instantiate module class: " + className, e);
+        }
+    }
+
+    public interface VersionPolicy {
+        SelectionResult selectModule(@NonNull Context context, @NonNull String moduleId, @NonNull IVersions versions) throws LoadingException;
+
+        interface IVersions {
+            IVersions Default = new IVersions() {
+                @Override
+                public int getLocalVersion(@NonNull Context context, @NonNull String moduleId) {
+                    return DynamiteModule.getLocalVersion(context, moduleId);
+                }
+
+                @Override
+                public int getRemoteVersion(@NonNull Context context, @NonNull String moduleId, boolean forceStaging) throws LoadingException {
+                    return DynamiteModule.getRemoteVersion(context, moduleId, forceStaging);
+                }
+            };
+
+            /* renamed from: zza */
+            int getLocalVersion(@NonNull Context context, @NonNull String moduleId);
+
+            /* renamed from: zzb */
+            int getRemoteVersion(@NonNull Context context, @NonNull String moduleId, boolean forceStaging) throws LoadingException;
+        }
+
+        class SelectionResult {
+            public int localVersion = 0;
+            public int remoteVersion = 0;
+            public int selection = NONE;
+        }
+    }
+
+    public static class LoadingException extends Exception {
+        public LoadingException(String message) {
+            super(message);
+        }
+
+        public LoadingException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

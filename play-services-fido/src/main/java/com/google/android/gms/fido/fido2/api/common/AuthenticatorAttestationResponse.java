@@ -19,6 +19,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
+    public static final Creator<AuthenticatorAttestationResponse> CREATOR = new AutoCreator<>(AuthenticatorAttestationResponse.class);
     @Field(2)
     private byte[] keyHandle;
     @Field(3)
@@ -34,6 +35,10 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.attestationObject = attestationObject;
+    }
+
+    public static AuthenticatorAttestationResponse deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
     }
 
     public byte[] getAttestationObject() {
@@ -83,10 +88,4 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
                 .field("attestationObject", attestationObject)
                 .end();
     }
-
-    public static AuthenticatorAttestationResponse deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    public static final Creator<AuthenticatorAttestationResponse> CREATOR = new AutoCreator<>(AuthenticatorAttestationResponse.class);
 }

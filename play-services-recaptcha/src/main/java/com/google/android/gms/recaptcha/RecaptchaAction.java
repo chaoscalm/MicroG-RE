@@ -19,6 +19,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  * {@link RecaptchaClient#execute(RecaptchaHandle, RecaptchaAction)}.
  */
 public class RecaptchaAction extends AutoSafeParcelable {
+    public static final Creator<RecaptchaAction> CREATOR = new AutoCreator<>(RecaptchaAction.class);
     @Field(1)
     private RecaptchaActionType action;
     @Field(2)
@@ -102,6 +103,4 @@ public class RecaptchaAction extends AutoSafeParcelable {
             return action.name;
         }
     }
-
-    public static final Creator<RecaptchaAction> CREATOR = new AutoCreator<>(RecaptchaAction.class);
 }

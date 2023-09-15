@@ -8,6 +8,7 @@ package com.google.android.gms.nearby.exposurenotification.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class IsEnabledParams extends AutoSafeParcelable {
+    public static final Creator<IsEnabledParams> CREATOR = new AutoCreator<>(IsEnabledParams.class);
     @Field(2)
     public IBooleanCallback callback;
 
@@ -17,6 +18,4 @@ public class IsEnabledParams extends AutoSafeParcelable {
     public IsEnabledParams(IBooleanCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<IsEnabledParams> CREATOR = new AutoCreator<>(IsEnabledParams.class);
 }

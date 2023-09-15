@@ -25,7 +25,6 @@ import android.util.Log;
 
 import org.microg.gms.maps.vtm.data.SharedTileCache;
 import org.microg.gms.maps.vtm.markup.ClearableVectorLayer;
-import org.microg.gms.maps.vtm.R;
 import org.oscim.android.AndroidAssets;
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;
@@ -45,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -57,6 +55,19 @@ public class BackendMapView extends MapView {
     private BuildingLayer buildings;
     private ItemizedLayer<MarkerItem> items;
     private ClearableVectorLayer drawables;
+
+    public BackendMapView(Context context) {
+        super(loadNativeLib(context));
+        if (context instanceof ContextWrapper) {
+            AndroidAssets.init(ApplicationContextWrapper.matchingApplicationContext(((ContextWrapper) context).getBaseContext()));
+        }
+        initialize();
+    }
+
+    public BackendMapView(Context context, AttributeSet attributeSet) {
+        super(loadNativeLib(context), attributeSet);
+        initialize();
+    }
 
     static synchronized Context loadNativeLib(Context context) {
         try {
@@ -112,19 +123,6 @@ public class BackendMapView extends MapView {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    public BackendMapView(Context context) {
-        super(loadNativeLib(context));
-        if (context instanceof ContextWrapper) {
-            AndroidAssets.init(ApplicationContextWrapper.matchingApplicationContext(((ContextWrapper) context).getBaseContext()));
-        }
-        initialize();
-    }
-
-    public BackendMapView(Context context, AttributeSet attributeSet) {
-        super(loadNativeLib(context), attributeSet);
-        initialize();
     }
 
     ItemizedLayer<MarkerItem> items() {

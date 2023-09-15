@@ -20,6 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class RemoveLocalCapabilityResponse extends AutoSafeParcelable {
+    public static final Creator<RemoveLocalCapabilityResponse> CREATOR = new AutoCreator<RemoveLocalCapabilityResponse>(RemoveLocalCapabilityResponse.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -31,6 +32,4 @@ public class RemoveLocalCapabilityResponse extends AutoSafeParcelable {
     public RemoveLocalCapabilityResponse(int status) {
         this.status = status;
     }
-
-    public static final Creator<RemoveLocalCapabilityResponse> CREATOR = new AutoCreator<RemoveLocalCapabilityResponse>(RemoveLocalCapabilityResponse.class);
 }

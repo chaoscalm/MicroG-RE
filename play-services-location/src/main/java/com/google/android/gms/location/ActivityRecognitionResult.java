@@ -106,6 +106,22 @@ public class ActivityRecognitionResult extends AutoSafeParcelable {
     }
 
     /**
+     * Returns true if an Intent contains an ActivityRecognitionResult.
+     * <p>
+     * This is a utility function that can be called from inside an intent receiver to make sure the received intent is
+     * from activity recognition.
+     *
+     * @return true if the intent contains an ActivityRecognitionResult, false otherwise or the given intent is null
+     */
+    public static boolean hasResult(Intent intent) {
+        if (intent == null) return false;
+        if (intent.hasExtra(EXTRA_ACTIVITY_RESULT)) return true;
+        intent.setExtrasClassLoader(ActivityRecognitionResult.class.getClassLoader());
+        List<ActivityRecognitionResult> list = intent.getParcelableArrayListExtra(EXTRA_ACTIVITY_RESULT_LIST);
+        return list != null && !list.isEmpty();
+    }
+
+    /**
      * Returns the confidence of the given activity type.
      */
     public int getActivityConfidence(int activityType) {
@@ -148,22 +164,6 @@ public class ActivityRecognitionResult extends AutoSafeParcelable {
      */
     public long getTime() {
         return time;
-    }
-
-    /**
-     * Returns true if an Intent contains an ActivityRecognitionResult.
-     * <p>
-     * This is a utility function that can be called from inside an intent receiver to make sure the received intent is
-     * from activity recognition.
-     *
-     * @return true if the intent contains an ActivityRecognitionResult, false otherwise or the given intent is null
-     */
-    public static boolean hasResult(Intent intent) {
-        if (intent == null) return false;
-        if (intent.hasExtra(EXTRA_ACTIVITY_RESULT)) return true;
-        intent.setExtrasClassLoader(ActivityRecognitionResult.class.getClassLoader());
-        List<ActivityRecognitionResult> list = intent.getParcelableArrayListExtra(EXTRA_ACTIVITY_RESULT_LIST);
-        return list != null && !list.isEmpty();
     }
 
     @NonNull

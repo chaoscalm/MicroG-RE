@@ -28,20 +28,6 @@ public abstract class Service extends ContextWrapper implements InstanceProvider
     private android.app.Service containerService;
     private ProxyCallbacks callbacks;
 
-    public interface ProxyCallbacks {
-        void superOnCreate();
-
-        void superOnDestroy();
-
-        int superOnStartCommand(Intent intent, int flags, int startId);
-
-        void superStopSelf();
-
-        void superStopSelf(int startId);
-
-        boolean superStopSelfResult(int startId);
-    }
-
     public Service() {
         super(null);
     }
@@ -63,7 +49,6 @@ public abstract class Service extends ContextWrapper implements InstanceProvider
     }
 
     public abstract IBinder onBind(Intent intent);
-
 
     public void onConfigurationChanged(Configuration configuration) {
     }
@@ -127,5 +112,19 @@ public abstract class Service extends ContextWrapper implements InstanceProvider
 
     public final void stopSelf(int startId) {
         this.callbacks.superStopSelf(startId);
+    }
+
+    public interface ProxyCallbacks {
+        void superOnCreate();
+
+        void superOnDestroy();
+
+        int superOnStartCommand(Intent intent, int flags, int startId);
+
+        void superStopSelf();
+
+        void superStopSelf(int startId);
+
+        boolean superStopSelfResult(int startId);
     }
 }

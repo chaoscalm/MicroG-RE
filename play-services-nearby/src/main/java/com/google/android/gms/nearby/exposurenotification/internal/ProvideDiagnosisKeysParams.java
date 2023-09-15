@@ -18,6 +18,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import java.util.List;
 
 public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
+    public static final Creator<ProvideDiagnosisKeysParams> CREATOR = new AutoCreator<>(ProvideDiagnosisKeysParams.class);
     @Field(1)
     @Nullable
     public List<TemporaryExposureKey> keys;
@@ -55,6 +56,4 @@ public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
         this.callback = callback;
         this.keyFileSupplier = keyFileSupplier;
     }
-
-    public static final Creator<ProvideDiagnosisKeysParams> CREATOR = new AutoCreator<>(ProvideDiagnosisKeysParams.class);
 }

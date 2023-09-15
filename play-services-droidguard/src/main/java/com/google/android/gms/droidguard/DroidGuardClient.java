@@ -13,10 +13,6 @@ import com.google.android.gms.tasks.Task;
 import java.util.Map;
 
 public interface DroidGuardClient {
-    Task<DroidGuardHandle> init(String flow, DroidGuardResultsRequest request);
-
-    Task<String> getResults(String flow, Map<String, String> data, DroidGuardResultsRequest request);
-
     static Task<DroidGuardHandle> init(Context context, String flow) {
         return DroidGuard.getClient(context).init(flow, null);
     }
@@ -24,4 +20,8 @@ public interface DroidGuardClient {
     static Task<String> getResults(Context context, String flow, Map<String, String> data) {
         return DroidGuard.getClient(context).getResults(flow, data, null);
     }
+
+    Task<DroidGuardHandle> init(String flow, DroidGuardResultsRequest request);
+
+    Task<String> getResults(String flow, Map<String, String> data, DroidGuardResultsRequest request);
 }

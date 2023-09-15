@@ -3,8 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="prefcat_location_apps"
         android:title="@string/prefcat_location_apps_title">
@@ -24,13 +23,13 @@
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_location_wifi_mls_enabled"
-            android:title="@string/pref_location_wifi_mls_enabled_title"
-            android:summary="@string/pref_location_wifi_mls_enabled_summary" />
+            android:summary="@string/pref_location_wifi_mls_enabled_summary"
+            android:title="@string/pref_location_wifi_mls_enabled_title" />
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_location_wifi_moving_enabled"
-            android:title="@string/pref_location_wifi_moving_enabled_title"
-            android:summary="@string/pref_location_wifi_moving_enabled_summary" />
+            android:summary="@string/pref_location_wifi_moving_enabled_summary"
+            android:title="@string/pref_location_wifi_moving_enabled_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_location_cells"
@@ -38,7 +37,7 @@
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_location_cell_mls_enabled"
-            android:title="@string/pref_location_cell_mls_enabled_title"
-            android:summary="@string/pref_location_cell_mls_enabled_summary" />
+            android:summary="@string/pref_location_cell_mls_enabled_summary"
+            android:title="@string/pref_location_cell_mls_enabled_title" />
     </PreferenceCategory>
 </PreferenceScreen>

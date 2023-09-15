@@ -34,6 +34,17 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public class OneoffTask extends com.google.android.gms.gcm.Task {
+    public static final Creator<OneoffTask> CREATOR = new Creator<OneoffTask>() {
+        @Override
+        public OneoffTask createFromParcel(Parcel source) {
+            return new OneoffTask(source);
+        }
+
+        @Override
+        public OneoffTask[] newArray(int size) {
+            return new OneoffTask[size];
+        }
+    };
     private final long windowStart;
     private final long windowEnd;
 
@@ -84,18 +95,6 @@ public class OneoffTask extends com.google.android.gms.gcm.Task {
         parcel.writeLong(this.windowStart);
         parcel.writeLong(this.windowEnd);
     }
-
-    public static final Creator<OneoffTask> CREATOR = new Creator<OneoffTask>() {
-        @Override
-        public OneoffTask createFromParcel(Parcel source) {
-            return new OneoffTask(source);
-        }
-
-        @Override
-        public OneoffTask[] newArray(int size) {
-            return new OneoffTask[size];
-        }
-    };
 
     public static class Builder extends Task.Builder {
         private long windowStart = -1;

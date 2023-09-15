@@ -22,6 +22,7 @@ import java.util.Map;
  */
 @PublicApi
 public class DiagnosisKeysDataMapping extends AutoSafeParcelable {
+    public static final Creator<DiagnosisKeysDataMapping> CREATOR = new AutoCreator<>(DiagnosisKeysDataMapping.class);
     @Field(value = 1, useDirectList = true)
     private List<Integer> daysSinceOnsetToInfectiousness = new ArrayList<>();
     @Field(2)
@@ -113,6 +114,4 @@ public class DiagnosisKeysDataMapping extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<DiagnosisKeysDataMapping> CREATOR = new AutoCreator<>(DiagnosisKeysDataMapping.class);
 }

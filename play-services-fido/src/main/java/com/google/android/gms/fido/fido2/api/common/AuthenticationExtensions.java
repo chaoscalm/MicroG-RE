@@ -23,6 +23,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class AuthenticationExtensions extends AutoSafeParcelable {
+    public static final Creator<AuthenticationExtensions> CREATOR = new AutoCreator<>(AuthenticationExtensions.class);
     @Field(2)
     private FidoAppIdExtension fidoAppIdExtension;
     @Field(3)
@@ -107,6 +108,4 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
             return extensions;
         }
     }
-
-    public static final Creator<AuthenticationExtensions> CREATOR = new AutoCreator<>(AuthenticationExtensions.class);
 }

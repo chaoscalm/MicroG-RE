@@ -21,8 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class RequestIndexingSpecification extends AutoSafeParcelable {
 
+    public static final Creator<RequestIndexingSpecification> CREATOR = new AutoCreator<RequestIndexingSpecification>(RequestIndexingSpecification.class);
     @SafeParceled(1000)
     private int versionCode;
-
-    public static final Creator<RequestIndexingSpecification> CREATOR = new AutoCreator<RequestIndexingSpecification>(RequestIndexingSpecification.class);
 }

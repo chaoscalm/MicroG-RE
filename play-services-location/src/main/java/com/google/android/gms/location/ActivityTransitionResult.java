@@ -25,8 +25,8 @@ import java.util.List;
  */
 @PublicApi
 public class ActivityTransitionResult extends AutoSafeParcelable {
+    public static final Creator<ActivityTransitionResult> CREATOR = new AutoCreator<>(ActivityTransitionResult.class);
     private static final String EXTRA = "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT";
-
     @Field(value = 1, subClass = ActivityTransitionEvent.class)
     @NonNull
     private List<ActivityTransitionEvent> transitionEvents;
@@ -51,13 +51,6 @@ public class ActivityTransitionResult extends AutoSafeParcelable {
     }
 
     /**
-     * Gets all the activity transition events in this result. The events are in ascending order of time, and may include events in the past.
-     */
-    public List<ActivityTransitionEvent> getTransitionEvents() {
-        return transitionEvents;
-    }
-
-    /**
      * Extracts the {@link ActivityTransitionResult} from the given {@link Intent}.
      *
      * @param intent the {@link Intent} to extract the result from
@@ -75,6 +68,13 @@ public class ActivityTransitionResult extends AutoSafeParcelable {
         return intent != null && intent.hasExtra(EXTRA);
     }
 
+    /**
+     * Gets all the activity transition events in this result. The events are in ascending order of time, and may include events in the past.
+     */
+    public List<ActivityTransitionEvent> getTransitionEvents() {
+        return transitionEvents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +89,4 @@ public class ActivityTransitionResult extends AutoSafeParcelable {
     public int hashCode() {
         return transitionEvents.hashCode();
     }
-
-    public static final Creator<ActivityTransitionResult> CREATOR = new AutoCreator<>(ActivityTransitionResult.class);
 }

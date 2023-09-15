@@ -10,8 +10,7 @@ import com.google.android.gms.recaptcha.RecaptchaHandle;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class InitResults extends AutoSafeParcelable {
+    public static final Creator<InitResults> CREATOR = new AutoCreator<>(InitResults.class);
     @Field(1)
     public RecaptchaHandle handle;
-
-    public static final Creator<InitResults> CREATOR = new AutoCreator<>(InitResults.class);
 }

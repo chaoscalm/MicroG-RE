@@ -16,10 +16,6 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.IBinder;
-
-import com.google.android.gms.dynamic.ObjectWrapper;
-
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
@@ -27,6 +23,7 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class MapStyleOptions extends AutoSafeParcelable {
 
+    public static Creator<MapStyleOptions> CREATOR = new AutoCreator<MapStyleOptions>(MapStyleOptions.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -42,7 +39,5 @@ public class MapStyleOptions extends AutoSafeParcelable {
     public String getJson() {
         return this.json;
     }
-
-    public static Creator<MapStyleOptions> CREATOR = new AutoCreator<MapStyleOptions>(MapStyleOptions.class);
 
 }

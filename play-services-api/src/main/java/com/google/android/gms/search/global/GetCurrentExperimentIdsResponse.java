@@ -25,14 +25,14 @@ import java.util.Arrays;
 
 public class GetCurrentExperimentIdsResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<GetCurrentExperimentIdsResponse> CREATOR = new AutoCreator<GetCurrentExperimentIdsResponse>(GetCurrentExperimentIdsResponse.class);
     @SafeParceled(1)
     public final Status status;
 
     @SafeParceled(2)
     public final int[] experimentIds;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private GetCurrentExperimentIdsResponse() {
         status = null;
@@ -52,6 +52,4 @@ public class GetCurrentExperimentIdsResponse extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<GetCurrentExperimentIdsResponse> CREATOR = new AutoCreator<GetCurrentExperimentIdsResponse>(GetCurrentExperimentIdsResponse.class);
 }

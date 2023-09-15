@@ -17,6 +17,7 @@ import java.util.List;
 
 @Hide
 public class ClientIdentity extends AutoSafeParcelable {
+    public static final Creator<ClientIdentity> CREATOR = new AutoCreator<>(ClientIdentity.class);
     @Field(1)
     public int uid;
     @Field(2)
@@ -43,6 +44,4 @@ public class ClientIdentity extends AutoSafeParcelable {
     public ClientIdentity(String packageName) {
         this.packageName = packageName;
     }
-
-    public static final Creator<ClientIdentity> CREATOR = new AutoCreator<>(ClientIdentity.class);
 }

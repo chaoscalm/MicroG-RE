@@ -496,6 +496,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
         return false;
     }
 
+    public interface RemoteExceptionRunnable {
+        void run() throws RemoteException;
+    }
+
     public abstract class CallbackRunnable implements Runnable {
         private IWearableCallbacks callbacks;
 
@@ -519,9 +523,5 @@ public class WearableServiceImpl extends IWearableService.Stub {
         }
 
         public abstract void run(IWearableCallbacks callbacks) throws RemoteException;
-    }
-
-    public interface RemoteExceptionRunnable {
-        void run() throws RemoteException;
     }
 }

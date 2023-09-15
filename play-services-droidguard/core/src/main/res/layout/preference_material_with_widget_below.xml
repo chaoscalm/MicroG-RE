@@ -17,15 +17,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:gravity="center_vertical"
-    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:background="?android:attr/selectableItemBackground"
+    android:baselineAligned="false"
     android:clipToPadding="false"
-    android:baselineAligned="false">
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:paddingRight="?android:attr/listPreferredItemPaddingRight">
 
     <include layout="@layout/image_frame" />
 
@@ -40,22 +40,22 @@
             android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            android:ellipsize="marquee" />
+            android:textAppearance="?android:attr/textAppearanceListItem" />
 
         <TextView
             android:id="@android:id/summary"
+            style="@style/PreferenceSummaryTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
-            android:layout_alignLeft="@android:id/title"
             android:layout_alignStart="@android:id/title"
+            android:layout_alignLeft="@android:id/title"
             android:layout_gravity="start"
-            android:textAlignment="viewStart"
-            android:textColor="?android:attr/textColorSecondary"
             android:maxLines="10"
-            style="@style/PreferenceSummaryTextStyle" />
+            android:textAlignment="viewStart"
+            android:textColor="?android:attr/textColorSecondary" />
 
 
         <!-- Preference should place its actual preference widget here. -->
@@ -64,8 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/summary"
-            android:layout_alignLeft="@android:id/title"
             android:layout_alignStart="@android:id/title"
+            android:layout_alignLeft="@android:id/title"
             android:gravity="end|center_vertical"
             android:orientation="vertical" />
     </RelativeLayout>

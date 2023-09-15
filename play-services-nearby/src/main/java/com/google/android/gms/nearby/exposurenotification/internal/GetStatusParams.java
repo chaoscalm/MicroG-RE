@@ -8,6 +8,7 @@ package com.google.android.gms.nearby.exposurenotification.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetStatusParams extends AutoSafeParcelable {
+    public static final Creator<GetStatusParams> CREATOR = new AutoCreator<>(GetStatusParams.class);
     @Field(1)
     public ILongCallback callback;
 
@@ -17,6 +18,4 @@ public class GetStatusParams extends AutoSafeParcelable {
     public GetStatusParams(ILongCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<GetStatusParams> CREATOR = new AutoCreator<>(GetStatusParams.class);
 }

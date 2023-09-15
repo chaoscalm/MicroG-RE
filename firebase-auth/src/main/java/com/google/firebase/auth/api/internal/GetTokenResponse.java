@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetTokenResponse extends AutoSafeParcelable {
+    public static final Creator<GetTokenResponse> CREATOR = new AutoCreator<>(GetTokenResponse.class);
     @Field(2)
     public String refreshToken;
     @Field(3)
@@ -39,6 +40,4 @@ public class GetTokenResponse extends AutoSafeParcelable {
             throw new RuntimeException(e);
         }
     }
-
-    public static final Creator<GetTokenResponse> CREATOR = new AutoCreator<>(GetTokenResponse.class);
 }

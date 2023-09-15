@@ -26,10 +26,11 @@ import org.microg.safeparcel.SafeParceled;
  */
 @PublicApi
 public class Scope extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<Scope> CREATOR = new AutoCreator<Scope>(Scope.class);
     @SafeParceled(2)
     private final String scopeUri;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private Scope() {
         scopeUri = null;
@@ -60,6 +61,4 @@ public class Scope extends AutoSafeParcelable {
     public String toString() {
         return scopeUri;
     }
-
-    public static final Creator<Scope> CREATOR = new AutoCreator<Scope>(Scope.class);
 }

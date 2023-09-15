@@ -154,6 +154,10 @@ public final class Cast {
         PendingResult<Status> stopApplication(GoogleApiClient client, String sessionId);
     }
 
+    public interface MessageReceivedCallback {
+        void onMessageReceived(CastDevice castDevice, String namespace, String message);
+    }
+
     public static class CastOptions implements Api.ApiOptions.HasOptions {
         private final CastDevice castDevice;
         private final Listener castListener;
@@ -215,9 +219,5 @@ public final class Cast {
         public void onVolumeChanged() {
 
         }
-    }
-
-    public interface MessageReceivedCallback {
-        void onMessageReceived(CastDevice castDevice, String namespace, String message);
     }
 }

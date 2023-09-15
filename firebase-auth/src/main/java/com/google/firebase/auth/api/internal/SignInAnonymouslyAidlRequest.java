@@ -8,7 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SignInAnonymouslyAidlRequest extends AutoSafeParcelable {
+    public static final Creator<SignInAnonymouslyAidlRequest> CREATOR = new AutoCreator<>(SignInAnonymouslyAidlRequest.class);
     @Field(1)
     public String tenantId;
-    public static final Creator<SignInAnonymouslyAidlRequest> CREATOR = new AutoCreator<>(SignInAnonymouslyAidlRequest.class);
 }

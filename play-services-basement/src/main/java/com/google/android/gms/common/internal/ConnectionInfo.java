@@ -12,12 +12,11 @@ import com.google.android.gms.common.Feature;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ConnectionInfo extends AutoSafeParcelable {
+    public static final Creator<ConnectionInfo> CREATOR = new AutoSafeParcelable.AutoCreator<>(ConnectionInfo.class);
     @Field(1)
     public Bundle params;
     @Field(2)
     public Feature[] features;
     @Field(3)
     public int unknown3;
-
-    public static final Creator<ConnectionInfo> CREATOR = new AutoSafeParcelable.AutoCreator<>(ConnectionInfo.class);
 }

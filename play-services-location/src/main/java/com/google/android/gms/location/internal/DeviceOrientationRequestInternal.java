@@ -16,12 +16,11 @@ import java.util.List;
 @Hide
 public class DeviceOrientationRequestInternal extends AutoSafeParcelable {
 
+    public static final Creator<DeviceOrientationRequestInternal> CREATOR = new AutoCreator<DeviceOrientationRequestInternal>(DeviceOrientationRequestInternal.class);
     @Field(1)
     public DeviceOrientationRequest request;
-
     @Field(value = 2, subClass = ClientIdentity.class)
     public List<ClientIdentity> clients;
-
     @Field(3)
     public String tag;
 
@@ -33,6 +32,4 @@ public class DeviceOrientationRequestInternal extends AutoSafeParcelable {
                 ", tag='" + tag + '\'' +
                 '}';
     }
-
-    public static final Creator<DeviceOrientationRequestInternal> CREATOR = new AutoCreator<DeviceOrientationRequestInternal>(DeviceOrientationRequestInternal.class);
 }

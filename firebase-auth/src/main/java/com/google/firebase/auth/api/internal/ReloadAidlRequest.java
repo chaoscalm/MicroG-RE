@@ -8,7 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ReloadAidlRequest extends AutoSafeParcelable {
+    public static final Creator<ReloadAidlRequest> CREATOR = new AutoCreator<>(ReloadAidlRequest.class);
     @Field(1)
     public String cachedState;
-    public static final Creator<ReloadAidlRequest> CREATOR = new AutoCreator<>(ReloadAidlRequest.class);
 }

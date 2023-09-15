@@ -20,6 +20,7 @@ import java.util.Objects;
  */
 @PublicApi
 public class ActivityTransitionEvent extends AutoSafeParcelable {
+    public static final Creator<ActivityTransitionEvent> CREATOR = new AutoCreator<>(ActivityTransitionEvent.class);
     @Field(1)
     private int activityType;
     @Field(2)
@@ -87,6 +88,4 @@ public class ActivityTransitionEvent extends AutoSafeParcelable {
     public String toString() {
         return "ActivityType " + activityType + " TransitionType " + transitionType + " ElapsedRealTimeNanos " + elapsedRealtimeNanos;
     }
-
-    public static final Creator<ActivityTransitionEvent> CREATOR = new AutoCreator<>(ActivityTransitionEvent.class);
 }

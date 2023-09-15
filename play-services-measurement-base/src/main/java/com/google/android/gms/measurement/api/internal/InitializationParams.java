@@ -10,6 +10,7 @@ import android.os.Bundle;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class InitializationParams extends AutoSafeParcelable {
+    public static final Creator<InitializationParams> CREATOR = new AutoCreator<>(InitializationParams.class);
     @Field(1)
     public long field1;
     @Field(2)
@@ -40,6 +41,4 @@ public class InitializationParams extends AutoSafeParcelable {
                 ", field8='" + field8 + '\'' +
                 '}';
     }
-
-    public static final Creator<InitializationParams> CREATOR = new AutoCreator<>(InitializationParams.class);
 }

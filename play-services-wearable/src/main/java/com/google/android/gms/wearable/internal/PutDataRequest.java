@@ -37,10 +37,8 @@ import java.util.Map;
 @PublicApi
 public class PutDataRequest extends AutoSafeParcelable {
     public static final String WEAR_URI_SCHEME = "wear";
+    public static final Creator<PutDataRequest> CREATOR = new AutoCreator<PutDataRequest>(PutDataRequest.class);
     private static final int DEFAULT_SYNC_DEADLINE = 30 * 60 * 1000;
-
-    @SafeParceled(1)
-    private int versionCode = 1;
     @SafeParceled(2)
     final Uri uri;
     @SafeParceled(4)
@@ -49,6 +47,8 @@ public class PutDataRequest extends AutoSafeParcelable {
     byte[] data;
     @SafeParceled(6)
     long syncDeadline = DEFAULT_SYNC_DEADLINE;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private PutDataRequest() {
         uri = null;
@@ -104,6 +104,11 @@ public class PutDataRequest extends AutoSafeParcelable {
         return data;
     }
 
+    public PutDataRequest setData(byte[] data) {
+        this.data = data;
+        return this;
+    }
+
     public Uri getUri() {
         return uri;
     }
@@ -119,11 +124,6 @@ public class PutDataRequest extends AutoSafeParcelable {
 
     public PutDataRequest removeAsset(String key) {
         assets.remove(key);
-        return this;
-    }
-
-    public PutDataRequest setData(byte[] data) {
-        this.data = data;
         return this;
     }
 
@@ -147,6 +147,4 @@ public class PutDataRequest extends AutoSafeParcelable {
         sb.append("]");
         return sb.toString();
     }
-
-    public static final Creator<PutDataRequest> CREATOR = new AutoCreator<PutDataRequest>(PutDataRequest.class);
 }

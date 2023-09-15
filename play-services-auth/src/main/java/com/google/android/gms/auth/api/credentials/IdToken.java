@@ -10,17 +10,15 @@ package com.google.android.gms.auth.api.credentials;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 @PublicApi
 public class IdToken extends AutoSafeParcelable {
 
+    public static final Creator<IdToken> CREATOR = new AutoCreator<IdToken>(IdToken.class);
     @Field(1000)
     private int versionCode = 1;
-
     @Field(1)
     private String accountType;
-
     @Field(2)
     private String id;
 
@@ -45,6 +43,4 @@ public class IdToken extends AutoSafeParcelable {
     public String getIdToken() {
         return id;
     }
-
-    public static final Creator<IdToken> CREATOR = new AutoCreator<IdToken>(IdToken.class);
 }

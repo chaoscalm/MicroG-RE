@@ -20,6 +20,8 @@ import java.util.Arrays;
  */
 @PublicApi
 public class PublicKeyCredential extends AutoSafeParcelable {
+    @PublicApi(exclude = true)
+    public static final Creator<PublicKeyCredential> CREATOR = new AutoCreator<>(PublicKeyCredential.class);
     @Field(1)
     private String id;
     @Field(2)
@@ -34,6 +36,16 @@ public class PublicKeyCredential extends AutoSafeParcelable {
     private AuthenticatorErrorResponse errorResponse;
     @Field(7)
     private AuthenticationExtensionsClientOutputs clientExtensionResults;
+
+    /**
+     * Deserializes the {@link PublicKeyCredential} from bytes, reversing {@link #serializeToBytes()}.
+     *
+     * @param serializedBytes The serialized bytes.
+     * @return The deserialized {@link PublicKeyCredential}.
+     */
+    public static PublicKeyCredential deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+    }
 
     public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
         return clientExtensionResults;
@@ -56,6 +68,39 @@ public class PublicKeyCredential extends AutoSafeParcelable {
 
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PublicKeyCredential)) return false;
+
+        PublicKeyCredential that = (PublicKeyCredential) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (!Arrays.equals(rawId, that.rawId)) return false;
+        if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null)
+            return false;
+        if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null)
+            return false;
+        if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null)
+            return false;
+        return clientExtensionResults != null ? clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new Object[]{id, type, rawId, signResponse, registerResponse, errorResponse, clientExtensionResults});
+    }
+
+    /**
+     * Serializes the {@link PublicKeyCredential} to bytes. Use {@link #deserializeFromBytes(byte[])} to deserialize.
+     *
+     * @return the serialized byte array.
+     */
+    public byte[] serializeToBytes() {
+        return SafeParcelUtil.asByteArray(this);
     }
 
     /**
@@ -130,50 +175,4 @@ public class PublicKeyCredential extends AutoSafeParcelable {
             return credential;
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PublicKeyCredential)) return false;
-
-        PublicKeyCredential that = (PublicKeyCredential) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (!Arrays.equals(rawId, that.rawId)) return false;
-        if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null)
-            return false;
-        if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null)
-            return false;
-        if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null)
-            return false;
-        return clientExtensionResults != null ? clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(new Object[]{id, type, rawId, signResponse, registerResponse, errorResponse, clientExtensionResults});
-    }
-
-    /**
-     * Serializes the {@link PublicKeyCredential} to bytes. Use {@link #deserializeFromBytes(byte[])} to deserialize.
-     *
-     * @return the serialized byte array.
-     */
-    public byte[] serializeToBytes() {
-        return SafeParcelUtil.asByteArray(this);
-    }
-
-    /**
-     * Deserializes the {@link PublicKeyCredential} from bytes, reversing {@link #serializeToBytes()}.
-     *
-     * @param serializedBytes The serialized bytes.
-     * @return The deserialized {@link PublicKeyCredential}.
-     */
-    public static PublicKeyCredential deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredential> CREATOR = new AutoCreator<>(PublicKeyCredential.class);
 }

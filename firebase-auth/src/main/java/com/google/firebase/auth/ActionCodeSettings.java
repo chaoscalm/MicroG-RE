@@ -17,6 +17,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class ActionCodeSettings extends AutoSafeParcelable {
+    public static final Creator<ActionCodeSettings> CREATOR = new AutoCreator<>(ActionCodeSettings.class);
     @Field(1)
     @PublicApi(exclude = true)
     public String url;
@@ -49,6 +50,13 @@ public class ActionCodeSettings extends AutoSafeParcelable {
     public String dynamicLinkDomain;
 
     private ActionCodeSettings() {
+    }
+
+    /**
+     * @return a new instance of {@link ActionCodeSettings.Builder}.
+     */
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     /**
@@ -91,13 +99,6 @@ public class ActionCodeSettings extends AutoSafeParcelable {
      */
     public String getUrl() {
         return url;
-    }
-
-    /**
-     * @return a new instance of {@link ActionCodeSettings.Builder}.
-     */
-    public static Builder newBuilder() {
-        return new Builder();
     }
 
     /**
@@ -177,6 +178,4 @@ public class ActionCodeSettings extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<ActionCodeSettings> CREATOR = new AutoCreator<>(ActionCodeSettings.class);
 }

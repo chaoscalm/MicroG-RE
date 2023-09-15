@@ -16,6 +16,12 @@
 
 package com.google.android.gms.iid;
 
+import static org.microg.gms.gcm.GcmConstants.EXTRA_DELETE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SCOPE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBSCIPTION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBTYPE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
@@ -35,12 +41,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.microg.gms.gcm.GcmConstants.EXTRA_DELETE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SCOPE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBSCIPTION;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBTYPE;
 
 /**
  * Instance ID provides a unique identifier for each app instance and a mechanism
@@ -101,6 +101,37 @@ public class InstanceID {
 
     private InstanceID(String subtype) {
         this.subtype = subtype == null ? "" : subtype;
+    }
+
+    /**
+     * Returns an instance of this class.
+     *
+     * @return InstanceID instance.
+     */
+    public static InstanceID getInstance(Context context) {
+        String subtype = "";
+        if (storeInstance == null) {
+            storeInstance = new InstanceIdStore(context.getApplicationContext());
+            rpc = new InstanceIdRpc(context.getApplicationContext());
+        }
+        InstanceID instance = instances.get(subtype);
+        if (instance == null) {
+            instance = new InstanceID(subtype);
+            instances.put(subtype, instance);
+        }
+        return instance;
+    }
+
+    @PublicApi(exclude = true)
+    public static String sha1KeyPair(KeyPair keyPair) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA1").digest(keyPair.getPublic().getEncoded());
+            digest[0] = (byte) (112 + (0xF & digest[0]) & 0xFF);
+            return Base64.encodeToString(digest, 0, 8, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        } catch (NoSuchAlgorithmException e) {
+            Log.w(TAG, e);
+            return null;
+        }
     }
 
     /**
@@ -169,25 +200,6 @@ public class InstanceID {
      */
     public String getId() {
         return sha1KeyPair(getKeyPair());
-    }
-
-    /**
-     * Returns an instance of this class.
-     *
-     * @return InstanceID instance.
-     */
-    public static InstanceID getInstance(Context context) {
-        String subtype = "";
-        if (storeInstance == null) {
-            storeInstance = new InstanceIdStore(context.getApplicationContext());
-            rpc = new InstanceIdRpc(context.getApplicationContext());
-        }
-        InstanceID instance = instances.get(subtype);
-        if (instance == null) {
-            instance = new InstanceID(subtype);
-            instances.put(subtype, instance);
-        }
-        return instance;
     }
 
     /**
@@ -266,17 +278,5 @@ public class InstanceID {
             }
         }
         return keyPair;
-    }
-
-    @PublicApi(exclude = true)
-    public static String sha1KeyPair(KeyPair keyPair) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA1").digest(keyPair.getPublic().getEncoded());
-            digest[0] = (byte) (112 + (0xF & digest[0]) & 0xFF);
-            return Base64.encodeToString(digest, 0, 8, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
-        } catch (NoSuchAlgorithmException e) {
-            Log.w(TAG, e);
-            return null;
-        }
     }
 }

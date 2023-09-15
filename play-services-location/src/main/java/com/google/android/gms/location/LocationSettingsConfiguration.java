@@ -10,12 +10,11 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
 public class LocationSettingsConfiguration extends AutoSafeParcelable {
+    public static final Creator<LocationSettingsConfiguration> CREATOR = new AutoCreator<>(LocationSettingsConfiguration.class);
     @Field(1)
     public String justificationText;
     @Field(2)
     public String experimentId;
     @Field(5)
     public String titleText;
-
-    public static final Creator<LocationSettingsConfiguration> CREATOR = new AutoCreator<>(LocationSettingsConfiguration.class);
 }

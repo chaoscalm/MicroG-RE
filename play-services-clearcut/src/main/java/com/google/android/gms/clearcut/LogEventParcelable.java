@@ -32,9 +32,7 @@ import java.nio.charset.CharsetDecoder;
 import java.util.Arrays;
 
 public class LogEventParcelable extends AutoSafeParcelable {
-    @Field(1)
-    private int versionCode = 1;
-
+    public static final Creator<LogEventParcelable> CREATOR = new AutoCreator<LogEventParcelable>(LogEventParcelable.class);
     @Field(2)
     public final PlayLoggerContext context;
 
@@ -64,12 +62,12 @@ public class LogEventParcelable extends AutoSafeParcelable {
 
     @Field(11)
     public final LogVerifierResultParcelable logVerifierResult;
-
-    @Field(12)
-    private String[] mendelPackagesToFilter;
-
     @Field(13)
     public int eventCode;
+    @Field(1)
+    private int versionCode = 1;
+    @Field(12)
+    private String[] mendelPackagesToFilter;
 
     private LogEventParcelable() {
         context = null;
@@ -122,6 +120,4 @@ public class LogEventParcelable extends AutoSafeParcelable {
             return Base64.encodeToString(bytes, Base64.NO_WRAP);
         }
     }
-
-    public static final Creator<LogEventParcelable> CREATOR = new AutoCreator<LogEventParcelable>(LogEventParcelable.class);
 }

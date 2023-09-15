@@ -12,6 +12,22 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 
 public class DroidGuardInitReply implements Parcelable {
+    public final static Creator<DroidGuardInitReply> CREATOR = new Creator<DroidGuardInitReply>() {
+        @Override
+        public DroidGuardInitReply createFromParcel(Parcel source) {
+            ParcelFileDescriptor pfd = source.readParcelable(ParcelFileDescriptor.class.getClassLoader());
+            Parcelable object = source.readParcelable(getClass().getClassLoader());
+            if (pfd != null && object != null) {
+                return new DroidGuardInitReply(pfd, object);
+            }
+            return null;
+        }
+
+        @Override
+        public DroidGuardInitReply[] newArray(int size) {
+            return new DroidGuardInitReply[size];
+        }
+    };
     public @Nullable ParcelFileDescriptor pfd;
     public @Nullable Parcelable object;
 
@@ -30,21 +46,4 @@ public class DroidGuardInitReply implements Parcelable {
         dest.writeParcelable(pfd, flags);
         dest.writeParcelable(object, flags);
     }
-
-    public final static Creator<DroidGuardInitReply> CREATOR = new Creator<DroidGuardInitReply>() {
-        @Override
-        public DroidGuardInitReply createFromParcel(Parcel source) {
-            ParcelFileDescriptor pfd = source.readParcelable(ParcelFileDescriptor.class.getClassLoader());
-            Parcelable object = source.readParcelable(getClass().getClassLoader());
-            if (pfd != null && object != null) {
-                return new DroidGuardInitReply(pfd, object);
-            }
-            return null;
-        }
-
-        @Override
-        public DroidGuardInitReply[] newArray(int size) {
-            return new DroidGuardInitReply[size];
-        }
-    };
 }

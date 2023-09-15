@@ -33,14 +33,15 @@ public class LocationStatus extends AutoSafeParcelable {
     public static final int STATUS_SCANS_DISABLED_IN_SETTINGS = 6;
     public static final int STATUS_LOCATION_DISABLED_IN_SETTINGS = 7;
     public static final int STATUS_IN_PROGRESS = 8;
-    @SafeParceled(1000)
-    private int versionCode = 1;
+    public static final Creator<LocationStatus> CREATOR = new AutoCreator<LocationStatus>(LocationStatus.class);
     @SafeParceled(1)
     int cellStatus;
     @SafeParceled(2)
     int wifiStatus;
     @SafeParceled(3)
     long elapsedRealtimeNanos;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     @Override
     public boolean equals(Object o) {
@@ -89,6 +90,4 @@ public class LocationStatus extends AutoSafeParcelable {
                 return "STATUS_IN_PROGRESS";
         }
     }
-
-    public static final Creator<LocationStatus> CREATOR = new AutoCreator<LocationStatus>(LocationStatus.class);
 }

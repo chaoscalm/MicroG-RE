@@ -18,6 +18,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class ScanInstance extends AutoSafeParcelable {
+    public static final Creator<ScanInstance> CREATOR = new AutoCreator<>(ScanInstance.class);
     @Field(1)
     private int typicalAttenuationDb;
     @Field(2)
@@ -88,6 +89,4 @@ public class ScanInstance extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<ScanInstance> CREATOR = new AutoCreator<>(ScanInstance.class);
 }

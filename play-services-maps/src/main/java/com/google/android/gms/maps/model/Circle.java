@@ -39,9 +39,25 @@ public class Circle {
         }
     }
 
+    public void setCenter(@NonNull LatLng center) {
+        try {
+            this.delegate.setCenter(center);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
     public int getFillColor() {
         try {
             return this.delegate.getFillColor();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setFillColor(int color) {
+        try {
+            this.delegate.setFillColor(color);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -64,83 +80,26 @@ public class Circle {
         }
     }
 
+    public void setRadius(double radius) {
+        try {
+            this.delegate.setRadius(radius);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
     @Nullable
     public List<PatternItem> getStrokePattern() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setStrokePattern(@Nullable List<PatternItem> pattern) {
         throw new UnsupportedOperationException();
     }
 
     public int getStrokeColor() {
         try {
             return this.delegate.getStrokeColor();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public float getStrokeWidth() {
-        try {
-            return this.delegate.getStrokeWidth();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    @Nullable
-    public Object getTag() {
-        throw new UnsupportedOperationException();
-    }
-
-    public float getZIndex() {
-        try {
-            return this.delegate.getZIndex();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public boolean isClickable() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isVisible() {
-        try {
-            return this.delegate.isVisible();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public void remove() {
-        try {
-            this.delegate.remove();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public void setCenter(@NonNull LatLng center) {
-        try {
-            this.delegate.setCenter(center);
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public void setClickable(boolean clickable) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setFillColor(int color) {
-        try {
-            this.delegate.setFillColor(color);
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public void setRadius(double radius) {
-        try {
-            this.delegate.setRadius(radius);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -154,8 +113,12 @@ public class Circle {
         }
     }
 
-    public void setStrokePattern(@Nullable List<PatternItem> pattern) {
-        throw new UnsupportedOperationException();
+    public float getStrokeWidth() {
+        try {
+            return this.delegate.getStrokeWidth();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
     }
 
     public void setStrokeWidth(float width) {
@@ -166,8 +129,45 @@ public class Circle {
         }
     }
 
+    @Nullable
+    public Object getTag() {
+        throw new UnsupportedOperationException();
+    }
+
     public void setTag(@Nullable Object tag) {
         throw new UnsupportedOperationException();
+    }
+
+    public float getZIndex() {
+        try {
+            return this.delegate.getZIndex();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setZIndex(float zIndex) {
+        try {
+            this.delegate.setZIndex(zIndex);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public boolean isClickable() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setClickable(boolean clickable) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isVisible() {
+        try {
+            return this.delegate.isVisible();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
     }
 
     public void setVisible(boolean visible) {
@@ -178,9 +178,9 @@ public class Circle {
         }
     }
 
-    public void setZIndex(float zIndex) {
+    public void remove() {
         try {
-            this.delegate.setZIndex(zIndex);
+            this.delegate.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

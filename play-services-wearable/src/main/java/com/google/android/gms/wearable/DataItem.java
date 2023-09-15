@@ -43,14 +43,14 @@ public interface DataItem extends Freezable<DataItem> {
     byte[] getData();
 
     /**
-     * Returns the DataItem's Uri. {@link Uri#getHost()} returns the id of the node that created it.
-     */
-    Uri getUri();
-
-    /**
      * Sets the data in a data item.
      * <p/>
      * The current maximum data item size limit is approximately 100k. Data items should generally be much smaller than this limit.
      */
     DataItem setData(byte[] data);
+
+    /**
+     * Returns the DataItem's Uri. {@link Uri#getHost()} returns the id of the node that created it.
+     */
+    Uri getUri();
 }

@@ -10,6 +10,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
 public class NetworkLocationStatus extends AutoSafeParcelable {
+    public static final Creator<NetworkLocationStatus> CREATOR = new AutoCreator<>(NetworkLocationStatus.class);
     @Field(1)
     public int wifiStatus;
     @Field(2)
@@ -28,6 +29,4 @@ public class NetworkLocationStatus extends AutoSafeParcelable {
         this.systemTimeMs = systemTimeMs;
         this.elapsedRealtimeNs = elapsedRealtimeNs;
     }
-
-    public static final Creator<NetworkLocationStatus> CREATOR = new AutoCreator<>(NetworkLocationStatus.class);
 }

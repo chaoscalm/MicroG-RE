@@ -11,6 +11,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class StartParams extends AutoSafeParcelable {
+    public static final Creator<StartParams> CREATOR = new AutoCreator<>(StartParams.class);
     @Field(3)
     public IStatusCallback callback;
     @Field(4)
@@ -22,6 +23,4 @@ public class StartParams extends AutoSafeParcelable {
     public StartParams(IStatusCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<StartParams> CREATOR = new AutoCreator<>(StartParams.class);
 }

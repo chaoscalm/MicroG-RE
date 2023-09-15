@@ -84,12 +84,12 @@ public class WearableImpl {
     private final Map<String, List<ListenerInfo>> listeners = new HashMap<String, List<ListenerInfo>>();
     private final Set<Node> connectedNodes = new HashSet<Node>();
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
+    public Handler networkHandler;
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
-    public Handler networkHandler;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -389,10 +389,6 @@ public class WearableImpl {
         return nodes;
     }
 
-    interface ListenerInvoker {
-        void invoke(IWearableListener listener) throws RemoteException;
-    }
-
     private void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
         for (String packageName : new ArrayList<>(listeners.keySet())) {
             List<ListenerInfo> listeners = this.listeners.get(packageName);
@@ -620,6 +616,10 @@ public class WearableImpl {
 
     public void stop() {
         this.networkHandler.getLooper().quit();
+    }
+
+    interface ListenerInvoker {
+        void invoke(IWearableListener listener) throws RemoteException;
     }
 
     private class ListenerInfo {

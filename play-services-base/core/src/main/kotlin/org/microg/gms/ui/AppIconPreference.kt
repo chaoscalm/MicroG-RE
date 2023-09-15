@@ -6,12 +6,9 @@
 package org.microg.gms.ui
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 
 class AppIconPreference : AppPreference {

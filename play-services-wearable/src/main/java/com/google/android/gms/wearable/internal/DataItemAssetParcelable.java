@@ -23,6 +23,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class DataItemAssetParcelable extends AutoSafeParcelable implements DataItemAsset {
 
+    public static final Creator<DataItemAssetParcelable> CREATOR = new AutoCreator<DataItemAssetParcelable>(DataItemAssetParcelable.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -57,6 +58,4 @@ public class DataItemAssetParcelable extends AutoSafeParcelable implements DataI
     public boolean isDataValid() {
         return true;
     }
-
-    public static final Creator<DataItemAssetParcelable> CREATOR = new AutoCreator<DataItemAssetParcelable>(DataItemAssetParcelable.class);
 }

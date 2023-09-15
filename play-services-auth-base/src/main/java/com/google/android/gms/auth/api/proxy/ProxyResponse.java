@@ -12,9 +12,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ProxyResponse extends AutoSafeParcelable {
     public static final int STATUS_CODE_NO_CONNECTION = -1;
-
-    @Field(1000)
-    private int versionCode = 1;
+    public static final Creator<ProxyResponse> CREATOR = new AutoCreator<>(ProxyResponse.class);
     @Field(1)
     public int gmsStatusCode;
     @Field(2)
@@ -25,6 +23,6 @@ public class ProxyResponse extends AutoSafeParcelable {
     public Bundle headers;
     @Field(5)
     public byte[] body;
-
-    public static final Creator<ProxyResponse> CREATOR = new AutoCreator<>(ProxyResponse.class);
+    @Field(1000)
+    private int versionCode = 1;
 }

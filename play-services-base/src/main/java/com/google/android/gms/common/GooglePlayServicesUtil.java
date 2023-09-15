@@ -38,26 +38,22 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public class GooglePlayServicesUtil {
-    private static final String TAG = "GooglePlayServicesUtil";
-
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
-
     /**
      * Package name for Google Play services.
      */
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = Constants.GMS_PACKAGE_NAME;
-
     /**
      * Google Play services client library version (declared in library's AndroidManifest.xml android:versionCode).
      */
     @Deprecated
     public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = Constants.GMS_VERSION_CODE;
-
     /**
      * Package name for Google Play Store.
      */
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
+    private static final String TAG = "GooglePlayServicesUtil";
 
     /**
      * Returns a dialog to address the provided errorCode. The returned dialog displays a localized

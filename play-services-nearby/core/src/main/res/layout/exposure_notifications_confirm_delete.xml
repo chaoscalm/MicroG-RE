@@ -9,8 +9,8 @@
     android:orientation="vertical">
 
     <TextView
-        android:padding="?attr/dialogPreferredPadding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="?attr/dialogPreferredPadding"
         android:text="@string/pref_exposure_rpi_delete_all_warning" />
 </FrameLayout>

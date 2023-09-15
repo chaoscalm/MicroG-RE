@@ -10,10 +10,9 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SignInWithPhoneNumberAidlRequest extends AutoSafeParcelable {
+    public static final Creator<SignInWithPhoneNumberAidlRequest> CREATOR = new AutoCreator<>(SignInWithPhoneNumberAidlRequest.class);
     @Field(1)
     public PhoneAuthCredential credential;
     @Field(2)
     public String tenantId;
-
-    public static final Creator<SignInWithPhoneNumberAidlRequest> CREATOR = new AutoCreator<>(SignInWithPhoneNumberAidlRequest.class);
 }

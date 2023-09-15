@@ -20,14 +20,15 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class ChannelParcelable extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<ChannelParcelable> CREATOR = new AutoCreator<ChannelParcelable>(ChannelParcelable.class);
     @SafeParceled(2)
     public String token;
     @SafeParceled(3)
     public String nodeId;
     @SafeParceled(4)
     public String path;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private ChannelParcelable() {
     }
@@ -37,6 +38,4 @@ public class ChannelParcelable extends AutoSafeParcelable {
         this.nodeId = nodeId;
         this.path = path;
     }
-
-    public static final Creator<ChannelParcelable> CREATOR = new AutoCreator<ChannelParcelable>(ChannelParcelable.class);
 }

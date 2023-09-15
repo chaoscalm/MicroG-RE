@@ -20,8 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class AppDescription extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<AppDescription> CREATOR = new AutoCreator<AppDescription>(AppDescription.class);
     @SafeParceled(2)
     public int callingUid;
     @SafeParceled(3)
@@ -30,6 +29,6 @@ public class AppDescription extends AutoSafeParcelable {
     public String sessiondSig;
     @SafeParceled(5)
     public String callingPkg;
-
-    public static final Creator<AppDescription> CREATOR = new AutoCreator<AppDescription>(AppDescription.class);
+    @SafeParceled(1)
+    private int versionCode = 1;
 }

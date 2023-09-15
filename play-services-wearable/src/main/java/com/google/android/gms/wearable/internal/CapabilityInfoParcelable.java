@@ -27,15 +27,13 @@ import java.util.List;
 import java.util.Set;
 
 public class CapabilityInfoParcelable extends AutoSafeParcelable implements CapabilityInfo {
+    public static final Creator<CapabilityInfoParcelable> CREATOR = new AutoCreator<CapabilityInfoParcelable>(CapabilityInfoParcelable.class);
     @SafeParceled(1)
     private int versionCode = 1;
-
     @SafeParceled(2)
     private String name;
-
     @SafeParceled(value = 3, subClass = NodeParcelable.class)
     private List<NodeParcelable> nodeParcelables;
-
     private Set<Node> nodes;
     private Object lock = new Object();
 
@@ -84,7 +82,5 @@ public class CapabilityInfoParcelable extends AutoSafeParcelable implements Capa
     public String toString() {
         return "CapabilityInfo{" + name + ", " + nodeParcelables + "}";
     }
-
-    public static final Creator<CapabilityInfoParcelable> CREATOR = new AutoCreator<CapabilityInfoParcelable>(CapabilityInfoParcelable.class);
 
 }

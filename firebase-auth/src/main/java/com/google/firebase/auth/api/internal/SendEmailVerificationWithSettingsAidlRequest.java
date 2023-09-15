@@ -10,9 +10,9 @@ import com.google.firebase.auth.ActionCodeSettings;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SendEmailVerificationWithSettingsAidlRequest extends AutoSafeParcelable {
+    public static final Creator<SendEmailVerificationWithSettingsAidlRequest> CREATOR = new AutoCreator<>(SendEmailVerificationWithSettingsAidlRequest.class);
     @Field(1)
     public String token;
     @Field(2)
     public ActionCodeSettings settings;
-    public static final Creator<SendEmailVerificationWithSettingsAidlRequest> CREATOR = new AutoCreator<>(SendEmailVerificationWithSettingsAidlRequest.class);
 }

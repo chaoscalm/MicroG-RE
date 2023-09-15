@@ -21,9 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class RequestIndexingRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static Creator<RequestIndexingRequest> CREATOR = new AutoCreator<RequestIndexingRequest>(RequestIndexingRequest.class);
     @SafeParceled(1)
     public final String packageName;
 
@@ -32,6 +30,8 @@ public class RequestIndexingRequest extends AutoSafeParcelable {
 
     @SafeParceled(3)
     public final long sequenceNumber;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private RequestIndexingRequest() {
         packageName = null;
@@ -48,6 +48,4 @@ public class RequestIndexingRequest extends AutoSafeParcelable {
                 ", sequenceNumber=" + sequenceNumber +
                 '}';
     }
-
-    public static Creator<RequestIndexingRequest> CREATOR = new AutoCreator<RequestIndexingRequest>(RequestIndexingRequest.class);
 }

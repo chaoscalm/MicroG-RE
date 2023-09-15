@@ -27,8 +27,8 @@ import android.graphics.Paint;
 
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import org.microg.gms.maps.vtm.ResourcesContainer;
 import org.microg.gms.maps.vtm.R;
+import org.microg.gms.maps.vtm.ResourcesContainer;
 
 public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
     public static final DefaultBitmapDescriptor DEFAULT_DESCRIPTOR = new DefaultBitmapDescriptor(0);
@@ -39,23 +39,6 @@ public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
 
     public DefaultBitmapDescriptor(float hue) {
         this.hue = hue > 180 ? -DEGREES + hue : hue;
-    }
-
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        Bitmap source;
-        if (this == DEFAULT_DESCRIPTOR) {
-            source = BitmapFactory.decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker);
-        } else {
-            source = DEFAULT_DESCRIPTOR.loadBitmap(context);
-        }
-        if (hue % DEGREES == 0) return source;
-        Paint paint = new Paint();
-        paint.setColorFilter(adjustHue(hue));
-        Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawBitmap(source, 0, 0, paint);
-        return bitmap;
     }
 
     /**
@@ -101,5 +84,22 @@ public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
 
     protected static float cleanValue(float p_val, float p_limit) {
         return Math.min(p_limit, Math.max(-p_limit, p_val));
+    }
+
+    @Override
+    public Bitmap generateBitmap(Context context) {
+        Bitmap source;
+        if (this == DEFAULT_DESCRIPTOR) {
+            source = BitmapFactory.decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker);
+        } else {
+            source = DEFAULT_DESCRIPTOR.loadBitmap(context);
+        }
+        if (hue % DEGREES == 0) return source;
+        Paint paint = new Paint();
+        paint.setColorFilter(adjustHue(hue));
+        Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(source, 0, 0, paint);
+        return bitmap;
     }
 }

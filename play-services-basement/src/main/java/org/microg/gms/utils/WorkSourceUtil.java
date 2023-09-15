@@ -5,13 +5,11 @@
 
 package org.microg.gms.utils;
 
-import android.os.Build;
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.os.WorkSource;
-import android.util.Log;
 
 import java.lang.reflect.Method;
-
-import static android.os.Build.VERSION.SDK_INT;
 
 public class WorkSourceUtil {
     private static final String TAG = "WorkSourceUtil";

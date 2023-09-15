@@ -31,6 +31,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  * If you add a map using XML, then you can apply these options using custom XML tags.
  */
 public final class GoogleMapOptions extends AutoSafeParcelable {
+    public static Creator<GoogleMapOptions> CREATOR = new AutoCreator<GoogleMapOptions>(GoogleMapOptions.class);
     @Field(1)
     private int versionCode;
     @Field(2)
@@ -476,7 +477,4 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
     public boolean isRotateGesturesEnabled() {
         return rotateGesturesEnabled;
     }
-
-
-    public static Creator<GoogleMapOptions> CREATOR = new AutoCreator<GoogleMapOptions>(GoogleMapOptions.class);
 }

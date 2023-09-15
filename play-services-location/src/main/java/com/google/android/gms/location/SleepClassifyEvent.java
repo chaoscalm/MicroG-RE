@@ -34,6 +34,16 @@ public class SleepClassifyEvent extends AutoSafeParcelable {
     }
 
     /**
+     * Checks whether the {@code Intent} has any {@code SleepClassifyEvent}.
+     *
+     * @param intent the {@code Intent} to extract from
+     * @return true if the Intent has events
+     */
+    public static boolean hasEvents(Intent intent) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns a sleep confidence value between 0 and 100. Higher values indicate that the user is more likely sleeping,
      * while lower values indicate that the user is more likely awake.
      */
@@ -62,16 +72,6 @@ public class SleepClassifyEvent extends AutoSafeParcelable {
      * Returns the UNIX epoch time when the event happened, expressed as the number of milliseconds since 1/1/1970 UTC.
      */
     public long getTimestampMillis() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Checks whether the {@code Intent} has any {@code SleepClassifyEvent}.
-     *
-     * @param intent the {@code Intent} to extract from
-     * @return true if the Intent has events
-     */
-    public static boolean hasEvents(Intent intent) {
         throw new UnsupportedOperationException();
     }
 }

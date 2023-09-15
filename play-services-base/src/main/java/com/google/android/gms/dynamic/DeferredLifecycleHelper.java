@@ -18,9 +18,9 @@ import androidx.annotation.Nullable;
 import java.util.LinkedList;
 
 public abstract class DeferredLifecycleHelper<T extends LifecycleDelegate> {
+    private final LinkedList<PendingStateOperation<T>> pendingStateOperations = new LinkedList<>();
     private T delegate;
     private Bundle savedInstanceState;
-    private final LinkedList<PendingStateOperation<T>> pendingStateOperations = new LinkedList<>();
     private final OnDelegateCreatedListener<T> listener = (delegate) -> {
         DeferredLifecycleHelper.this.delegate = delegate;
         for (PendingStateOperation<T> op : pendingStateOperations) {
@@ -147,6 +147,14 @@ public abstract class DeferredLifecycleHelper<T extends LifecycleDelegate> {
         }
     }
 
+    private enum State {
+        NONE, CREATED, VIEW_CREATED, STARTED, RESUMED;
+
+        public boolean isAtLeast(@NonNull State state) {
+            return compareTo(state) >= 0;
+        }
+    }
+
     private static abstract class PendingStateOperation<T extends LifecycleDelegate> {
         public final State state;
 
@@ -155,13 +163,5 @@ public abstract class DeferredLifecycleHelper<T extends LifecycleDelegate> {
         }
 
         public abstract void apply(T delegate);
-    }
-
-    private enum State {
-        NONE, CREATED, VIEW_CREATED, STARTED, RESUMED;
-
-        public boolean isAtLeast(@NonNull State state) {
-            return compareTo(state) >= 0;
-        }
     }
 }

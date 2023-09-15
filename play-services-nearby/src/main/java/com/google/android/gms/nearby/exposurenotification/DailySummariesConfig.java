@@ -41,6 +41,7 @@ import java.util.Map;
  */
 @PublicApi
 public class DailySummariesConfig extends AutoSafeParcelable {
+    public static final Creator<DailySummariesConfig> CREATOR = new AutoCreator<>(DailySummariesConfig.class);
     @Field(value = 1, useDirectList = true)
     private List<Double> reportTypeWeights;
     @Field(value = 2, useDirectList = true)
@@ -239,6 +240,4 @@ public class DailySummariesConfig extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<DailySummariesConfig> CREATOR = new AutoCreator<>(DailySummariesConfig.class);
 }

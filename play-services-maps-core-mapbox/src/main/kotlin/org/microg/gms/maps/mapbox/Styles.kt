@@ -17,7 +17,6 @@ import org.json.JSONObject
 import org.microg.gms.maps.mapbox.utils.MapContext
 import java.io.File
 import java.io.IOException
-import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.roundToInt
 

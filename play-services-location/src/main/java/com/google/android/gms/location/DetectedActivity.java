@@ -60,19 +60,17 @@ public class DetectedActivity extends AutoSafeParcelable {
      * The device is on a user who is walking. This is a sub-activity of ON_FOOT.
      */
     public static final int WALKING = 7;
-
+    public static final Creator<DetectedActivity> CREATOR = new AutoCreator<DetectedActivity>(DetectedActivity.class);
     @Field(1000)
     private int versionCode = 1;
-
     @Field(1)
     private int type;
-
     @Field(2)
     private int confidence;
 
+
     private DetectedActivity() {
     }
-
 
     /**
      * Constructs a DetectedActivity.
@@ -83,6 +81,31 @@ public class DetectedActivity extends AutoSafeParcelable {
     public DetectedActivity(int activityType, int confidence) {
         this.type = activityType;
         this.confidence = confidence;
+    }
+
+    @Hide
+    public static String typeToString(int type) {
+        switch (type) {
+            case 0:
+                return "IN_VEHICLE";
+            case 1:
+                return "ON_BICYCLE";
+            case 2:
+                return "ON_FOOT";
+            case 3:
+                return "STILL";
+            case 4:
+                return "UNKNOWN";
+            case 5:
+                return "TILTING";
+            case 6:
+            default:
+                return Integer.toString(type);
+            case 7:
+                return "WALKING";
+            case 8:
+                return "RUNNING";
+        }
     }
 
     /**
@@ -117,31 +140,4 @@ public class DetectedActivity extends AutoSafeParcelable {
     public String toString() {
         return "DetectedActivity [type=" + typeToString(getType()) + ", confidence=" + getConfidence() + "]";
     }
-
-    @Hide
-    public static String typeToString(int type) {
-        switch (type) {
-            case 0:
-                return "IN_VEHICLE";
-            case 1:
-                return "ON_BICYCLE";
-            case 2:
-                return "ON_FOOT";
-            case 3:
-                return "STILL";
-            case 4:
-                return "UNKNOWN";
-            case 5:
-                return "TILTING";
-            case 6:
-            default:
-                return Integer.toString(type);
-            case 7:
-                return "WALKING";
-            case 8:
-                return "RUNNING";
-        }
-    }
-
-    public static final Creator<DetectedActivity> CREATOR = new AutoCreator<DetectedActivity>(DetectedActivity.class);
 }

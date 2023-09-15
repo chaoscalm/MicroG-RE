@@ -5,6 +5,8 @@
 
 package org.microg.gms.tasks;
 
+import static com.google.android.gms.tasks.TaskExecutors.MAIN_THREAD;
+
 import android.app.Activity;
 
 import com.google.android.gms.tasks.Continuation;
@@ -21,8 +23,6 @@ import java.util.Queue;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import static com.google.android.gms.tasks.TaskExecutors.MAIN_THREAD;
 
 public class TaskImpl<TResult> extends Task<TResult> {
     private final Object lock = new Object();
@@ -123,6 +123,15 @@ public class TaskImpl<TResult> extends Task<TResult> {
         }
     }
 
+    public void setException(Exception exception) {
+        synchronized (lock) {
+            if (completed) throw DuplicateTaskCompletionException.of(this);
+            this.completed = true;
+            this.exception = exception;
+            notifyQueue();
+        }
+    }
+
     @Override
     public TResult getResult() {
         synchronized (lock) {
@@ -130,6 +139,15 @@ public class TaskImpl<TResult> extends Task<TResult> {
             if (cancelled) throw new CancellationException("Task is canceled");
             if (exception != null) throw new RuntimeExecutionException(exception);
             return result;
+        }
+    }
+
+    public void setResult(TResult result) {
+        synchronized (lock) {
+            if (completed) throw DuplicateTaskCompletionException.of(this);
+            this.completed = true;
+            this.result = result;
+            notifyQueue();
         }
     }
 
@@ -204,24 +222,6 @@ public class TaskImpl<TResult> extends Task<TResult> {
             if (completed) throw DuplicateTaskCompletionException.of(this);
             this.completed = true;
             this.cancelled = true;
-            notifyQueue();
-        }
-    }
-
-    public void setResult(TResult result) {
-        synchronized (lock) {
-            if (completed) throw DuplicateTaskCompletionException.of(this);
-            this.completed = true;
-            this.result = result;
-            notifyQueue();
-        }
-    }
-
-    public void setException(Exception exception) {
-        synchronized (lock) {
-            if (completed) throw DuplicateTaskCompletionException.of(this);
-            this.completed = true;
-            this.exception = exception;
             notifyQueue();
         }
     }

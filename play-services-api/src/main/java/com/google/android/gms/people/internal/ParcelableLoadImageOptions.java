@@ -20,9 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class ParcelableLoadImageOptions extends AutoSafeParcelable {
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<ParcelableLoadImageOptions> CREATOR = new AutoCreator<ParcelableLoadImageOptions>(ParcelableLoadImageOptions.class);
     @SafeParceled(1)
     public int imageSize;
 
@@ -31,6 +29,6 @@ public class ParcelableLoadImageOptions extends AutoSafeParcelable {
 
     @SafeParceled(3)
     public boolean useLargePictureForCp2Images;
-
-    public static final Creator<ParcelableLoadImageOptions> CREATOR = new AutoCreator<ParcelableLoadImageOptions>(ParcelableLoadImageOptions.class);
+    @SafeParceled(1000)
+    private int versionCode = 1;
 }

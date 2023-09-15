@@ -48,18 +48,6 @@ import java.util.List;
 public abstract class LocationProviderBase {
 
     /**
-     * Callback to be invoked when a flush operation is complete and all flushed locations have been
-     * reported.
-     */
-    protected interface OnFlushCompleteCallback {
-
-        /**
-         * Should be invoked once the flush is complete.
-         */
-        void onFlushComplete();
-    }
-
-    /**
      * Bundle key for a version of the location containing no GPS data.
      * Allows location providers to flag locations as being safe to
      * feed to LocationFudger.
@@ -68,7 +56,6 @@ public abstract class LocationProviderBase {
      */
     @Deprecated
     public static final String EXTRA_NO_GPS_LOCATION = "noGPSLocation";
-
     /**
      * Name of the Fused location provider.
      *
@@ -76,16 +63,12 @@ public abstract class LocationProviderBase {
      * to provide the best possible Location fix.
      */
     public static final String FUSED_PROVIDER = LocationManager.FUSED_PROVIDER;
-
     final String mTag;
     @Nullable
     final String mAttributionTag;
     final IBinder mBinder;
-
-
     volatile ProviderProperties mProperties;
     volatile boolean mAllowed;
-
     /**
      * @deprecated Prefer
      * {@link #LocationProviderBase(Context, String, ProviderPropertiesUnbundled)}.
@@ -108,36 +91,6 @@ public abstract class LocationProviderBase {
 
     public IBinder getBinder() {
         return mBinder;
-    }
-
-    /**
-     * @deprecated Use {@link #setAllowed(boolean)} instead.
-     */
-    @Deprecated
-    @RequiresApi(VERSION_CODES.Q)
-    public void setEnabled(boolean enabled) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Sets whether this provider is currently allowed or not. Note that this is specific to the
-     * provider only, and is not related to global location settings. This is a hint to the Location
-     * Manager that this provider will generally be unable to fulfill incoming requests. This
-     * provider may still receive callbacks to onSetRequest while not allowed, and must decide
-     * whether to attempt to satisfy those requests or not.
-     *
-     * <p>Some guidelines: providers should set their own allowed/disallowed status based only on
-     * state "owned" by that provider. For instance, providers should not take into account the
-     * state of the location master setting when setting themselves allowed or disallowed, as this
-     * state is not owned by a particular provider. If a provider requires some additional user
-     * consent that is particular to the provider, this should be use to set the allowed/disallowed
-     * state. If the provider proxies to another provider, the child provider's allowed/disallowed
-     * state should be taken into account in the parent's allowed state. For most providers, it is
-     * expected that they will be always allowed.
-     */
-    @RequiresApi(VERSION_CODES.R)
-    public void setAllowed(boolean allowed) {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -173,10 +126,40 @@ public abstract class LocationProviderBase {
     }
 
     /**
+     * @deprecated Use {@link #setAllowed(boolean)} instead.
+     */
+    @Deprecated
+    @RequiresApi(VERSION_CODES.Q)
+    public void setEnabled(boolean enabled) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns true if this provider is allowed. Providers start as allowed on construction.
      */
     @RequiresApi(VERSION_CODES.R)
     public boolean isAllowed() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Sets whether this provider is currently allowed or not. Note that this is specific to the
+     * provider only, and is not related to global location settings. This is a hint to the Location
+     * Manager that this provider will generally be unable to fulfill incoming requests. This
+     * provider may still receive callbacks to onSetRequest while not allowed, and must decide
+     * whether to attempt to satisfy those requests or not.
+     *
+     * <p>Some guidelines: providers should set their own allowed/disallowed status based only on
+     * state "owned" by that provider. For instance, providers should not take into account the
+     * state of the location master setting when setting themselves allowed or disallowed, as this
+     * state is not owned by a particular provider. If a provider requires some additional user
+     * consent that is particular to the provider, this should be use to set the allowed/disallowed
+     * state. If the provider proxies to another provider, the child provider's allowed/disallowed
+     * state should be taken into account in the parent's allowed state. For most providers, it is
+     * expected that they will be always allowed.
+     */
+    @RequiresApi(VERSION_CODES.R)
+    public void setAllowed(boolean allowed) {
         throw new UnsupportedOperationException();
     }
 
@@ -276,5 +259,17 @@ public abstract class LocationProviderBase {
      */
     protected boolean onSendExtraCommand(@Nullable String command, @Nullable Bundle extras) {
         return false;
+    }
+
+    /**
+     * Callback to be invoked when a flush operation is complete and all flushed locations have been
+     * reported.
+     */
+    protected interface OnFlushCompleteCallback {
+
+        /**
+         * Should be invoked once the flush is complete.
+         */
+        void onFlushComplete();
     }
 }

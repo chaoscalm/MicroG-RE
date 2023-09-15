@@ -53,8 +53,31 @@ public class Attestation {
         this.packageName = packageName;
     }
 
-    public void setPayload(byte[] payload) {
-        this.payload = payload;
+    private static MessageDigest getSha256Digest() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256");
+    }
+
+    public static byte[] getPackageFileDigest(Context context, String packageName) throws Exception {
+        FileInputStream is = new FileInputStream(new File(context.getPackageManager().getApplicationInfo(packageName, 0).sourceDir));
+        MessageDigest digest = getSha256Digest();
+        byte[] data = new byte[4096];
+        while (true) {
+            int read = is.read(data);
+            if (read < 0) break;
+            digest.update(data, 0, read);
+        }
+        is.close();
+        return digest.digest();
+    }
+
+    public static byte[][] getPackageSignatures(Context context, String packageName) throws Exception {
+        PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+        ArrayList<byte[]> res = new ArrayList<>();
+        MessageDigest digest = getSha256Digest();
+        for (Signature signature : pi.signatures) {
+            res.add(digest.digest(signature.toByteArray()));
+        }
+        return res.toArray(new byte[][]{});
     }
 
     public SafetyNetData buildPayload(byte[] nonce) {
@@ -79,6 +102,10 @@ public class Attestation {
         return payload;
     }
 
+    public void setPayload(byte[] payload) {
+        this.payload = payload;
+    }
+
     public String getPayloadHashBase64() {
         try {
             MessageDigest digest = getSha256Digest();
@@ -87,10 +114,6 @@ public class Attestation {
             Log.w(TAG, e);
             return null;
         }
-    }
-
-    private static MessageDigest getSha256Digest() throws NoSuchAlgorithmException {
-        return MessageDigest.getInstance("SHA-256");
     }
 
     public void setDroidGuardResult(String droidGuardResult) {
@@ -106,19 +129,6 @@ public class Attestation {
         }
     }
 
-    public static byte[] getPackageFileDigest(Context context, String packageName) throws Exception {
-        FileInputStream is = new FileInputStream(new File(context.getPackageManager().getApplicationInfo(packageName, 0).sourceDir));
-        MessageDigest digest = getSha256Digest();
-        byte[] data = new byte[4096];
-        while (true) {
-            int read = is.read(data);
-            if (read < 0) break;
-            digest.update(data, 0, read);
-        }
-        is.close();
-        return digest.digest();
-    }
-
     @SuppressLint("PackageManagerGetSignatures")
     private List<ByteString> getPackageSignatures() {
         try {
@@ -131,16 +141,6 @@ public class Attestation {
             Log.w(TAG, e);
             return null;
         }
-    }
-
-    public static byte[][] getPackageSignatures(Context context, String packageName) throws Exception {
-        PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-        ArrayList<byte[]> res = new ArrayList<>();
-        MessageDigest digest = getSha256Digest();
-        for (Signature signature : pi.signatures) {
-            res.add(digest.digest(signature.toByteArray()));
-        }
-        return res.toArray(new byte[][]{});
     }
 
     public String attest(String apiKey) throws IOException {

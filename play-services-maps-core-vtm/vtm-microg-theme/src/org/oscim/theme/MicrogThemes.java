@@ -21,6 +21,10 @@ public enum MicrogThemes implements ThemeFile {
     }
 
     @Override
+    public void setMenuCallback(XmlRenderThemeMenuCallback menuCallback) {
+    }
+
+    @Override
     public String getRelativePathPrefix() {
         return "";
     }
@@ -28,10 +32,6 @@ public enum MicrogThemes implements ThemeFile {
     @Override
     public InputStream getRenderThemeAsStream() {
         return AssetAdapter.readFileAsStream(mPath);
-    }
-
-    @Override
-    public void setMenuCallback(XmlRenderThemeMenuCallback menuCallback) {
     }
 
     @Override

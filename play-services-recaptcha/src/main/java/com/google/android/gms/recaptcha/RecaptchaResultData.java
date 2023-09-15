@@ -14,6 +14,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  * Information pertaining to reCAPTCHA result data.
  */
 public class RecaptchaResultData extends AutoSafeParcelable {
+    public static final Creator<RecaptchaResultData> CREATOR = new AutoCreator<>(RecaptchaResultData.class);
     @Field(1)
     private String tokenResult;
 
@@ -30,6 +31,4 @@ public class RecaptchaResultData extends AutoSafeParcelable {
     public String getTokenResult() {
         return tokenResult;
     }
-
-    public static final Creator<RecaptchaResultData> CREATOR = new AutoCreator<>(RecaptchaResultData.class);
 }

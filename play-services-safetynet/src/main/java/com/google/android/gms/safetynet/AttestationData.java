@@ -9,6 +9,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class AttestationData extends AutoSafeParcelable {
+    public static final Creator<AttestationData> CREATOR = new AutoCreator<AttestationData>(AttestationData.class);
     @Field(1)
     private int versionCode = 1;
     @Field(2)
@@ -24,6 +25,4 @@ public class AttestationData extends AutoSafeParcelable {
     public String getJwsResult() {
         return jwsResult;
     }
-
-    public static final Creator<AttestationData> CREATOR = new AutoCreator<AttestationData>(AttestationData.class);
 }

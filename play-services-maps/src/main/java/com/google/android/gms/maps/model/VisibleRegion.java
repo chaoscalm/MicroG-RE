@@ -22,6 +22,7 @@ import org.microg.safeparcel.SafeParceled;
 
 @PublicApi
 public class VisibleRegion extends AutoSafeParcelable {
+    public static Creator<VisibleRegion> CREATOR = new AutoCreator<VisibleRegion>(VisibleRegion.class);
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -62,6 +63,4 @@ public class VisibleRegion extends AutoSafeParcelable {
                 new LatLng(bounds.northeast.latitude, bounds.southwest.longitude), bounds.northeast,
                 bounds);
     }
-
-    public static Creator<VisibleRegion> CREATOR = new AutoCreator<VisibleRegion>(VisibleRegion.class);
 }

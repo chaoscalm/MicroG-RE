@@ -11,6 +11,7 @@ import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMappi
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SetDiagnosisKeysDataMappingParams extends AutoSafeParcelable {
+    public static final Creator<SetDiagnosisKeysDataMappingParams> CREATOR = new AutoCreator<>(SetDiagnosisKeysDataMappingParams.class);
     @Field(1)
     public IStatusCallback callback;
     @Field(2)
@@ -23,6 +24,4 @@ public class SetDiagnosisKeysDataMappingParams extends AutoSafeParcelable {
         this.callback = callback;
         this.mapping = mapping;
     }
-
-    public static final Creator<SetDiagnosisKeysDataMappingParams> CREATOR = new AutoCreator<>(SetDiagnosisKeysDataMappingParams.class);
 }

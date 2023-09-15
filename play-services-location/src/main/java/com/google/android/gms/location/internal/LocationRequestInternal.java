@@ -23,63 +23,57 @@ import java.util.List;
 @Hide
 public class LocationRequestInternal extends AutoSafeParcelable {
 
-    @Field(1000)
-    private int versionCode = 1;
-
-    @Field(1)
-    private LocationRequest request;
-
+    public static final Creator<LocationRequestInternal> CREATOR = new AutoCreator<LocationRequestInternal>(LocationRequestInternal.class);
     @Field(2)
     @Deprecated
     public boolean requestNlpDebugInfo;
-
     @Field(3)
     @Deprecated
     public boolean restorePendingIntentListeners;
-
     @Field(4)
     @Deprecated
     public boolean triggerUpdate;
-
     @Field(value = 5, subClass = ClientIdentity.class)
     @Deprecated
     public List<ClientIdentity> clients;
-
     @Field(6)
     @Deprecated
     public String tag;
-
     @Field(7)
     @Deprecated
     public boolean hideFromAppOps;
-
     @Field(8)
     @Deprecated
     public boolean forceCoarseLocation;
-
     @Field(9)
     @Deprecated
     public boolean exemptFromThrottle;
-
     @Field(10)
     @Deprecated
     public String moduleId;
-
     @Field(11)
     @Deprecated
     public boolean bypass;
-
     @Field(12)
     @Deprecated
     public boolean waitForAccurateLocation;
-
     @Field(13)
     @Deprecated
     public String contextAttributeTag;
-
     @Field(14)
     @Deprecated
     public long maxUpdateAgeMillis = Long.MAX_VALUE;
+    @Field(1000)
+    private int versionCode = 1;
+    @Field(1)
+    private LocationRequest request;
+
+    public LocationRequestInternal() {
+    }
+
+    public LocationRequestInternal(LocationRequest request) {
+        this.request = request;
+    }
 
     @Override
     public String toString() {
@@ -98,13 +92,6 @@ public class LocationRequestInternal extends AutoSafeParcelable {
                 ", inaccurateLocationsDelayed=" + waitForAccurateLocation +
                 ", contextAttributeTag=" + contextAttributeTag +
                 '}';
-    }
-
-    public LocationRequestInternal() {
-    }
-
-    public LocationRequestInternal(LocationRequest request) {
-        this.request = request;
     }
 
     @SuppressLint("MissingPermission")
@@ -129,6 +116,4 @@ public class LocationRequestInternal extends AutoSafeParcelable {
         if (maxUpdateAgeMillis != Long.MAX_VALUE) builder.setMaxUpdateAgeMillis(maxUpdateAgeMillis);
         return builder.build();
     }
-
-    public static final Creator<LocationRequestInternal> CREATOR = new AutoCreator<LocationRequestInternal>(LocationRequestInternal.class);
 }

@@ -35,15 +35,6 @@ public class PutDataMapRequest {
     }
 
     /**
-     * Creates a {@link PutDataRequest} containing the data and assets in this
-     * {@link PutDataMapRequest}.
-     */
-    public PutDataRequest asPutDataRequest() {
-        // TODO
-        return PutDataRequest.create((Uri) null);
-    }
-
-    /**
      * Creates a {@link PutDataMapRequest} with the provided, complete, path.
      */
     public static PutDataMapRequest create(String path) {
@@ -65,6 +56,15 @@ public class PutDataMapRequest {
     public static PutDataMapRequest createWithAutoAppendedId(String pathPrefix) {
         // TODO
         return new PutDataMapRequest(null);
+    }
+
+    /**
+     * Creates a {@link PutDataRequest} containing the data and assets in this
+     * {@link PutDataMapRequest}.
+     */
+    public PutDataRequest asPutDataRequest() {
+        // TODO
+        return PutDataRequest.create((Uri) null);
     }
 
     /**

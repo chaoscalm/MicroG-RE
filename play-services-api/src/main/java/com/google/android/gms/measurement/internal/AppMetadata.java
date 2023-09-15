@@ -10,6 +10,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import java.util.List;
 
 public class AppMetadata extends AutoSafeParcelable {
+    public static final Creator<AppMetadata> CREATOR = new AutoCreator<>(AppMetadata.class);
     @Field(2)
     public String packageName;
     @Field(3)
@@ -18,6 +19,22 @@ public class AppMetadata extends AutoSafeParcelable {
     public String versionName;
     @Field(5)
     public String installerPackageName;
+    @Field(11)
+    public long versionCode = Integer.MIN_VALUE;
+    @Field(15)
+    public int appType;
+    @Field(17)
+    public boolean ssaidCollectionEnabled = true;
+    @Field(18)
+    public boolean deferredAnalyticsCollection;
+    @Field(19)
+    public String admobAppId;
+    @Field(21)
+    public Boolean allowAdPersonalization;
+    @Field(23)
+    public List<String> safelistedEvents;
+    @Field(24)
+    public String gaAppId;
     @Field(6)
     private long googleVersion;
     @Field(7)
@@ -28,32 +45,16 @@ public class AppMetadata extends AutoSafeParcelable {
     private boolean measurementEnabled = true;
     @Field(10)
     private boolean firstOpen;
-    @Field(11)
-    public long versionCode = Integer.MIN_VALUE;
     @Field(12)
     private String firebaseInstanceId;
     @Field(13)
     private long androidId;
     @Field(14)
     private long instantiationTime;
-    @Field(15)
-    public int appType;
     @Field(16)
     private boolean adIdReportingEnabled;
-    @Field(17)
-    public boolean ssaidCollectionEnabled = true;
-    @Field(18)
-    public boolean deferredAnalyticsCollection;
-    @Field(19)
-    public String admobAppId;
-    @Field(21)
-    public Boolean allowAdPersonalization;
     @Field(22)
     private long dynamiteVersion;
-    @Field(23)
-    public List<String> safelistedEvents;
-    @Field(24)
-    public String gaAppId;
     @Field(25)
     private String consentSettings;
     @Field(26)
@@ -68,6 +69,4 @@ public class AppMetadata extends AutoSafeParcelable {
     public String toString() {
         return "AppMetadata[" + packageName + "]";
     }
-
-    public static final Creator<AppMetadata> CREATOR = new AutoCreator<>(AppMetadata.class);
 }

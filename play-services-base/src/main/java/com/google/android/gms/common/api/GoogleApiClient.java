@@ -236,6 +236,35 @@ public interface GoogleApiClient {
     void unregisterConnectionFailedListener(OnConnectionFailedListener listener);
 
     /**
+     * Provides callbacks that are called when the client is connected or disconnected from the
+     * service. Most applications implement {@link #onConnected(Bundle)} to start making requests.
+     */
+    @PublicApi
+    @Deprecated
+    interface ConnectionCallbacks extends org.microg.gms.common.api.ConnectionCallbacks {
+        /**
+         * A suspension cause informing that the service has been killed.
+         */
+        int CAUSE_SERVICE_DISCONNECTED = 1;
+        /**
+         * A suspension cause informing you that a peer device connection was lost.
+         */
+        int CAUSE_NETWORK_LOST = 2;
+
+        void onConnected(Bundle connectionHint);
+    }
+
+    /**
+     * Provides callbacks for scenarios that result in a failed attempt to connect the client to
+     * the service. See {@link ConnectionResult} for a list of error codes and suggestions for
+     * resolution.
+     */
+    @PublicApi
+    @Deprecated
+    interface OnConnectionFailedListener extends org.microg.gms.common.api.OnConnectionFailedListener {
+    }
+
+    /**
      * Builder to configure a {@link GoogleApiClient}.
      */
     @PublicApi
@@ -427,34 +456,5 @@ public interface GoogleApiClient {
             this.accountName = AuthConstants.DEFAULT_ACCOUNT;
             return this;
         }
-    }
-
-    /**
-     * Provides callbacks that are called when the client is connected or disconnected from the
-     * service. Most applications implement {@link #onConnected(Bundle)} to start making requests.
-     */
-    @PublicApi
-    @Deprecated
-    interface ConnectionCallbacks extends org.microg.gms.common.api.ConnectionCallbacks {
-        /**
-         * A suspension cause informing that the service has been killed.
-         */
-        int CAUSE_SERVICE_DISCONNECTED = 1;
-        /**
-         * A suspension cause informing you that a peer device connection was lost.
-         */
-        int CAUSE_NETWORK_LOST = 2;
-
-        void onConnected(Bundle connectionHint);
-    }
-
-    /**
-     * Provides callbacks for scenarios that result in a failed attempt to connect the client to
-     * the service. See {@link ConnectionResult} for a list of error codes and suggestions for
-     * resolution.
-     */
-    @PublicApi
-    @Deprecated
-    interface OnConnectionFailedListener extends org.microg.gms.common.api.OnConnectionFailedListener {
     }
 }

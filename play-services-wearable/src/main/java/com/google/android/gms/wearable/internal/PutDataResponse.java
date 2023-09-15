@@ -20,12 +20,13 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class PutDataResponse extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<PutDataResponse> CREATOR = new AutoCreator<PutDataResponse>(PutDataResponse.class);
     @SafeParceled(2)
     public final int statusCode;
     @SafeParceled(3)
     public final DataItemParcelable dataItem;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private PutDataResponse() {
         statusCode = 0;
@@ -36,6 +37,4 @@ public class PutDataResponse extends AutoSafeParcelable {
         this.statusCode = statusCode;
         this.dataItem = dataItem;
     }
-
-    public static final Creator<PutDataResponse> CREATOR = new AutoCreator<PutDataResponse>(PutDataResponse.class);
 }

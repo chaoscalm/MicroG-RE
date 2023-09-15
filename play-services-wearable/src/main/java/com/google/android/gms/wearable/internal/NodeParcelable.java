@@ -25,8 +25,7 @@ import org.microg.safeparcel.SafeParceled;
  * Parcelable implementation of the {@link com.google.android.gms.wearable.Node} interface.
  */
 public class NodeParcelable extends AutoSafeParcelable implements Node {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<NodeParcelable> CREATOR = new AutoCreator<NodeParcelable>(NodeParcelable.class);
     @SafeParceled(2)
     private final String nodeId;
     @SafeParceled(3)
@@ -35,6 +34,8 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
     private final int hops;
     @SafeParceled(5)
     private final boolean isNearby;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private NodeParcelable() {
         nodeId = displayName = null;
@@ -94,6 +95,4 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
     public String toString() {
         return "NodeParcelable{" + displayName + ", id=" + displayName + ", hops=" + hops + ", isNearby=" + isNearby + "}";
     }
-
-    public static final Creator<NodeParcelable> CREATOR = new AutoCreator<NodeParcelable>(NodeParcelable.class);
 }

@@ -25,17 +25,6 @@ import java.util.*;
  */
 @PublicApi
 public class ActivityTransitionRequest extends AutoSafeParcelable {
-    private static final String EXTRA = "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_REQUEST";
-
-    @Field(value = 1, subClass = ActivityTransition.class)
-    private List<ActivityTransition> activityTransitions;
-    @Field(2)
-    private String tag;
-    @Field(value = 3, subClass = ClientIdentity.class)
-    private List<ClientIdentity> clients;
-    @Field(4)
-    private String contextAttributionTag;
-
     /**
      * The comparator used to determine if two transitions are the same. It's different from {@link ActivityTransition#equals(Object)} because in the future we
      * may add latency to activity transition and the latency value should not be compared against.
@@ -49,6 +38,16 @@ public class ActivityTransitionRequest extends AutoSafeParcelable {
             return res;
         }
     };
+    public static final Creator<ActivityTransitionRequest> CREATOR = new AutoCreator<>(ActivityTransitionRequest.class);
+    private static final String EXTRA = "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_REQUEST";
+    @Field(value = 1, subClass = ActivityTransition.class)
+    private List<ActivityTransition> activityTransitions;
+    @Field(2)
+    private String tag;
+    @Field(value = 3, subClass = ClientIdentity.class)
+    private List<ClientIdentity> clients;
+    @Field(4)
+    private String contextAttributionTag;
 
     private ActivityTransitionRequest() {
     }
@@ -107,6 +106,4 @@ public class ActivityTransitionRequest extends AutoSafeParcelable {
     public String toString() {
         return "ActivityTransitionRequest [mTransitions=" + activityTransitions + ", mTag=" + tag + ", mClients" + clients + ", mAttributionTag=" + contextAttributionTag + "]";
     }
-
-    public static final Creator<ActivityTransitionRequest> CREATOR = new AutoCreator<>(ActivityTransitionRequest.class);
 }

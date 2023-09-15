@@ -24,8 +24,7 @@ import org.microg.safeparcel.SafeParceled;
  */
 public class AutocompleteFilter extends AutoSafeParcelable {
 
+    public static final Creator<AutocompleteFilter> CREATOR = new AutoCreator<AutocompleteFilter>(AutocompleteFilter.class);
     @SafeParceled(1000)
     private int versionCode = 1;
-
-    public static final Creator<AutocompleteFilter> CREATOR = new AutoCreator<AutocompleteFilter>(AutocompleteFilter.class);
 }

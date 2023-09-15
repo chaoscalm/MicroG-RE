@@ -16,6 +16,8 @@
 
 package com.google.android.gms.gcm;
 
+import static org.microg.gms.gcm.GcmConstants.EXTRA_TOPIC;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,8 +26,6 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
-
-import static org.microg.gms.gcm.GcmConstants.EXTRA_TOPIC;
 
 /**
  * GcmPubSub provides a publish-subscribe model for sending GCM topic messages.

@@ -25,8 +25,7 @@ import org.microg.safeparcel.SafeParceled;
  */
 @PublicApi
 public final class LatLng extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static Creator<LatLng> CREATOR = new AutoCreator<LatLng>(LatLng.class);
     /**
      * Latitude, in degrees. This value is in the range [-90, 90].
      */
@@ -37,6 +36,8 @@ public final class LatLng extends AutoSafeParcelable {
      */
     @SafeParceled(3)
     public final double longitude;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     /**
      * This constructor is dirty setting the final fields to make the compiler happy.
@@ -99,6 +100,4 @@ public final class LatLng extends AutoSafeParcelable {
     public String toString() {
         return "lat/lng: (" + latitude + "," + longitude + ")";
     }
-
-    public static Creator<LatLng> CREATOR = new AutoCreator<LatLng>(LatLng.class);
 }

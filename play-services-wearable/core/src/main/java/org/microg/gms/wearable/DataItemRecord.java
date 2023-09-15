@@ -49,6 +49,48 @@ public class DataItemRecord {
     public String packageName;
     public String signatureDigest;
 
+    public static DataItemRecord fromCursor(Cursor cursor) {
+        DataItemRecord record = new DataItemRecord();
+        record.packageName = cursor.getString(1);
+        record.signatureDigest = cursor.getString(2);
+        record.dataItem = new DataItemInternal(cursor.getString(3), cursor.getString(4));
+        record.seqId = cursor.getLong(5);
+        record.deleted = cursor.getLong(6) > 0;
+        record.source = cursor.getString(7);
+        record.dataItem.data = cursor.getBlob(8);
+        record.lastModified = cursor.getLong(9);
+        record.assetsAreReady = cursor.getLong(10) > 0;
+        if (cursor.getString(11) != null) {
+            record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+            while (cursor.moveToNext()) {
+                if (cursor.getLong(5) == record.seqId) {
+                    record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                }
+            }
+            cursor.moveToPrevious();
+        }
+        return record;
+    }
+
+    public static DataItemRecord fromSetDataItem(SetDataItem setDataItem) {
+        DataItemRecord record = new DataItemRecord();
+        record.dataItem = new DataItemInternal(Uri.parse(setDataItem.uri));
+        if (setDataItem.data != null) record.dataItem.data = setDataItem.data.toByteArray();
+        if (setDataItem.assets != null) {
+            for (AssetEntry asset : setDataItem.assets) {
+                record.dataItem.addAsset(asset.key, Asset.createFromRef(asset.value.digest));
+            }
+        }
+        record.source = setDataItem.source;
+        record.seqId = setDataItem.seqId;
+        record.v1SeqId = -1;
+        record.lastModified = setDataItem.lastModified;
+        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
+        record.packageName = setDataItem.packageName;
+        record.signatureDigest = setDataItem.signatureDigest;
+        return record;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("sourceNode", source);
@@ -126,48 +168,6 @@ public class DataItemRecord {
         }
         builder.assets(protoAssets);
         return builder.build();
-    }
-
-    public static DataItemRecord fromCursor(Cursor cursor) {
-        DataItemRecord record = new DataItemRecord();
-        record.packageName = cursor.getString(1);
-        record.signatureDigest = cursor.getString(2);
-        record.dataItem = new DataItemInternal(cursor.getString(3), cursor.getString(4));
-        record.seqId = cursor.getLong(5);
-        record.deleted = cursor.getLong(6) > 0;
-        record.source = cursor.getString(7);
-        record.dataItem.data = cursor.getBlob(8);
-        record.lastModified = cursor.getLong(9);
-        record.assetsAreReady = cursor.getLong(10) > 0;
-        if (cursor.getString(11) != null) {
-            record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
-            while (cursor.moveToNext()) {
-                if (cursor.getLong(5) == record.seqId) {
-                    record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
-                }
-            }
-            cursor.moveToPrevious();
-        }
-        return record;
-    }
-
-    public static DataItemRecord fromSetDataItem(SetDataItem setDataItem) {
-        DataItemRecord record = new DataItemRecord();
-        record.dataItem = new DataItemInternal(Uri.parse(setDataItem.uri));
-        if (setDataItem.data != null) record.dataItem.data = setDataItem.data.toByteArray();
-        if (setDataItem.assets != null) {
-            for (AssetEntry asset : setDataItem.assets) {
-                record.dataItem.addAsset(asset.key, Asset.createFromRef(asset.value.digest));
-            }
-        }
-        record.source = setDataItem.source;
-        record.seqId = setDataItem.seqId;
-        record.v1SeqId = -1;
-        record.lastModified = setDataItem.lastModified;
-        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
-        record.packageName = setDataItem.packageName;
-        record.signatureDigest = setDataItem.signatureDigest;
-        return record;
     }
 
     @Override

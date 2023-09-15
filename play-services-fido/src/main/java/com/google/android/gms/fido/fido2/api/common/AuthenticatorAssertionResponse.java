@@ -20,6 +20,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
+    public static final Creator<AuthenticatorAssertionResponse> CREATOR = new AutoCreator<>(AuthenticatorAssertionResponse.class);
     @Field(2)
     private byte[] keyHandle;
     @Field(3)
@@ -40,6 +41,10 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.authenticatorData = authenticatorData;
         this.signature = signature;
         this.userHandle = userHandle;
+    }
+
+    public static AuthenticatorAssertionResponse deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
     }
 
     public byte[] getAuthenticatorData() {
@@ -101,10 +106,4 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
                 .field("userHandle", userHandle)
                 .end();
     }
-
-    public static AuthenticatorAssertionResponse deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    public static final Creator<AuthenticatorAssertionResponse> CREATOR = new AutoCreator<>(AuthenticatorAssertionResponse.class);
 }

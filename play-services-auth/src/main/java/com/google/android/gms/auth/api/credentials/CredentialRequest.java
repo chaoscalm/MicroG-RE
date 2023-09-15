@@ -9,7 +9,6 @@
 package com.google.android.gms.auth.api.credentials;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 /**
  * Parameters for requesting a Credential, via Auth.CredentialsApi.request(). Instances can be
@@ -17,9 +16,9 @@ import org.microg.safeparcel.SafeParceled;
  */
 public class CredentialRequest extends AutoSafeParcelable {
 
+    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<CredentialRequest>(CredentialRequest.class);
     @Field(1000)
     private int versionCode = 1;
-
     @Field(1)
     private boolean passwordLoginSupported;
     @Field(2)
@@ -62,8 +61,6 @@ public class CredentialRequest extends AutoSafeParcelable {
     public boolean isPasswordLoginSupported() {
         return passwordLoginSupported;
     }
-
-    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<CredentialRequest>(CredentialRequest.class);
 
     public static class Builder {
         private boolean passwordLoginSupported;

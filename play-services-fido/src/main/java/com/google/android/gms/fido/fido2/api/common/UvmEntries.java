@@ -21,6 +21,8 @@ import java.util.List;
  */
 @PublicApi
 public class UvmEntries extends AutoSafeParcelable {
+    @PublicApi(exclude = true)
+    public static Creator<UvmEntries> CREATOR = new AutoCreator<>(UvmEntries.class);
     @Field(1)
     private List<UvmEntry> uvmEntryList;
 
@@ -76,7 +78,4 @@ public class UvmEntries extends AutoSafeParcelable {
             return uvmEntries;
         }
     }
-
-    @PublicApi(exclude = true)
-    public static Creator<UvmEntries> CREATOR = new AutoCreator<>(UvmEntries.class);
 }

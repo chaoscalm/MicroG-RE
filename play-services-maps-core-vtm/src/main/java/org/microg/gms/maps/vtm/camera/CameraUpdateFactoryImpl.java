@@ -32,12 +32,11 @@ import org.oscim.map.Map;
 
 public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
     private static final String TAG = "GmsMapCamUpdateFactory";
+    private static CameraUpdateFactoryImpl instance;
 
     private CameraUpdateFactoryImpl() {
 
     }
-
-    private static CameraUpdateFactoryImpl instance;
 
     public static CameraUpdateFactoryImpl get() {
         if (instance == null) {

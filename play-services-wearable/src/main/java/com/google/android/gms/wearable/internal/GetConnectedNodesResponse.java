@@ -22,12 +22,13 @@ import org.microg.safeparcel.SafeParceled;
 import java.util.List;
 
 public class GetConnectedNodesResponse extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<GetConnectedNodesResponse> CREATOR = new AutoCreator<GetConnectedNodesResponse>(GetConnectedNodesResponse.class);
     @SafeParceled(2)
     public final int statusCode;
     @SafeParceled(value = 3, subClass = NodeParcelable.class)
     public final List<NodeParcelable> nodes;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private GetConnectedNodesResponse() {
         statusCode = 0;
@@ -38,6 +39,4 @@ public class GetConnectedNodesResponse extends AutoSafeParcelable {
         this.statusCode = statusCode;
         this.nodes = nodes;
     }
-
-    public static final Creator<GetConnectedNodesResponse> CREATOR = new AutoCreator<GetConnectedNodesResponse>(GetConnectedNodesResponse.class);
 }

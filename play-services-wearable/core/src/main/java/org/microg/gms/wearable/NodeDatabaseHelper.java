@@ -44,6 +44,75 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         clockworkNodePreferences = new ClockworkNodePreferences(context);
     }
 
+    private static synchronized long getAppKey(SQLiteDatabase db, String packageName, String signatureDigest) {
+        Cursor cursor = db.rawQuery("SELECT _id FROM appkeys WHERE packageName=? AND signatureDigest=?", new String[]{packageName, signatureDigest});
+        if (cursor != null) {
+            try {
+                if (cursor.moveToNext()) {
+                    return cursor.getLong(0);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        ContentValues appKey = new ContentValues();
+        appKey.put("packageName", packageName);
+        appKey.put("signatureDigest", signatureDigest);
+        return db.insert("appkeys", null, appKey);
+    }
+
+    private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
+        ContentValues cv = record.toContentValues();
+        db.update("dataitems", cv, "_id=?", new String[]{key});
+        finishRecord(db, key, record);
+    }
+
+    private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
+        ContentValues contentValues = record.toContentValues();
+        contentValues.put("appkeys_id", getAppKey(db, record.packageName, record.signatureDigest));
+        contentValues.put("host", record.dataItem.host);
+        contentValues.put("path", record.dataItem.path);
+        String key = Long.toString(db.insertWithOnConflict("dataitems", "host", contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+        return finishRecord(db, key, record);
+    }
+
+    private static String finishRecord(SQLiteDatabase db, String key, DataItemRecord record) {
+        if (!record.deleted) {
+            for (Map.Entry<String, Asset> asset : record.dataItem.getAssets().entrySet()) {
+                ContentValues assetValues = new ContentValues();
+                assetValues.put("assets_digest", asset.getValue().getDigest());
+                assetValues.put("dataitems_id", key);
+                assetValues.put("assetname", asset.getKey());
+                db.insertWithOnConflict("assetrefs", "assetname", assetValues, SQLiteDatabase.CONFLICT_IGNORE);
+            }
+            Cursor status = db.query("assetsReadyStatus", new String[]{"nowReady"}, "dataitems_id=?", new String[]{key}, null, null, null);
+            if (status.moveToNext()) {
+                record.assetsAreReady = status.getLong(0) != 0;
+            }
+            status.close();
+        } else {
+            record.assetsAreReady = false;
+        }
+        return key;
+    }
+
+    private static Cursor getDataItemsByHostAndPath(SQLiteDatabase db, String packageName, String signatureDigest, String host, String path) {
+        String[] params;
+        String selection;
+        if (path == null) {
+            params = new String[]{packageName, signatureDigest};
+            selection = "packageName =? AND signatureDigest =?";
+        } else if (host == null) {
+            params = new String[]{packageName, signatureDigest, path};
+            selection = "packageName =? AND signatureDigest =? AND path =?";
+        } else {
+            params = new String[]{packageName, signatureDigest, host, path};
+            selection = "packageName =? AND signatureDigest =? AND host =? AND path =?";
+        }
+        selection += " AND deleted=0";
+        return db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, params, null, null, "packageName, signatureDigest, host, path");
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE appkeys(_id INTEGER PRIMARY KEY AUTOINCREMENT,packageName TEXT NOT NULL,signatureDigest TEXT NOT NULL);");
@@ -114,23 +183,6 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private static synchronized long getAppKey(SQLiteDatabase db, String packageName, String signatureDigest) {
-        Cursor cursor = db.rawQuery("SELECT _id FROM appkeys WHERE packageName=? AND signatureDigest=?", new String[]{packageName, signatureDigest});
-        if (cursor != null) {
-            try {
-                if (cursor.moveToNext()) {
-                    return cursor.getLong(0);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        ContentValues appKey = new ContentValues();
-        appKey.put("packageName", packageName);
-        appKey.put("signatureDigest", signatureDigest);
-        return db.insert("appkeys", null, appKey);
-    }
-
     public synchronized void putRecord(DataItemRecord record) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -155,58 +207,6 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         db.endTransaction();
-    }
-
-    private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        ContentValues cv = record.toContentValues();
-        db.update("dataitems", cv, "_id=?", new String[]{key});
-        finishRecord(db, key, record);
-    }
-
-    private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
-        ContentValues contentValues = record.toContentValues();
-        contentValues.put("appkeys_id", getAppKey(db, record.packageName, record.signatureDigest));
-        contentValues.put("host", record.dataItem.host);
-        contentValues.put("path", record.dataItem.path);
-        String key = Long.toString(db.insertWithOnConflict("dataitems", "host", contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-        return finishRecord(db, key, record);
-    }
-
-    private static String finishRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        if (!record.deleted) {
-            for (Map.Entry<String, Asset> asset : record.dataItem.getAssets().entrySet()) {
-                ContentValues assetValues = new ContentValues();
-                assetValues.put("assets_digest", asset.getValue().getDigest());
-                assetValues.put("dataitems_id", key);
-                assetValues.put("assetname", asset.getKey());
-                db.insertWithOnConflict("assetrefs", "assetname", assetValues, SQLiteDatabase.CONFLICT_IGNORE);
-            }
-            Cursor status = db.query("assetsReadyStatus", new String[]{"nowReady"}, "dataitems_id=?", new String[]{key}, null, null, null);
-            if (status.moveToNext()) {
-                record.assetsAreReady = status.getLong(0) != 0;
-            }
-            status.close();
-        } else {
-            record.assetsAreReady = false;
-        }
-        return key;
-    }
-
-    private static Cursor getDataItemsByHostAndPath(SQLiteDatabase db, String packageName, String signatureDigest, String host, String path) {
-        String[] params;
-        String selection;
-        if (path == null) {
-            params = new String[]{packageName, signatureDigest};
-            selection = "packageName =? AND signatureDigest =?";
-        } else if (host == null) {
-            params = new String[]{packageName, signatureDigest, path};
-            selection = "packageName =? AND signatureDigest =? AND path =?";
-        } else {
-            params = new String[]{packageName, signatureDigest, host, path};
-            selection = "packageName =? AND signatureDigest =? AND host =? AND path =?";
-        }
-        selection += " AND deleted=0";
-        return db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, params, null, null, "packageName, signatureDigest, host, path");
     }
 
     public Cursor getModifiedDataItems(final String nodeId, final long seqId, final boolean excludeDeleted) {

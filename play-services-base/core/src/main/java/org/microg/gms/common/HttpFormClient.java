@@ -208,11 +208,6 @@ public class HttpFormClient {
         }).start();
     }
 
-    public static abstract class Request {
-        protected void prepare() {
-        }
-    }
-
     public interface Callback<T> {
         void onResponse(T response);
 
@@ -268,5 +263,10 @@ public class HttpFormClient {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ResponseStatusText {
+    }
+
+    public static abstract class Request {
+        protected void prepare() {
+        }
     }
 }

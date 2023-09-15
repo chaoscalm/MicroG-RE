@@ -18,18 +18,6 @@ public abstract class IntentService extends Service {
     private String name;
     private boolean redelivery;
 
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            onHandleIntent((Intent) msg.obj);
-            stopSelf(msg.arg1);
-        }
-    }
-
     public IntentService(String name) {
         this.name = name;
     }
@@ -117,4 +105,16 @@ public abstract class IntentService extends Service {
      *               for details.
      */
     public abstract void onHandleIntent(Intent intent);
+
+    private final class ServiceHandler extends Handler {
+        public ServiceHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            onHandleIntent((Intent) msg.obj);
+            stopSelf(msg.arg1);
+        }
+    }
 }

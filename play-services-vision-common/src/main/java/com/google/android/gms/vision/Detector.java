@@ -96,6 +96,21 @@ public abstract class Detector<T> {
     }
 
     /**
+     * Interface for defining a post-processing action to be executed for each detection, when using the detector as part of a pipeline (see the class level docs above). An instance of a processor is associated with the detector via the {@link Detector#setProcessor(Detector.Processor)} method.
+     */
+    public interface Processor<T> {
+        /**
+         * Called by the detector to deliver detection results to the processor.
+         */
+        void receiveDetections(Detections<T> detections);
+
+        /**
+         * Shuts down and releases associated processor resources.
+         */
+        void release();
+    }
+
+    /**
      * Detection result object containing both detected items and the associated frame metadata.
      */
     public static class Detections<T> {
@@ -134,20 +149,5 @@ public abstract class Detector<T> {
         public Frame.Metadata getFrameMetadata() {
             return frameMetadata;
         }
-    }
-
-    /**
-     * Interface for defining a post-processing action to be executed for each detection, when using the detector as part of a pipeline (see the class level docs above). An instance of a processor is associated with the detector via the {@link Detector#setProcessor(Detector.Processor)} method.
-     */
-    public interface Processor<T> {
-        /**
-         * Called by the detector to deliver detection results to the processor.
-         */
-        void receiveDetections(Detections<T> detections);
-
-        /**
-         * Shuts down and releases associated processor resources.
-         */
-        void release();
     }
 }

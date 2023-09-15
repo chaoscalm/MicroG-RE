@@ -19,6 +19,8 @@ import java.util.Arrays;
  */
 @PublicApi
 public class PublicKeyCredentialParameters extends AutoSafeParcelable {
+    @PublicApi(exclude = true)
+    public static final Creator<PublicKeyCredentialParameters> CREATOR = new AutoCreator<>(PublicKeyCredentialParameters.class);
     @Field(2)
     private PublicKeyCredentialType type;
     @Field(3)
@@ -79,7 +81,4 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
                 .field("algorithm", algorithm)
                 .end();
     }
-
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredentialParameters> CREATOR = new AutoCreator<>(PublicKeyCredentialParameters.class);
 }

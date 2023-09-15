@@ -18,13 +18,13 @@ import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class DroidGuardResultsRequest extends AutoSafeParcelable {
+    public static final String KEY_OPEN_HANDLES = "openHandles";
+    public static final Creator<DroidGuardResultsRequest> CREATOR = new AutoCreator<>(DroidGuardResultsRequest.class);
     private static final String KEY_APP_ARCHITECTURE = "appArchitecture";
     private static final String KEY_CLIENT_VERSION = "clientVersion";
     private static final String KEY_FD = "fd";
     private static final String KEY_NETWORK_TO_USE = "networkToUse";
     private static final String KEY_TIMEOUT_MS = "timeoutMs";
-    public static final String KEY_OPEN_HANDLES = "openHandles";
-
     @Field(2)
     public Bundle bundle;
 
@@ -100,6 +100,4 @@ public class DroidGuardResultsRequest extends AutoSafeParcelable {
         }
         return helper.end();
     }
-
-    public static final Creator<DroidGuardResultsRequest> CREATOR = new AutoCreator<>(DroidGuardResultsRequest.class);
 }

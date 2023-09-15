@@ -20,12 +20,11 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class SuggestSpecification extends AutoSafeParcelable {
+    public static final Creator<SuggestSpecification> CREATOR = new AutoCreator<SuggestSpecification>(SuggestSpecification.class);
     @SafeParceled(1000)
     private int versionCode;
 
     public SuggestSpecification() {
         versionCode = 2;
     }
-
-    public static final Creator<SuggestSpecification> CREATOR = new AutoCreator<SuggestSpecification>(SuggestSpecification.class);
 }

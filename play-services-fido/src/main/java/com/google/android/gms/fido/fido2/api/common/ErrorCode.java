@@ -68,10 +68,34 @@ public enum ErrorCode implements Parcelable {
      */
     ATTESTATION_NOT_PRIVATE_ERR(36);
 
+    @PublicApi(exclude = true)
+    public static final Creator<ErrorCode> CREATOR = new Creator<ErrorCode>() {
+        @Override
+        public ErrorCode createFromParcel(Parcel source) {
+            try {
+                return ErrorCode.toErrorCode(source.readInt());
+            } catch (UnsupportedErrorCodeException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+
+        @Override
+        public ErrorCode[] newArray(int size) {
+            return new ErrorCode[size];
+        }
+    };
     private int code;
 
     ErrorCode(int code) {
         this.code = code;
+    }
+
+    @PublicApi(exclude = true)
+    public static ErrorCode toErrorCode(int errorCode) throws UnsupportedErrorCodeException {
+        for (ErrorCode value : values()) {
+            if (value.code == errorCode) return value;
+        }
+        throw new UnsupportedErrorCodeException(errorCode);
     }
 
     @PublicApi(exclude = true)
@@ -89,14 +113,6 @@ public enum ErrorCode implements Parcelable {
         dest.writeInt(code);
     }
 
-    @PublicApi(exclude = true)
-    public static ErrorCode toErrorCode(int errorCode) throws UnsupportedErrorCodeException {
-        for (ErrorCode value : values()) {
-            if (value.code == errorCode) return value;
-        }
-        throw new UnsupportedErrorCodeException(errorCode);
-    }
-
     /**
      * Exception thrown when an unsupported or unrecognized error code is encountered.
      */
@@ -108,21 +124,4 @@ public enum ErrorCode implements Parcelable {
             super("Error code " + errorCode + " is not supported");
         }
     }
-
-    @PublicApi(exclude = true)
-    public static final Creator<ErrorCode> CREATOR = new Creator<ErrorCode>() {
-        @Override
-        public ErrorCode createFromParcel(Parcel source) {
-            try {
-                return ErrorCode.toErrorCode(source.readInt());
-            } catch (UnsupportedErrorCodeException e) {
-                throw new IllegalArgumentException(e);
-            }
-        }
-
-        @Override
-        public ErrorCode[] newArray(int size) {
-            return new ErrorCode[size];
-        }
-    };
 }

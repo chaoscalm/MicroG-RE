@@ -23,6 +23,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class UserVerificationMethodExtension extends AutoSafeParcelable {
+    public static final Creator<UserVerificationMethodExtension> CREATOR = new AutoCreator<>(UserVerificationMethodExtension.class);
     @Field(1)
     private boolean uvm;
 
@@ -44,6 +45,4 @@ public class UserVerificationMethodExtension extends AutoSafeParcelable {
     public int hashCode() {
         return Arrays.hashCode(new Object[]{uvm});
     }
-
-    public static final Creator<UserVerificationMethodExtension> CREATOR = new AutoCreator<>(UserVerificationMethodExtension.class);
 }

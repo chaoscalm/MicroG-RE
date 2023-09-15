@@ -16,6 +16,16 @@
 
 package com.google.android.gms.gcm;
 
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_DELAY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER_LEGACY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,16 +39,6 @@ import org.microg.gms.gcm.CloudMessagingRpc;
 import org.microg.gms.gcm.GcmConstants;
 
 import java.io.IOException;
-
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_DELAY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER_LEGACY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
 
 /**
  * GoogleCloudMessaging (GCM) enables apps to communicate with their app servers
@@ -130,15 +130,6 @@ public class GoogleCloudMessaging {
     }
 
     /**
-     * Must be called when your application is done using GCM, to release
-     * internal resources.
-     */
-    public synchronized void close() {
-        instance = null;
-        rpc.close();
-    }
-
-    /**
      * Return the singleton instance of GCM.
      */
     public static GoogleCloudMessaging getInstance(Context context) {
@@ -148,6 +139,15 @@ public class GoogleCloudMessaging {
             instance.rpc = new CloudMessagingRpc(instance.context);
         }
         return instance;
+    }
+
+    /**
+     * Must be called when your application is done using GCM, to release
+     * internal resources.
+     */
+    public synchronized void close() {
+        instance = null;
+        rpc.close();
     }
 
     /**

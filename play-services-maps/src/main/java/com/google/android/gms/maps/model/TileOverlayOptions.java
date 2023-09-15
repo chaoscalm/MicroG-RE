@@ -31,6 +31,7 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class TileOverlayOptions extends AutoSafeParcelable {
 
+    public static Creator<TileOverlayOptions> CREATOR = new AutoCreator<TileOverlayOptions>(TileOverlayOptions.class);
     @SafeParceled(1)
     private int versionCode = 1;
     /**
@@ -136,6 +137,4 @@ public class TileOverlayOptions extends AutoSafeParcelable {
         this.zIndex = zIndex;
         return this;
     }
-
-    public static Creator<TileOverlayOptions> CREATOR = new AutoCreator<TileOverlayOptions>(TileOverlayOptions.class);
 }

@@ -20,12 +20,11 @@ import java.util.List;
 public class LocationResult extends AutoSafeParcelable {
     @PublicApi(exclude = true)
     public static final String EXTRA_LOCATION_RESULT = "com.google.android.gms.location.EXTRA_LOCATION_RESULT";
-
-    @Field(1000)
-    private int versionCode = 2;
-
+    public static final Creator<LocationResult> CREATOR = new AutoCreator<LocationResult>(LocationResult.class);
     @Field(value = 1, subClass = Location.class)
     public final List<Location> locations;
+    @Field(1000)
+    private int versionCode = 2;
 
     private LocationResult(List<Location> locations) {
         this.locations = locations;
@@ -111,6 +110,4 @@ public class LocationResult extends AutoSafeParcelable {
         }
         return result;
     }
-
-    public static final Creator<LocationResult> CREATOR = new AutoCreator<LocationResult>(LocationResult.class);
 }

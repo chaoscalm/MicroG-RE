@@ -17,6 +17,8 @@ import java.util.List;
  */
 @PublicApi
 public class PublicKeyCredentialCreationOptions extends RequestOptions {
+    @PublicApi(exclude = true)
+    public static final Creator<PublicKeyCredentialCreationOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialCreationOptions.class);
     @Field(2)
     private PublicKeyCredentialRpEntity rp;
     @Field(3)
@@ -39,6 +41,16 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
     private AttestationConveyancePreference attestationConveyancePreference;
     @Field(12)
     private AuthenticationExtensions authenticationExtensions;
+
+    /**
+     * Deserializes the {@link PublicKeyCredentialCreationOptions} from bytes, reversing {@link #serializeToBytes()}.
+     *
+     * @param serializedBytes The serialized bytes.
+     * @return The deserialized {@link PublicKeyCredentialCreationOptions}.
+     */
+    public static PublicKeyCredentialCreationOptions deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+    }
 
     public AttestationConveyancePreference getAttestationConveyancePreference() {
         return attestationConveyancePreference;
@@ -272,17 +284,4 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
             return options;
         }
     }
-
-    /**
-     * Deserializes the {@link PublicKeyCredentialCreationOptions} from bytes, reversing {@link #serializeToBytes()}.
-     *
-     * @param serializedBytes The serialized bytes.
-     * @return The deserialized {@link PublicKeyCredentialCreationOptions}.
-     */
-    public static PublicKeyCredentialCreationOptions deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredentialCreationOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialCreationOptions.class);
 }

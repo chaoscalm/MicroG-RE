@@ -23,14 +23,14 @@ import java.util.Arrays;
 
 public class SetExperimentIdsRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static final Creator<SetExperimentIdsRequest> CREATOR = new AutoCreator<SetExperimentIdsRequest>(SetExperimentIdsRequest.class);
     @SafeParceled(1)
     public byte[] experimentIds;
 
     @SafeParceled(2)
     public boolean enable;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     @Override
     public String toString() {
@@ -40,6 +40,4 @@ public class SetExperimentIdsRequest extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<SetExperimentIdsRequest> CREATOR = new AutoCreator<SetExperimentIdsRequest>(SetExperimentIdsRequest.class);
 }

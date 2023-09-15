@@ -73,11 +73,6 @@ public enum ExposureNotificationStatus {
     @Deprecated
     NOT_IN_WHITELIST;
 
-    private long flag() {
-        if (this == NOT_IN_WHITELIST) return NOT_IN_ALLOWLIST.flag();
-        return 1 << ordinal();
-    }
-
     @PublicApi(exclude = true)
     public static long setToFlags(Set<ExposureNotificationStatus> set) {
         long res = 0;
@@ -98,5 +93,10 @@ public enum ExposureNotificationStatus {
             }
         }
         return set;
+    }
+
+    private long flag() {
+        if (this == NOT_IN_WHITELIST) return NOT_IN_ALLOWLIST.flag();
+        return 1 << ordinal();
     }
 }

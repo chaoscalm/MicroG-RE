@@ -13,7 +13,6 @@ import android.text.TextUtils;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +21,9 @@ import java.util.Locale;
 @PublicApi
 public class Credential extends AutoSafeParcelable {
 
+    public static final Creator<Credential> CREATOR = new AutoCreator<Credential>(Credential.class);
     @Field(1000)
     private int versionCode = 1;
-
     @Field(1)
     private String id;
     @Field(2)
@@ -147,14 +146,13 @@ public class Credential extends AutoSafeParcelable {
     }
 
     public static class Builder {
+        @PublicApi(exclude = true)
+        public List<IdToken> tokens;
         private String id;
         private String name;
         private Uri profilePictureUri;
         private String password;
         private String accountType;
-
-        @PublicApi(exclude = true)
-        public List<IdToken> tokens;
         @PublicApi(exclude = true)
         private String generatedPassword;
 
@@ -230,6 +228,4 @@ public class Credential extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<Credential> CREATOR = new AutoCreator<Credential>(Credential.class);
 }

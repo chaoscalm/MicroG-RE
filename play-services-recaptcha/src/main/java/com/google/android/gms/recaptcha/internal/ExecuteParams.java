@@ -14,6 +14,7 @@ import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ExecuteParams extends AutoSafeParcelable {
+    public static final Creator<ExecuteParams> CREATOR = new AutoCreator<>(ExecuteParams.class);
     @Field(1)
     public RecaptchaHandle handle;
     @Field(2)
@@ -30,6 +31,4 @@ public class ExecuteParams extends AutoSafeParcelable {
                 .field("version", version)
                 .end();
     }
-
-    public static final Creator<ExecuteParams> CREATOR = new AutoCreator<>(ExecuteParams.class);
 }

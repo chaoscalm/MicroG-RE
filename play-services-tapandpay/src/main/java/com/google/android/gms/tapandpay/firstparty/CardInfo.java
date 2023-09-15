@@ -8,6 +8,7 @@ package com.google.android.gms.tapandpay.firstparty;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class CardInfo extends AutoSafeParcelable {
+    public static final Creator<CardInfo> CREATOR = new AutoCreator<>(CardInfo.class);
     @Field(2)
     public String billingCardId;
     @Field(3)
@@ -82,6 +83,4 @@ public class CardInfo extends AutoSafeParcelable {
     public String rawPanLastDigits;
     @Field(40)
     public int cardDisplayType;
-
-    public static final Creator<CardInfo> CREATOR = new AutoCreator<>(CardInfo.class);
 }

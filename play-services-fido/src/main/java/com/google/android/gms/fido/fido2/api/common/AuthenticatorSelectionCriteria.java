@@ -19,6 +19,7 @@ import java.util.Arrays;
  * attributes.
  */
 public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
+    public static final Creator<AuthenticatorSelectionCriteria> CREATOR = new AutoCreator<>(AuthenticatorSelectionCriteria.class);
     @Field(2)
     private Attachment attachment;
     @Field(3)
@@ -103,6 +104,4 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
             return criteria;
         }
     }
-
-    public static final Creator<AuthenticatorSelectionCriteria> CREATOR = new AutoCreator<>(AuthenticatorSelectionCriteria.class);
 }

@@ -69,12 +69,11 @@ import java.util.Set;
 
 public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements ExposureNotificationClient {
     private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new ExposureNotificationApiClient(context, callbacks, connectionFailedListener));
+    private static final String TAG = "ENClientImpl";
 
     public ExposureNotificationClientImpl(Context context) {
         super(context, API);
     }
-
-    private static final String TAG = "ENClientImpl";
 
     @Override
     public Task<Long> getVersion() {

@@ -16,18 +16,6 @@ public abstract class AutoSafeParcelable extends AbstractSafeParcelable {
     private static final String TAG = "SafeParcel";
 
     @SuppressWarnings("unchecked")
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        Creator<Parcelable> creator = SafeParcelReflectionUtil.getCreator(this.getClass());
-        if (creator instanceof SafeParcelableCreatorAndWriter) {
-            ((SafeParcelableCreatorAndWriter<AutoSafeParcelable>) (SafeParcelableCreatorAndWriter<?>) creator).writeToParcel(this, out, flags);
-        } else {
-            Log.w(TAG, "AutoSafeParcelable is not using SafeParcelableCreatorAndWriter");
-            SafeParcelReflectionUtil.writeObject(this, out, flags);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public static <T extends AbstractSafeParcelable> SafeParcelableCreatorAndWriter<T> findCreator(java.lang.Class<T> tClass) {
         try {
             return AbstractSafeParcelable.findCreator(tClass);
@@ -37,6 +25,18 @@ public abstract class AutoSafeParcelable extends AbstractSafeParcelable {
             } else {
                 throw new RuntimeException("AutoSafeParcelable.findCreator() invoked with non-AutoSafeParcelable");
             }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        Creator<Parcelable> creator = SafeParcelReflectionUtil.getCreator(this.getClass());
+        if (creator instanceof SafeParcelableCreatorAndWriter) {
+            ((SafeParcelableCreatorAndWriter<AutoSafeParcelable>) (SafeParcelableCreatorAndWriter<?>) creator).writeToParcel(this, out, flags);
+        } else {
+            Log.w(TAG, "AutoSafeParcelable is not using SafeParcelableCreatorAndWriter");
+            SafeParcelReflectionUtil.writeObject(this, out, flags);
         }
     }
 

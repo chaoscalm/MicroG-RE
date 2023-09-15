@@ -13,6 +13,9 @@ import java.util.Arrays;
 
 @Hide
 public class DeviceOrientation extends AutoSafeParcelable {
+    public static final Creator<DeviceOrientation> CREATOR = new AutoCreator<DeviceOrientation>(DeviceOrientation.class);
+    @Field(6)
+    public long elapsedRealtimeNanos = 0;
     @Field(1)
     private float[] attitude = new float[4];
     @Field(2)
@@ -23,8 +26,6 @@ public class DeviceOrientation extends AutoSafeParcelable {
     private float headingDegrees = Float.NaN;
     @Field(5)
     private float headingErrorDegrees = Float.NaN;
-    @Field(6)
-    public long elapsedRealtimeNanos = 0;
     @Field(7)
     private byte fieldsMask = 0;
     @Field(8)
@@ -129,6 +130,4 @@ public class DeviceOrientation extends AutoSafeParcelable {
         helper.field("elapsedRealtimeNanos", elapsedRealtimeNanos);
         return helper.end();
     }
-
-    public static final Creator<DeviceOrientation> CREATOR = new AutoCreator<DeviceOrientation>(DeviceOrientation.class);
 }

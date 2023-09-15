@@ -8,6 +8,7 @@ package com.google.android.gms.vision.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class FrameMetadataParcel extends AutoSafeParcelable {
+    public static Creator<FrameMetadataParcel> CREATOR = new AutoCreator<>(FrameMetadataParcel.class);
     @Field(1)
     private final int versionCode = 1;
     @Field(2)
@@ -20,6 +21,4 @@ public class FrameMetadataParcel extends AutoSafeParcelable {
     public long timestampMillis;
     @Field(6)
     public int rotation;
-
-    public static Creator<FrameMetadataParcel> CREATOR = new AutoCreator<>(FrameMetadataParcel.class);
 }

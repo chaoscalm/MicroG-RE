@@ -13,6 +13,7 @@
 
     <PreferenceCategory
         android:key="prefcat_device_profile"
+        android:layout="@layout/preference_category"
         android:title="@string/pref_device_registration_device_profile_category">
         <ListPreference
             android:icon="@drawable/ic_profile"

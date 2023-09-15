@@ -21,8 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ChannelEventParcelable extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<ChannelEventParcelable> CREATOR = new AutoCreator<ChannelEventParcelable>(ChannelEventParcelable.class);
     @SafeParceled(2)
     public ChannelParcelable channel;
     @SafeParceled(3)
@@ -31,6 +30,6 @@ public class ChannelEventParcelable extends AutoSafeParcelable {
     public int closeReason;
     @SafeParceled(5)
     public int appSpecificErrorCode;
-
-    public static final Creator<ChannelEventParcelable> CREATOR = new AutoCreator<ChannelEventParcelable>(ChannelEventParcelable.class);
+    @SafeParceled(1)
+    private int versionCode = 1;
 }

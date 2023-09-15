@@ -21,17 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class CastDeviceStatus extends AutoSafeParcelable {
 
-    public CastDeviceStatus() {
-    }
-
-    public CastDeviceStatus(double volume, boolean mute, int activeInputState, ApplicationMetadata applicationMetadata, int standbyState) {
-        this.volume = volume;
-        this.mute = mute;
-        this.activeInputState = activeInputState;
-        this.applicationMetadata = applicationMetadata;
-        this.standbyState = standbyState;
-    }
-
+    public static final Creator<CastDeviceStatus> CREATOR = new AutoCreator<CastDeviceStatus>(CastDeviceStatus.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -44,6 +34,14 @@ public class CastDeviceStatus extends AutoSafeParcelable {
     private ApplicationMetadata applicationMetadata;
     @SafeParceled(6)
     private int standbyState;
+    public CastDeviceStatus() {
+    }
 
-    public static final Creator<CastDeviceStatus> CREATOR = new AutoCreator<CastDeviceStatus>(CastDeviceStatus.class);
+    public CastDeviceStatus(double volume, boolean mute, int activeInputState, ApplicationMetadata applicationMetadata, int standbyState) {
+        this.volume = volume;
+        this.mute = mute;
+        this.activeInputState = activeInputState;
+        this.applicationMetadata = applicationMetadata;
+        this.standbyState = standbyState;
+    }
 }

@@ -24,8 +24,7 @@ import org.microg.safeparcel.SafeParceled;
  */
 public class UserAddedPlace extends AutoSafeParcelable {
 
+    public static final Creator<UserAddedPlace> CREATOR = new AutoCreator<UserAddedPlace>(UserAddedPlace.class);
     @SafeParceled(1000)
     private int versionCode = 1;
-
-    public static final Creator<UserAddedPlace> CREATOR = new AutoCreator<UserAddedPlace>(UserAddedPlace.class);
 }

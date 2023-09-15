@@ -24,6 +24,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public class FidoAppIdExtension extends AutoSafeParcelable {
+    public static final Creator<FidoAppIdExtension> CREATOR = new AutoCreator<>(FidoAppIdExtension.class);
     @Field(2)
     private String appId;
 
@@ -52,6 +53,4 @@ public class FidoAppIdExtension extends AutoSafeParcelable {
     public int hashCode() {
         return Arrays.hashCode(new Object[]{appId});
     }
-
-    public static final Creator<FidoAppIdExtension> CREATOR = new AutoCreator<>(FidoAppIdExtension.class);
 }

@@ -23,6 +23,7 @@ import java.util.List;
  */
 @PublicApi
 public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
+    public static final Creator<PublicKeyCredentialDescriptor> CREATOR = new AutoCreator<>(PublicKeyCredentialDescriptor.class);
     @Field(2)
     private PublicKeyCredentialType type;
     @Field(3)
@@ -97,6 +98,4 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
             super(message, cause);
         }
     }
-
-    public static final Creator<PublicKeyCredentialDescriptor> CREATOR = new AutoCreator<>(PublicKeyCredentialDescriptor.class);
 }

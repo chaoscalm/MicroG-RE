@@ -21,14 +21,12 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SendMessageResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
-
+    public static final Creator<SendMessageResponse> CREATOR = new AutoCreator<SendMessageResponse>(SendMessageResponse.class);
     @SafeParceled(2)
     public int statusCode;
 
     @SafeParceled(3)
     public int requestId = -1;
-
-    public static final Creator<SendMessageResponse> CREATOR = new AutoCreator<SendMessageResponse>(SendMessageResponse.class);
+    @SafeParceled(1)
+    private int versionCode = 1;
 }

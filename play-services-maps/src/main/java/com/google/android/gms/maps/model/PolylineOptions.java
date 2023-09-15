@@ -19,6 +19,7 @@ import java.util.List;
  */
 @PublicApi
 public class PolylineOptions extends AutoSafeParcelable {
+    public static Creator<PolylineOptions> CREATOR = new AutoCreator<PolylineOptions>(PolylineOptions.class);
     @Field(1)
     private int versionCode = 1;
     @Field(value = 2, subClass = LatLng.class)
@@ -133,6 +134,4 @@ public class PolylineOptions extends AutoSafeParcelable {
         this.zIndex = zIndex;
         return this;
     }
-
-    public static Creator<PolylineOptions> CREATOR = new AutoCreator<PolylineOptions>(PolylineOptions.class);
 }

@@ -20,6 +20,8 @@ import java.util.List;
  */
 @PublicApi
 public class PublicKeyCredentialRequestOptions extends RequestOptions {
+    @PublicApi(exclude = true)
+    public static final Creator<PublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialRequestOptions.class);
     @Field(2)
     private byte[] challenge;
     @Field(3)
@@ -36,6 +38,16 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     private UserVerificationRequirement requireUserVerification;
     @Field(9)
     private AuthenticationExtensions authenticationExtensions;
+
+    /**
+     * Deserializes the {@link PublicKeyCredentialRequestOptions} from bytes, reversing {@link #serializeToBytes()}.
+     *
+     * @param serializedBytes The serialized bytes.
+     * @return The deserialized {@link PublicKeyCredentialRequestOptions}.
+     */
+    public static PublicKeyCredentialRequestOptions deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+    }
 
     public List<PublicKeyCredentialDescriptor> getAllowList() {
         return allowList;
@@ -212,17 +224,4 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
             return options;
         }
     }
-
-    /**
-     * Deserializes the {@link PublicKeyCredentialRequestOptions} from bytes, reversing {@link #serializeToBytes()}.
-     *
-     * @param serializedBytes The serialized bytes.
-     * @return The deserialized {@link PublicKeyCredentialRequestOptions}.
-     */
-    public static PublicKeyCredentialRequestOptions deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialRequestOptions.class);
 }

@@ -19,9 +19,9 @@ import java.util.Arrays;
  */
 @PublicApi
 public class HintRequest extends AutoSafeParcelable {
+    public static final Creator<HintRequest> CREATOR = new AutoCreator<>(HintRequest.class);
     @Field(1000)
     private int versionCode = 2;
-
     @Field(1)
     private CredentialPickerConfig hintPickerConfig;
     @Field(2)
@@ -77,8 +77,6 @@ public class HintRequest extends AutoSafeParcelable {
     public boolean isIdTokenRequested() {
         return idTokenRequested;
     }
-
-    public static final Creator<HintRequest> CREATOR = new AutoCreator<>(HintRequest.class);
 
     @Override
     public String toString() {

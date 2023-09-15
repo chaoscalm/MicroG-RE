@@ -19,10 +19,33 @@ import org.microg.gms.common.PublicApi;
 public enum PublicKeyCredentialType implements Parcelable {
     PUBLIC_KEY("public-key");
 
+    public static Creator<PublicKeyCredentialType> CREATOR = new Creator<PublicKeyCredentialType>() {
+        @Override
+        public PublicKeyCredentialType createFromParcel(Parcel source) {
+            try {
+                return PublicKeyCredentialType.fromString(source.readString());
+            } catch (UnsupportedPublicKeyCredTypeException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public PublicKeyCredentialType[] newArray(int size) {
+            return new PublicKeyCredentialType[size];
+        }
+    };
     private final String value;
 
     PublicKeyCredentialType(String value) {
         this.value = value;
+    }
+
+    @PublicApi(exclude = true)
+    public static PublicKeyCredentialType fromString(String type) throws UnsupportedPublicKeyCredTypeException {
+        for (PublicKeyCredentialType value : values()) {
+            if (value.value.equals(type)) return value;
+        }
+        throw new UnsupportedPublicKeyCredTypeException("PublicKeyCredentialType " + type + " not supported");
     }
 
     @Override
@@ -39,30 +62,6 @@ public enum PublicKeyCredentialType implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(toString());
     }
-
-    @PublicApi(exclude = true)
-    public static PublicKeyCredentialType fromString(String type) throws UnsupportedPublicKeyCredTypeException {
-        for (PublicKeyCredentialType value : values()) {
-            if (value.value.equals(type)) return value;
-        }
-        throw new UnsupportedPublicKeyCredTypeException("PublicKeyCredentialType " + type + " not supported");
-    }
-
-    public static Creator<PublicKeyCredentialType> CREATOR = new Creator<PublicKeyCredentialType>() {
-        @Override
-        public PublicKeyCredentialType createFromParcel(Parcel source) {
-            try {
-                return PublicKeyCredentialType.fromString(source.readString());
-            } catch (UnsupportedPublicKeyCredTypeException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public PublicKeyCredentialType[] newArray(int size) {
-            return new PublicKeyCredentialType[size];
-        }
-    };
 
     /**
      * Exception thrown when an unsupported or unrecognized transport is encountered.

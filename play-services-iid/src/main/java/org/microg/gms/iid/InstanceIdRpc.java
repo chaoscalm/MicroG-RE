@@ -16,6 +16,36 @@
 
 package org.microg.gms.iid;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.google.android.gms.iid.InstanceID.ERROR_BACKOFF;
+import static com.google.android.gms.iid.InstanceID.ERROR_MISSING_INSTANCEID_SERVICE;
+import static com.google.android.gms.iid.InstanceID.ERROR_SERVICE_NOT_AVAILABLE;
+import static com.google.android.gms.iid.InstanceID.ERROR_TIMEOUT;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+import static org.microg.gms.common.Constants.GSF_PACKAGE_NAME;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_VERSION_CODE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_VERSION_NAME;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_CLIENT_VERSION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_GMS_VERSION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_IS_MESSENGER2;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_KID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_OS_VERSION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_PUBLIC_KEY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SIGNATURE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_USE_GSF;
+import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -49,36 +79,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.google.android.gms.iid.InstanceID.ERROR_BACKOFF;
-import static com.google.android.gms.iid.InstanceID.ERROR_MISSING_INSTANCEID_SERVICE;
-import static com.google.android.gms.iid.InstanceID.ERROR_SERVICE_NOT_AVAILABLE;
-import static com.google.android.gms.iid.InstanceID.ERROR_TIMEOUT;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GSF_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
-import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_VERSION_CODE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_VERSION_NAME;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_CLIENT_VERSION;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_GMS_VERSION;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_IS_MESSENGER2;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_KID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_OS_VERSION;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_PUBLIC_KEY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SIGNATURE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_USE_GSF;
-import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE;
 
 public class InstanceIdRpc {
     private static final String TAG = "InstanceID/Rpc";
@@ -149,6 +149,34 @@ public class InstanceIdRpc {
         } catch (PackageManager.NameNotFoundException neverHappens) {
             return null;
         }
+    }
+
+    private static synchronized String getRequestId() {
+        return Integer.toString(lastRequestId++);
+    }
+
+    private static String sign(KeyPair keyPair, String... payload) {
+        byte[] bytes;
+        try {
+            bytes = TextUtils.join("\n", payload).getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Unable to encode", e);
+            return null;
+        }
+        PrivateKey privateKey = keyPair.getPrivate();
+        try {
+            Signature signature = Signature.getInstance(privateKey instanceof RSAPrivateKey ? "SHA256withRSA" : "SHA256withECDSA");
+            signature.initSign(privateKey);
+            signature.update(bytes);
+            return base64encode(signature.sign());
+        } catch (GeneralSecurityException e) {
+            Log.e(TAG, "Unable to sign", e);
+            return null;
+        }
+    }
+
+    private static String base64encode(byte[] bytes) {
+        return Base64.encodeToString(bytes, Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP);
     }
 
     void initialize() {
@@ -264,10 +292,6 @@ public class InstanceIdRpc {
         return selfAuthToken;
     }
 
-    private static synchronized String getRequestId() {
-        return Integer.toString(lastRequestId++);
-    }
-
     private void sendRegisterMessage(Bundle data, KeyPair keyPair, String requestId) throws IOException {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         if (nextAttempt != 0 && elapsedRealtime <= nextAttempt) {
@@ -292,30 +316,6 @@ public class InstanceIdRpc {
         intent.putExtras(data);
         intent.putExtra(EXTRA_APP, getSelfAuthToken());
         sendRequest(intent, requestId);
-    }
-
-    private static String sign(KeyPair keyPair, String... payload) {
-        byte[] bytes;
-        try {
-            bytes = TextUtils.join("\n", payload).getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Unable to encode", e);
-            return null;
-        }
-        PrivateKey privateKey = keyPair.getPrivate();
-        try {
-            Signature signature = Signature.getInstance(privateKey instanceof RSAPrivateKey ? "SHA256withRSA" : "SHA256withECDSA");
-            signature.initSign(privateKey);
-            signature.update(bytes);
-            return base64encode(signature.sign());
-        } catch (GeneralSecurityException e) {
-            Log.e(TAG, "Unable to sign", e);
-            return null;
-        }
-    }
-
-    private static String base64encode(byte[] bytes) {
-        return Base64.encodeToString(bytes, Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP);
     }
 
     private void sendRequest(Intent intent, String requestId) {

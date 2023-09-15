@@ -18,6 +18,22 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class PatternItem extends AutoSafeParcelable {
+    public static final Creator<PatternItem> CREATOR = new AutoCreator<PatternItem>(PatternItem.class) {
+        @Override
+        public PatternItem createFromParcel(Parcel parcel) {
+            PatternItem item = super.createFromParcel(parcel);
+            switch (item.type) {
+                case 0:
+                    return new Dash(item.length);
+                case 1:
+                    return new Dot();
+                case 2:
+                    return new Gap(item.length);
+                default:
+                    return item;
+            }
+        }
+    };
     @Field(2)
     private int type;
     @Field(3)
@@ -36,21 +52,4 @@ public class PatternItem extends AutoSafeParcelable {
     public String toString() {
         return "[PatternItem: type=" + type + " length=" + length + "]";
     }
-
-    public static final Creator<PatternItem> CREATOR = new AutoCreator<PatternItem>(PatternItem.class) {
-        @Override
-        public PatternItem createFromParcel(Parcel parcel) {
-            PatternItem item = super.createFromParcel(parcel);
-            switch (item.type) {
-                case 0:
-                    return new Dash(item.length);
-                case 1:
-                    return new Dot();
-                case 2:
-                    return new Gap(item.length);
-                default:
-                    return item;
-            }
-        }
-    };
 }

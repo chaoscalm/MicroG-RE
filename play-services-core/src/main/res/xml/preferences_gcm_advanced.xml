@@ -26,6 +26,7 @@
 
     <PreferenceCategory
         android:key="prefcat_networks"
+        android:layout="@layout/preference_category"
         android:title="@string/prefcat_push_networks_title">
 
         <ListPreference

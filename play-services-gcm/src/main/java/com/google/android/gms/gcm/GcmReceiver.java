@@ -16,6 +16,14 @@
 
 package com.google.android.gms.gcm;
 
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA_BASE64;
+import static org.microg.gms.gcm.GcmConstants.GCMID_INSTANCE_ID;
+import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
+
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,14 +36,6 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
-
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
-import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA_BASE64;
-import static org.microg.gms.gcm.GcmConstants.GCMID_INSTANCE_ID;
-import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
 
 /**
  * <code>WakefulBroadcastReceiver</code> that receives GCM messages and delivers them to an

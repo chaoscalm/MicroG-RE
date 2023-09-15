@@ -16,16 +16,6 @@
 
 package com.google.android.gms.gcm;
 
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-
-import org.microg.gms.common.PublicApi;
-
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_NOTIFICATION_OPEN;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
@@ -37,6 +27,16 @@ import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_DELETED_MESSAGE;
 import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_GCM;
 import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_SEND_ERROR;
 import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_SEND_EVENT;
+
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+
+import org.microg.gms.common.PublicApi;
 
 /**
  * Base class for communicating with Google Cloud Messaging.

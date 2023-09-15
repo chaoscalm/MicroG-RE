@@ -17,27 +17,11 @@ import androidx.annotation.RequiresApi;
 import org.microg.gms.base.core.R;
 
 public class ForegroundServiceContext extends ContextWrapper {
-    private static final String TAG = "ForegroundService";
     public static final String EXTRA_FOREGROUND = "foreground";
+    private static final String TAG = "ForegroundService";
 
     public ForegroundServiceContext(Context base) {
         super(base);
-    }
-
-    @Override
-    public ComponentName startService(Intent service) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations()) {
-            Log.d(TAG, "Starting in foreground mode.");
-            service.putExtra(EXTRA_FOREGROUND, true);
-            return super.startForegroundService(service);
-        }
-        return super.startService(service);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean isIgnoringBatteryOptimizations() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
     private static String getServiceName(Service service) {
@@ -96,6 +80,22 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setContentText(firstLine)
                 .setStyle(new Notification.BigTextStyle().bigText(firstLine + "\n" + secondLine))
                 .build();
+    }
+
+    @Override
+    public ComponentName startService(Intent service) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations()) {
+            Log.d(TAG, "Starting in foreground mode.");
+            service.putExtra(EXTRA_FOREGROUND, true);
+            return super.startForegroundService(service);
+        }
+        return super.startService(service);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean isIgnoringBatteryOptimizations() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
 }

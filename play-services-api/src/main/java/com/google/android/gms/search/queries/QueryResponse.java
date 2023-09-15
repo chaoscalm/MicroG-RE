@@ -24,14 +24,14 @@ import org.microg.safeparcel.SafeParceled;
 
 public class QueryResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
+    public static Creator<QueryResponse> CREATOR = new AutoCreator<QueryResponse>(QueryResponse.class);
     @SafeParceled(1)
     public final Status status;
 
     @SafeParceled(2)
     public final SearchResults results;
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     private QueryResponse() {
         status = null;
@@ -42,6 +42,4 @@ public class QueryResponse extends AutoSafeParcelable {
         this.status = status;
         this.results = results;
     }
-
-    public static Creator<QueryResponse> CREATOR = new AutoCreator<QueryResponse>(QueryResponse.class);
 }

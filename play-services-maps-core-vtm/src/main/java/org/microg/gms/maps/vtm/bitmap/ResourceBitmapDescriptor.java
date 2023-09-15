@@ -31,11 +31,6 @@ public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
         this.resourceId = resourceId;
     }
 
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        return drawableToBitmap(context, ContextCompat.getDrawable(context.getApplicationContext(), resourceId));
-    }
-
     public static Bitmap drawableToBitmap(Context context, Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -51,5 +46,10 @@ public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    @Override
+    public Bitmap generateBitmap(Context context) {
+        return drawableToBitmap(context, ContextCompat.getDrawable(context.getApplicationContext(), resourceId));
     }
 }

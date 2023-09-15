@@ -70,62 +70,6 @@ public class DataMap {
     }
 
     /**
-     * Removes all elements from the mapping of this DataMap.
-     */
-    public void clear() {
-        data.clear();
-    }
-
-    /**
-     * @return true if the given key is contained in the mapping of this DataMap.
-     */
-    public boolean containsKey(String key) {
-        return data.containsKey(key);
-    }
-
-    /**
-     * @return true if the given Object is a DataMap equivalent to this one.
-     */
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof DataMap && data.equals(((DataMap) o).data);
-    }
-
-    public StoredType getType(String key) {
-        return types.get(key);
-    }
-
-    @PublicApi(exclude = true)
-    public enum StoredType {
-        Asset(ASSET_TYPE_CODE), Boolean(BOOLEAN_TYPE_CODE), Byte(BYTE_TYPE_CODE),
-        ByteArray(BYTE_ARRAY_TYPE_CODE), DataMap(DATAMAP_TYPE_CODE), DataMapArrayList(DataMap),
-        Double(DOUBLE_TYPE_CODE), Float(FLOAT_TYPE_CODE), FloatArray(FLOAT_ARRAY_TYPE_CODE),
-        Integer(INTEGER_TYPE_CODE), IntegerArrayList(Integer), Long(LONG_TYPE_CODE),
-        LongArray(LONG_ARRAY_TYPE_CODE), String(STRING_TYPE_CODE),
-        StringArray(STRING_ARRAY_TYPE_CODE), StringArrayList(String);
-
-        private int typeCode;
-        private StoredType listType;
-
-        StoredType(int typeCode) {
-            this.typeCode = typeCode;
-        }
-
-        StoredType(StoredType listType) {
-            this.typeCode = LIST_TYPE_CODE;
-            this.listType = listType;
-        }
-
-        public int getTypeCode() {
-            return typeCode;
-        }
-
-        public StoredType getListType() {
-            return listType;
-        }
-    }
-
-    /**
      * @return a DataMap from a Bundle. The input Bundle is expected to contain only elements
      * supported by DataMap. Any elements in the Bundle not supported by DataMap will be dropped.
      */
@@ -183,6 +127,32 @@ public class DataMap {
      */
     public static DataMap fromByteArray(byte[] bytes) {
         return DataBundleUtil.readDataMap(bytes, Collections.<Asset>emptyList());
+    }
+
+    /**
+     * Removes all elements from the mapping of this DataMap.
+     */
+    public void clear() {
+        data.clear();
+    }
+
+    /**
+     * @return true if the given key is contained in the mapping of this DataMap.
+     */
+    public boolean containsKey(String key) {
+        return data.containsKey(key);
+    }
+
+    /**
+     * @return true if the given Object is a DataMap equivalent to this one.
+     */
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof DataMap && data.equals(((DataMap) o).data);
+    }
+
+    public StoredType getType(String key) {
+        return types.get(key);
     }
 
     /**
@@ -459,5 +429,35 @@ public class DataMap {
 
     public String toString() {
         return "DataMap{size=" + size() + "}";
+    }
+
+    @PublicApi(exclude = true)
+    public enum StoredType {
+        Asset(ASSET_TYPE_CODE), Boolean(BOOLEAN_TYPE_CODE), Byte(BYTE_TYPE_CODE),
+        ByteArray(BYTE_ARRAY_TYPE_CODE), DataMap(DATAMAP_TYPE_CODE), DataMapArrayList(DataMap),
+        Double(DOUBLE_TYPE_CODE), Float(FLOAT_TYPE_CODE), FloatArray(FLOAT_ARRAY_TYPE_CODE),
+        Integer(INTEGER_TYPE_CODE), IntegerArrayList(Integer), Long(LONG_TYPE_CODE),
+        LongArray(LONG_ARRAY_TYPE_CODE), String(STRING_TYPE_CODE),
+        StringArray(STRING_ARRAY_TYPE_CODE), StringArrayList(String);
+
+        private int typeCode;
+        private StoredType listType;
+
+        StoredType(int typeCode) {
+            this.typeCode = typeCode;
+        }
+
+        StoredType(StoredType listType) {
+            this.typeCode = LIST_TYPE_CODE;
+            this.listType = listType;
+        }
+
+        public int getTypeCode() {
+            return typeCode;
+        }
+
+        public StoredType getListType() {
+            return listType;
+        }
     }
 }

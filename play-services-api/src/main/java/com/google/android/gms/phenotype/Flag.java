@@ -8,8 +8,18 @@ package com.google.android.gms.phenotype;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Flag extends AutoSafeParcelable {
+    public static final int DATA_TYPE_LONG = 1;
+    public static final int DATA_TYPE_BOOL = 2;
+    public static final int DATA_TYPE_DOUBLE = 3;
+    public static final int DATA_TYPE_STRING = 4;
+    public static final int DATA_TYPE_BYTES = 5;
+    public static final Creator<Flag> CREATOR = new AutoCreator<>(Flag.class);
     @Field(2)
     public String name;
+    @Field(8)
+    public int dataType;
+    @Field(9)
+    public int flagType;
     @Field(3)
     private long longValue;
     @Field(4)
@@ -20,10 +30,6 @@ public class Flag extends AutoSafeParcelable {
     private String stringValue;
     @Field(7)
     private byte[] bytesValue;
-    @Field(8)
-    public int dataType;
-    @Field(9)
-    public int flagType;
 
     private Flag() {
     }
@@ -92,11 +98,4 @@ public class Flag extends AutoSafeParcelable {
             return bytesValue;
         throw new IllegalArgumentException("Not a bytes type");
     }
-
-    public static final int DATA_TYPE_LONG = 1;
-    public static final int DATA_TYPE_BOOL = 2;
-    public static final int DATA_TYPE_DOUBLE = 3;
-    public static final int DATA_TYPE_STRING = 4;
-    public static final int DATA_TYPE_BYTES = 5;
-    public static final Creator<Flag> CREATOR = new AutoCreator<>(Flag.class);
 }

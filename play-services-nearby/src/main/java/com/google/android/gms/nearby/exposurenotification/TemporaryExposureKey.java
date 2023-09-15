@@ -16,6 +16,15 @@ import java.util.Arrays;
  * A key generated for advertising over a window of time.
  */
 public class TemporaryExposureKey extends AutoSafeParcelable {
+    /**
+     * The default value for {@link #getDaysSinceOnsetOfSymptoms()}.
+     * <p>
+     * See {@link DiagnosisKeysDataMapping#getDaysSinceOnsetToInfectiousness()} for more information.
+     */
+    public static final int DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN = Integer.MAX_VALUE;
+    public static final Creator<TemporaryExposureKey> CREATOR = new AutoCreator<>(TemporaryExposureKey.class);
+    @Field(6)
+    int daysSinceOnsetOfSymptoms;
     @Field(1)
     private byte[] keyData;
     @Field(2)
@@ -28,15 +37,6 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
     @Field(5)
     @ReportType
     private int reportType;
-    @Field(6)
-    int daysSinceOnsetOfSymptoms;
-
-    /**
-     * The default value for {@link #getDaysSinceOnsetOfSymptoms()}.
-     * <p>
-     * See {@link DiagnosisKeysDataMapping#getDaysSinceOnsetToInfectiousness()} for more information.
-     */
-    public static final int DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN = Integer.MAX_VALUE;
 
     private TemporaryExposureKey() {
     }
@@ -181,6 +181,4 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
             return new TemporaryExposureKey(keyData, rollingStartIntervalNumber, transmissionRiskLevel, rollingPeriod, reportType, daysSinceOnsetOfSymptoms);
         }
     }
-
-    public static final Creator<TemporaryExposureKey> CREATOR = new AutoCreator<>(TemporaryExposureKey.class);
 }

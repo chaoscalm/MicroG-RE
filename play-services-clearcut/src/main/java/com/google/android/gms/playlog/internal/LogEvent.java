@@ -24,9 +24,7 @@ import java.util.Date;
 @Deprecated
 public class LogEvent extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
-
+    public static Creator<LogEvent> CREATOR = new AutoCreator<LogEvent>(LogEvent.class);
     @SafeParceled(2)
     public final long eventTime;
 
@@ -35,6 +33,8 @@ public class LogEvent extends AutoSafeParcelable {
 
     @SafeParceled(4)
     public final byte[] data;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private LogEvent() {
         eventTime = -1;
@@ -50,6 +50,4 @@ public class LogEvent extends AutoSafeParcelable {
                 ", data=" + (data == null ? "null" : ('\'' + new String(data) + '\'')) +
                 '}';
     }
-
-    public static Creator<LogEvent> CREATOR = new AutoCreator<LogEvent>(LogEvent.class);
 }

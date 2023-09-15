@@ -11,6 +11,7 @@ import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class InitParams extends AutoSafeParcelable {
+    public static final Creator<InitParams> CREATOR = new AutoCreator<>(InitParams.class);
     @Field(1)
     public String siteKey;
     @Field(2)
@@ -24,6 +25,4 @@ public class InitParams extends AutoSafeParcelable {
                 .field("version", version)
                 .end();
     }
-
-    public static final Creator<InitParams> CREATOR = new AutoCreator<>(InitParams.class);
 }

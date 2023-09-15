@@ -22,19 +22,15 @@ import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.ICastStateListener;
-import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
-import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SessionManagerImpl extends ISessionManager.Stub {
     private static final String TAG = SessionManagerImpl.class.getSimpleName();
@@ -101,6 +97,11 @@ public class SessionManagerImpl extends ISessionManager.Stub {
         return this.castState;
     }
 
+    private void setCastState(int castState) {
+        this.castState = castState;
+        this.onCastStateChanged();
+    }
+
     @Override
     public void startSession(Bundle params) {
         Log.d(TAG, "unimplemented Method: startSession");
@@ -110,11 +111,6 @@ public class SessionManagerImpl extends ISessionManager.Stub {
 
     public void onRouteSelected(String routeId, Bundle extras) {
         Log.d(TAG, "unimplemented Method: onRouteSelected: " + routeId);
-    }
-
-    private void setCastState(int castState) {
-        this.castState = castState;
-        this.onCastStateChanged();
     }
 
     public void onCastStateChanged() {

@@ -18,6 +18,7 @@ import java.util.List;
  * Information pertaining to reCAPTCHA handle, which is used to identify the initialized reCAPTCHA service.
  */
 public class RecaptchaHandle extends AutoSafeParcelable {
+    public static final Creator<RecaptchaHandle> CREATOR = new AutoCreator<>(RecaptchaHandle.class);
     @Field(1)
     private String siteKey;
     @Field(2)
@@ -56,6 +57,4 @@ public class RecaptchaHandle extends AutoSafeParcelable {
     public String getSiteKey() {
         return siteKey;
     }
-
-    public static final Creator<RecaptchaHandle> CREATOR = new AutoCreator<>(RecaptchaHandle.class);
 }

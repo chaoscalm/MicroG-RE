@@ -49,13 +49,13 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setPosition(LatLng pos) throws RemoteException {
-        this.position = pos;
+    public LatLng getPosition() throws RemoteException {
+        return position;
     }
 
     @Override
-    public LatLng getPosition() throws RemoteException {
-        return position;
+    public void setPosition(LatLng pos) throws RemoteException {
+        this.position = pos;
     }
 
     @Override
@@ -90,18 +90,13 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setBearing(float bearing) throws RemoteException {
-        this.bearing = bearing;
-    }
-
-    @Override
     public float getBearing() throws RemoteException {
         return bearing;
     }
 
     @Override
-    public void setZIndex(float zIndex) throws RemoteException {
-        this.zIndex = zIndex;
+    public void setBearing(float bearing) throws RemoteException {
+        this.bearing = bearing;
     }
 
     @Override
@@ -110,8 +105,8 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setVisible(boolean visible) throws RemoteException {
-        this.visible = visible;
+    public void setZIndex(float zIndex) throws RemoteException {
+        this.zIndex = zIndex;
     }
 
     @Override
@@ -120,13 +115,18 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setTransparency(float transparency) throws RemoteException {
-        this.transparency = transparency;
+    public void setVisible(boolean visible) throws RemoteException {
+        this.visible = visible;
     }
 
     @Override
     public float getTransparency() throws RemoteException {
         return transparency;
+    }
+
+    @Override
+    public void setTransparency(float transparency) throws RemoteException {
+        this.transparency = transparency;
     }
 
     @Override

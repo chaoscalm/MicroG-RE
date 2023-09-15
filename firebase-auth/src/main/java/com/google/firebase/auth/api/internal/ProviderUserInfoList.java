@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProviderUserInfoList extends AutoSafeParcelable {
+    public static final Creator<ProviderUserInfoList> CREATOR = new AutoCreator<>(ProviderUserInfoList.class);
     @Field(2)
     public List<ProviderUserInfo> providerUserInfos = new ArrayList<>();
-
-
-    public static final Creator<ProviderUserInfoList> CREATOR = new AutoCreator<>(ProviderUserInfoList.class);
 }

@@ -81,20 +81,14 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setPoints(List<LatLng> points) {
-        options.getPoints().clear();
-        options.getPoints().addAll(points);
-        listener.update(this);
-    }
-
-    @Override
     public List<LatLng> getPoints() {
         return options.getPoints();
     }
 
     @Override
-    public void setWidth(float width) {
-        options.width(width);
+    public void setPoints(List<LatLng> points) {
+        options.getPoints().clear();
+        options.getPoints().addAll(points);
         listener.update(this);
     }
 
@@ -104,8 +98,8 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setColor(int color) {
-        this.options.color(color);
+    public void setWidth(float width) {
+        options.width(width);
         listener.update(this);
     }
 
@@ -115,8 +109,8 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setZIndex(float zIndex) {
-        options.zIndex(zIndex);
+    public void setColor(int color) {
+        this.options.color(color);
         listener.update(this);
     }
 
@@ -126,8 +120,8 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setVisible(boolean visible) {
-        options.visible(visible);
+    public void setZIndex(float zIndex) {
+        options.zIndex(zIndex);
         listener.update(this);
     }
 
@@ -137,14 +131,20 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setGeodesic(boolean geod) {
-        options.geodesic(geod);
+    public void setVisible(boolean visible) {
+        options.visible(visible);
         listener.update(this);
     }
 
     @Override
     public boolean isGeodesic() {
         return options.isGeodesic();
+    }
+
+    @Override
+    public void setGeodesic(boolean geod) {
+        options.geodesic(geod);
+        listener.update(this);
     }
 
     @Override
@@ -159,19 +159,14 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
         return id.hashCode();
     }
 
-    // Not implemented
-    @Override
-    public void setClickable(boolean clickable) throws RemoteException {
-
-    }
-
     @Override
     public boolean isClickable() throws RemoteException {
         return false;
     }
 
+    // Not implemented
     @Override
-    public void setJointType(int jointType) throws RemoteException {
+    public void setClickable(boolean clickable) throws RemoteException {
 
     }
 
@@ -181,7 +176,7 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setPattern(List<PatternItem> pattern) throws RemoteException {
+    public void setJointType(int jointType) throws RemoteException {
 
     }
 
@@ -191,13 +186,18 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
-    public void setTag(IObjectWrapper tag) throws RemoteException {
+    public void setPattern(List<PatternItem> pattern) throws RemoteException {
 
     }
 
     @Override
     public IObjectWrapper getTag() throws RemoteException {
         return null;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper tag) throws RemoteException {
+
     }
 
     @Override

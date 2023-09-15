@@ -21,6 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class DeleteDataItemsResponse extends AutoSafeParcelable {
 
+    public static final Creator<DeleteDataItemsResponse> CREATOR = new AutoCreator<DeleteDataItemsResponse>(DeleteDataItemsResponse.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -35,6 +36,4 @@ public class DeleteDataItemsResponse extends AutoSafeParcelable {
         this.status = status;
         this.count = count;
     }
-
-    public static final Creator<DeleteDataItemsResponse> CREATOR = new AutoCreator<DeleteDataItemsResponse>(DeleteDataItemsResponse.class);
 }

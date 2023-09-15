@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAllCardsResponse extends AutoSafeParcelable {
+    public static final Creator<GetAllCardsResponse> CREATOR = new AutoCreator<>(GetAllCardsResponse.class);
     @Field(2)
     public final CardInfo[] cardInfos;
     @Field(3)
@@ -43,6 +44,4 @@ public class GetAllCardsResponse extends AutoSafeParcelable {
         this.seDefaultCards = seDefaultCards;
         this.wearSortOrder = wearSortOrder;
     }
-
-    public static final Creator<GetAllCardsResponse> CREATOR = new AutoCreator<>(GetAllCardsResponse.class);
 }

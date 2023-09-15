@@ -8,6 +8,7 @@ package com.google.android.gms.measurement.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ConditionalUserPropertyParcel extends AutoSafeParcelable {
+    public static final Creator<ConditionalUserPropertyParcel> CREATOR = new AutoCreator<>(ConditionalUserPropertyParcel.class);
     @Field(2)
     public String appId;
     @Field(3)
@@ -30,6 +31,4 @@ public class ConditionalUserPropertyParcel extends AutoSafeParcelable {
     public long timeToLive;
     @Field(12)
     public EventParcel expiredEvent;
-
-    public static final Creator<ConditionalUserPropertyParcel> CREATOR = new AutoCreator<>(ConditionalUserPropertyParcel.class);
 }

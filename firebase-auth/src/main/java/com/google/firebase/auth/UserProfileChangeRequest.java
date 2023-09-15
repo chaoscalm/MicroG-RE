@@ -18,6 +18,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class UserProfileChangeRequest extends AutoSafeParcelable {
+    public static final Creator<UserProfileChangeRequest> CREATOR = new AutoCreator<>(UserProfileChangeRequest.class);
     @Field(1)
     @PublicApi(exclude = true)
     public String displayName;
@@ -85,6 +86,4 @@ public class UserProfileChangeRequest extends AutoSafeParcelable {
             return request;
         }
     }
-
-    public static final Creator<UserProfileChangeRequest> CREATOR = new AutoCreator<>(UserProfileChangeRequest.class);
 }

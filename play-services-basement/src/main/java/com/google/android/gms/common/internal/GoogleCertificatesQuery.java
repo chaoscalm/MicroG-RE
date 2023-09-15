@@ -26,6 +26,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GoogleCertificatesQuery extends AutoSafeParcelable {
+    public static final Creator<GoogleCertificatesQuery> CREATOR = new AutoCreator<GoogleCertificatesQuery>(GoogleCertificatesQuery.class);
     @SafeParceled(1)
     private String packageName;
     @SafeParceled(2)
@@ -70,6 +71,4 @@ public class GoogleCertificatesQuery extends AutoSafeParcelable {
         }
         return certData;
     }
-
-    public static final Creator<GoogleCertificatesQuery> CREATOR = new AutoCreator<GoogleCertificatesQuery>(GoogleCertificatesQuery.class);
 }

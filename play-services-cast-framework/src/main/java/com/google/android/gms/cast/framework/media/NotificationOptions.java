@@ -8,11 +8,11 @@
 
 package com.google.android.gms.cast.framework.media;
 
-import java.util.List;
-
 import android.app.Activity;
 
 import org.microg.safeparcel.AutoSafeParcelable;
+
+import java.util.List;
 
 /**
  * Configuration parameters for building the media notification. The {@link NotificationOptions.Builder} is used to create an
@@ -27,7 +27,7 @@ public class NotificationOptions extends AutoSafeParcelable {
      * Constant for notification skip step, thirty seconds in milliseconds.
      */
     public static final long SKIP_STEP_THIRTY_SECONDS_IN_MS = 30000;
-
+    public static Creator<NotificationOptions> CREATOR = new AutoCreator<NotificationOptions>(NotificationOptions.class);
     @Field(1)
     private int versionCode = 1;
     @Field(2)
@@ -121,6 +121,4 @@ public class NotificationOptions extends AutoSafeParcelable {
     public String getTargetActivityClassName() {
         return targetActivityClassName;
     }
-
-    public static Creator<NotificationOptions> CREATOR = new AutoCreator<NotificationOptions>(NotificationOptions.class);
 }

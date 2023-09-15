@@ -7,7 +7,6 @@ package org.microg.gms.common.api;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.DeadObjectException;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
@@ -88,37 +87,6 @@ public class GoogleApiManager {
         waitingApiCalls.clear();
     }
 
-    private class ConnectionCallback implements ConnectionCallbacks {
-        private ApiInstance apiInstance;
-
-        public ConnectionCallback(ApiInstance apiInstance) {
-            this.apiInstance = apiInstance;
-        }
-
-        @Override
-        public void onConnected(Bundle connectionHint) {
-            onInstanceConnected(apiInstance, connectionHint);
-        }
-
-        @Override
-        public void onConnectionSuspended(int cause) {
-            onInstanceSuspended(apiInstance, cause);
-        }
-    }
-
-    private class ConnectionFailedListener implements OnConnectionFailedListener {
-        private ApiInstance apiInstance;
-
-        public ConnectionFailedListener(ApiInstance apiInstance) {
-            this.apiInstance = apiInstance;
-        }
-
-        @Override
-        public void onConnectionFailed(ConnectionResult result) {
-            onInstanceFailed(apiInstance, result);
-        }
-    }
-
     private static class WaitingApiCall<R> {
         private PendingGoogleApiCall<R, ApiClient> apiCall;
         private TaskCompletionSource<R> completionSource;
@@ -186,6 +154,37 @@ public class GoogleApiManager {
             int result = apiClass != null ? apiClass.hashCode() : 0;
             result = 31 * result + (apiOptions != null ? apiOptions.hashCode() : 0);
             return result;
+        }
+    }
+
+    private class ConnectionCallback implements ConnectionCallbacks {
+        private ApiInstance apiInstance;
+
+        public ConnectionCallback(ApiInstance apiInstance) {
+            this.apiInstance = apiInstance;
+        }
+
+        @Override
+        public void onConnected(Bundle connectionHint) {
+            onInstanceConnected(apiInstance, connectionHint);
+        }
+
+        @Override
+        public void onConnectionSuspended(int cause) {
+            onInstanceSuspended(apiInstance, cause);
+        }
+    }
+
+    private class ConnectionFailedListener implements OnConnectionFailedListener {
+        private ApiInstance apiInstance;
+
+        public ConnectionFailedListener(ApiInstance apiInstance) {
+            this.apiInstance = apiInstance;
+        }
+
+        @Override
+        public void onConnectionFailed(ConnectionResult result) {
+            onInstanceFailed(apiInstance, result);
         }
     }
 }

@@ -5,9 +5,8 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/locationPreferencesFragment"
-    android:id="@+id/nav_location">
+    android:id="@+id/nav_location"
+    app:startDestination="@id/locationPreferencesFragment">
 
     <fragment
         android:id="@+id/locationPreferencesFragment"

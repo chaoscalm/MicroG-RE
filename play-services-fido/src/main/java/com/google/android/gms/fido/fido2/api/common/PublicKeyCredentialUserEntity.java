@@ -19,6 +19,8 @@ import java.util.Arrays;
  */
 @PublicApi
 public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
+    @PublicApi(exclude = true)
+    public static final Creator<PublicKeyCredentialUserEntity> CREATOR = new AutoCreator<>(PublicKeyCredentialUserEntity.class);
     @Field(2)
     private byte[] id;
     @Field(3)
@@ -81,7 +83,4 @@ public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
                 .field("displayName", displayName)
                 .end();
     }
-
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredentialUserEntity> CREATOR = new AutoCreator<>(PublicKeyCredentialUserEntity.class);
 }

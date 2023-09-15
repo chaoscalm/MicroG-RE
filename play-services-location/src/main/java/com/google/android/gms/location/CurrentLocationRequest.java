@@ -29,6 +29,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class CurrentLocationRequest extends AutoSafeParcelable {
+    public static final Creator<CurrentLocationRequest> CREATOR = new AutoCreator<>(CurrentLocationRequest.class);
     @Field(1)
     private long maxUpdateAgeMillis;
     @Field(2)
@@ -90,6 +91,31 @@ public class CurrentLocationRequest extends AutoSafeParcelable {
      */
     public @Priority int getPriority() {
         return priority;
+    }
+
+    @Hide
+    public boolean isBypass() {
+        return bypass;
+    }
+
+    @Hide
+    public @ThrottleBehavior int getThrottleBehavior() {
+        return throttleBehavior;
+    }
+
+    @Hide
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    @Hide
+    public WorkSource getWorkSource() {
+        return workSource;
+    }
+
+    @Hide
+    public ClientIdentity getImpersonation() {
+        return impersonation;
     }
 
     /**
@@ -244,31 +270,4 @@ public class CurrentLocationRequest extends AutoSafeParcelable {
             return this;
         }
     }
-
-    @Hide
-    public boolean isBypass() {
-        return bypass;
-    }
-
-    @Hide
-    public @ThrottleBehavior int getThrottleBehavior() {
-        return throttleBehavior;
-    }
-
-    @Hide
-    public String getModuleId() {
-        return moduleId;
-    }
-
-    @Hide
-    public WorkSource getWorkSource() {
-        return workSource;
-    }
-
-    @Hide
-    public ClientIdentity getImpersonation() {
-        return impersonation;
-    }
-
-    public static final Creator<CurrentLocationRequest> CREATOR = new AutoCreator<>(CurrentLocationRequest.class);
 }

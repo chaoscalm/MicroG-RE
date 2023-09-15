@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringList extends AutoSafeParcelable {
+    public static final Creator<StringList> CREATOR = new AutoCreator<>(StringList.class);
     @Field(1)
     public int versionCode = 1;
     @Field(2)
     public List<String> values = new ArrayList<>();
-    public static final Creator<StringList> CREATOR = new AutoCreator<>(StringList.class);
 }

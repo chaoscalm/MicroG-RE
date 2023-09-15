@@ -177,96 +177,6 @@ public class CameraSource {
         }
     }
 
-    /**
-     * Builder for configuring and creating an associated camera source.
-     */
-    public static class Builder {
-        private CameraSource cameraSource = new CameraSource();
-
-        /**
-         * Creates a camera source builder with the supplied context and detector.
-         * Camera preview images will be streamed to the associated detector upon starting the camera source.
-         */
-        public Builder(Context context, Detector<?> detector) {
-            if (context == null) throw new IllegalArgumentException("No context supplied.");
-            if (detector == null) throw new IllegalArgumentException("No detector supplied.");
-            this.cameraSource.context = context;
-            this.cameraSource.detector = detector;
-        }
-
-        /**
-         * Creates an instance of the camera source.
-         */
-        public CameraSource build() {
-            return cameraSource;
-        }
-
-        /**
-         * Sets whether to enable camera auto focus. If set to false (default), the camera's default focus setting is used. If set to true, a continuous video focus setting is used (if supported by the camera hardware).
-         * Default: false.
-         */
-        public Builder setAutoFocusEnabled(boolean autoFocusEnabled) {
-            this.cameraSource.autoFocusEnabled = autoFocusEnabled;
-            return this;
-        }
-
-        /**
-         * Sets the camera to use (either {@link CameraSource#CAMERA_FACING_BACK} or {@link CameraSource#CAMERA_FACING_FRONT}).
-         * Default: back facing.
-         */
-        public Builder setFacing(int facing) {
-            this.cameraSource.facing = facing;
-            return this;
-        }
-
-        /**
-         * Sets which FocusMode will be used for camera focus. Only FOCUS_MODE_CONTINUOUS_PICTURE and FOCUS_MODE_CONTINUOUS_VIDEO are supported for now.
-         */
-        public Builder setFocusMode(String focusMode) {
-            this.cameraSource.focusMode = focusMode;
-            return this;
-        }
-
-        /**
-         * Sets the requested frame rate in frames per second. If the exact requested value is not not available, the best matching available value is selected.
-         * Default: 30.
-         */
-        public Builder setRequestedFps(float fps) {
-            this.cameraSource.requestedFps = fps;
-            return this;
-        }
-
-        /**
-         * Sets the desired width and height of the camera frames in pixels. If the exact desired values are not available options, the best matching available options are selected. Also, we try to select a preview size which corresponds to the aspect ratio of an associated full picture size, if applicable.
-         * Default: 1024x768.
-         */
-        public Builder setRequestedPreviewSize(int width, int height) {
-            this.cameraSource.requestedWidth = width;
-            this.cameraSource.requestedHeight = height;
-            return this;
-        }
-    }
-
-    /**
-     * Callback interface used to supply image data from a photo capture.
-     */
-    public interface PictureCallback {
-        /**
-         * Called when image data is available after a picture is taken. The format of the data is a jpeg binary.
-         */
-        void onPictureTaken(byte[] data);
-    }
-
-    /**
-     * Callback interface used to signal the moment of actual image capture.
-     */
-    public interface ShutterCallback {
-        /**
-         * Called as near as possible to the moment when a photo is captured from the sensor. This is a good opportunity to play a shutter sound or give other feedback of camera operation. This may be some time after the photo was triggered, but some time before the actual data is available.
-         */
-        void onShutter();
-    }
-
     private void startDetectorThread() {
         if (detectorThread != null && detectorThread.isAlive()) return;
         detectorThread = new Thread(detectorRunner);
@@ -411,6 +321,96 @@ public class CameraSource {
 
         if (sizePair == null) throw new IOException("Could not find suitable preview size.");
         return sizePair;
+    }
+
+    /**
+     * Callback interface used to supply image data from a photo capture.
+     */
+    public interface PictureCallback {
+        /**
+         * Called when image data is available after a picture is taken. The format of the data is a jpeg binary.
+         */
+        void onPictureTaken(byte[] data);
+    }
+
+    /**
+     * Callback interface used to signal the moment of actual image capture.
+     */
+    public interface ShutterCallback {
+        /**
+         * Called as near as possible to the moment when a photo is captured from the sensor. This is a good opportunity to play a shutter sound or give other feedback of camera operation. This may be some time after the photo was triggered, but some time before the actual data is available.
+         */
+        void onShutter();
+    }
+
+    /**
+     * Builder for configuring and creating an associated camera source.
+     */
+    public static class Builder {
+        private CameraSource cameraSource = new CameraSource();
+
+        /**
+         * Creates a camera source builder with the supplied context and detector.
+         * Camera preview images will be streamed to the associated detector upon starting the camera source.
+         */
+        public Builder(Context context, Detector<?> detector) {
+            if (context == null) throw new IllegalArgumentException("No context supplied.");
+            if (detector == null) throw new IllegalArgumentException("No detector supplied.");
+            this.cameraSource.context = context;
+            this.cameraSource.detector = detector;
+        }
+
+        /**
+         * Creates an instance of the camera source.
+         */
+        public CameraSource build() {
+            return cameraSource;
+        }
+
+        /**
+         * Sets whether to enable camera auto focus. If set to false (default), the camera's default focus setting is used. If set to true, a continuous video focus setting is used (if supported by the camera hardware).
+         * Default: false.
+         */
+        public Builder setAutoFocusEnabled(boolean autoFocusEnabled) {
+            this.cameraSource.autoFocusEnabled = autoFocusEnabled;
+            return this;
+        }
+
+        /**
+         * Sets the camera to use (either {@link CameraSource#CAMERA_FACING_BACK} or {@link CameraSource#CAMERA_FACING_FRONT}).
+         * Default: back facing.
+         */
+        public Builder setFacing(int facing) {
+            this.cameraSource.facing = facing;
+            return this;
+        }
+
+        /**
+         * Sets which FocusMode will be used for camera focus. Only FOCUS_MODE_CONTINUOUS_PICTURE and FOCUS_MODE_CONTINUOUS_VIDEO are supported for now.
+         */
+        public Builder setFocusMode(String focusMode) {
+            this.cameraSource.focusMode = focusMode;
+            return this;
+        }
+
+        /**
+         * Sets the requested frame rate in frames per second. If the exact requested value is not not available, the best matching available value is selected.
+         * Default: 30.
+         */
+        public Builder setRequestedFps(float fps) {
+            this.cameraSource.requestedFps = fps;
+            return this;
+        }
+
+        /**
+         * Sets the desired width and height of the camera frames in pixels. If the exact desired values are not available options, the best matching available options are selected. Also, we try to select a preview size which corresponds to the aspect ratio of an associated full picture size, if applicable.
+         * Default: 1024x768.
+         */
+        public Builder setRequestedPreviewSize(int width, int height) {
+            this.cameraSource.requestedWidth = width;
+            this.cameraSource.requestedHeight = height;
+            return this;
+        }
     }
 
     private static class SizePair {

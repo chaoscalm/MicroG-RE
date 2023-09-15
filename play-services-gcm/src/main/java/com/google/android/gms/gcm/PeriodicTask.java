@@ -35,8 +35,18 @@ import org.microg.gms.common.PublicApi;
 @PublicApi
 public class PeriodicTask extends com.google.android.gms.gcm.Task {
 
-    protected long mFlexInSeconds;
+    public static final Creator<PeriodicTask> CREATOR = new Creator<PeriodicTask>() {
+        @Override
+        public PeriodicTask createFromParcel(Parcel source) {
+            return new PeriodicTask(source);
+        }
 
+        @Override
+        public PeriodicTask[] newArray(int size) {
+            return new PeriodicTask[size];
+        }
+    };
+    protected long mFlexInSeconds;
     protected long mIntervalInSeconds;
 
     private PeriodicTask(Builder builder) {
@@ -45,12 +55,12 @@ public class PeriodicTask extends com.google.android.gms.gcm.Task {
         this.mFlexInSeconds = Math.min(builder.flexInSeconds, mIntervalInSeconds);
     }
 
+
     private PeriodicTask(Parcel source) {
         super(source);
         mIntervalInSeconds = source.readLong();
         mFlexInSeconds = Math.min(source.readLong(), mIntervalInSeconds);
     }
-
 
     /**
      * @return The number of seconds before the end of the period returned via
@@ -86,18 +96,6 @@ public class PeriodicTask extends com.google.android.gms.gcm.Task {
         parcel.writeLong(this.mIntervalInSeconds);
         parcel.writeLong(this.mFlexInSeconds);
     }
-
-    public static final Creator<PeriodicTask> CREATOR = new Creator<PeriodicTask>() {
-        @Override
-        public PeriodicTask createFromParcel(Parcel source) {
-            return new PeriodicTask(source);
-        }
-
-        @Override
-        public PeriodicTask[] newArray(int size) {
-            return new PeriodicTask[size];
-        }
-    };
 
     public static class Builder extends com.google.android.gms.gcm.Task.Builder {
         private long flexInSeconds = -1;

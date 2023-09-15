@@ -8,9 +8,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/exposure_enable_switch"
         android:key="pref_exposure_enabled"
-        android:persistent="false" />
+        android:persistent="false"
+        android:title="@string/exposure_enable_switch" />
 
     <Preference
         android:key="pref_exposure_enable_info"
@@ -22,24 +22,24 @@
     <Preference
         android:icon="@drawable/ic_bluetooth_off"
         android:key="pref_exposure_error_bluetooth_off"
-        android:title="@string/pref_exposure_error_bluetooth_off_title"
         android:summary="@string/exposure_confirm_bluetooth_description"
+        android:title="@string/pref_exposure_error_bluetooth_off_title"
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 
     <Preference
         android:icon="@drawable/ic_location_off"
         android:key="pref_exposure_error_location_off"
-        android:title="@string/pref_exposure_error_location_off_title"
         android:summary="@string/exposure_confirm_location_description"
+        android:title="@string/pref_exposure_error_location_off_title"
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 
     <Preference
         android:icon="@drawable/ic_info_outline"
         android:key="pref_exposure_error_nearby_not_granted"
-        android:title="@string/pref_exposure_error_nearby_not_granted_title"
         android:summary="@string/pref_exposure_error_nearby_not_granted_description"
+        android:title="@string/pref_exposure_error_nearby_not_granted_title"
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 

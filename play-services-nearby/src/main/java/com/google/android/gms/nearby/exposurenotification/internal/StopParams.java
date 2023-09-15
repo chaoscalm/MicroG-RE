@@ -10,6 +10,7 @@ import com.google.android.gms.common.api.internal.IStatusCallback;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class StopParams extends AutoSafeParcelable {
+    public static final Creator<StopParams> CREATOR = new AutoCreator<>(StopParams.class);
     @Field(1)
     public IStatusCallback callback;
 
@@ -19,6 +20,4 @@ public class StopParams extends AutoSafeParcelable {
     public StopParams(IStatusCallback callback) {
         this.callback = callback;
     }
-
-    public static final Creator<StopParams> CREATOR = new AutoCreator<>(StopParams.class);
 }

@@ -74,25 +74,22 @@ import org.microg.gms.gcm.GcmConstants;
  */
 @PublicApi
 public abstract class GcmTaskService extends Service {
-    private static final String TAG = "GcmTaskService";
-
     /**
      * Action broadcast by the GcmNetworkManager to the requesting package when
      * a scheduled task is ready for execution.
      */
     public static final String SERVICE_ACTION_EXECUTE_TASK = GcmConstants.ACTION_TASK_READY;
-
     /**
      * Action that a {@link com.google.android.gms.gcm.GcmTaskService} is started with when the service needs to initialize
      * its tasks.
      */
     public static final String SERVICE_ACTION_INITIALIZE = GcmConstants.ACTION_TASK_INITIALZE;
-
     /**
      * You must protect your service with this permission to avoid being bound to by an
      * application other than Google Play Services.
      */
     public static final String SERVICE_PERMISSION = GcmConstants.PERMISSION_NETWORK_TASK;
+    private static final String TAG = "GcmTaskService";
 
     public IBinder onBind(Intent intent) {
         return null;

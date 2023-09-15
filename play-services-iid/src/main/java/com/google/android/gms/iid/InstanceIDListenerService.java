@@ -16,6 +16,11 @@
 
 package com.google.android.gms.iid;
 
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,11 +32,6 @@ import android.os.Looper;
 import android.os.Message;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
-
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
-import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
 
 /**
  * Base class to handle Instance ID service notifications on token
@@ -52,6 +52,14 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
  */
 public class InstanceIDListenerService extends Service {
 
+    private MessengerCompat messengerCompat = new MessengerCompat(new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            handleIntent((Intent) msg.obj);
+        }
+    });
+    private int counter = 0;
+    private int startId = -1;
     private BroadcastReceiver registrationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -59,15 +67,6 @@ public class InstanceIDListenerService extends Service {
             stop();
         }
     };
-    private MessengerCompat messengerCompat = new MessengerCompat(new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            handleIntent((Intent) msg.obj);
-        }
-    });
-
-    private int counter = 0;
-    private int startId = -1;
 
     private void handleIntent(Intent intent) {
         // TODO

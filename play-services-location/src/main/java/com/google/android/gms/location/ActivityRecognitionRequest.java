@@ -14,6 +14,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
 public class ActivityRecognitionRequest extends AutoSafeParcelable {
+    public static final Creator<ActivityRecognitionRequest> CREATOR = new AutoCreator<>(ActivityRecognitionRequest.class);
     @Field(1)
     public long intervalMillis;
     @Field(2)
@@ -37,6 +38,4 @@ public class ActivityRecognitionRequest extends AutoSafeParcelable {
     @Field(9)
     @Nullable
     public String contextAttributionTag;
-
-    public static final Creator<ActivityRecognitionRequest> CREATOR = new AutoCreator<>(ActivityRecognitionRequest.class);
 }

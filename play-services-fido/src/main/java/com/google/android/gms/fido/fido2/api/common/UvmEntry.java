@@ -18,6 +18,8 @@ import java.util.Arrays;
  */
 @PublicApi
 public class UvmEntry extends AutoSafeParcelable {
+    @PublicApi(exclude = true)
+    public static final Creator<UvmEntry> CREATOR = new AutoCreator<>(UvmEntry.class);
     @Field(1)
     private int userVerificationMethod;
     @Field(2)
@@ -85,7 +87,4 @@ public class UvmEntry extends AutoSafeParcelable {
             return entry;
         }
     }
-
-    @PublicApi(exclude = true)
-    public static final Creator<UvmEntry> CREATOR = new AutoCreator<>(UvmEntry.class);
 }

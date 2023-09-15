@@ -38,11 +38,12 @@ import java.util.Arrays;
 @PublicApi
 public class Asset extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<Asset> CREATOR = new AutoCreator<Asset>(Asset.class);
     @SafeParceled(2)
     @PublicApi(exclude = true)
     public byte[] data;
+    @SafeParceled(1)
+    private int versionCode = 1;
     @SafeParceled(3)
     private String digest;
     @SafeParceled(4)
@@ -149,6 +150,4 @@ public class Asset extends AutoSafeParcelable {
         if (this.uri != null) sb.append(", uri=").append(uri);
         return sb.append("]").toString();
     }
-
-    public static final Creator<Asset> CREATOR = new AutoCreator<Asset>(Asset.class);
 }

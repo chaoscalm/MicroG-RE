@@ -29,8 +29,7 @@ import java.util.List;
 @PublicApi
 public class ApplicationMetadata extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<ApplicationMetadata> CREATOR = new AutoCreator<ApplicationMetadata>(ApplicationMetadata.class);
     @SafeParceled(2)
     public String applicationId;
     @SafeParceled(3)
@@ -43,6 +42,8 @@ public class ApplicationMetadata extends AutoSafeParcelable {
     public String senderAppIdentifier;
     @SafeParceled(7)
     public Uri senderAppLaunchUri;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     public String getApplicationId() {
         return applicationId;
@@ -80,6 +81,4 @@ public class ApplicationMetadata extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<ApplicationMetadata> CREATOR = new AutoCreator<ApplicationMetadata>(ApplicationMetadata.class);
 }

@@ -15,6 +15,25 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public class WalletConstants {
+    public static final int CARD_CLASS_CREDIT = 1;
+    public static final int CARD_CLASS_DEBIT = 2;
+    public static final int CARD_CLASS_PREPAID = 3;
+    public static final int CARD_CLASS_UNKNOWN = 0;
+    public static final int CARD_NETWORK_AMEX = 1;
+    public static final int CARD_NETWORK_DISCOVER = 2;
+    public static final int CARD_NETWORK_INTERAC = 6;
+    public static final int CARD_NETWORK_JCB = 3;
+    public static final int CARD_NETWORK_MASTERCARD = 4;
+    public static final int CARD_NETWORK_OTHER = 1000;
+    public static final int CARD_NETWORK_VISA = 5;
+    public static final int PAYMENT_METHOD_CARD = 1;
+    public static final int PAYMENT_METHOD_TOKENIZED_CARD = 2;
+    public static final int PAYMENT_METHOD_UNKNOWN = 0;
+    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_DIRECT = 3;
+    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_NETWORK_TOKEN = 2;
+    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY = 1;
+
+
     /**
      * Credit card networks. Different APIs may support only a subset of these.
      * <p>
@@ -63,7 +82,6 @@ public class WalletConstants {
          */
         int OTHER = 1000;
     }
-
     /**
      * The payment methods you support.
      * <p>
@@ -77,7 +95,6 @@ public class WalletConstants {
      */
     public @interface PaymentMethod {
     }
-
     /**
      * Payment method tokenization types.
      * <p>
@@ -91,27 +108,4 @@ public class WalletConstants {
      */
     public @interface PaymentMethodTokenizationType {
     }
-
-
-    public static final int CARD_CLASS_CREDIT = 1;
-    public static final int CARD_CLASS_DEBIT = 2;
-    public static final int CARD_CLASS_PREPAID = 3;
-    public static final int CARD_CLASS_UNKNOWN = 0;
-
-    public static final int CARD_NETWORK_AMEX = 1;
-    public static final int CARD_NETWORK_DISCOVER = 2;
-    public static final int CARD_NETWORK_INTERAC = 6;
-    public static final int CARD_NETWORK_JCB = 3;
-    public static final int CARD_NETWORK_MASTERCARD = 4;
-    public static final int CARD_NETWORK_OTHER = 1000;
-    public static final int CARD_NETWORK_VISA = 5;
-
-    public static final int PAYMENT_METHOD_CARD = 1;
-    public static final int PAYMENT_METHOD_TOKENIZED_CARD = 2;
-    public static final int PAYMENT_METHOD_UNKNOWN = 0;
-
-
-    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_DIRECT = 3;
-    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_NETWORK_TOKEN = 2;
-    public static final int PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY = 1;
 }

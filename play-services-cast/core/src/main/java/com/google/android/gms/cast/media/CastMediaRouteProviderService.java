@@ -16,12 +16,10 @@
 
 package com.google.android.gms.cast.media;
 
-import org.microg.gms.cast.CastMediaRouteProvider;
-
-import android.util.Log;
-
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderService;
+
+import org.microg.gms.cast.CastMediaRouteProvider;
 
 public class CastMediaRouteProviderService extends MediaRouteProviderService {
     private static final String TAG = CastMediaRouteProviderService.class.getSimpleName();

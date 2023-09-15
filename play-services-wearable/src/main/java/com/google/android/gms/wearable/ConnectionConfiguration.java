@@ -21,8 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ConnectionConfiguration extends AutoSafeParcelable {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<ConnectionConfiguration> CREATOR = new AutoCreator<ConnectionConfiguration>(ConnectionConfiguration.class);
     @SafeParceled(2)
     public final String name;
     @SafeParceled(3)
@@ -41,6 +40,8 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
     public boolean btlePriority = true;
     @SafeParceled(10)
     public String nodeId;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private ConnectionConfiguration() {
         name = address = null;
@@ -80,6 +81,4 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         sb.append('}');
         return sb.toString();
     }
-
-    public static final Creator<ConnectionConfiguration> CREATOR = new AutoCreator<ConnectionConfiguration>(ConnectionConfiguration.class);
 }

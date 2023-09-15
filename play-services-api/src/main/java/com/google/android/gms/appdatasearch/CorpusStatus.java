@@ -23,8 +23,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class CorpusStatus extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode;
+    public static final Creator<CorpusStatus> CREATOR = new AutoCreator<CorpusStatus>(CorpusStatus.class);
     @SafeParceled(1)
     public boolean found;
     @SafeParceled(2)
@@ -37,10 +36,10 @@ public class CorpusStatus extends AutoSafeParcelable {
     public Bundle counters;
     @SafeParceled(6)
     public String g;
+    @SafeParceled(1000)
+    private int versionCode;
 
     public CorpusStatus() {
         versionCode = 2;
     }
-
-    public static final Creator<CorpusStatus> CREATOR = new AutoCreator<CorpusStatus>(CorpusStatus.class);
 }

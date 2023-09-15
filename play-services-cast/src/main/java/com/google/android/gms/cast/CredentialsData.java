@@ -35,7 +35,7 @@ public class CredentialsData extends AbstractSafeParcelable {
      * The credentials type indicating it comes from a Web sender.
      */
     public static final String CREDENTIALS_TYPE_WEB = "web";
-
+    public static final SafeParcelableCreatorAndWriter<CredentialsData> CREATOR = findCreator(CredentialsData.class);
     @Field(1)
     final String credentials;
     @Field(2)
@@ -72,6 +72,4 @@ public class CredentialsData extends AbstractSafeParcelable {
     public void writeToParcel(Parcel out, int flags) {
         CREATOR.writeToParcel(this, out, flags);
     }
-
-    public static final SafeParcelableCreatorAndWriter<CredentialsData> CREATOR = findCreator(CredentialsData.class);
 }

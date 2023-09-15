@@ -10,9 +10,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class UpdateProfileAidlRequest extends AutoSafeParcelable {
+    public static final Creator<UpdateProfileAidlRequest> CREATOR = new AutoCreator<>(UpdateProfileAidlRequest.class);
     @Field(1)
     public UserProfileChangeRequest request;
     @Field(2)
     public String cachedState;
-    public static final Creator<UpdateProfileAidlRequest> CREATOR = new AutoCreator<>(UpdateProfileAidlRequest.class);
 }

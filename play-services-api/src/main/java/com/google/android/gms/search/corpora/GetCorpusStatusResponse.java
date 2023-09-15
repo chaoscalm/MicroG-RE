@@ -24,14 +24,14 @@ import org.microg.safeparcel.SafeParceled;
 
 public class GetCorpusStatusResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode;
-
+    public static Creator<GetCorpusStatusResponse> CREATOR = new AutoCreator<GetCorpusStatusResponse>(GetCorpusStatusResponse.class);
     @SafeParceled(1)
     public final Status status;
 
     @SafeParceled(2)
     public final CorpusStatus corpusStatus;
+    @SafeParceled(1000)
+    private int versionCode;
 
     private GetCorpusStatusResponse() {
         status = null;
@@ -42,6 +42,4 @@ public class GetCorpusStatusResponse extends AutoSafeParcelable {
         this.status = status;
         this.corpusStatus = corpusStatus;
     }
-
-    public static Creator<GetCorpusStatusResponse> CREATOR = new AutoCreator<GetCorpusStatusResponse>(GetCorpusStatusResponse.class);
 }

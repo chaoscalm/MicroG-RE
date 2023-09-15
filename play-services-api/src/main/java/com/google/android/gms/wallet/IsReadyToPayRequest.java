@@ -19,6 +19,7 @@ import java.util.Collection;
  */
 @PublicApi
 public class IsReadyToPayRequest extends AutoSafeParcelable {
+    public static final Creator<IsReadyToPayRequest> CREATOR = new AutoCreator<>(IsReadyToPayRequest.class);
     @Field(value = 2, useDirectList = true)
     private ArrayList<Integer> allowedCardNetworks;
     @Field(4)
@@ -156,6 +157,4 @@ public class IsReadyToPayRequest extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<IsReadyToPayRequest> CREATOR = new AutoCreator<>(IsReadyToPayRequest.class);
 }

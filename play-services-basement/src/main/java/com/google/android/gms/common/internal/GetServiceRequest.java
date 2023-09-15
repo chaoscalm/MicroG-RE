@@ -26,13 +26,11 @@ import com.google.android.gms.common.api.Scope;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.GmsService;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 
 public class GetServiceRequest extends AutoSafeParcelable {
-    @Field(1)
-    private int versionCode = 6;
+    public static Creator<GetServiceRequest> CREATOR = new AutoCreator<GetServiceRequest>(GetServiceRequest.class);
     @Field(2)
     public final int serviceId;
     @Field(3)
@@ -47,13 +45,15 @@ public class GetServiceRequest extends AutoSafeParcelable {
     public Bundle extras;
     @Field(8)
     public Account account;
-    @Field(9)
-    @Deprecated
-    private long field9;
     @Field(10)
     public Feature[] defaultFeatures;
     @Field(11)
     public Feature[] apiFeatures;
+    @Field(1)
+    private int versionCode = 6;
+    @Field(9)
+    @Deprecated
+    private long field9;
     @Field(12)
     private boolean field12;
     @Field(13)
@@ -85,6 +85,4 @@ public class GetServiceRequest extends AutoSafeParcelable {
                 (account == null ? "" : (", account=" + account)) +
                 '}';
     }
-
-    public static Creator<GetServiceRequest> CREATOR = new AutoCreator<GetServiceRequest>(GetServiceRequest.class);
 }

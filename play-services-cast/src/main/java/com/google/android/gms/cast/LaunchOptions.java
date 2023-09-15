@@ -22,6 +22,7 @@ import java.util.Locale;
  * {@link Cast.CastApi#launchApplication(GoogleApiClient, String, LaunchOptions)}.
  */
 public class LaunchOptions extends AutoSafeParcelable {
+    public static Creator<LaunchOptions> CREATOR = new AutoCreator<LaunchOptions>(LaunchOptions.class);
     @Field(1)
     private int versionCode = 1;
     @Field(2)
@@ -70,19 +71,19 @@ public class LaunchOptions extends AutoSafeParcelable {
     }
 
     /**
-     * Returns the "relaunch if running" flag.
-     */
-    public boolean getRelaunchIfRunning() {
-        return relaunchIfRunning;
-    }
-
-    /**
      * Sets the language to be used by the receiver application. If not specified, the sender device's default language is used.
      *
      * @param language The language
      */
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    /**
+     * Returns the "relaunch if running" flag.
+     */
+    public boolean getRelaunchIfRunning() {
+        return relaunchIfRunning;
     }
 
     /**
@@ -101,6 +102,4 @@ public class LaunchOptions extends AutoSafeParcelable {
                 .field("androidReceiverCompatible", androidReceiverCompatible)
                 .end();
     }
-
-    public static Creator<LaunchOptions> CREATOR = new AutoCreator<LaunchOptions>(LaunchOptions.class);
 }

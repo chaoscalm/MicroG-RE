@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateAuthUriResponse extends AutoSafeParcelable {
+    public static final Creator<CreateAuthUriResponse> CREATOR = new AutoCreator<>(CreateAuthUriResponse.class);
     @Field(2)
     public String authUri;
     @Field(3)
@@ -23,5 +24,4 @@ public class CreateAuthUriResponse extends AutoSafeParcelable {
     public StringList stringList = new StringList();
     @Field(7)
     public List<String> signInMethods = new ArrayList<>();
-    public static final Creator<CreateAuthUriResponse> CREATOR = new AutoCreator<>(CreateAuthUriResponse.class);
 }

@@ -99,7 +99,7 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     @Deprecated
     public static final int PRIORITY_NO_POWER = 105;
-
+    public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);
     @Field(1000)
     private int versionCode = 1;
     @Field(1)
@@ -215,11 +215,35 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * @deprecated Use {@link LocationRequest.Builder#setDurationMillis(long)} instead. Using this method will express the expiration time in
+     * terms of duration, which may give unexpected results. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setExpirationTime(long elapsedRealtime) {
+        this.durationMillis = Math.max(1, elapsedRealtime - SystemClock.elapsedRealtime());
+        return this;
+    }
+
+    /**
      * @deprecated Use {@link #getMinUpdateIntervalMillis()} instead. May be removed in a future release.
      */
     @Deprecated
     public long getFastestInterval() {
         return minUpdateIntervalMillis;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateIntervalMillis(long)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setFastestInterval(long fastestIntervalMillis) throws IllegalArgumentException {
+        if (fastestIntervalMillis < 0)
+            throw new IllegalArgumentException("illegal fastest interval: " + fastestIntervalMillis);
+        this.minUpdateIntervalMillis = fastestIntervalMillis;
+        explicitFastestInterval = true; // FIXME: Remove
+        return this;
     }
 
     /**
@@ -242,6 +266,24 @@ public class LocationRequest extends AutoSafeParcelable {
     @Deprecated
     public long getInterval() {
         return intervalMillis;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setIntervalMillis(long)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setInterval(long intervalMillis) throws IllegalArgumentException {
+        if (intervalMillis < 0)
+            throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+        if (this.minUpdateIntervalMillis == this.intervalMillis / 6) {
+            this.minUpdateIntervalMillis = intervalMillis / 6;
+        }
+        if (this.maxUpdateAgeMillis == this.intervalMillis) {
+            this.maxUpdateAgeMillis = intervalMillis;
+        }
+        this.intervalMillis = intervalMillis;
+        return this;
     }
 
     /**
@@ -300,6 +342,18 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdateDelayMillis(long)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setMaxWaitTime(long maxWaitTimeMillis) throws IllegalArgumentException {
+        if (maxWaitTimeMillis < 0)
+            throw new IllegalArgumentException("illegal max wait time: " + maxWaitTimeMillis);
+        maxUpdateDelayMillis = maxWaitTimeMillis;
+        return this;
+    }
+
+    /**
      * The minimum distance required between consecutive location updates. If a derived location update is not at least the
      * specified distance away from the previous location update delivered to the client, it will not be delivered. This may also
      * allow additional power savings under some circumstances.
@@ -333,6 +387,18 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdates(int)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setNumUpdates(int maxUpdates) throws IllegalArgumentException {
+        if (maxUpdates <= 0)
+            throw new IllegalArgumentException("invalid numUpdates: " + maxUpdates);
+        this.maxUpdates = maxUpdates;
+        return this;
+    }
+
+    /**
      * The {@link Priority} of the location request.
      */
     @Priority
@@ -341,11 +407,34 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * @deprecated Use {@link LocationRequest.Builder#setPriority(int)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setPriority(@Priority int priority) {
+        PriorityUtil.checkValidPriority(priority);
+        this.priority = priority;
+        return this;
+    }
+
+    /**
      * @deprecated Use {@link #getMinUpdateDistanceMeters()} instead.
      */
     @Deprecated
     public float getSmallestDisplacement() {
         return minUpdateDistanceMeters;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateDistanceMeters(float)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
+        if (smallestDisplacementMeters < 0)
+            throw new IllegalArgumentException("invalid displacement: " + smallestDisplacementMeters);
+        this.minUpdateDistanceMeters = smallestDisplacementMeters;
+        return this;
     }
 
     @PublicApi(exclude = true)
@@ -400,6 +489,16 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * @deprecated Use {@link LocationRequest.Builder#setWaitForAccurateLocation(boolean)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setWaitForAccurateLocation(boolean waitForAccurateLocation) {
+        this.waitForAccurateLocation = waitForAccurateLocation;
+        return this;
+    }
+
+    /**
      * @deprecated Use {@link LocationRequest.Builder#setDurationMillis(long)} instead. May be removed in a future release.
      */
     @Deprecated
@@ -408,105 +507,6 @@ public class LocationRequest extends AutoSafeParcelable {
         if (durationMillis <= 0)
             throw new IllegalArgumentException("durationMillis must be greater than 0");
         this.durationMillis = durationMillis;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setDurationMillis(long)} instead. Using this method will express the expiration time in
-     * terms of duration, which may give unexpected results. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setExpirationTime(long elapsedRealtime) {
-        this.durationMillis = Math.max(1, elapsedRealtime - SystemClock.elapsedRealtime());
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateIntervalMillis(long)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setFastestInterval(long fastestIntervalMillis) throws IllegalArgumentException {
-        if (fastestIntervalMillis < 0)
-            throw new IllegalArgumentException("illegal fastest interval: " + fastestIntervalMillis);
-        this.minUpdateIntervalMillis = fastestIntervalMillis;
-        explicitFastestInterval = true; // FIXME: Remove
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setIntervalMillis(long)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setInterval(long intervalMillis) throws IllegalArgumentException {
-        if (intervalMillis < 0)
-            throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
-        if (this.minUpdateIntervalMillis == this.intervalMillis / 6) {
-            this.minUpdateIntervalMillis = intervalMillis / 6;
-        }
-        if (this.maxUpdateAgeMillis == this.intervalMillis) {
-            this.maxUpdateAgeMillis = intervalMillis;
-        }
-        this.intervalMillis = intervalMillis;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdateDelayMillis(long)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setMaxWaitTime(long maxWaitTimeMillis) throws IllegalArgumentException {
-        if (maxWaitTimeMillis < 0)
-            throw new IllegalArgumentException("illegal max wait time: " + maxWaitTimeMillis);
-        maxUpdateDelayMillis = maxWaitTimeMillis;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdates(int)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setNumUpdates(int maxUpdates) throws IllegalArgumentException {
-        if (maxUpdates <= 0)
-            throw new IllegalArgumentException("invalid numUpdates: " + maxUpdates);
-        this.maxUpdates = maxUpdates;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setPriority(int)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setPriority(@Priority int priority) {
-        PriorityUtil.checkValidPriority(priority);
-        this.priority = priority;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateDistanceMeters(float)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
-        if (smallestDisplacementMeters < 0)
-            throw new IllegalArgumentException("invalid displacement: " + smallestDisplacementMeters);
-        this.minUpdateDistanceMeters = smallestDisplacementMeters;
-        return this;
-    }
-
-    /**
-     * @deprecated Use {@link LocationRequest.Builder#setWaitForAccurateLocation(boolean)} instead. May be removed in a future release.
-     */
-    @Deprecated
-    @NonNull
-    public LocationRequest setWaitForAccurateLocation(boolean waitForAccurateLocation) {
-        this.waitForAccurateLocation = waitForAccurateLocation;
         return this;
     }
 
@@ -860,7 +860,4 @@ public class LocationRequest extends AutoSafeParcelable {
             return this;
         }
     }
-
-
-    public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);
 }

@@ -21,6 +21,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class SourceDirectTransferResult extends AutoSafeParcelable {
+    public static final Creator<SourceDirectTransferResult> CREATOR = new AutoCreator<>(SourceDirectTransferResult.class);
     @Field(1)
     private Status status;
 
@@ -37,6 +38,4 @@ public class SourceDirectTransferResult extends AutoSafeParcelable {
     public Status getStatus() {
         return status;
     }
-
-    public static final Creator<SourceDirectTransferResult> CREATOR = new AutoCreator<>(SourceDirectTransferResult.class);
 }

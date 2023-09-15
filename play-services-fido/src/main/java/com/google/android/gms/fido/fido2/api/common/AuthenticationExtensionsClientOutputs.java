@@ -19,8 +19,18 @@ import java.util.Arrays;
  */
 @PublicApi
 public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
+    public static final Creator<AuthenticationExtensionsClientOutputs> CREATOR = new AutoCreator<>(AuthenticationExtensionsClientOutputs.class);
     @Field(1)
     private UvmEntries uvmEntries;
+
+    /**
+     * De-serializes the {@link AuthenticationExtensionsClientOutputs} from bytes, reversing {@link #serializeToBytes()}.
+     *
+     * @return The deserialized {@link AuthenticationExtensionsClientOutputs}
+     */
+    public static AuthenticationExtensionsClientOutputs deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+    }
 
     public UvmEntries getUvmEntries() {
         return uvmEntries;
@@ -32,15 +42,6 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      */
     public byte[] serializeToBytes() {
         return SafeParcelUtil.asByteArray(this);
-    }
-
-    /**
-     * De-serializes the {@link AuthenticationExtensionsClientOutputs} from bytes, reversing {@link #serializeToBytes()}.
-     *
-     * @return The deserialized {@link AuthenticationExtensionsClientOutputs}
-     */
-    public static AuthenticationExtensionsClientOutputs deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
     }
 
     @Override
@@ -88,6 +89,4 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
             return extensions;
         }
     }
-
-    public static final Creator<AuthenticationExtensionsClientOutputs> CREATOR = new AutoCreator<>(AuthenticationExtensionsClientOutputs.class);
 }

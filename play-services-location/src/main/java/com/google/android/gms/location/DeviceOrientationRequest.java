@@ -12,6 +12,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
 public class DeviceOrientationRequest extends AutoSafeParcelable {
+    public static final Creator<DeviceOrientationRequest> CREATOR = new AutoCreator<DeviceOrientationRequest>(DeviceOrientationRequest.class);
     @Field(1)
     public boolean shouldUseMag = true;
     @Field(2)
@@ -36,6 +37,4 @@ public class DeviceOrientationRequest extends AutoSafeParcelable {
         sb.append("]");
         return sb.toString();
     }
-
-    public static final Creator<DeviceOrientationRequest> CREATOR = new AutoCreator<DeviceOrientationRequest>(DeviceOrientationRequest.class);
 }

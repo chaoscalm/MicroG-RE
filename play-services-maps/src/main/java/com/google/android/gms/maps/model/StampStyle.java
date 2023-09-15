@@ -10,9 +10,8 @@ import android.os.IBinder;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class StampStyle extends AutoSafeParcelable {
+    public static final Creator<StampStyle> CREATOR = new AutoCreator<>(StampStyle.class);
     @Field(2)
     private IBinder stamp;
     private BitmapDescriptor stampDescriptor;
-
-    public static final Creator<StampStyle> CREATOR = new AutoCreator<>(StampStyle.class);
 }

@@ -22,14 +22,15 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class AddListenerRequest extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<AddListenerRequest> CREATOR = new AutoCreator<AddListenerRequest>(AddListenerRequest.class);
     @SafeParceled(2)
     public final IWearableListener listener;
     @SafeParceled(3)
     public final IntentFilter[] intentFilters;
     @SafeParceled(4)
     public final String channelTokenString;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private AddListenerRequest() {
         listener = null;
@@ -42,6 +43,4 @@ public class AddListenerRequest extends AutoSafeParcelable {
         this.intentFilters = intentFilters;
         this.channelTokenString = channelTokenString;
     }
-
-    public static final Creator<AddListenerRequest> CREATOR = new AutoCreator<AddListenerRequest>(AddListenerRequest.class);
 }

@@ -10,6 +10,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 @PublicApi
 public class TokenStatus extends AutoSafeParcelable {
+    public static final Creator<TokenStatus> CREATOR = new AutoCreator<>(TokenStatus.class);
     @Field(2)
     @PublicApi(exclude = true)
     public String issuerTokenId;
@@ -27,6 +28,4 @@ public class TokenStatus extends AutoSafeParcelable {
     public boolean isSelected() {
         return isSelected;
     }
-
-    public static final Creator<TokenStatus> CREATOR = new AutoCreator<>(TokenStatus.class);
 }

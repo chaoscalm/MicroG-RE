@@ -8,6 +8,7 @@ package com.google.android.gms.auth;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetHubTokenRequest extends AutoSafeParcelable {
+    public static final Creator<GetHubTokenRequest> CREATOR = new AutoCreator<>(GetHubTokenRequest.class);
     @Field(1)
     public String accountName;
     @Field(2)
@@ -16,5 +17,4 @@ public class GetHubTokenRequest extends AutoSafeParcelable {
     public String packageName;
     @Field(4)
     public int callerUid;
-    public static final Creator<GetHubTokenRequest> CREATOR = new AutoCreator<>(GetHubTokenRequest.class);
 }

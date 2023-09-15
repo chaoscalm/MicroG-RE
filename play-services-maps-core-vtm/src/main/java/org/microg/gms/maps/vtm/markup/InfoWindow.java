@@ -16,6 +16,9 @@
 
 package org.microg.gms.maps.vtm.markup;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,11 +28,8 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
 
 import org.microg.gms.maps.vtm.GoogleMapImpl;
-import org.microg.gms.maps.vtm.ResourcesContainer;
 import org.microg.gms.maps.vtm.R;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1;
+import org.microg.gms.maps.vtm.ResourcesContainer;
 
 public class InfoWindow {
     private static final String TAG = InfoWindow.class.getName();

@@ -15,6 +15,7 @@ import org.microg.safeparcel.SafeParceled;
 import java.io.File;
 
 public class SafeBrowsingData extends AutoSafeParcelable {
+    public static final Creator<SafeBrowsingData> CREATOR = new AutoCreator<SafeBrowsingData>(SafeBrowsingData.class);
     @Field(1)
     public int versionCode = 1;
     @Field(2)
@@ -29,6 +30,4 @@ public class SafeBrowsingData extends AutoSafeParcelable {
     public long field5;
     @Field(6)
     public byte[] field6;
-
-    public static final Creator<SafeBrowsingData> CREATOR = new AutoCreator<SafeBrowsingData>(SafeBrowsingData.class);
 }

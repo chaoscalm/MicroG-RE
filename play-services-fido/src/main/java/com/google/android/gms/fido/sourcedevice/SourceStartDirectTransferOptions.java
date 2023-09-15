@@ -22,7 +22,7 @@ public class SourceStartDirectTransferOptions extends AutoSafeParcelable {
      * Value of the callerType if the caller is browser.
      */
     public static final int CALLER_TYPE_BROWSER = 2;
-
+    public static final Creator<SourceStartDirectTransferOptions> CREATOR = new AutoCreator<>(SourceStartDirectTransferOptions.class);
     @Field(1)
     private int callerType;
 
@@ -35,6 +35,4 @@ public class SourceStartDirectTransferOptions extends AutoSafeParcelable {
     public SourceStartDirectTransferOptions(int callerType) {
         this.callerType = callerType;
     }
-
-    public static final Creator<SourceStartDirectTransferOptions> CREATOR = new AutoCreator<>(SourceStartDirectTransferOptions.class);
 }

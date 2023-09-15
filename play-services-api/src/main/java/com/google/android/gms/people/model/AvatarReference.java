@@ -21,14 +21,12 @@ import org.microg.safeparcel.SafeParceled;
 
 public class AvatarReference extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode;
-
+    public static final Creator<AvatarReference> CREATOR = new AutoCreator<AvatarReference>(AvatarReference.class);
     @SafeParceled(1)
     public int source;
 
     @SafeParceled(2)
     public String location;
-
-    public static final Creator<AvatarReference> CREATOR = new AutoCreator<AvatarReference>(AvatarReference.class);
+    @SafeParceled(1000)
+    private int versionCode;
 }

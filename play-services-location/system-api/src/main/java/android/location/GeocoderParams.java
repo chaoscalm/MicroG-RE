@@ -27,6 +27,17 @@ import java.util.Locale;
  * @hide
  */
 public class GeocoderParams implements Parcelable {
+    public static final Parcelable.Creator<GeocoderParams> CREATOR =
+            new Parcelable.Creator<GeocoderParams>() {
+                public GeocoderParams createFromParcel(Parcel in) {
+                    return null;
+                }
+
+                public GeocoderParams[] newArray(int size) {
+                    return null;
+                }
+            };
+
     /**
      * This object is only constructed by the Geocoder class
      *
@@ -64,17 +75,6 @@ public class GeocoderParams implements Parcelable {
     public Locale getLocale() {
         return null;
     }
-
-    public static final Parcelable.Creator<GeocoderParams> CREATOR =
-            new Parcelable.Creator<GeocoderParams>() {
-                public GeocoderParams createFromParcel(Parcel in) {
-                    return null;
-                }
-
-                public GeocoderParams[] newArray(int size) {
-                    return null;
-                }
-            };
 
     public int describeContents() {
         return 0;

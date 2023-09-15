@@ -32,7 +32,8 @@ public class TokenBinding extends AutoSafeParcelable {
      * A singleton instance representing that token binding is supported by the client, but unused by the relying party.
      */
     public static final TokenBinding SUPPORTED = new TokenBinding(TokenBindingStatus.SUPPORTED, null);
-
+    @PublicApi(exclude = true)
+    public static final Creator<TokenBinding> CREATOR = new AutoCreator<>(TokenBinding.class);
     @Field(2)
     private TokenBindingStatus status;
     @Field(3)
@@ -119,6 +120,21 @@ public class TokenBinding extends AutoSafeParcelable {
          * The client does not support token binding.
          */
         NOT_SUPPORTED("not-supported");
+        public static final Creator<TokenBindingStatus> CREATOR = new Creator<TokenBindingStatus>() {
+            @Override
+            public TokenBindingStatus createFromParcel(Parcel in) {
+                try {
+                    return fromString(in.readString());
+                } catch (UnsupportedTokenBindingStatusException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public TokenBindingStatus[] newArray(int size) {
+                return new TokenBindingStatus[size];
+            }
+        };
         private String value;
 
         TokenBindingStatus(String value) {
@@ -143,22 +159,6 @@ public class TokenBinding extends AutoSafeParcelable {
             return 0;
         }
 
-        public static final Creator<TokenBindingStatus> CREATOR = new Creator<TokenBindingStatus>() {
-            @Override
-            public TokenBindingStatus createFromParcel(Parcel in) {
-                try {
-                    return fromString(in.readString());
-                } catch (UnsupportedTokenBindingStatusException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            @Override
-            public TokenBindingStatus[] newArray(int size) {
-                return new TokenBindingStatus[size];
-            }
-        };
-
         @Override
         public String toString() {
             return value;
@@ -173,7 +173,4 @@ public class TokenBinding extends AutoSafeParcelable {
             super(message);
         }
     }
-
-    @PublicApi(exclude = true)
-    public static final Creator<TokenBinding> CREATOR = new AutoCreator<>(TokenBinding.class);
 }

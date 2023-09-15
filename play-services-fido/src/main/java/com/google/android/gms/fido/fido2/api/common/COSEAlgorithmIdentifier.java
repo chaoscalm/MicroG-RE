@@ -16,6 +16,21 @@ import org.microg.gms.utils.ToStringHelper;
 
 @PublicApi
 public class COSEAlgorithmIdentifier implements Parcelable {
+    public static final Creator<COSEAlgorithmIdentifier> CREATOR = new Creator<COSEAlgorithmIdentifier>() {
+        @Override
+        public COSEAlgorithmIdentifier createFromParcel(Parcel in) {
+            try {
+                return fromCoseValue(in.readInt());
+            } catch (UnsupportedAlgorithmIdentifierException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public COSEAlgorithmIdentifier[] newArray(int size) {
+            return new COSEAlgorithmIdentifier[size];
+        }
+    };
     private Algorithm algorithm;
 
     private COSEAlgorithmIdentifier() {
@@ -57,22 +72,6 @@ public class COSEAlgorithmIdentifier implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(algorithm.getAlgoValue());
     }
-
-    public static final Creator<COSEAlgorithmIdentifier> CREATOR = new Creator<COSEAlgorithmIdentifier>() {
-        @Override
-        public COSEAlgorithmIdentifier createFromParcel(Parcel in) {
-            try {
-                return fromCoseValue(in.readInt());
-            } catch (UnsupportedAlgorithmIdentifierException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public COSEAlgorithmIdentifier[] newArray(int size) {
-            return new COSEAlgorithmIdentifier[size];
-        }
-    };
 
     public static class UnsupportedAlgorithmIdentifierException extends Exception {
         public UnsupportedAlgorithmIdentifierException(int algId) {

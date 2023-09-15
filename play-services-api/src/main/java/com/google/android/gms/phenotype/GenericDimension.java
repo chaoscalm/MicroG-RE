@@ -8,10 +8,9 @@ package com.google.android.gms.phenotype;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GenericDimension extends AutoSafeParcelable {
+    public static final Creator<GenericDimension> CREATOR = new AutoCreator<>(GenericDimension.class);
     @Field(1)
     public int a;
     @Field(2)
     public int b;
-
-    public static final Creator<GenericDimension> CREATOR = new AutoCreator<>(GenericDimension.class);
 }

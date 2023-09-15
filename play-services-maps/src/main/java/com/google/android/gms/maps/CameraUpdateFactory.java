@@ -25,15 +25,15 @@ import org.microg.gms.common.Hide;
 public class CameraUpdateFactory {
     private static ICameraUpdateFactoryDelegate delegate;
 
-    @Hide
-    public static void setDelegate(@NonNull ICameraUpdateFactoryDelegate delegate) {
-        CameraUpdateFactory.delegate = delegate;
-    }
-
     private static ICameraUpdateFactoryDelegate getDelegate() {
         if (delegate == null)
             throw new IllegalStateException("CameraUpdateFactory is not initialized");
         return delegate;
+    }
+
+    @Hide
+    public static void setDelegate(@NonNull ICameraUpdateFactoryDelegate delegate) {
+        CameraUpdateFactory.delegate = delegate;
     }
 
     /**

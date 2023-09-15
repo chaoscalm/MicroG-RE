@@ -8,10 +8,9 @@ package com.google.android.gms.tapandpay.internal.firstparty;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SetActiveAccountRequest extends AutoSafeParcelable {
+    public static final Creator<SetActiveAccountRequest> CREATOR = new AutoCreator<>(SetActiveAccountRequest.class);
     @Field(2)
     public String accountName;
     @Field(3)
     public boolean allowSetupErrorMessage;
-
-    public static final Creator<SetActiveAccountRequest> CREATOR = new AutoCreator<>(SetActiveAccountRequest.class);
 }

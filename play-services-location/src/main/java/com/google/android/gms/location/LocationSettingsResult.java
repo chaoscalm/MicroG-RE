@@ -35,27 +35,13 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class LocationSettingsResult extends AutoSafeParcelable implements Result {
 
+    public static final Creator<LocationSettingsResult> CREATOR = new AutoCreator<LocationSettingsResult>(LocationSettingsResult.class);
     @SafeParceled(1000)
     private int versionCode = 1;
-
     @SafeParceled(1)
     private Status status;
-
     @SafeParceled(2)
     private LocationSettingsStates settings;
-
-
-    /**
-     * Retrieves the location settings states.
-     */
-    public LocationSettingsStates getLocationSettingsStates() {
-        return settings;
-    }
-
-    @Override
-    public Status getStatus() {
-        return status;
-    }
 
     @PublicApi(exclude = true)
     public LocationSettingsResult(LocationSettingsStates settings, Status status) {
@@ -68,5 +54,15 @@ public class LocationSettingsResult extends AutoSafeParcelable implements Result
         this.status = status;
     }
 
-    public static final Creator<LocationSettingsResult> CREATOR = new AutoCreator<LocationSettingsResult>(LocationSettingsResult.class);
+    /**
+     * Retrieves the location settings states.
+     */
+    public LocationSettingsStates getLocationSettingsStates() {
+        return settings;
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
 }

@@ -63,11 +63,6 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
  */
 @PublicApi
 public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptions.NoOptions> {
-    @PublicApi(exclude = true)
-    protected FusedLocationProviderClient(Context context) {
-        super(context, LocationServices.API);
-    }
-
     /**
      * Key used for the Bundle extra in {@link Location} object indicating whether this is a mock location.
      *
@@ -77,7 +72,6 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
     @Deprecated
     @NonNull
     public static String KEY_MOCK_LOCATION = "mockLocation";
-
     /**
      * Key used for the Bundle extra in {@link Location} object holding a float indicating the estimated vertical
      * accuracy of the location, in meters.
@@ -88,6 +82,11 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
     @Deprecated
     @NonNull
     public static String KEY_VERTICAL_ACCURACY = "verticalAccuracy";
+
+    @PublicApi(exclude = true)
+    protected FusedLocationProviderClient(Context context) {
+        super(context, LocationServices.API);
+    }
 
     /**
      * Flushes any locations currently being batched and sends them to all registered {@link LocationListener}s,

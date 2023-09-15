@@ -35,9 +35,9 @@ import java.util.Arrays;
 import java.util.EnumSet;
 
 public abstract class BaseService extends LifecycleService {
+    protected final String TAG;
     private final IGmsServiceBroker broker;
     private final EnumSet<GmsService> services;
-    protected final String TAG;
 
     public BaseService(String tag, GmsService supportedService, GmsService... supportedServices) {
         this.TAG = tag;

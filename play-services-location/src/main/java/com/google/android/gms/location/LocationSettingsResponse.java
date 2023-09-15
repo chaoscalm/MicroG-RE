@@ -27,16 +27,16 @@ import org.microg.gms.common.PublicApi;
  * The current location settings states can be accessed via {@link #getLocationSettingsStates()}. See {@link LocationSettingsResult} for more details.
  */
 public class LocationSettingsResponse extends Response<LocationSettingsResult> {
+    @PublicApi(exclude = true)
+    public LocationSettingsResponse(@NonNull LocationSettingsResult result) {
+        super(result);
+    }
+
     /**
      * Retrieves the location settings states.
      */
     @Nullable
     public LocationSettingsStates getLocationSettingsStates() {
         return getResult().getLocationSettingsStates();
-    }
-
-    @PublicApi(exclude = true)
-    public LocationSettingsResponse(@NonNull LocationSettingsResult result) {
-        super(result);
     }
 }

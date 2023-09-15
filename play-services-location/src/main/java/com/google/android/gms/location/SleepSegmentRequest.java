@@ -45,15 +45,15 @@ public class SleepSegmentRequest extends AutoSafeParcelable {
         this.requestedDataType = requestedDataType;
     }
 
-    public boolean equals(Object o) {
-        return o instanceof SleepSegmentRequest && ((SleepSegmentRequest) o).requestedDataType == requestedDataType;
-    }
-
     /**
      * Creates a default request that registers for both {@code SleepSegmentEvent} and {@code SleepClassifyEvent} data.
      */
     public static SleepSegmentRequest getDefaultSleepSegmentRequest() {
         return new SleepSegmentRequest(SEGMENT_AND_CLASSIFY_EVENTS);
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof SleepSegmentRequest && ((SleepSegmentRequest) o).requestedDataType == requestedDataType;
     }
 
     /**

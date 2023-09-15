@@ -18,9 +18,7 @@ public class ProxyRequest extends AutoSafeParcelable {
     public static final int HTTP_METHOD_OPTIONS = 5;
     public static final int HTTP_METHOD_TRACE = 6;
     public static final int HTTP_METHOD_PATCH = 7;
-
-    @Field(1000)
-    private int versionCode = 2;
+    public static final Creator<ProxyRequest> CREATOR = new AutoCreator<>(ProxyRequest.class);
     @Field(1)
     public String url;
     @Field(2)
@@ -31,11 +29,11 @@ public class ProxyRequest extends AutoSafeParcelable {
     public byte[] body;
     @Field(5)
     public Bundle headers;
+    @Field(1000)
+    private int versionCode = 2;
 
     @Override
     public String toString() {
         return url;
     }
-
-    public static final Creator<ProxyRequest> CREATOR = new AutoCreator<>(ProxyRequest.class);
 }

@@ -91,6 +91,26 @@ public interface Geofence {
     int getTransitionTypes();
 
     /**
+     * Geofence transition event.
+     */
+    @Target({ElementType.TYPE_USE})
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL})
+    @interface GeofenceTransition {
+
+    }
+
+    /**
+     * Geofence transition types of interest, as either 0 or a bitwise-OR of {@code GEOFENCE_TRANSITION_} flags.
+     */
+    @Target({ElementType.TYPE_USE})
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(value = {GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL}, flag = true)
+    @interface TransitionTypes {
+
+    }
+
+    /**
      * A builder that builds {@link Geofence}.
      */
     class Builder {
@@ -207,25 +227,5 @@ public interface Geofence {
             this.transitionTypes = transitionTypes;
             return this;
         }
-    }
-
-    /**
-     * Geofence transition event.
-     */
-    @Target({ElementType.TYPE_USE})
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL})
-    @interface GeofenceTransition {
-
-    }
-
-    /**
-     * Geofence transition types of interest, as either 0 or a bitwise-OR of {@code GEOFENCE_TRANSITION_} flags.
-     */
-    @Target({ElementType.TYPE_USE})
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef(value = {GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL}, flag = true)
-    @interface TransitionTypes {
-
     }
 }

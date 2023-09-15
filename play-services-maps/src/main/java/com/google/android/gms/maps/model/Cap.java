@@ -10,6 +10,7 @@ import android.os.IBinder;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Cap extends AutoSafeParcelable {
+    public static final Creator<Cap> CREATOR = new AutoCreator<>(Cap.class);
     @Field(2)
     private int type;
     @Field(3)
@@ -17,5 +18,4 @@ public class Cap extends AutoSafeParcelable {
     private BitmapDescriptor bitmapDescriptor;
     @Field(4)
     private float bitmapRefWidth;
-    public static final Creator<Cap> CREATOR = new AutoCreator<>(Cap.class);
 }

@@ -30,26 +30,22 @@ import com.google.android.gms.cast.framework.CastOptions;
 import com.google.android.gms.cast.framework.IAppVisibilityListener;
 import com.google.android.gms.cast.framework.ICastContext;
 import com.google.android.gms.cast.framework.IDiscoveryManager;
-import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionProvider;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CastContextImpl extends ICastContext.Stub {
     private static final String TAG = CastContextImpl.class.getSimpleName();
-
+    public ISessionProvider defaultSessionProvider;
     private SessionManagerImpl sessionManager;
     private DiscoveryManagerImpl discoveryManager;
-
     private Context context;
     private CastOptions options;
     private IMediaRouter router;
     private Map<String, ISessionProvider> sessionProviders = new HashMap<String, ISessionProvider>();
-    public ISessionProvider defaultSessionProvider;
-
     private MediaRouteSelector mergedSelector;
 
     public CastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map<String, IBinder> sessionProviders) throws RemoteException {

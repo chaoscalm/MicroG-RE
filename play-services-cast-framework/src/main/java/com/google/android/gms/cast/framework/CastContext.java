@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.Tasks;
 
 import org.microg.gms.cast.CastDynamiteModule;
 import org.microg.gms.cast.CastSessionProvider;
-import org.microg.gms.common.PublicApi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -38,6 +37,29 @@ public class CastContext {
      * {@code AndroidManifest.xml}.
      */
     public static final String OPTIONS_PROVIDER_CLASS_NAME_KEY = "com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME";
+    private static volatile CastContext sharedInstance;
+    private Context appContext;
+    private CastOptions castOptions;
+    private IMediaRouter mediaRouter;
+    private List<SessionProvider> additionalSessionProviders;
+    private CastSessionProvider castSessionProvider;
+    private ICastContext delegate;
+    private SessionManager sessionManager;
+    private DiscoveryManager discoveryManager;
+    private CastContext(Context appContext, CastOptions castOptions, @Nullable List<SessionProvider> additionalSessionProviders) throws ModuleUnavailableException {
+        this.appContext = appContext;
+        this.castOptions = castOptions;
+        this.mediaRouter = null; // TODO
+        this.additionalSessionProviders = additionalSessionProviders;
+        this.castSessionProvider = new CastSessionProvider(appContext, castOptions);
+        try {
+            this.delegate = CastDynamiteModule.newCastContext(appContext, castOptions, mediaRouter, getSessionProviderMap());
+            this.sessionManager = new SessionManager(appContext, delegate.getSessionManagerImpl());
+            this.discoveryManager = new DiscoveryManager(appContext, delegate.getDiscoveryManagerImpl());
+        } catch (RemoteException e) {
+            throw new IllegalStateException("Failed to call dynamite module", e);
+        }
+    }
 
     /**
      * Returns the shared instance of {@link CastContext}. This method must be called after {@link CastContext} is initialized through
@@ -119,6 +141,21 @@ public class CastContext {
         });
     }
 
+    private static OptionsProvider getOptionsProvider(Context context) {
+        try {
+            Bundle metaData = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA).metaData;
+            String optionsProviderClassName = metaData.getString(OPTIONS_PROVIDER_CLASS_NAME_KEY);
+            if (optionsProviderClassName != null) {
+                return Class.forName(optionsProviderClassName).asSubclass(OptionsProvider.class).getDeclaredConstructor().newInstance();
+            }
+            throw new IllegalStateException("The fully qualified name of the implementation of OptionsProvider must be provided as a metadata in the AndroidManifest.xml with key com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME.");
+        } catch (PackageManager.NameNotFoundException | ClassNotFoundException |
+                 NoSuchMethodException | IllegalAccessException | InstantiationException |
+                 InvocationTargetException | NullPointerException e) {
+            throw new IllegalStateException("Failed to initialize CastContext.", e);
+        }
+    }
+
     /**
      * Returns the {@link SessionManager}, never returns {@code null}.
      *
@@ -127,31 +164,6 @@ public class CastContext {
     @NonNull
     public SessionManager getSessionManager() {
         return sessionManager;
-    }
-
-    private static volatile CastContext sharedInstance;
-    private Context appContext;
-    private CastOptions castOptions;
-    private IMediaRouter mediaRouter;
-    private List<SessionProvider> additionalSessionProviders;
-    private CastSessionProvider castSessionProvider;
-    private ICastContext delegate;
-    private SessionManager sessionManager;
-    private DiscoveryManager discoveryManager;
-
-    private CastContext(Context appContext, CastOptions castOptions, @Nullable List<SessionProvider> additionalSessionProviders) throws ModuleUnavailableException {
-        this.appContext = appContext;
-        this.castOptions = castOptions;
-        this.mediaRouter = null; // TODO
-        this.additionalSessionProviders = additionalSessionProviders;
-        this.castSessionProvider = new CastSessionProvider(appContext, castOptions);
-        try {
-            this.delegate = CastDynamiteModule.newCastContext(appContext, castOptions, mediaRouter, getSessionProviderMap());
-            this.sessionManager = new SessionManager(appContext, delegate.getSessionManagerImpl());
-            this.discoveryManager = new DiscoveryManager(appContext, delegate.getDiscoveryManagerImpl());
-        } catch (RemoteException e) {
-            throw new IllegalStateException("Failed to call dynamite module", e);
-        }
     }
 
     private Map<String, IBinder> getSessionProviderMap() {
@@ -172,21 +184,6 @@ public class CastContext {
             }
         }
         return map;
-    }
-
-    private static OptionsProvider getOptionsProvider(Context context) {
-        try {
-            Bundle metaData = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA).metaData;
-            String optionsProviderClassName = metaData.getString(OPTIONS_PROVIDER_CLASS_NAME_KEY);
-            if (optionsProviderClassName != null) {
-                return Class.forName(optionsProviderClassName).asSubclass(OptionsProvider.class).getDeclaredConstructor().newInstance();
-            }
-            throw new IllegalStateException("The fully qualified name of the implementation of OptionsProvider must be provided as a metadata in the AndroidManifest.xml with key com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME.");
-        } catch (PackageManager.NameNotFoundException | ClassNotFoundException |
-                 NoSuchMethodException | IllegalAccessException | InstantiationException |
-                 InvocationTargetException | NullPointerException e) {
-            throw new IllegalStateException("Failed to initialize CastContext.", e);
-        }
     }
 
     @NonNull

@@ -18,12 +18,17 @@ import java.util.Arrays;
  */
 @PublicApi
 public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOptions {
+    public static final Creator<BrowserPublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(BrowserPublicKeyCredentialRequestOptions.class);
     @Field(2)
     private PublicKeyCredentialRequestOptions delegate;
     @Field(3)
     private Uri origin;
     @Field(4)
     private byte[] clientDataHash;
+
+    public static BrowserPublicKeyCredentialRequestOptions deserializeFromBytes(byte[] serializedBytes) {
+        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+    }
 
     @Override
     public AuthenticationExtensions getAuthenticationExtensions() {
@@ -148,10 +153,4 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
             return options;
         }
     }
-
-    public static BrowserPublicKeyCredentialRequestOptions deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
-    }
-
-    public static final Creator<BrowserPublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(BrowserPublicKeyCredentialRequestOptions.class);
 }

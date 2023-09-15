@@ -9,9 +9,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class PlayLoggerContext extends AutoSafeParcelable {
 
-    @Field(1)
-    private int versionCode = 1;
-
+    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
     @Field(2)
     public final String packageName;
 
@@ -47,6 +45,8 @@ public class PlayLoggerContext extends AutoSafeParcelable {
 
     @Field(13)
     public final Integer piiLevelset;
+    @Field(1)
+    private int versionCode = 1;
 
     private PlayLoggerContext() {
         packageName = uploadAccount = logSourceName = loggingId = null;
@@ -87,6 +87,4 @@ public class PlayLoggerContext extends AutoSafeParcelable {
         sb.append(']');
         return sb.toString();
     }
-
-    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
 }

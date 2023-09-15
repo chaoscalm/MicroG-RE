@@ -15,6 +15,7 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public class EmailAuthCredential extends AuthCredential {
+    public static final Creator<EmailAuthCredential> CREATOR = new AutoCreator<>(EmailAuthCredential.class);
     @Field(1)
     @PublicApi(exclude = true)
     public String email;
@@ -49,6 +50,4 @@ public class EmailAuthCredential extends AuthCredential {
         }
         return "emailLink";
     }
-
-    public static final Creator<EmailAuthCredential> CREATOR = new AutoCreator<>(EmailAuthCredential.class);
 }

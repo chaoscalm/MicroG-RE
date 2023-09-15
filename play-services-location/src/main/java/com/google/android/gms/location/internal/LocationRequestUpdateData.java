@@ -19,10 +19,7 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
 
     public static final int REQUEST_UPDATES = 1;
     public static final int REMOVE_UPDATES = 2;
-
-    @Field(1000)
-    private int versionCode;
-
+    public static final Creator<LocationRequestUpdateData> CREATOR = new AutoCreator<LocationRequestUpdateData>(LocationRequestUpdateData.class);
     @Field(1)
     public int opCode;
 
@@ -43,6 +40,8 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
 
     @Field(8)
     public String listenerId;
+    @Field(1000)
+    private int versionCode;
 
     @Override
     public String toString() {
@@ -55,6 +54,4 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
                 ", fusedLocationProviderCallback=" + (fusedLocationProviderCallback != null ? fusedLocationProviderCallback.asBinder() : null) +
                 '}';
     }
-
-    public static final Creator<LocationRequestUpdateData> CREATOR = new AutoCreator<LocationRequestUpdateData>(LocationRequestUpdateData.class);
 }

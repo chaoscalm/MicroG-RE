@@ -15,6 +15,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class PackageConfiguration extends AutoSafeParcelable {
+    public static final Creator<PackageConfiguration> CREATOR = new AutoCreator<>(PackageConfiguration.class);
     @Field(1)
     private Bundle values;
 
@@ -52,6 +53,4 @@ public class PackageConfiguration extends AutoSafeParcelable {
             return new PackageConfiguration(values);
         }
     }
-
-    public static final Creator<PackageConfiguration> CREATOR = new AutoCreator<>(PackageConfiguration.class);
 }

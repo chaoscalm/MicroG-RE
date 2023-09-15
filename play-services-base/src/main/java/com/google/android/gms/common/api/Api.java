@@ -70,13 +70,6 @@ public final class Api<O extends Api.ApiOptions> {
         }
 
         /**
-         * {@link ApiOptions} implementation for {@link Api}s that do not take any options.
-         */
-        @PublicApi
-        final class NoOptions implements NotRequiredOptions {
-        }
-
-        /**
          * Base interface for {@link ApiOptions} that are optional.
          */
         @PublicApi
@@ -97,6 +90,13 @@ public final class Api<O extends Api.ApiOptions> {
         @PublicApi
         interface HasGoogleSignInAccountOptions extends HasOptions {
             GoogleSignInAccount getGoogleSignInAccount();
+        }
+
+        /**
+         * {@link ApiOptions} implementation for {@link Api}s that do not take any options.
+         */
+        @PublicApi
+        final class NoOptions implements NotRequiredOptions {
         }
     }
 

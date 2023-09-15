@@ -10,14 +10,13 @@ package com.google.android.gms.auth.api.credentials;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 @PublicApi
 public class CredentialPickerConfig extends AutoSafeParcelable {
 
+    public static final Creator<CredentialPickerConfig> CREATOR = new AutoCreator<CredentialPickerConfig>(CredentialPickerConfig.class);
     @Field(1000)
     private int versionCode = 1;
-
     @Field(1)
     private boolean showAddAccountButton;
     @Field(2)
@@ -91,6 +90,4 @@ public class CredentialPickerConfig extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<CredentialPickerConfig> CREATOR = new AutoCreator<CredentialPickerConfig>(CredentialPickerConfig.class);
 }

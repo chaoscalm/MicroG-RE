@@ -17,7 +17,6 @@
 package org.microg.gms.maps.vtm.markup;
 
 import android.os.RemoteException;
-
 import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
@@ -62,19 +61,13 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setCenter(LatLng center) throws RemoteException {
-        options.center(center);
-        listener.update(this);
-    }
-
-    @Override
     public LatLng getCenter() throws RemoteException {
         return options.getCenter();
     }
 
     @Override
-    public void setRadius(double radius) throws RemoteException {
-        options.radius(radius);
+    public void setCenter(LatLng center) throws RemoteException {
+        options.center(center);
         listener.update(this);
     }
 
@@ -84,8 +77,8 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setStrokeWidth(float width) throws RemoteException {
-        options.strokeWidth(width);
+    public void setRadius(double radius) throws RemoteException {
+        options.radius(radius);
         listener.update(this);
     }
 
@@ -95,8 +88,8 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setStrokeColor(int color) throws RemoteException {
-        options.strokeColor(color);
+    public void setStrokeWidth(float width) throws RemoteException {
+        options.strokeWidth(width);
         listener.update(this);
     }
 
@@ -106,8 +99,8 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setFillColor(int color) throws RemoteException {
-        options.fillColor(color);
+    public void setStrokeColor(int color) throws RemoteException {
+        options.strokeColor(color);
         listener.update(this);
     }
 
@@ -117,8 +110,8 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setZIndex(float zIndex) throws RemoteException {
-        options.zIndex(zIndex);
+    public void setFillColor(int color) throws RemoteException {
+        options.fillColor(color);
         listener.update(this);
     }
 
@@ -128,14 +121,20 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setVisible(boolean visible) throws RemoteException {
-        options.visible(visible);
+    public void setZIndex(float zIndex) throws RemoteException {
+        options.zIndex(zIndex);
         listener.update(this);
     }
 
     @Override
     public boolean isVisible() {
         return options.isVisible();
+    }
+
+    @Override
+    public void setVisible(boolean visible) throws RemoteException {
+        options.visible(visible);
+        listener.update(this);
     }
 
     @Override
@@ -149,18 +148,13 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setClickable(boolean clickable) throws RemoteException {
-        Log.d(TAG, "unimplemented method: setClickable");
-    }
-
-    @Override
     public boolean isClickable() throws RemoteException {
         return false;
     }
 
     @Override
-    public void setStrokePattern(List<PatternItem> object) throws RemoteException {
-        Log.d(TAG, "unimplemented method: setStrokePattern");
+    public void setClickable(boolean clickable) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setClickable");
     }
 
     @Override
@@ -170,14 +164,19 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
-    public void setTag(IObjectWrapper object) throws RemoteException {
-        Log.d(TAG, "unimplemented method: setTag");
+    public void setStrokePattern(List<PatternItem> object) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setStrokePattern");
     }
 
     @Override
     public IObjectWrapper getTag() throws RemoteException {
         Log.d(TAG, "unimplemented method: getTag");
         return ObjectWrapper.wrap(null);
+    }
+
+    @Override
+    public void setTag(IObjectWrapper object) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setTag");
     }
 
     @Override

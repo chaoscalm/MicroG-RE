@@ -45,29 +45,31 @@ import java.util.Map;
  */
 @PublicApi(until = "1")
 public class DataHolder extends AutoSafeParcelable implements Closeable {
-    @SafeParceled(1000)
-    private int versionCode = 1;
-
-    @SafeParceled(1)
-    private final String[] columns;
-
-    @SafeParceled(2)
-    private final CursorWindow[] windows;
-
-    @SafeParceled(3)
-    private final int statusCode;
-
-    @SafeParceled(4)
-    private final Bundle metadata;
-
-    private boolean closed = false;
-    private Map<String, Integer> columnIndices;
-
+    public static final Creator<DataHolder> CREATOR = new AutoCreator<DataHolder>(DataHolder.class) {
+        @Override
+        public DataHolder createFromParcel(Parcel parcel) {
+            DataHolder res = super.createFromParcel(parcel);
+            res.validateContents();
+            return res;
+        }
+    };
     protected static final int FIELD_TYPE_NULL = 0;
     protected static final int FIELD_TYPE_INTEGER = 1;
     protected static final int FIELD_TYPE_FLOAT = 2;
     protected static final int FIELD_TYPE_STRING = 3;
     protected static final int FIELD_TYPE_BLOB = 4;
+    @SafeParceled(1)
+    private final String[] columns;
+    @SafeParceled(2)
+    private final CursorWindow[] windows;
+    @SafeParceled(3)
+    private final int statusCode;
+    @SafeParceled(4)
+    private final Bundle metadata;
+    @SafeParceled(1000)
+    private int versionCode = 1;
+    private boolean closed = false;
+    private Map<String, Integer> columnIndices;
 
     private DataHolder() {
         columns = null;
@@ -179,35 +181,6 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
         throw new RuntimeException("Unsupported cursor on this platform!");
     }
 
-    /**
-     * Closes the data holder, releasing all of its resources and making it completely invalid.
-     */
-    @Override
-    public void close() {
-        synchronized (this) {
-            if (!closed) {
-                closed = true;
-                for (CursorWindow window : windows) {
-                    window.close();
-                }
-            }
-        }
-    }
-
-    /**
-     * Copies the String content in the given column at the provided position into a {@link CharArrayBuffer}.
-     * This will throw an {@link IllegalArgumentException} if the column does not exist, the
-     * position is invalid, or the data holder has been closed.
-     *
-     * @param column      The column to retrieve.
-     * @param row         The row to retrieve the data from.
-     * @param windowIndex Index of the cursor window to extract the data from.
-     * @param dataOut     The {@link CharArrayBuffer} to copy into.
-     */
-    public void copyToBuffer(String column, int row, int windowIndex, CharArrayBuffer dataOut) {
-        throw new RuntimeException("Not yet available");
-    }
-
     @SuppressWarnings("deprecation")
     private static CursorWindow[] createCursorWindows(Builder builder) {
         if (builder.columns.length == 0) return new CursorWindow[0];
@@ -298,6 +271,35 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
         }
         cursor.close();
         return windows.toArray(new CursorWindow[windows.size()]);
+    }
+
+    /**
+     * Closes the data holder, releasing all of its resources and making it completely invalid.
+     */
+    @Override
+    public void close() {
+        synchronized (this) {
+            if (!closed) {
+                closed = true;
+                for (CursorWindow window : windows) {
+                    window.close();
+                }
+            }
+        }
+    }
+
+    /**
+     * Copies the String content in the given column at the provided position into a {@link CharArrayBuffer}.
+     * This will throw an {@link IllegalArgumentException} if the column does not exist, the
+     * position is invalid, or the data holder has been closed.
+     *
+     * @param column      The column to retrieve.
+     * @param row         The row to retrieve the data from.
+     * @param windowIndex Index of the cursor window to extract the data from.
+     * @param dataOut     The {@link CharArrayBuffer} to copy into.
+     */
+    public void copyToBuffer(String column, int row, int windowIndex, CharArrayBuffer dataOut) {
+        throw new RuntimeException("Not yet available");
     }
 
     /**
@@ -541,13 +543,4 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
             return this;
         }
     }
-
-    public static final Creator<DataHolder> CREATOR = new AutoCreator<DataHolder>(DataHolder.class) {
-        @Override
-        public DataHolder createFromParcel(Parcel parcel) {
-            DataHolder res = super.createFromParcel(parcel);
-            res.validateContents();
-            return res;
-        }
-    };
 }

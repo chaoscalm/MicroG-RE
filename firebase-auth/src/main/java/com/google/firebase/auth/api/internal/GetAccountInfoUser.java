@@ -12,6 +12,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import java.util.List;
 
 public class GetAccountInfoUser extends AutoSafeParcelable {
+    public static final Creator<GetAccountInfoUser> CREATOR = new AutoCreator<>(GetAccountInfoUser.class);
     @Field(2)
     public String localId;
     @Field(3)
@@ -38,6 +39,4 @@ public class GetAccountInfoUser extends AutoSafeParcelable {
     public DefaultOAuthCredential defaultOAuthCredential;
     @Field(14)
     public List<MfaInfo> mfaInfoList;
-
-    public static final Creator<GetAccountInfoUser> CREATOR = new AutoCreator<>(GetAccountInfoUser.class);
 }

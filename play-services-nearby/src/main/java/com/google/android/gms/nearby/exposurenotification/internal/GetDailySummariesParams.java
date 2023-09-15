@@ -10,6 +10,7 @@ import com.google.android.gms.nearby.exposurenotification.DailySummariesConfig;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetDailySummariesParams extends AutoSafeParcelable {
+    public static final Creator<GetDailySummariesParams> CREATOR = new AutoCreator<>(GetDailySummariesParams.class);
     @Field(1)
     public IDailySummaryListCallback callback;
     @Field(2)
@@ -22,6 +23,4 @@ public class GetDailySummariesParams extends AutoSafeParcelable {
         this.callback = callback;
         this.config = config;
     }
-
-    public static final Creator<GetDailySummariesParams> CREATOR = new AutoCreator<>(GetDailySummariesParams.class);
 }

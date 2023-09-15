@@ -16,7 +16,6 @@
 
 package org.microg.gms.maps.mapbox.model
 
-import android.util.Log
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Options

@@ -19,6 +19,9 @@ public class UpdateListenerLifecycleObserver {
     private static boolean activityLifecycleCallbacksRegistered = false;
     private List<WeakReference<UpdateListener<?>>> list = new ArrayList<>();
 
+    private UpdateListenerLifecycleObserver() {
+    }
+
     public synchronized static UpdateListenerLifecycleObserver getObserverForActivity(Activity activity) {
         WeakReference<UpdateListenerLifecycleObserver> ref = map.get(activity);
         if (ref != null) {
@@ -36,9 +39,6 @@ public class UpdateListenerLifecycleObserver {
         UpdateListenerLifecycleObserver newInstance = new UpdateListenerLifecycleObserver();
         map.put(activity, new WeakReference<>(newInstance));
         return newInstance;
-    }
-
-    private UpdateListenerLifecycleObserver() {
     }
 
     public synchronized void registerActivityStopListener(UpdateListener<?> listener) {

@@ -23,14 +23,14 @@ import org.microg.safeparcel.SafeParceled;
 
 public class RequestIndexingResponse extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode;
-
+    public static Creator<RequestIndexingResponse> CREATOR = new AutoCreator<RequestIndexingResponse>(RequestIndexingResponse.class);
     @SafeParceled(1)
     public final Status status;
 
     @SafeParceled(2)
     public final boolean scheduledIndexing;
+    @SafeParceled(1000)
+    private int versionCode;
 
     private RequestIndexingResponse() {
         status = null;
@@ -41,6 +41,4 @@ public class RequestIndexingResponse extends AutoSafeParcelable {
         this.status = status;
         this.scheduledIndexing = scheduledIndexing;
     }
-
-    public static Creator<RequestIndexingResponse> CREATOR = new AutoCreator<RequestIndexingResponse>(RequestIndexingResponse.class);
 }

@@ -8,6 +8,7 @@ package com.google.android.gms.maps.model;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class StyleSpan extends AutoSafeParcelable {
+    public static final Creator<StyleSpan> CREATOR = new AutoCreator<>(StyleSpan.class);
     @Field(2)
     private StrokeStyle style;
     @Field(3)
@@ -20,6 +21,4 @@ public class StyleSpan extends AutoSafeParcelable {
     public StrokeStyle getStyle() {
         return style;
     }
-
-    public static final Creator<StyleSpan> CREATOR = new AutoCreator<>(StyleSpan.class);
 }

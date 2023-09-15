@@ -8,6 +8,7 @@ package com.google.android.gms.common;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Feature extends AutoSafeParcelable {
+    public static final Creator<Feature> CREATOR = new AutoSafeParcelable.AutoCreator<>(Feature.class);
     @Field(1)
     private String name;
     @Field(2)
@@ -31,6 +32,4 @@ public class Feature extends AutoSafeParcelable {
         if (version == -1) return oldVersion;
         return version;
     }
-
-    public static final Creator<Feature> CREATOR = new AutoSafeParcelable.AutoCreator<>(Feature.class);
 }

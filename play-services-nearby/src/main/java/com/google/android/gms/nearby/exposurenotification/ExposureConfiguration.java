@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 @Deprecated
 public class ExposureConfiguration extends AutoSafeParcelable {
+    public static final Creator<ExposureConfiguration> CREATOR = new AutoCreator<>(ExposureConfiguration.class);
     @Field(1)
     private int minimumRiskScore;
     @Field(2)
@@ -208,6 +209,4 @@ public class ExposureConfiguration extends AutoSafeParcelable {
             return new ExposureConfiguration(minimumRiskScore, attenuationScores, attenuationWeight, daysSinceLastExposureScores, daysSinceLastExposureWeight, durationScores, durationWeight, transmissionRiskScores, transmissionRiskWeight, durationAtAttenuationThresholds);
         }
     }
-
-    public static final Creator<ExposureConfiguration> CREATOR = new AutoCreator<>(ExposureConfiguration.class);
 }

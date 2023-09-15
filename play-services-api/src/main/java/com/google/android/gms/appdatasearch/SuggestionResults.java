@@ -20,8 +20,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class SuggestionResults extends AutoSafeParcelable {
-    @SafeParceled(1000)
-    private int versionCode;
+    public static final Creator<SuggestionResults> CREATOR = new AutoCreator<SuggestionResults>(SuggestionResults.class);
     @SafeParceled(1)
     public final String errorMessage;
 
@@ -29,6 +28,8 @@ public class SuggestionResults extends AutoSafeParcelable {
     public final String[] s1;
     @SafeParceled(3)
     public final String[] s2;
+    @SafeParceled(1000)
+    private int versionCode;
 
     private SuggestionResults() {
         versionCode = 2;
@@ -49,6 +50,4 @@ public class SuggestionResults extends AutoSafeParcelable {
         this.s1 = s1;
         this.s2 = s2;
     }
-
-    public static final Creator<SuggestionResults> CREATOR = new AutoCreator<SuggestionResults>(SuggestionResults.class);
 }

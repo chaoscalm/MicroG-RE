@@ -44,7 +44,7 @@ public class GeofencingRequest extends AutoSafeParcelable {
      * added and if the device is already inside that geofence for some time.
      */
     public static final int INITIAL_TRIGGER_DWELL = 4;
-
+    public static final Creator<GeofencingRequest> CREATOR = new AutoCreator<>(GeofencingRequest.class);
     @Field(value = 1, subClass = ParcelableGeofence.class)
     private List<Geofence> geofences;
     @Field(2)
@@ -74,6 +74,11 @@ public class GeofencingRequest extends AutoSafeParcelable {
         return initialTrigger;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "GeofencingRequest[geofences=" + this.geofences + ", initialTrigger=" + this.initialTrigger + ", tag=" + this.tag + ", attributionTag=" + this.contextAttributionTag + "]";
+    }
 
     /**
      * The triggering behavior at the moment when the geofences are added. It's either 0, or a bit-wise OR of {@link GeofencingRequest#INITIAL_TRIGGER_ENTER},
@@ -156,12 +161,4 @@ public class GeofencingRequest extends AutoSafeParcelable {
             return request;
         }
     }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "GeofencingRequest[geofences=" + this.geofences + ", initialTrigger=" + this.initialTrigger + ", tag=" + this.tag + ", attributionTag=" + this.contextAttributionTag + "]";
-    }
-
-    public static final Creator<GeofencingRequest> CREATOR = new AutoCreator<>(GeofencingRequest.class);
 }

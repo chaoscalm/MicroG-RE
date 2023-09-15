@@ -52,6 +52,15 @@ public class OssLicensesMenuActivity extends AppCompatActivity implements Loader
     private boolean destroyed;
     private ArrayAdapter<License> licensesAdapter;
 
+    /**
+     * Sets the title for {@link OssLicensesMenuActivity}.
+     *
+     * @param title the title for this activity
+     */
+    public static void setActivityTitle(String title) {
+        OssLicensesMenuActivity.TITLE = title;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,30 +110,6 @@ public class OssLicensesMenuActivity extends AppCompatActivity implements Loader
             LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
         } else {
             setContentView(R.layout.license_menu_activity_no_licenses);
-        }
-    }
-
-    private static class LicensesAdapter extends ArrayAdapter<License> {
-        private final LayoutInflater layoutInflater;
-        private final Resources resources;
-        private final String layoutPackage;
-
-        public LicensesAdapter(@NonNull Context context, @NonNull LayoutInflater layoutInflater, @NonNull Resources resources, @NonNull String layoutPackage) {
-            super(context, 0);
-            this.layoutInflater = layoutInflater;
-            this.resources = resources;
-            this.layoutPackage = layoutPackage;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
-            if (view == null) {
-                view = layoutInflater.inflate(resources.getXml(resources.getIdentifier("libraries_social_licenses_license", "layout", layoutPackage)), null, false);
-            }
-            TextView textView = view.findViewById(resources.getIdentifier("license", "id", layoutPackage));
-            textView.setText(getItem(position).toString());
-            return view;
         }
     }
 
@@ -199,12 +184,27 @@ public class OssLicensesMenuActivity extends AppCompatActivity implements Loader
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Sets the title for {@link OssLicensesMenuActivity}.
-     *
-     * @param title the title for this activity
-     */
-    public static void setActivityTitle(String title) {
-        OssLicensesMenuActivity.TITLE = title;
+    private static class LicensesAdapter extends ArrayAdapter<License> {
+        private final LayoutInflater layoutInflater;
+        private final Resources resources;
+        private final String layoutPackage;
+
+        public LicensesAdapter(@NonNull Context context, @NonNull LayoutInflater layoutInflater, @NonNull Resources resources, @NonNull String layoutPackage) {
+            super(context, 0);
+            this.layoutInflater = layoutInflater;
+            this.resources = resources;
+            this.layoutPackage = layoutPackage;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
+            if (view == null) {
+                view = layoutInflater.inflate(resources.getXml(resources.getIdentifier("libraries_social_licenses_license", "layout", layoutPackage)), null, false);
+            }
+            TextView textView = view.findViewById(resources.getIdentifier("license", "id", layoutPackage));
+            textView.setText(getItem(position).toString());
+            return view;
+        }
     }
 }

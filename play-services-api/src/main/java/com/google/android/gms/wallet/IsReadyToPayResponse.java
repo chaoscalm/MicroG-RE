@@ -8,6 +8,7 @@ package com.google.android.gms.wallet;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class IsReadyToPayResponse extends AutoSafeParcelable {
+    public static final Creator<IsReadyToPayResponse> CREATOR = new AutoCreator<>(IsReadyToPayResponse.class);
     @Field(1)
     public boolean result;
     @Field(2)
@@ -20,6 +21,4 @@ public class IsReadyToPayResponse extends AutoSafeParcelable {
         this.result = result;
         this.json = json;
     }
-
-    public static final Creator<IsReadyToPayResponse> CREATOR = new AutoCreator<>(IsReadyToPayResponse.class);
 }

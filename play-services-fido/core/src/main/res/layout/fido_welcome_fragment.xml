@@ -4,7 +4,6 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -52,9 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@{@string/fido_welcome_privileged_info(data.privilegedCallerName, data.appName)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:visibility="@{data.privilegedCallerName != null ? View.VISIBLE : View.GONE}"
-            android:text="@{@string/fido_welcome_privileged_info(data.privilegedCallerName, data.appName)}"
             tools:text="@string/fido_welcome_privileged_info" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -62,8 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:visibility="@{data.requiresPrivilege ? View.VISIBLE : View.GONE}"
             android:text="@{@string/fido_welcome_privileged_check(data.privilegedCallerName)}"
+            android:visibility="@{data.requiresPrivilege ? View.VISIBLE : View.GONE}"
             tools:text="@string/fido_welcome_privileged_check" />
 
         <LinearLayout

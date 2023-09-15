@@ -23,6 +23,7 @@ import java.util.List;
  */
 @PublicApi
 public class PolygonOptions extends AutoSafeParcelable {
+    public static Creator<PolygonOptions> CREATOR = new AutoCreator<PolygonOptions>(PolygonOptions.class);
     @Field(1)
     private int versionCode = 1;
     @Field(value = 2, subClass = LatLng.class)
@@ -297,6 +298,4 @@ public class PolygonOptions extends AutoSafeParcelable {
         this.zIndex = zIndex;
         return this;
     }
-
-    public static Creator<PolygonOptions> CREATOR = new AutoCreator<PolygonOptions>(PolygonOptions.class);
 }

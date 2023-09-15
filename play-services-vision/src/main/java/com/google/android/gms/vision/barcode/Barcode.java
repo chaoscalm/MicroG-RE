@@ -166,7 +166,7 @@ public class Barcode extends AutoSafeParcelable {
      * and also specifies a detected Barcode's {@link #format} via the format field.
      */
     public static final int AZTEC = 4096;
-
+    public static final Creator<Barcode> CREATOR = new AutoCreator<>(Barcode.class);
     @Field(1)
     private final int versionCode = 1;
     /**
@@ -295,9 +295,7 @@ public class Barcode extends AutoSafeParcelable {
         public static final int UNKNOWN = 0;
         public static final int WORK = 1;
         public static final int HOME = 2;
-
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<Address> CREATOR = new AutoCreator<>(Address.class);
         @Field(2)
         public int type;
         /**
@@ -305,16 +303,15 @@ public class Barcode extends AutoSafeParcelable {
          */
         @Field(3)
         public String[] addressLines;
-
-        public static Creator<Address> CREATOR = new AutoCreator<>(Address.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * DateTime data type used in calendar events. If hours/minutes/seconds are not specified in the barcode value, they will be set to -1.
      */
     public static class CalendarDateTime extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<CalendarDateTime> CREATOR = new AutoCreator<>(CalendarDateTime.class);
         @Field(2)
         public int year;
         @Field(3)
@@ -331,16 +328,15 @@ public class Barcode extends AutoSafeParcelable {
         public boolean isUtc;
         @Field(9)
         public String rawValue;
-
-        public static Creator<CalendarDateTime> CREATOR = new AutoCreator<>(CalendarDateTime.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * A calendar event extracted from QRCode.
      */
     public static class CalendarEvent extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<CalendarEvent> CREATOR = new AutoCreator<>(CalendarEvent.class);
         @Field(2)
         public String summary;
         @Field(3)
@@ -355,16 +351,15 @@ public class Barcode extends AutoSafeParcelable {
         public Barcode.CalendarDateTime start;
         @Field(8)
         public Barcode.CalendarDateTime end;
-
-        public static Creator<CalendarEvent> CREATOR = new AutoCreator<>(CalendarEvent.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * A person's or organization's business card. For example a VCARD.
      */
     public static class ContactInfo extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<ContactInfo> CREATOR = new AutoCreator<>(ContactInfo.class);
         @Field(2)
         public Barcode.PersonName name;
         @Field(3)
@@ -379,16 +374,15 @@ public class Barcode extends AutoSafeParcelable {
         public String[] urls;
         @Field(8)
         public Barcode.Address[] addresses;
-
-        public static Creator<ContactInfo> CREATOR = new AutoCreator<>(ContactInfo.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * A driver license or ID card.
      */
     public static class DriverLicense extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<DriverLicense> CREATOR = new AutoCreator<>(DriverLicense.class);
         /**
          * "DL" for driver licenses, "ID" for ID cards.
          */
@@ -438,8 +432,8 @@ public class Barcode extends AutoSafeParcelable {
          */
         @Field(15)
         public String issuingCountry;
-
-        public static Creator<DriverLicense> CREATOR = new AutoCreator<>(DriverLicense.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
@@ -452,9 +446,7 @@ public class Barcode extends AutoSafeParcelable {
         public static final int UNKNOWN = 0;
         public static final int WORK = 1;
         public static final int HOME = 2;
-
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<Email> CREATOR = new AutoCreator<>(Email.class);
         @Field(2)
         public int type;
         @Field(3)
@@ -463,30 +455,28 @@ public class Barcode extends AutoSafeParcelable {
         public String subject;
         @Field(5)
         public String body;
-
-        public static Creator<Email> CREATOR = new AutoCreator<>(Email.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * GPS coordinates from a 'GEO:' or similar QRCode type.
      */
     public static class GeoPoint extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<GeoPoint> CREATOR = new AutoCreator<>(GeoPoint.class);
         @Field(2)
         public double lat;
         @Field(3)
         public double lng;
-
-        public static Creator<GeoPoint> CREATOR = new AutoCreator<>(GeoPoint.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * A person's name, both formatted version and individual name components.
      */
     public static class PersonName extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<PersonName> CREATOR = new AutoCreator<>(PersonName.class);
         /**
          * Properly formatted name.
          */
@@ -507,8 +497,8 @@ public class Barcode extends AutoSafeParcelable {
         public String last;
         @Field(8)
         public String suffix;
-
-        public static Creator<PersonName> CREATOR = new AutoCreator<>(PersonName.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
@@ -523,37 +513,33 @@ public class Barcode extends AutoSafeParcelable {
         public static final int HOME = 2;
         public static final int FAX = 3;
         public static final int MOBILE = 4;
-
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<Phone> CREATOR = new AutoCreator<>(Phone.class);
         @Field(2)
         public int type;
         @Field(3)
         public String number;
-
-        public static Creator<Phone> CREATOR = new AutoCreator<>(Phone.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * An sms message from an 'SMS:' or similar QRCode type.
      */
     public static class Sms extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<Sms> CREATOR = new AutoCreator<>(Sms.class);
         @Field(2)
         public String message;
         @Field(3)
         public String phoneNumber;
-
-        public static Creator<Sms> CREATOR = new AutoCreator<>(Sms.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
      * A URL and title from a 'MEBKM:' or similar QRCode type.
      */
     public static class UrlBookmark extends AutoSafeParcelable {
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<UrlBookmark> CREATOR = new AutoCreator<>(UrlBookmark.class);
         @Field(2)
         public String title;
         /**
@@ -561,8 +547,8 @@ public class Barcode extends AutoSafeParcelable {
          */
         @Field(3)
         public String url;
-
-        public static Creator<UrlBookmark> CREATOR = new AutoCreator<>(UrlBookmark.class);
+        @Field(1)
+        private int versionCode = 1;
     }
 
     /**
@@ -575,9 +561,7 @@ public class Barcode extends AutoSafeParcelable {
         public static final int OPEN = 1;
         public static final int WPA = 2;
         public static final int WEP = 3;
-
-        @Field(1)
-        private int versionCode = 1;
+        public static Creator<WiFi> CREATOR = new AutoCreator<>(WiFi.class);
         @Field(2)
         public String ssid;
         @Nullable
@@ -585,9 +569,7 @@ public class Barcode extends AutoSafeParcelable {
         public String password;
         @Field(4)
         public int encryptionType;
-
-        public static Creator<WiFi> CREATOR = new AutoCreator<>(WiFi.class);
+        @Field(1)
+        private int versionCode = 1;
     }
-
-    public static final Creator<Barcode> CREATOR = new AutoCreator<>(Barcode.class);
 }

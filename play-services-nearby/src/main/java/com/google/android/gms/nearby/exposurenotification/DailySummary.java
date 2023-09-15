@@ -18,6 +18,7 @@ import java.util.List;
  */
 @PublicApi
 public class DailySummary extends AutoSafeParcelable {
+    public static final Creator<DailySummary> CREATOR = new AutoCreator<>(DailySummary.class);
     @Field(1)
     private int daysSinceEpoch;
     @Field(2)
@@ -81,6 +82,7 @@ public class DailySummary extends AutoSafeParcelable {
      * Stores different scores for specific {@link ReportType}.
      */
     public static class ExposureSummaryData extends AutoSafeParcelable {
+        public static final Creator<ExposureSummaryData> CREATOR = new AutoCreator<>(ExposureSummaryData.class);
         @Field(1)
         private double maximumScore;
         @Field(2)
@@ -128,7 +130,6 @@ public class DailySummary extends AutoSafeParcelable {
             return scoreSum;
         }
 
-
         /**
          * Sum of weighted durations for all {@link ExposureWindow}s aggregated into this summary.
          * <p>
@@ -150,9 +151,5 @@ public class DailySummary extends AutoSafeParcelable {
             result = 31 * result + (int) (temp ^ (temp >>> 32));
             return result;
         }
-
-        public static final Creator<ExposureSummaryData> CREATOR = new AutoCreator<>(ExposureSummaryData.class);
     }
-
-    public static final Creator<DailySummary> CREATOR = new AutoCreator<>(DailySummary.class);
 }

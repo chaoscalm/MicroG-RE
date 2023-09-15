@@ -21,6 +21,15 @@ import org.oscim.map.Map;
 
 public abstract class MapPositionCameraUpdate implements CameraUpdate {
 
+    public static CameraUpdate directMapPosition(final MapPosition position) {
+        return new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                return position;
+            }
+        };
+    }
+
     abstract MapPosition getMapPosition(Map map);
 
     @Override
@@ -31,14 +40,5 @@ public abstract class MapPositionCameraUpdate implements CameraUpdate {
     @Override
     public void applyAnimated(Map map, int duration) {
         map.animator().animateTo(duration, getMapPosition(map));
-    }
-
-    public static CameraUpdate directMapPosition(final MapPosition position) {
-        return new MapPositionCameraUpdate() {
-            @Override
-            MapPosition getMapPosition(Map map) {
-                return position;
-            }
-        };
     }
 }

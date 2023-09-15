@@ -22,8 +22,6 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,6 +29,7 @@ import java.util.List;
  */
 @PublicApi
 public class CircleOptions extends AutoSafeParcelable {
+    public static Creator<CircleOptions> CREATOR = new AutoCreator<CircleOptions>(CircleOptions.class);
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -263,6 +262,4 @@ public class CircleOptions extends AutoSafeParcelable {
     public List<PatternItem> getStrokePattern() {
         return strokePattern;
     }
-
-    public static Creator<CircleOptions> CREATOR = new AutoCreator<CircleOptions>(CircleOptions.class);
 }

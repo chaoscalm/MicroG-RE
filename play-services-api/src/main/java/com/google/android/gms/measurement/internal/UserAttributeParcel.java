@@ -8,6 +8,7 @@ package com.google.android.gms.measurement.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class UserAttributeParcel extends AutoSafeParcelable {
+    public static final Creator<UserAttributeParcel> CREATOR = new AutoCreator<>(UserAttributeParcel.class);
     @Field(1)
     public int field1;
     @Field(2)
@@ -22,6 +23,4 @@ public class UserAttributeParcel extends AutoSafeParcelable {
     public String field7;
     @Field(8)
     public Double field8;
-
-    public static final Creator<UserAttributeParcel> CREATOR = new AutoCreator<>(UserAttributeParcel.class);
 }

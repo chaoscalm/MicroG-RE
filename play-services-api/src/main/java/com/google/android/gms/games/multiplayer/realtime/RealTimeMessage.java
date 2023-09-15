@@ -18,12 +18,21 @@ package com.google.android.gms.games.multiplayer.realtime;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public final class RealTimeMessage implements Parcelable {
     public static final int RELIABLE = 1;
     public static final int UNRELIABLE = 0;
+    public static final Creator<RealTimeMessage> CREATOR = new Creator<RealTimeMessage>() {
+        @Override
+        public RealTimeMessage createFromParcel(Parcel in) {
+            return new RealTimeMessage(in);
+        }
 
+        @Override
+        public RealTimeMessage[] newArray(int size) {
+            return new RealTimeMessage[size];
+        }
+    };
     private final String mSenderParticipantId;
     private final byte[] mMessageData;
     private final int mIsReliable;
@@ -37,18 +46,6 @@ public final class RealTimeMessage implements Parcelable {
     private RealTimeMessage(Parcel parcel) {
         this(parcel.readString(), parcel.createByteArray(), parcel.readInt());
     }
-
-    public static final Creator<RealTimeMessage> CREATOR = new Creator<RealTimeMessage>() {
-        @Override
-        public RealTimeMessage createFromParcel(Parcel in) {
-            return new RealTimeMessage(in);
-        }
-
-        @Override
-        public RealTimeMessage[] newArray(int size) {
-            return new RealTimeMessage[size];
-        }
-    };
 
     public byte[] getMessageData() {
         return this.mMessageData;

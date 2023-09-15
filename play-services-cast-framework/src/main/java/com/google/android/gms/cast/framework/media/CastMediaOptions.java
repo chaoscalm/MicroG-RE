@@ -17,12 +17,10 @@
 package com.google.android.gms.cast.framework.media;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 public class CastMediaOptions extends AutoSafeParcelable {
 
-    @Field(1)
-    private int versionCode = 1;
+    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
     @Field(2)
     public String mediaIntentReceiverClassName;
     @Field(3)
@@ -35,6 +33,6 @@ public class CastMediaOptions extends AutoSafeParcelable {
     public boolean bool6;
     @Field(7)
     public boolean bool7;
-
-    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
+    @Field(1)
+    private int versionCode = 1;
 }

@@ -6,9 +6,9 @@
 package com.google.android.gms.cast;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 public class RequestItem extends AutoSafeParcelable {
+    public static Creator<RequestItem> CREATOR = new AutoCreator<RequestItem>(RequestItem.class);
     @Field(2)
     public String url;
     @Field(3)
@@ -17,6 +17,4 @@ public class RequestItem extends AutoSafeParcelable {
     public int initialTime;
     @Field(5)
     public String hlsSegmentFormat;
-
-    public static Creator<RequestItem> CREATOR = new AutoCreator<RequestItem>(RequestItem.class);
 }

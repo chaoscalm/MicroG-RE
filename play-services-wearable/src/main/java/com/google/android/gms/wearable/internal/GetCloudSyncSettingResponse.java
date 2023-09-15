@@ -20,12 +20,13 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetCloudSyncSettingResponse extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<GetCloudSyncSettingResponse> CREATOR = new AutoCreator<GetCloudSyncSettingResponse>(GetCloudSyncSettingResponse.class);
     @SafeParceled(2)
     public int statusCode;
     @SafeParceled(3)
     public boolean cloudSyncEnabled;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private GetCloudSyncSettingResponse() {
     }
@@ -34,6 +35,4 @@ public class GetCloudSyncSettingResponse extends AutoSafeParcelable {
         this.statusCode = statusCode;
         this.cloudSyncEnabled = cloudSyncEnabled;
     }
-
-    public static final Creator<GetCloudSyncSettingResponse> CREATOR = new AutoCreator<GetCloudSyncSettingResponse>(GetCloudSyncSettingResponse.class);
 }

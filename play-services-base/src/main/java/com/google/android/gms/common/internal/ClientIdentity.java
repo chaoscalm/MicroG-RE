@@ -12,6 +12,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import java.util.Objects;
 
 public class ClientIdentity extends AutoSafeParcelable {
+    public static final Creator<ClientIdentity> CREATOR = new AutoCreator<ClientIdentity>(ClientIdentity.class);
     @Field(1)
     public int uid;
     @Field(2)
@@ -35,6 +36,4 @@ public class ClientIdentity extends AutoSafeParcelable {
         ClientIdentity that = (ClientIdentity) o;
         return uid == that.uid && Objects.equals(packageName, that.packageName);
     }
-
-    public static final Creator<ClientIdentity> CREATOR = new AutoCreator<ClientIdentity>(ClientIdentity.class);
 }

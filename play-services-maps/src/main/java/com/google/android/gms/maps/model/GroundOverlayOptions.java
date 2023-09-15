@@ -33,7 +33,7 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
      * Flag for when no dimension is specified for the height.
      */
     public static final float NO_DIMENSION = -1;
-
+    public static Creator<GroundOverlayOptions> CREATOR = new AutoCreator<GroundOverlayOptions>(GroundOverlayOptions.class);
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -336,6 +336,4 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
         this.zIndex = zIndex;
         return this;
     }
-
-    public static Creator<GroundOverlayOptions> CREATOR = new AutoCreator<GroundOverlayOptions>(GroundOverlayOptions.class);
 }

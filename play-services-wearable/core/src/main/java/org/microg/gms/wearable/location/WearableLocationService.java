@@ -37,53 +37,12 @@ import java.util.List;
 import java.util.Map;
 
 public class WearableLocationService extends WearableListenerService {
-    private static final String TAG = "GmsWearLocSvc";
-
     public static final String PATH_LOCATION_REQUESTS = "com/google/android/location/fused/wearable/LOCATION_REQUESTS";
     public static final String PATH_CAPABILITY_QUERY = "com/google/android/location/fused/wearable/CAPABILITY_QUERY";
     public static final String PATH_CAPABILITY = "com/google/android/location/fused/wearable/CAPABILITY";
-
+    private static final String TAG = "GmsWearLocSvc";
     private GoogleApiClient apiClient;
     private Map<String, Collection<LocationRequestInternal>> requestMap = new HashMap<String, Collection<LocationRequestInternal>>();
-
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(PATH_LOCATION_REQUESTS)) {
-            DataMap dataMap = DataMap.fromByteArray(messageEvent.getData());
-            onLocationRequests(messageEvent.getSourceNodeId(), readLocationRequestList(dataMap, this), dataMap.getBoolean("TRIGGER_UPDATE", false));
-        } else if (messageEvent.getPath().equals(PATH_CAPABILITY_QUERY)) {
-            onCapabilityQuery(messageEvent.getSourceNodeId());
-        }
-    }
-
-    @Override
-    public void onPeerDisconnected(Node peer) {
-        onLocationRequests(peer.getId(), null, false);
-    }
-
-    public void onLocationRequests(String nodeId, Collection<LocationRequestInternal> requests, boolean triggerUpdate) {
-        if (requests == null || requests.isEmpty()) {
-            requestMap.remove(nodeId);
-        } else {
-            requestMap.put(nodeId, requests);
-        }
-        Log.d(TAG, "Requests: " + requestMap.entrySet());
-        // TODO actually request
-    }
-
-    public void onCapabilityQuery(String nodeId) {
-        Wearable.MessageApi.sendMessage(getApiClient(), nodeId, PATH_CAPABILITY, writeLocationCapability(new DataMap(), true).toByteArray());
-    }
-
-    private GoogleApiClient getApiClient() {
-        if (apiClient == null) {
-            apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
-        }
-        if (!apiClient.isConnected()) {
-            apiClient.connect();
-        }
-        return apiClient;
-    }
 
     public static DataMap writeLocationCapability(DataMap dataMap, boolean locationCapable) {
         dataMap.putBoolean("CAPABILITY_LOCATION", locationCapable);
@@ -146,5 +105,44 @@ public class WearableLocationService extends WearableListenerService {
             Log.w(TAG, "Unknown client identity: " + packageName, e);
             return new ClientIdentity(context.getApplicationInfo().uid, context.getPackageName());
         }*/
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        if (messageEvent.getPath().equals(PATH_LOCATION_REQUESTS)) {
+            DataMap dataMap = DataMap.fromByteArray(messageEvent.getData());
+            onLocationRequests(messageEvent.getSourceNodeId(), readLocationRequestList(dataMap, this), dataMap.getBoolean("TRIGGER_UPDATE", false));
+        } else if (messageEvent.getPath().equals(PATH_CAPABILITY_QUERY)) {
+            onCapabilityQuery(messageEvent.getSourceNodeId());
+        }
+    }
+
+    @Override
+    public void onPeerDisconnected(Node peer) {
+        onLocationRequests(peer.getId(), null, false);
+    }
+
+    public void onLocationRequests(String nodeId, Collection<LocationRequestInternal> requests, boolean triggerUpdate) {
+        if (requests == null || requests.isEmpty()) {
+            requestMap.remove(nodeId);
+        } else {
+            requestMap.put(nodeId, requests);
+        }
+        Log.d(TAG, "Requests: " + requestMap.entrySet());
+        // TODO actually request
+    }
+
+    public void onCapabilityQuery(String nodeId) {
+        Wearable.MessageApi.sendMessage(getApiClient(), nodeId, PATH_CAPABILITY, writeLocationCapability(new DataMap(), true).toByteArray());
+    }
+
+    private GoogleApiClient getApiClient() {
+        if (apiClient == null) {
+            apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+        }
+        if (!apiClient.isConnected()) {
+            apiClient.connect();
+        }
+        return apiClient;
     }
 }

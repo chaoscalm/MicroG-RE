@@ -8,6 +8,7 @@ package com.google.android.gms.phenotype;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Configurations extends AutoSafeParcelable {
+    public static final Creator<Configurations> CREATOR = new AutoCreator<>(Configurations.class);
     @Field(2)
     public String field2;
     @Field(3)
@@ -20,6 +21,4 @@ public class Configurations extends AutoSafeParcelable {
     public byte[] field6;
     @Field(7)
     public long field7;
-
-    public static final Creator<Configurations> CREATOR = new AutoCreator<>(Configurations.class);
 }

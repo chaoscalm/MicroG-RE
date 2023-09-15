@@ -20,23 +20,19 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class PIMEUpdateResponse extends AutoSafeParcelable {
-    @SafeParceled(1000)
-    private int versionCode;
-
-    @SafeParceled(1)
-    private String b;
-
+    public static final Creator<PIMEUpdateResponse> CREATOR = new AutoCreator<PIMEUpdateResponse>(PIMEUpdateResponse.class);
     @SafeParceled(2)
     public final byte[] bytes;
-
     @SafeParceled(3)
     public final PIMEUpdate[] updates;
+    @SafeParceled(1000)
+    private int versionCode;
+    @SafeParceled(1)
+    private String b;
 
     public PIMEUpdateResponse() {
         versionCode = 1;
         this.bytes = null;
         this.updates = new PIMEUpdate[0];
     }
-
-    public static final Creator<PIMEUpdateResponse> CREATOR = new AutoCreator<PIMEUpdateResponse>(PIMEUpdateResponse.class);
 }

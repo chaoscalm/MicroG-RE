@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DroidGuardChimeraService extends TracingIntentService {
     public static final Object a = new Object();
+    private static final Object f = new Object();
     // factory
     public HandleProxyFactory b;
     // widevine
@@ -38,9 +39,6 @@ public class DroidGuardChimeraService extends TracingIntentService {
     public Executor d;
     // log
     public Object e;
-
-    private static final Object f = new Object();
-
     // ping
     private Object g;
     // handler

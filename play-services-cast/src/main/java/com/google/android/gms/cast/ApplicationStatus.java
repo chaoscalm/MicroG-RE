@@ -21,17 +21,15 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ApplicationStatus extends AutoSafeParcelable {
 
+    public static final Creator<ApplicationStatus> CREATOR = new AutoCreator<ApplicationStatus>(ApplicationStatus.class);
+    @SafeParceled(1)
+    private int versionCode = 1;
+    @SafeParceled(2)
+    private String applicationStatus;
     public ApplicationStatus() {
     }
 
     public ApplicationStatus(String applicationStatus) {
         this.applicationStatus = applicationStatus;
     }
-
-    @SafeParceled(1)
-    private int versionCode = 1;
-    @SafeParceled(2)
-    private String applicationStatus;
-
-    public static final Creator<ApplicationStatus> CREATOR = new AutoCreator<ApplicationStatus>(ApplicationStatus.class);
 }

@@ -26,8 +26,7 @@ import org.microg.safeparcel.SafeParceled;
  */
 @PublicApi
 public class Tile extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static Creator<Tile> CREATOR = new AutoCreator<Tile>(Tile.class);
     /**
      * The width of the image encoded by {@link #data} in pixels.
      */
@@ -44,6 +43,8 @@ public class Tile extends AutoSafeParcelable {
      */
     @SafeParceled(4)
     public final byte[] data;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private Tile() {
         width = height = 0;
@@ -64,6 +65,4 @@ public class Tile extends AutoSafeParcelable {
         this.height = height;
         this.data = data;
     }
-
-    public static Creator<Tile> CREATOR = new AutoCreator<Tile>(Tile.class);
 }

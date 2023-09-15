@@ -18,9 +18,9 @@ import org.microg.gms.common.api.PendingGoogleApiCall;
 
 @PublicApi
 public abstract class GoogleApi<O extends Api.ApiOptions> implements HasApiKey<O> {
-    private GoogleApiManager manager;
     @PublicApi(exclude = true)
     public Api<O> api;
+    private GoogleApiManager manager;
 
     @PublicApi(exclude = true)
     protected GoogleApi(Context context, Api<O> api) {

@@ -34,25 +34,25 @@ public enum Transport implements Parcelable {
     @PublicApi(exclude = true)
     CABLE("cable");
 
+    public static Creator<Transport> CREATOR = new Creator<Transport>() {
+        @Override
+        public Transport createFromParcel(Parcel source) {
+            try {
+                return Transport.fromString(source.readString());
+            } catch (UnsupportedTransportException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Transport[] newArray(int size) {
+            return new Transport[size];
+        }
+    };
     private final String value;
 
     Transport(String value) {
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(toString());
     }
 
     @PublicApi(exclude = true)
@@ -80,21 +80,20 @@ public enum Transport implements Parcelable {
         return new ArrayList<>(set);
     }
 
-    public static Creator<Transport> CREATOR = new Creator<Transport>() {
-        @Override
-        public Transport createFromParcel(Parcel source) {
-            try {
-                return Transport.fromString(source.readString());
-            } catch (UnsupportedTransportException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    @Override
+    public String toString() {
+        return value;
+    }
 
-        @Override
-        public Transport[] newArray(int size) {
-            return new Transport[size];
-        }
-    };
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(toString());
+    }
 
     /**
      * Exception thrown when an unsupported or unrecognized transport is encountered.

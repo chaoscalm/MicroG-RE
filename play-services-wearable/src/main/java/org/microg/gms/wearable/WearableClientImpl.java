@@ -41,15 +41,15 @@ public class WearableClientImpl extends GmsClient<IWearableService> {
         Log.d(TAG, "<init>");
     }
 
-    @Override
-    protected IWearableService interfaceFromBinder(IBinder binder) {
-        return IWearableService.Stub.asInterface(binder);
-    }
-
     public static WearableClientImpl get(GoogleApiClient apiClient) {
         if (apiClient instanceof GoogleApiClientImpl) {
             return (WearableClientImpl) ((GoogleApiClientImpl) apiClient).getApiConnection(Wearable.API);
         }
         return null;
+    }
+
+    @Override
+    protected IWearableService interfaceFromBinder(IBinder binder) {
+        return IWearableService.Stub.asInterface(binder);
     }
 }

@@ -13,9 +13,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 @Hide
 public class ParcelableGeofence extends AutoSafeParcelable implements Geofence {
 
-    @Field(1000)
-    private int versionCode = 1;
-
+    public static final Creator<ParcelableGeofence> CREATOR = new AutoCreator<ParcelableGeofence>(ParcelableGeofence.class);
     @Field(1)
     public String requestId;
 
@@ -42,6 +40,8 @@ public class ParcelableGeofence extends AutoSafeParcelable implements Geofence {
 
     @Field(9)
     public int loiteringDelay;
+    @Field(1000)
+    private int versionCode = 1;
 
     private ParcelableGeofence() {
         notificationResponsiveness = 0;
@@ -99,6 +99,4 @@ public class ParcelableGeofence extends AutoSafeParcelable implements Geofence {
     public int getLoiteringDelay() {
         return loiteringDelay;
     }
-
-    public static final Creator<ParcelableGeofence> CREATOR = new AutoCreator<ParcelableGeofence>(ParcelableGeofence.class);
 }

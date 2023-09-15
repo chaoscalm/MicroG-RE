@@ -23,6 +23,7 @@ import java.util.List;
  */
 @PublicApi
 public class ExposureWindow extends AutoSafeParcelable {
+    public static final Creator<ExposureWindow> CREATOR = new AutoCreator<>(ExposureWindow.class);
     @Field(1)
     private long dateMillisSinceEpoch;
     @Field(2)
@@ -160,6 +161,4 @@ public class ExposureWindow extends AutoSafeParcelable {
             return this;
         }
     }
-
-    public static final Creator<ExposureWindow> CREATOR = new AutoCreator<>(ExposureWindow.class);
 }

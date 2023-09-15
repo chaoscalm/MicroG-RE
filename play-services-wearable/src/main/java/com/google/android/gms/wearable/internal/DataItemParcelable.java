@@ -29,14 +29,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataItemParcelable extends AutoSafeParcelable implements DataItem {
+    public static final Creator<DataItemParcelable> CREATOR = new AutoCreator<DataItemParcelable>(DataItemParcelable.class);
+    @SafeParceled(5)
+    public byte[] data;
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
     private Uri uri;
     @SafeParceled(4)
     private Bundle assets = new Bundle();
-    @SafeParceled(5)
-    public byte[] data;
 
     private DataItemParcelable() {
     }
@@ -87,6 +88,4 @@ public class DataItemParcelable extends AutoSafeParcelable implements DataItem {
     public boolean isDataValid() {
         return true;
     }
-
-    public static final Creator<DataItemParcelable> CREATOR = new AutoCreator<DataItemParcelable>(DataItemParcelable.class);
 }

@@ -21,9 +21,9 @@ import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
 import android.accounts.Account;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 public class AccountChangeEventsRequest extends AutoSafeParcelable {
+    public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<AccountChangeEventsRequest>(AccountChangeEventsRequest.class);
     @Field(1)
     private int versionCode = 1;
     @Field(2)
@@ -39,7 +39,5 @@ public class AccountChangeEventsRequest extends AutoSafeParcelable {
         if (accountName != null) return new Account(accountName, DEFAULT_ACCOUNT_TYPE);
         return null;
     }
-
-    public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<AccountChangeEventsRequest>(AccountChangeEventsRequest.class);
 
 }

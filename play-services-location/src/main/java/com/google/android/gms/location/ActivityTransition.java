@@ -32,7 +32,7 @@ public class ActivityTransition extends AutoSafeParcelable {
      * User exits the given activity.
      */
     public static final int ACTIVITY_TRANSITION_EXIT = 1;
-
+    public static final Creator<ActivityTransition> CREATOR = new AutoCreator<>(ActivityTransition.class);
     @Field(1)
     private int activityType;
     @Field(2)
@@ -118,6 +118,4 @@ public class ActivityTransition extends AutoSafeParcelable {
             return new ActivityTransition(activityType, transitionType);
         }
     }
-
-    public static final Creator<ActivityTransition> CREATOR = new AutoCreator<>(ActivityTransition.class);
 }

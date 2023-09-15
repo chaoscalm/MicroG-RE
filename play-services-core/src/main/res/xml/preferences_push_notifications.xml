@@ -14,6 +14,7 @@
 
     <PreferenceCategory
         android:key="prefcat_push_apps"
+        android:layout="@layout/preference_category"
         android:title="@string/prefcat_push_apps_title">
         <Preference
             android:enabled="false"

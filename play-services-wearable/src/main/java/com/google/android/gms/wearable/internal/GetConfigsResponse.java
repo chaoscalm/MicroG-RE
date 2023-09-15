@@ -22,12 +22,13 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetConfigsResponse extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<GetConfigsResponse> CREATOR = new AutoCreator<GetConfigsResponse>(GetConfigsResponse.class);
     @SafeParceled(2)
     public final int statusCode;
     @SafeParceled(3)
     public final ConnectionConfiguration[] configurations;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     private GetConfigsResponse() {
         statusCode = 0;
@@ -38,6 +39,4 @@ public class GetConfigsResponse extends AutoSafeParcelable {
         this.statusCode = statusCode;
         this.configurations = configurations;
     }
-
-    public static final Creator<GetConfigsResponse> CREATOR = new AutoCreator<GetConfigsResponse>(GetConfigsResponse.class);
 }

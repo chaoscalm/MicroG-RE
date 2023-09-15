@@ -14,21 +14,17 @@ import android.os.Bundle;
 import android.net.Uri;
 
 public class DynamicLinkData extends AutoSafeParcelable {
+    public static final Creator<DynamicLinkData> CREATOR = new AutoCreator<DynamicLinkData>(DynamicLinkData.class);
     @Field(1)
     public final String dynamicLink;
-
     @Field(2)
     public final String deepLink;
-
     @Field(3)
     public final int minVersion;
-
     @Field(4)
     public final long clickTimestamp;
-
     @Field(5)
     public final Bundle extensionBundle;
-
     @Field(6)
     public final Uri redirectUrl;
 
@@ -40,6 +36,4 @@ public class DynamicLinkData extends AutoSafeParcelable {
         extensionBundle = new Bundle();
         redirectUrl = Uri.EMPTY;
     }
-
-    public static final Creator<DynamicLinkData> CREATOR = new AutoCreator<DynamicLinkData>(DynamicLinkData.class);
 }

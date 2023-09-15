@@ -38,6 +38,27 @@ public interface SafetyNetApi {
     @Deprecated
     PendingResult<RecaptchaTokenResult> verifyWithRecaptcha(GoogleApiClient client, String siteKey);
 
+    @PublicApi(exclude = true)
+    @Deprecated
+    interface AttestationResult extends Result {
+        String getJwsResult();
+    }
+
+    /**
+     * A Result from {@link #verifyWithRecaptcha(GoogleApiClient, String)}.
+     * <p>
+     * This Result contains a reCAPTCHA user response token and third party clients should use this token to verify
+     * the user. Calling the {@link Status#isSuccess()} will indicate whether or not communication with the service was
+     * successful, but does not indicate if the user has passed the reCAPTCHA challenge. The token must be validated on
+     * the server side to determine whether the user has passed the challenge.
+     *
+     * @deprecated use {@link RecaptchaTokenResponse} returned from {@link SafetyNetClient#verifyWithRecaptcha(String)}.
+     */
+    @Deprecated
+    interface RecaptchaTokenResult extends Result {
+        String getTokenResult();
+    }
+
     /**
      * Response from {@link SafetyNetClient#attest(byte[], String)} that contains a Compatibility Test Suite
      * attestation result.
@@ -61,12 +82,6 @@ public interface SafetyNetApi {
         }
     }
 
-    @PublicApi(exclude = true)
-    @Deprecated
-    interface AttestationResult extends Result {
-        String getJwsResult();
-    }
-
     /**
      * {@link Response} from {@link SafetyNetClient#verifyWithRecaptcha(String)}.
      * <p>
@@ -82,20 +97,5 @@ public interface SafetyNetApi {
         public String getTokenResult() {
             return getResult().getTokenResult();
         }
-    }
-
-    /**
-     * A Result from {@link #verifyWithRecaptcha(GoogleApiClient, String)}.
-     * <p>
-     * This Result contains a reCAPTCHA user response token and third party clients should use this token to verify
-     * the user. Calling the {@link Status#isSuccess()} will indicate whether or not communication with the service was
-     * successful, but does not indicate if the user has passed the reCAPTCHA challenge. The token must be validated on
-     * the server side to determine whether the user has passed the challenge.
-     *
-     * @deprecated use {@link RecaptchaTokenResponse} returned from {@link SafetyNetClient#verifyWithRecaptcha(String)}.
-     */
-    @Deprecated
-    interface RecaptchaTokenResult extends Result {
-        String getTokenResult();
     }
 }

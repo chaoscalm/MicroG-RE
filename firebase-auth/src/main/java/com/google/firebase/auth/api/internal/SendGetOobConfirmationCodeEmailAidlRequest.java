@@ -10,11 +10,11 @@ import com.google.firebase.auth.ActionCodeSettings;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SendGetOobConfirmationCodeEmailAidlRequest extends AutoSafeParcelable {
+    public static final Creator<SendGetOobConfirmationCodeEmailAidlRequest> CREATOR = new AutoCreator<>(SendGetOobConfirmationCodeEmailAidlRequest.class);
     @Field(1)
     public String email;
     @Field(2)
     public ActionCodeSettings settings;
     @Field(3)
     public String tenantId;
-    public static final Creator<SendGetOobConfirmationCodeEmailAidlRequest> CREATOR = new AutoCreator<>(SendGetOobConfirmationCodeEmailAidlRequest.class);
 }

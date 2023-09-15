@@ -10,12 +10,11 @@ import android.accounts.Account;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class OptInRequest extends AutoSafeParcelable {
+    public static final Creator<OptInRequest> CREATOR = new AutoCreator<OptInRequest>(OptInRequest.class);
     @Field(2)
     public Account account;
     @Field(3)
     public String tag;
     @Field(4)
     public String auditToken;
-
-    public static final Creator<OptInRequest> CREATOR = new AutoCreator<OptInRequest>(OptInRequest.class);
 }

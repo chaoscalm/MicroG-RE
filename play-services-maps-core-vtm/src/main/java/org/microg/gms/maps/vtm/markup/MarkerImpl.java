@@ -71,19 +71,13 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setPosition(LatLng pos) {
-        options.position(pos);
-        listener.update(this);
-    }
-
-    @Override
     public LatLng getPosition() {
         return options.getPosition();
     }
 
     @Override
-    public void setTitle(String title) {
-        options.title(title);
+    public void setPosition(LatLng pos) {
+        options.position(pos);
         listener.update(this);
     }
 
@@ -93,8 +87,9 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setSnippet(String snippet) {
-        options.snippet(snippet);
+    public void setTitle(String title) {
+        options.title(title);
+        listener.update(this);
     }
 
     @Override
@@ -103,13 +98,18 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setDraggable(boolean drag) {
-        options.draggable(drag);
+    public void setSnippet(String snippet) {
+        options.snippet(snippet);
     }
 
     @Override
     public boolean isDraggable() {
         return options.isDraggable();
+    }
+
+    @Override
+    public void setDraggable(boolean drag) {
+        options.draggable(drag);
     }
 
     @Override
@@ -128,13 +128,13 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setVisible(boolean visible) {
-        options.visible(visible);
+    public boolean isVisible() {
+        return options.isVisible();
     }
 
     @Override
-    public boolean isVisible() {
-        return options.isVisible();
+    public void setVisible(boolean visible) {
+        options.visible(visible);
     }
 
     @Override
@@ -169,19 +169,13 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setFlat(boolean flat) {
-        options.flat(flat);
-        listener.update(this);
-    }
-
-    @Override
     public boolean isFlat() {
         return options.isFlat();
     }
 
     @Override
-    public void setRotation(float rotation) {
-        options.rotation(rotation);
+    public void setFlat(boolean flat) {
+        options.flat(flat);
         listener.update(this);
     }
 
@@ -191,19 +185,25 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
+    public void setRotation(float rotation) {
+        options.rotation(rotation);
+        listener.update(this);
+    }
+
+    @Override
     public void setInfoWindowAnchor(float x, float y) {
         options.infoWindowAnchor(x, y);
+    }
+
+    @Override
+    public float getAlpha() {
+        return options.getAlpha();
     }
 
     @Override
     public void setAlpha(float alpha) {
         options.alpha(alpha);
         listener.update(this);
-    }
-
-    @Override
-    public float getAlpha() {
-        return options.getAlpha();
     }
 
     public int getHeight() {
@@ -268,22 +268,22 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
-    public void setZIndex(float zIndex) {
-        options.zIndex(zIndex);
-    }
-
-    @Override
     public float getZIndex() {
         return options.getZIndex();
     }
 
     @Override
-    public void setTag(IObjectWrapper obj) {
-        this.tag = obj;
+    public void setZIndex(float zIndex) {
+        options.zIndex(zIndex);
     }
 
     @Override
     public IObjectWrapper getTag() {
         return this.tag == null ? ObjectWrapper.wrap(null) : this.tag;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper obj) {
+        this.tag = obj;
     }
 }

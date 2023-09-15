@@ -23,8 +23,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class MessageEventParcelable extends AutoSafeParcelable implements MessageEvent {
 
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static final Creator<MessageEventParcelable> CREATOR = new AutoCreator<MessageEventParcelable>(MessageEventParcelable.class);
     @SafeParceled(2)
     public int requestId;
     @SafeParceled(3)
@@ -33,6 +32,8 @@ public class MessageEventParcelable extends AutoSafeParcelable implements Messag
     public byte[] data;
     @SafeParceled(5)
     public String sourceNodeId;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     @Override
     public byte[] getData() {
@@ -63,6 +64,4 @@ public class MessageEventParcelable extends AutoSafeParcelable implements Messag
                 ", sourceNodeId='" + sourceNodeId + '\'' +
                 '}';
     }
-
-    public static final Creator<MessageEventParcelable> CREATOR = new AutoCreator<MessageEventParcelable>(MessageEventParcelable.class);
 }

@@ -21,6 +21,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PendingCallback implements Parcelable {
+    public static final Creator<PendingCallback> CREATOR = new Creator<PendingCallback>() {
+        @Override
+        public PendingCallback createFromParcel(Parcel source) {
+            return new PendingCallback(source);
+        }
+
+        @Override
+        public PendingCallback[] newArray(int size) {
+            return new PendingCallback[size];
+        }
+    };
     private final IBinder binder;
 
     public PendingCallback(IBinder binder) {
@@ -44,16 +55,4 @@ public class PendingCallback implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStrongBinder(binder);
     }
-
-    public static final Creator<PendingCallback> CREATOR = new Creator<PendingCallback>() {
-        @Override
-        public PendingCallback createFromParcel(Parcel source) {
-            return new PendingCallback(source);
-        }
-
-        @Override
-        public PendingCallback[] newArray(int size) {
-            return new PendingCallback[size];
-        }
-    };
 }

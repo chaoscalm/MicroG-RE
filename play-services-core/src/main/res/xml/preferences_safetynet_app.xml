@@ -13,6 +13,7 @@
 
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"
+        android:layout="@layout/preference_category"
         android:title="@string/pref_safetynet_recent_uses">
         <Preference
             android:enabled="false"

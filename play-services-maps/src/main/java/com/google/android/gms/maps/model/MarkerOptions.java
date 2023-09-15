@@ -27,6 +27,7 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class MarkerOptions extends AutoSafeParcelable {
 
+    public static Creator<MarkerOptions> CREATOR = new AutoCreator<MarkerOptions>(MarkerOptions.class);
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -337,6 +338,4 @@ public class MarkerOptions extends AutoSafeParcelable {
     public float getZIndex() {
         return this.zIndex;
     }
-
-    public static Creator<MarkerOptions> CREATOR = new AutoCreator<MarkerOptions>(MarkerOptions.class);
 }

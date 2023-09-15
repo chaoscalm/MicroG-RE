@@ -21,8 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class GetPendingExperimentIdsRequest extends AutoSafeParcelable {
 
+    public static final Creator<GetPendingExperimentIdsRequest> CREATOR = new AutoCreator<GetPendingExperimentIdsRequest>(GetPendingExperimentIdsRequest.class);
     @SafeParceled(1000)
     private int versionCode = 1;
-
-    public static final Creator<GetPendingExperimentIdsRequest> CREATOR = new AutoCreator<GetPendingExperimentIdsRequest>(GetPendingExperimentIdsRequest.class);
 }

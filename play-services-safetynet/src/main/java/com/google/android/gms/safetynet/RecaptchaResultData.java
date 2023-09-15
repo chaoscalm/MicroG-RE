@@ -8,8 +8,7 @@ package com.google.android.gms.safetynet;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class RecaptchaResultData extends AutoSafeParcelable {
+    public static final Creator<RecaptchaResultData> CREATOR = new AutoCreator<RecaptchaResultData>(RecaptchaResultData.class);
     @Field(2)
     public String token;
-
-    public static final Creator<RecaptchaResultData> CREATOR = new AutoCreator<RecaptchaResultData>(RecaptchaResultData.class);
 }

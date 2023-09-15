@@ -21,11 +21,35 @@ public final class Geofence implements Parcelable {
      * @hide
      */
     public static final int TYPE_HORIZONTAL_CIRCLE = 1;
+    public static final Parcelable.Creator<Geofence> CREATOR = new Parcelable.Creator<Geofence>() {
+        @Override
+        public Geofence createFromParcel(Parcel in) {
+            int type = in.readInt();
+            double latitude = in.readDouble();
+            double longitude = in.readDouble();
+            float radius = in.readFloat();
+            checkType(type);
+            return Geofence.createCircle(latitude, longitude, radius);
+        }
 
+        @Override
+        public Geofence[] newArray(int size) {
+            return new Geofence[size];
+        }
+    };
     private final int mType;
     private final double mLatitude;
     private final double mLongitude;
     private final float mRadius;
+
+    private Geofence(double latitude, double longitude, float radius) {
+        checkRadius(radius);
+        checkLatLong(latitude, longitude);
+        mType = TYPE_HORIZONTAL_CIRCLE;
+        mLatitude = latitude;
+        mLongitude = longitude;
+        mRadius = radius;
+    }
 
     /**
      * Create a circular geofence (on a flat, horizontal plane).
@@ -40,13 +64,35 @@ public final class Geofence implements Parcelable {
         return new Geofence(latitude, longitude, radius);
     }
 
-    private Geofence(double latitude, double longitude, float radius) {
-        checkRadius(radius);
-        checkLatLong(latitude, longitude);
-        mType = TYPE_HORIZONTAL_CIRCLE;
-        mLatitude = latitude;
-        mLongitude = longitude;
-        mRadius = radius;
+    private static void checkRadius(float radius) {
+        if (radius <= 0) {
+            throw new IllegalArgumentException("invalid radius: " + radius);
+        }
+    }
+
+    private static void checkLatLong(double latitude, double longitude) {
+        if (latitude > 90.0 || latitude < -90.0) {
+            throw new IllegalArgumentException("invalid latitude: " + latitude);
+        }
+        if (longitude > 180.0 || longitude < -180.0) {
+            throw new IllegalArgumentException("invalid longitude: " + longitude);
+        }
+    }
+
+    private static void checkType(int type) {
+        if (type != TYPE_HORIZONTAL_CIRCLE) {
+            throw new IllegalArgumentException("invalid type: " + type);
+        }
+    }
+
+    private static String typeToString(int type) {
+        switch (type) {
+            case TYPE_HORIZONTAL_CIRCLE:
+                return "CIRCLE";
+            default:
+                checkType(type);
+                return null;
+        }
     }
 
     /**
@@ -77,44 +123,6 @@ public final class Geofence implements Parcelable {
         return mRadius;
     }
 
-    private static void checkRadius(float radius) {
-        if (radius <= 0) {
-            throw new IllegalArgumentException("invalid radius: " + radius);
-        }
-    }
-
-    private static void checkLatLong(double latitude, double longitude) {
-        if (latitude > 90.0 || latitude < -90.0) {
-            throw new IllegalArgumentException("invalid latitude: " + latitude);
-        }
-        if (longitude > 180.0 || longitude < -180.0) {
-            throw new IllegalArgumentException("invalid longitude: " + longitude);
-        }
-    }
-
-    private static void checkType(int type) {
-        if (type != TYPE_HORIZONTAL_CIRCLE) {
-            throw new IllegalArgumentException("invalid type: " + type);
-        }
-    }
-
-    public static final Parcelable.Creator<Geofence> CREATOR = new Parcelable.Creator<Geofence>() {
-        @Override
-        public Geofence createFromParcel(Parcel in) {
-            int type = in.readInt();
-            double latitude = in.readDouble();
-            double longitude = in.readDouble();
-            float radius = in.readFloat();
-            checkType(type);
-            return Geofence.createCircle(latitude, longitude, radius);
-        }
-
-        @Override
-        public Geofence[] newArray(int size) {
-            return new Geofence[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -126,16 +134,6 @@ public final class Geofence implements Parcelable {
         parcel.writeDouble(mLatitude);
         parcel.writeDouble(mLongitude);
         parcel.writeFloat(mRadius);
-    }
-
-    private static String typeToString(int type) {
-        switch (type) {
-            case TYPE_HORIZONTAL_CIRCLE:
-                return "CIRCLE";
-            default:
-                checkType(type);
-                return null;
-        }
     }
 
     @Override

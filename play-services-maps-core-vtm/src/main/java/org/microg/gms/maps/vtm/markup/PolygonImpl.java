@@ -80,6 +80,11 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
+    public List<LatLng> getPoints() throws RemoteException {
+        return options.getPoints();
+    }
+
+    @Override
     public void setPoints(List<LatLng> points) throws RemoteException {
         options.getPoints().clear();
         options.getPoints().addAll(points);
@@ -87,8 +92,8 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public List<LatLng> getPoints() throws RemoteException {
-        return options.getPoints();
+    public List getHoles() throws RemoteException {
+        return options.getHoles();
     }
 
     @Override
@@ -99,8 +104,8 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public List getHoles() throws RemoteException {
-        return options.getHoles();
+    public float getStrokeWidth() {
+        return options.getStrokeWidth();
     }
 
     @Override
@@ -110,8 +115,8 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public float getStrokeWidth() {
-        return options.getStrokeWidth();
+    public int getStrokeColor() {
+        return options.getStrokeColor();
     }
 
     @Override
@@ -121,8 +126,8 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public int getStrokeColor() {
-        return options.getStrokeColor();
+    public int getFillColor() {
+        return options.getFillColor();
     }
 
     @Override
@@ -132,19 +137,14 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public int getFillColor() {
-        return options.getFillColor();
+    public float getZIndex() {
+        return options.getZIndex();
     }
 
     @Override
     public void setZIndex(float zIndex) throws RemoteException {
         options.zIndex(zIndex);
         listener.update(this);
-    }
-
-    @Override
-    public float getZIndex() {
-        return options.getZIndex();
     }
 
     @Override
@@ -168,25 +168,25 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
+    public boolean isVisible() {
+        return options.isVisible();
+    }
+
+    @Override
     public void setVisible(boolean visible) throws RemoteException {
         options.visible(visible);
         listener.update(this);
     }
 
     @Override
-    public boolean isVisible() {
-        return options.isVisible();
+    public boolean isGeodesic() throws RemoteException {
+        return options.isGeodesic();
     }
 
     @Override
     public void setGeodesic(boolean geod) throws RemoteException {
         options.geodesic(geod);
         listener.update(this);
-    }
-
-    @Override
-    public boolean isGeodesic() throws RemoteException {
-        return options.isGeodesic();
     }
 
     @Override
@@ -199,19 +199,14 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
         return id.hashCode();
     }
 
-    // Not implemented
-    @Override
-    public void setClickable(boolean click) throws RemoteException {
-
-    }
-
     @Override
     public boolean isClickable() throws RemoteException {
         return false;
     }
 
+    // Not implemented
     @Override
-    public void setStrokeJointType(int type) throws RemoteException {
+    public void setClickable(boolean click) throws RemoteException {
 
     }
 
@@ -221,7 +216,7 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public void setStrokePattern(List<PatternItem> items) throws RemoteException {
+    public void setStrokeJointType(int type) throws RemoteException {
 
     }
 
@@ -231,12 +226,17 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
-    public void setTag(IObjectWrapper obj) throws RemoteException {
+    public void setStrokePattern(List<PatternItem> items) throws RemoteException {
 
     }
 
     @Override
     public IObjectWrapper getTag() throws RemoteException {
         return null;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper obj) throws RemoteException {
+
     }
 }

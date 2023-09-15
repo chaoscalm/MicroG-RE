@@ -8,6 +8,7 @@ package com.google.firebase.auth.api.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ProviderUserInfo extends AutoSafeParcelable {
+    public static final Creator<ProviderUserInfo> CREATOR = new AutoCreator<>(ProviderUserInfo.class);
     @Field(2)
     public String federatedId;
     @Field(3)
@@ -22,6 +23,4 @@ public class ProviderUserInfo extends AutoSafeParcelable {
     public String phoneNumber;
     @Field(8)
     public String email;
-
-    public static final Creator<ProviderUserInfo> CREATOR = new AutoCreator<>(ProviderUserInfo.class);
 }

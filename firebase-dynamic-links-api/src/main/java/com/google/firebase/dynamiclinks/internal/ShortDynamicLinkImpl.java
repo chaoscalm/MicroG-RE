@@ -16,12 +16,11 @@ import java.util.List;
 
 
 public class ShortDynamicLinkImpl extends AutoSafeParcelable {
+    public static final Creator<ShortDynamicLinkImpl> CREATOR = new AutoCreator<ShortDynamicLinkImpl>(ShortDynamicLinkImpl.class);
     @Field(1)
     public final Uri shortLink;
-
     @Field(2)
     public final Uri previewLink;
-
     @Field(3)
     public final List<WarningImpl> warnings;
 
@@ -32,7 +31,4 @@ public class ShortDynamicLinkImpl extends AutoSafeParcelable {
 
         warnings = new ArrayList<>();
     }
-
-
-    public static final Creator<ShortDynamicLinkImpl> CREATOR = new AutoCreator<ShortDynamicLinkImpl>(ShortDynamicLinkImpl.class);
 }

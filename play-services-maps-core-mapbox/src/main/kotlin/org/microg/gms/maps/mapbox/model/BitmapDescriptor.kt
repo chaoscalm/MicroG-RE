@@ -18,7 +18,6 @@ package org.microg.gms.maps.mapbox.model
 
 import android.graphics.Color
 import android.graphics.PointF
-import android.util.Log
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_TOP_LEFT

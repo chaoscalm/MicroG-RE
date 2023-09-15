@@ -7,16 +7,11 @@ package org.microg.gms.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.net.Uri
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.preference.Preference
-import androidx.preference.PreferenceViewHolder
 import org.microg.gms.base.core.R
 
 class AppHeadingPreference : AppPreference, Preference.OnPreferenceClickListener {

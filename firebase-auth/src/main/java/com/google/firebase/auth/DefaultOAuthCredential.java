@@ -14,6 +14,7 @@ import org.microg.gms.common.PublicApi;
 
 @PublicApi
 public class DefaultOAuthCredential extends OAuthCredential {
+    public static final Creator<DefaultOAuthCredential> CREATOR = new AutoCreator<>(DefaultOAuthCredential.class);
     @Field(1)
     @PublicApi(exclude = true)
     public String provider;
@@ -35,7 +36,6 @@ public class DefaultOAuthCredential extends OAuthCredential {
     @Field(7)
     @PublicApi(exclude = true)
     public String rawNonce;
-
 
     @Override
     public String getAccessToken() {
@@ -61,6 +61,4 @@ public class DefaultOAuthCredential extends OAuthCredential {
     public String getSignInMethod() {
         return provider;
     }
-
-    public static final Creator<DefaultOAuthCredential> CREATOR = new AutoCreator<>(DefaultOAuthCredential.class);
 }

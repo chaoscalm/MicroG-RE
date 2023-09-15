@@ -24,7 +24,7 @@ public class LocationReceiver extends AutoSafeParcelable {
     public static final int TYPE_PENDING_INTENT = 3;
     public static final int TYPE_STATUS_CALLBACK = 4;
     public static final int TYPE_AVAILABILITY_STATUS_CALLBACK = 5;
-
+    public static final Creator<LocationReceiver> CREATOR = new AutoCreator<>(LocationReceiver.class);
     @Field(1)
     public int type;
     @Field(2)
@@ -110,6 +110,4 @@ public class LocationReceiver extends AutoSafeParcelable {
         if (type != TYPE_AVAILABILITY_STATUS_CALLBACK) throw new IllegalStateException();
         return ILocationAvailabilityStatusCallback.Stub.asInterface(binderReceiver);
     }
-
-    public static final Creator<LocationReceiver> CREATOR = new AutoCreator<>(LocationReceiver.class);
 }

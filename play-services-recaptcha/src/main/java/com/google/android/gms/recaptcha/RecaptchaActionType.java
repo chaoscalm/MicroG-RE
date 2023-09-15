@@ -14,24 +14,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  * Collection of predefined actions used by RecaptchaHandle.
  */
 public class RecaptchaActionType extends AutoSafeParcelable {
-    @Field(1)
-    String name;
-
-    private RecaptchaActionType() {
-    }
-
-    public RecaptchaActionType(String action) {
-        this.name = action;
-    }
-
     public static final Creator<RecaptchaActionType> CREATOR = new AutoCreator<>(RecaptchaActionType.class);
-
-    /**
-     * User interaction that needs to be verified while the user is performing the workflow you would like to protect.
-     */
-    public @interface Action {
-    }
-
     /**
      * Indicates that the protected action is a login workflow.
      */
@@ -44,4 +27,17 @@ public class RecaptchaActionType extends AutoSafeParcelable {
      * Indicates that the protected action is a signup workflow.
      */
     public static final String SIGNUP = "signup";
+    @Field(1)
+    String name;
+
+    private RecaptchaActionType() {
+    }
+    public RecaptchaActionType(String action) {
+        this.name = action;
+    }
+    /**
+     * User interaction that needs to be verified while the user is performing the workflow you would like to protect.
+     */
+    public @interface Action {
+    }
 }

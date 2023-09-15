@@ -16,8 +16,8 @@
 
 package com.google.android.gms.cast;
 
-import android.os.Bundle;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.android.gms.common.images.WebImage;
@@ -27,13 +27,51 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.net.InetAddress;
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 
 @PublicApi
 public class CastDevice extends AutoSafeParcelable {
+    /**
+     * Video-output device capability.
+     */
+    public static final int CAPABILITY_VIDEO_OUT = 1;
+    /**
+     * Video-input device capability.
+     */
+    public static final int CAPABILITY_VIDEO_IN = 2;
+    /**
+     * Audio-output device capability.
+     */
+    public static final int CAPABILITY_AUDIO_OUT = 4;
+    /**
+     * Audio-input device capability.
+     */
+    public static final int CAPABILITY_AUDIO_IN = 8;
     private static final String EXTRA_CAST_DEVICE = "com.google.android.gms.cast.EXTRA_CAST_DEVICE";
+    public static Creator<CastDevice> CREATOR = new AutoCreator<CastDevice>(CastDevice.class);
+    @SafeParceled(1)
+    private int versionCode = 3;
+    @SafeParceled(2)
+    private String deviceId;
+    @SafeParceled(3)
+    private String address;
+    @SafeParceled(4)
+    private String friendlyName;
+    @SafeParceled(5)
+    private String modelName;
+    @SafeParceled(6)
+    private String deviceVersion;
+    @SafeParceled(7)
+    private int servicePort;
+    @SafeParceled(value = 8, subClass = WebImage.class)
+    private ArrayList<WebImage> icons;
+    @SafeParceled(9)
+    private int capabilities;
+    @SafeParceled(10)
+    private int status;
+    @SafeParceled(11)
+    private String unknown; // TODO: Need to figure this one out
 
     public CastDevice() {
     }
@@ -53,58 +91,13 @@ public class CastDevice extends AutoSafeParcelable {
         this.capabilities = capabilities;
     }
 
-    /**
-     * Video-output device capability.
-     */
-    public static final int CAPABILITY_VIDEO_OUT = 1;
-
-    /**
-     * Video-input device capability.
-     */
-    public static final int CAPABILITY_VIDEO_IN = 2;
-
-    /**
-     * Audio-output device capability.
-     */
-    public static final int CAPABILITY_AUDIO_OUT = 4;
-
-    /**
-     * Audio-input device capability.
-     */
-    public static final int CAPABILITY_AUDIO_IN = 8;
-
-    @SafeParceled(1)
-    private int versionCode = 3;
-
-    @SafeParceled(2)
-    private String deviceId;
-
-    @SafeParceled(3)
-    private String address;
-
-    @SafeParceled(4)
-    private String friendlyName;
-
-    @SafeParceled(5)
-    private String modelName;
-
-    @SafeParceled(6)
-    private String deviceVersion;
-
-    @SafeParceled(7)
-    private int servicePort;
-
-    @SafeParceled(value = 8, subClass = WebImage.class)
-    private ArrayList<WebImage> icons;
-
-    @SafeParceled(9)
-    private int capabilities;
-
-    @SafeParceled(10)
-    private int status;
-
-    @SafeParceled(11)
-    private String unknown; // TODO: Need to figure this one out
+    public static CastDevice getFromBundle(Bundle extras) {
+        if (extras == null) {
+            return null;
+        }
+        extras.setClassLoader(CastDevice.class.getClassLoader());
+        return extras.getParcelable(EXTRA_CAST_DEVICE);
+    }
 
     public String getDeviceId() {
         return deviceId;
@@ -116,14 +109,6 @@ public class CastDevice extends AutoSafeParcelable {
 
     public String getFriendlyName() {
         return friendlyName;
-    }
-
-    public static CastDevice getFromBundle(Bundle extras) {
-        if (extras == null) {
-            return null;
-        }
-        extras.setClassLoader(CastDevice.class.getClassLoader());
-        return extras.getParcelable(EXTRA_CAST_DEVICE);
     }
 
     public WebImage getIcon(int preferredWidth, int preferredHeight) {
@@ -189,6 +174,4 @@ public class CastDevice extends AutoSafeParcelable {
                 ", status=" + status +
                 "}";
     }
-
-    public static Creator<CastDevice> CREATOR = new AutoCreator<CastDevice>(CastDevice.class);
 }

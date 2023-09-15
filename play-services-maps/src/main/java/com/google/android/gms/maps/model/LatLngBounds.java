@@ -27,8 +27,7 @@ import java.util.Arrays;
  */
 @PublicApi
 public final class LatLngBounds extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+    public static Creator<LatLngBounds> CREATOR = new AutoCreator<LatLngBounds>(LatLngBounds.class);
     /**
      * Southwest corner of the bound.
      */
@@ -39,6 +38,8 @@ public final class LatLngBounds extends AutoSafeParcelable {
      */
     @SafeParceled(3)
     public final LatLng northeast;
+    @SafeParceled(1)
+    private int versionCode = 1;
 
     /**
      * This constructor is dirty setting the final fields to make the compiler happy.
@@ -177,8 +178,6 @@ public final class LatLngBounds extends AutoSafeParcelable {
                 ", northeast=" + northeast +
                 '}';
     }
-
-    public static Creator<LatLngBounds> CREATOR = new AutoCreator<LatLngBounds>(LatLngBounds.class);
 
     /**
      * This is a builder that is able to create a minimum bound based on a set of LatLng points.

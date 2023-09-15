@@ -25,6 +25,7 @@ import java.util.Objects;
  * @see FusedLocationProviderClient#getLastLocation(LastLocationRequest)
  */
 public class LastLocationRequest extends AutoSafeParcelable {
+    public static final Creator<LastLocationRequest> CREATOR = new AutoCreator<>(LastLocationRequest.class);
     @Field(1)
     private long maxUpdateAgeMillis;
     @Field(2)
@@ -38,11 +39,11 @@ public class LastLocationRequest extends AutoSafeParcelable {
     @Nullable
     private ClientIdentity impersonation;
 
+
     private LastLocationRequest() {
         maxUpdateAgeMillis = Long.MAX_VALUE;
         granularity = Granularity.GRANULARITY_PERMISSION_LEVEL;
     }
-
 
     /**
      * The {@link Granularity} of locations returned for this request. This controls whether fine or coarse locations may be returned.
@@ -56,6 +57,42 @@ public class LastLocationRequest extends AutoSafeParcelable {
      */
     public long getMaxUpdateAgeMillis() {
         return maxUpdateAgeMillis;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LastLocationRequest)) return false;
+
+        LastLocationRequest request = (LastLocationRequest) o;
+
+        if (maxUpdateAgeMillis != request.maxUpdateAgeMillis) return false;
+        if (granularity != request.granularity) return false;
+        if (bypass != request.bypass) return false;
+        if (!Objects.equals(moduleId, request.moduleId)) return false;
+        return Objects.equals(impersonation, request.impersonation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(new Object[]{this.maxUpdateAgeMillis, this.granularity, this.bypass});
+    }
+
+    @Hide
+    public boolean isBypass() {
+        return bypass;
+    }
+
+    @Hide
+    @Nullable
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    @Hide
+    @Nullable
+    public ClientIdentity getImpersonation() {
+        return impersonation;
     }
 
     /**
@@ -125,42 +162,4 @@ public class LastLocationRequest extends AutoSafeParcelable {
             return request;
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LastLocationRequest)) return false;
-
-        LastLocationRequest request = (LastLocationRequest) o;
-
-        if (maxUpdateAgeMillis != request.maxUpdateAgeMillis) return false;
-        if (granularity != request.granularity) return false;
-        if (bypass != request.bypass) return false;
-        if (!Objects.equals(moduleId, request.moduleId)) return false;
-        return Objects.equals(impersonation, request.impersonation);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(new Object[]{this.maxUpdateAgeMillis, this.granularity, this.bypass});
-    }
-
-    @Hide
-    public boolean isBypass() {
-        return bypass;
-    }
-
-    @Hide
-    @Nullable
-    public String getModuleId() {
-        return moduleId;
-    }
-
-    @Hide
-    @Nullable
-    public ClientIdentity getImpersonation() {
-        return impersonation;
-    }
-
-    public static final Creator<LastLocationRequest> CREATOR = new AutoCreator<>(LastLocationRequest.class);
 }

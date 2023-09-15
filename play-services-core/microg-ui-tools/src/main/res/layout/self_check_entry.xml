@@ -52,7 +52,8 @@
     <CheckBox
         android:id="@+id/self_check_result"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
         android:focusable="false"
         android:gravity="right|center_vertical"
         android:paddingTop="8dp" />

@@ -317,27 +317,32 @@
             android:name="org.microg.gms.ui.SettingsActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/gms_settings_name"
             android:process=":ui"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:taskAffinity="org.microg.gms.settings">
+            android:taskAffinity="org.microg.gms.settings"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
+
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.microg.gms.ui.SettingsDashboardActivity"
-            android:icon="@mipmap/ic_launcher"
-            android:label="Legacy microG Settings"
-            android:process=":ui"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:taskAffinity="org.microg.gms.settings" />
+        <!-- microG Settings shown in Launcher -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivityLauncher"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+        </activity-alias>
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
@@ -357,7 +362,7 @@
                 android:value="com.android.settings.category.device" />
             <meta-data
                 android:name="com.android.settings.icon"
-                android:resource="@drawable/microg_light_color_24" />
+                android:resource="@drawable/ic_logo" />
             <meta-data
                 android:name="com.android.settings.summary"
                 android:resource="@string/gms_settings_summary" />
@@ -384,6 +389,7 @@
         <activity
             android:name="org.microg.gms.ui.AccountSettingsActivity"
             android:exported="true"
+            android:label="@string/account_manager_title"
             android:process=":ui"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>

@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:paddingStart="?attr/listPreferredItemPaddingStart"
     android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-    android:paddingTop="16dp"
+    android:paddingTop="32dp"
     android:paddingEnd="?attr/listPreferredItemPaddingEnd"
     android:paddingRight="?attr/listPreferredItemPaddingRight"
     android:paddingBottom="32dp">

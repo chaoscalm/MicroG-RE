@@ -20,7 +20,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingTop="16dip"
+    android:paddingTop="32dip"
     android:paddingBottom="32dip">
 
     <ImageView
@@ -76,5 +76,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        tools:listitem="@android:layout/simple_list_item_2" />
+        tools:listitem="@android:layout/simple_expandable_list_item_2" />
 </LinearLayout>

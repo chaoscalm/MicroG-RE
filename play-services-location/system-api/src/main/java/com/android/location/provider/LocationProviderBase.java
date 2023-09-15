@@ -69,6 +69,7 @@ public abstract class LocationProviderBase {
     final IBinder mBinder;
     volatile ProviderProperties mProperties;
     volatile boolean mAllowed;
+
     /**
      * @deprecated Prefer
      * {@link #LocationProviderBase(Context, String, ProviderPropertiesUnbundled)}.

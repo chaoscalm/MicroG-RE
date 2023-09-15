@@ -34,6 +34,7 @@ public class CastDeviceStatus extends AutoSafeParcelable {
     private ApplicationMetadata applicationMetadata;
     @SafeParceled(6)
     private int standbyState;
+
     public CastDeviceStatus() {
     }
 

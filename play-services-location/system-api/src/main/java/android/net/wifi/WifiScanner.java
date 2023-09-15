@@ -802,6 +802,7 @@ public class WifiScanner {
     public Handler getInternalHandler() {
         throw new UnsupportedOperationException();
     }
+
     /**
      * @hide
      */
@@ -814,6 +815,7 @@ public class WifiScanner {
             WIFI_BAND_INDEX_60_GHZ})
     public @interface WifiBandIndex {
     }
+
     /**
      * @hide
      */
@@ -835,6 +837,7 @@ public class WifiScanner {
             WIFI_BAND_24_5_WITH_DFS_6_60_GHZ})
     public @interface WifiBand {
     }
+
     /**
      * @hide
      */
@@ -845,6 +848,7 @@ public class WifiScanner {
             WIFI_RNR_NOT_NEEDED})
     public @interface RnrSetting {
     }
+
     /**
      * Generic action callback invocation interface
      *
@@ -894,6 +898,7 @@ public class WifiScanner {
          */
         void onPnoNetworkFound(ScanResult[] results);
     }
+
     /**
      * interface to get wifi change events on; use this on {@link #startTrackingWifiChange}
      */

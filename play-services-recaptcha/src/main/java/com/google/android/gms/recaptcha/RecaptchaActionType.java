@@ -32,9 +32,11 @@ public class RecaptchaActionType extends AutoSafeParcelable {
 
     private RecaptchaActionType() {
     }
+
     public RecaptchaActionType(String action) {
         this.name = action;
     }
+
     /**
      * User interaction that needs to be verified while the user is performing the workflow you would like to protect.
      */

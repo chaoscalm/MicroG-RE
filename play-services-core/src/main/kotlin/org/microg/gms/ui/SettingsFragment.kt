@@ -38,7 +38,10 @@ class SettingsFragment : ResourceSettingsFragment() {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 setOnPreferenceChangeListener { _, newValue ->
                     pm.setComponentEnabledSetting(
-                        ComponentName.createRelative(requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"),
+                        ComponentName.createRelative(
+                            requireActivity(),
+                            "org.microg.gms.ui.SettingsActivityLauncher"
+                        ),
                         when (newValue) {
                             true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
                             else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED

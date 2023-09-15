@@ -900,6 +900,7 @@ public class TestVectors {
                     new AdvertisedData(RPI141, AEM141),
                     new AdvertisedData(RPI142, AEM142),
                     new AdvertisedData(RPI143, AEM143)));
+
     private TestVectors() {
     }
 

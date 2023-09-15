@@ -82,6 +82,7 @@ public class WalletConstants {
          */
         int OTHER = 1000;
     }
+
     /**
      * The payment methods you support.
      * <p>
@@ -95,6 +96,7 @@ public class WalletConstants {
      */
     public @interface PaymentMethod {
     }
+
     /**
      * Payment method tokenization types.
      * <p>

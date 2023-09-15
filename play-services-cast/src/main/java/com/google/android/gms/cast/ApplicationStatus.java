@@ -26,6 +26,7 @@ public class ApplicationStatus extends AutoSafeParcelable {
     private int versionCode = 1;
     @SafeParceled(2)
     private String applicationStatus;
+
     public ApplicationStatus() {
     }
 

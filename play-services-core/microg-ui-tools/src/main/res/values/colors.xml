@@ -28,6 +28,6 @@
     <color name="settings_theme_primary_dark">#ff121212</color>
     <color name="settings_theme_accent">#ff065dd0</color>
 
-    <color name="switchbar_background_color">#ff212121</color>
-    <color name="switch_accent_color">#ff065dd0</color>
-</resources>
+    <color name="switchbar_background_color">?cardBackgroundColor</color>
+    <color name="switch_accent_color">?colorAccent</color>
+</resources>dd

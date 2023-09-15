@@ -24,5 +24,4 @@
 
     <color name="ic_launcher_background">#ffffffff</color>
     <color name="dialog_border_color">#88CCCCCC</color>
-    <color name="material_error">#fff44336</color>
 </resources>

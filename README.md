@@ -6,14 +6,6 @@
 
 ![alt text](https://raw.githubusercontent.com/WSTxda/MicroG-RE/main/Images/Banner.png)
 
-**Support list**
-
-[ReVanced](https://github.com/revanced)
-
-[ReVanced Extended (RVX)](https://github.com/inotia00/revanced-patches)
-
-[YT Advanced (REX)](https://github.com/YT-Advanced/ReX-patches)
-
 **Download MicroG**
 
 [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/GitHub.svg"
@@ -21,6 +13,14 @@ alt='Get it on GitHub'
 height="80">](https://github.com/WSTxda/MicroG-RE/releases) [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/Telegram.svg"
 alt='Get it on Telegram'
 height="80">](https://t.me/WSTprojects)
+
+**Support list**
+
+[ReVanced](https://github.com/ReVanced/revanced-patches)
+
+[ReVanced Extended (RVX)](https://github.com/inotia00/revanced-patches)
+
+[YT Advanced (REX)](https://github.com/YT-Advanced/ReX-patches)
 
 **Donate**
 

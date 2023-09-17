@@ -35,16 +35,16 @@ This can take a couple of minutes"</string>
     <string name="auth_notification_title">Authentication required</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account</string>
 
-    <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
-    <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
-    <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
-    <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
+    <string name="perm_status_broadcast_label">Listen to internal status broadcasts</string>
+    <string name="perm_c2dm_receive_label">Listen to C2DM messages</string>
+    <string name="perm_c2dm_send_label">End C2DM messages to other apps</string>
+    <string name="perm_gtalk_svc_label">Exchange messages and receive sync notifications from Google servers</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
-    <string name="perm_provision_label">provision MicroG services</string>
+    <string name="perm_provision_label">Provision MicroG services</string>
     <string name="perm_provision_description">Allows the app to configure MicroG services without user interaction</string>
 
     <string name="service_name_checkin">Google device registration</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Disabled</string>
@@ -93,7 +93,7 @@ This can take a couple of minutes"</string>
     <string name="self_check_resolution_correct_sig">Either the installed <xliff:g example="F-Droid">%1$s</xliff:g> is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible</string>
 
     <string name="self_check_name_battery_optimizations">Battery optimizations ignored</string>
-    <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications</string>
+    <string name="self_check_resolution_battery_optimizations">Tap here to disable battery optimizations. Not doing this may result in misbehaving applications</string>
 
     <!-- Settings strings -->
 
@@ -235,4 +235,8 @@ This can take a couple of minutes"</string>
     <string name="manage_google_account_summary">Manage your Google account information</string>
     <string name="manage_yt_activities">Manage YouTube activities</string>
     <string name="manage_yt_activities_summary">Manage YouTube activities such as watch or search history</string>
+    <string name="pref_network_google_enabled_summary">If disabled, all connections to Google servers usually done by MicroG will be denied. This overrides service specific settings</string>
+    <string name="pref_network_google_enabled">Allow connecting to Google servers</string>
+    <string name="pref_network_google_use_tor">Connect to Google via Tor network</string>
+    <string name="pref_network_google_use_tor_summary">Requires Orbot to be installed\\nNot yet supported</string>
 </resources>

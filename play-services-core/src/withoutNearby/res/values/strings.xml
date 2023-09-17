@@ -4,5 +4,5 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_name_exposure">Exposure Notifications</string>
+    <string name="service_name_exposure">Exposure notifications</string>
 </resources>

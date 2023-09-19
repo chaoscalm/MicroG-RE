@@ -17,11 +17,13 @@
 package org.microg.gms.auth.login;
 
 import android.annotation.SuppressLint;
+//import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+//import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
@@ -38,28 +40,8 @@ public abstract class AssistantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_assistant);
         formatTitle();
-        findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isHuaweiDevice()) {
-                    onNextButtonClicked();
-                } else {
-                    onHuaweiButtonClicked();
-                }
-            }
-        });
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClicked();
-            }
-        });
-    }
-
-    private boolean isHuaweiDevice() {
-        String manufacturer = android.os.Build.MANUFACTURER;
-        String brand = android.os.Build.BRAND;
-        return manufacturer.toLowerCase().contains("huawei") || brand.toLowerCase().contains("huawei");
+        findViewById(R.id.spoof_button).setOnClickListener(v -> onHuaweiButtonClicked());
+        findViewById(R.id.next_button).setOnClickListener(v -> onNextButtonClicked());
     }
 
     @SuppressLint("WrongViewCast")
@@ -70,6 +52,19 @@ public abstract class AssistantActivity extends AppCompatActivity {
                     (int) (dpToPx(TITLE_MIN_HEIGHT) + (TITLE_WIDTH_FACTOR * widthPixels));
         } else {
             findViewById(R.id.title_container).getLayoutParams().height = dpToPx(TITLE_MIN_HEIGHT);
+        }
+    }
+
+    public void setSpoofButtonText(@StringRes int res) {
+        setSpoofButtonText(getText(res));
+    }
+
+    public void setSpoofButtonText(CharSequence text) {
+        if (text == null) {
+            findViewById(R.id.spoof_button).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.spoof_button).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.spoof_button)).setText(text);
         }
     }
 
@@ -85,29 +80,11 @@ public abstract class AssistantActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.next_button)).setText(text);
         }
     }
-
     protected void onHuaweiButtonClicked() {
 
     }
 
-    public void setBackButtonText(@StringRes int res) {
-        setBackButtonText(getText(res));
-    }
-
-    public void setBackButtonText(CharSequence text) {
-        if (text == null) {
-            findViewById(R.id.back_button).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.back_button).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.back_button)).setText(text);
-        }
-    }
-
     protected void onNextButtonClicked() {
-
-    }
-
-    protected void onBackButtonClicked() {
 
     }
 

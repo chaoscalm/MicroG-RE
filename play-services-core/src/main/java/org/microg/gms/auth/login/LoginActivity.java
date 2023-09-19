@@ -16,23 +16,6 @@
 
 package org.microg.gms.auth.login;
 
-import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
-import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
-import static android.view.KeyEvent.KEYCODE_BACK;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
-import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
-import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
-import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
-import static org.microg.gms.common.Constants.GOOGLE_GMS_PACKAGE_NAME;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
@@ -54,13 +37,16 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
+import androidx.webkit.WebViewFeature;
+import androidx.webkit.WebSettingsCompat;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.webkit.WebSettingsCompat;
+import androidx.core.app.OnNewIntentProvider;
 import androidx.webkit.WebViewClientCompat;
-import androidx.webkit.WebViewFeature;
 
 import com.google.android.gms.R;
 
@@ -73,12 +59,33 @@ import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+//import org.microg.gms.droidguard.core.DroidGuardResultCreator;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Collections;
 import java.util.Locale;
+
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
+//import static org.microg.gms.checkin.CheckinPreferences.hideLauncherIcon;
+import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
+import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+import static org.microg.gms.common.Constants.GOOGLE_GMS_PACKAGE_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -130,6 +137,40 @@ public class LoginActivity extends AssistantActivity {
         }
         prepareWebViewSettings(context, webView.getSettings());
         return webView;
+    }
+
+    @Override
+    protected void onHuaweiButtonClicked() {
+        super.onHuaweiButtonClicked();
+        state++;
+        if (state == 1) {
+//            hideLauncherIcon(this, false);
+//            UtilsKt.hideIcon(this, false);
+            if (!isSpoofingEnabled(this)) {
+                LastCheckinInfo.clear(this);
+                setSpoofingEnabled(this, true);
+            }
+            init();
+        } else if (state == -1) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onNextButtonClicked() {
+        super.onNextButtonClicked();
+        state++;
+        if (state == 1) {
+            if (isSpoofingEnabled(this)) {
+                LastCheckinInfo.clear(this);
+                setSpoofingEnabled(this, false);
+            }
+            init();
+        } else if (state == -1) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -210,69 +251,8 @@ public class LoginActivity extends AssistantActivity {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
-            setBackButtonText(android.R.string.cancel);
+            setSpoofButtonText(R.string.brand_spoof_button);
             setNextButtonText(R.string.auth_sign_in);
-        }
-    }
-
-    @Override
-    protected void onHuaweiButtonClicked() {
-        super.onHuaweiButtonClicked();
-        state++;
-        if (state == 1) {
-//            hideLauncherIcon(this, false);
-//            UtilsKt.hideIcon(this, false);
-            if (!isSpoofingEnabled(this)) {
-                LastCheckinInfo.clear(this);
-                setSpoofingEnabled(this, true);
-            }
-            init();
-        } else if (state == -1) {
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    @Override
-    protected void onNextButtonClicked() {
-        super.onNextButtonClicked();
-        state++;
-        if (state == 1) {
-            if (isSpoofingEnabled(this)) {
-                LastCheckinInfo.clear(this);
-                setSpoofingEnabled(this, false);
-            }
-            init();
-        } else if (state == -1) {
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    @Override
-    protected void onBackButtonClicked() {
-        super.onBackButtonClicked();
-        state--;
-        if (state == -1) {
-            finish();
-        }
-    }
-
-    private void init() {
-        setTitle(R.string.just_a_sec);
-        setBackButtonText(null);
-        setNextButtonText(null);
-        View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
-        authContent.removeAllViews();
-        authContent.addView(loading);
-        setMessage(R.string.auth_connecting);
-        CookieManager.getInstance().setAcceptCookie(true);
-        if (SDK_INT >= LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies(value -> start());
-        } else {
-            //noinspection deprecation
-            CookieManager.getInstance().removeAllCookie();
-            start();
         }
     }
 
@@ -433,6 +413,24 @@ public class LoginActivity extends AssistantActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void init() {
+        setTitle(R.string.just_a_sec);
+        setSpoofButtonText(null);
+        setNextButtonText(null);
+        View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
+        authContent.removeAllViews();
+        authContent.addView(loading);
+        setMessage(R.string.auth_connecting);
+        CookieManager.getInstance().setAcceptCookie(true);
+        if (SDK_INT >= LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(value -> start());
+        } else {
+            //noinspection deprecation
+            CookieManager.getInstance().removeAllCookie();
+            start();
+        }
     }
 
     private class JsBridge {

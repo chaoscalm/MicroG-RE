@@ -126,14 +126,14 @@ android {
         }
         withVtm {
             dimension 'maps'
-            versionNameSuffix '-vtm'
+//            versionNameSuffix '-vtm'
         }
         withNearby {
             dimension 'nearby'
         }
         withoutNearby {
             dimension 'nearby'
-            versionNameSuffix '-noen'
+//            versionNameSuffix '-noen'
         }
     }
 

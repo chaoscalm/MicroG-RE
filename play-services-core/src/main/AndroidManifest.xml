@@ -44,9 +44,6 @@
         android:protectionLevel="dangerous" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
-
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
@@ -372,7 +369,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.Material3.DayNight.Dialog.Alert" />
+            android:theme="@style/AppTheme.Dialog" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"

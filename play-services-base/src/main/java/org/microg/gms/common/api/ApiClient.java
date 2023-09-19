@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.microg.gms.common.api;
-
-public interface ApiClient {
-    void connect();
-
-    void disconnect();
-
-    boolean isConnected();
-
-    boolean isConnecting();
-}
+//package com.google.android.gms.ads;
+//
+//import android.app.Activity;
+//
+//class AdActivity : Activity()

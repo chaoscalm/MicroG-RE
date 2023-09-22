@@ -17,13 +17,11 @@
 package org.microg.gms.auth.login;
 
 import android.annotation.SuppressLint;
-//import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-//import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
@@ -80,6 +78,7 @@ public abstract class AssistantActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.next_button)).setText(text);
         }
     }
+
     protected void onHuaweiButtonClicked() {
 
     }

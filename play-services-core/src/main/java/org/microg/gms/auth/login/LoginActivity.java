@@ -16,6 +16,23 @@
 
 package org.microg.gms.auth.login;
 
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
+import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
+import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+import static org.microg.gms.common.Constants.GOOGLE_GMS_PACKAGE_NAME;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
@@ -37,16 +54,13 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-
-import androidx.webkit.WebViewFeature;
-import androidx.webkit.WebSettingsCompat;
-
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.core.app.OnNewIntentProvider;
+import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewClientCompat;
+import androidx.webkit.WebViewFeature;
 
 import com.google.android.gms.R;
 
@@ -59,33 +73,12 @@ import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
-//import org.microg.gms.droidguard.core.DroidGuardResultCreator;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.util.Collections;
 import java.util.Locale;
-
-import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
-import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
-import static android.view.KeyEvent.KEYCODE_BACK;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
-import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-//import static org.microg.gms.checkin.CheckinPreferences.hideLauncherIcon;
-import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
-import static org.microg.gms.checkin.CheckinPreferences.setSpoofingEnabled;
-import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
-import static org.microg.gms.common.Constants.GOOGLE_GMS_PACKAGE_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -139,6 +132,33 @@ public class LoginActivity extends AssistantActivity {
         return webView;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    private static void prepareWebViewSettings(Context context, WebSettings settings) {
+        ProfileManager.ensureInitialized(context);
+        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
+        settings.setJavaScriptEnabled(true);
+        settings.setSupportMultipleWindows(false);
+        settings.setSaveFormData(false);
+        settings.setAllowFileAccess(false);
+        settings.setDatabaseEnabled(false);
+        settings.setNeedInitialFocus(false);
+        settings.setUseWideViewPort(false);
+        settings.setSupportZoom(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+    }
+
+    private static String buildUrl(String tmpl, Locale locale) {
+        return Uri.parse(EMBEDDED_SETUP_URL).buildUpon()
+                .appendQueryParameter("source", "android")
+                .appendQueryParameter("xoauth_display_name", "Android Device")
+                .appendQueryParameter("lang", locale.getLanguage())
+                .appendQueryParameter("cc", locale.getCountry().toLowerCase(Locale.US))
+                .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
+                .appendQueryParameter("hl", locale.toString().replace("_", "-"))
+                .appendQueryParameter("tmpl", tmpl)
+                .build().toString();
+    }
+
     @Override
     protected void onHuaweiButtonClicked() {
         super.onHuaweiButtonClicked();
@@ -171,33 +191,6 @@ public class LoginActivity extends AssistantActivity {
             setResult(RESULT_CANCELED);
             finish();
         }
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    private static void prepareWebViewSettings(Context context, WebSettings settings) {
-        ProfileManager.ensureInitialized(context);
-        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
-        settings.setJavaScriptEnabled(true);
-        settings.setSupportMultipleWindows(false);
-        settings.setSaveFormData(false);
-        settings.setAllowFileAccess(false);
-        settings.setDatabaseEnabled(false);
-        settings.setNeedInitialFocus(false);
-        settings.setUseWideViewPort(false);
-        settings.setSupportZoom(false);
-        settings.setJavaScriptCanOpenWindowsAutomatically(false);
-    }
-
-    private static String buildUrl(String tmpl, Locale locale) {
-        return Uri.parse(EMBEDDED_SETUP_URL).buildUpon()
-                .appendQueryParameter("source", "android")
-                .appendQueryParameter("xoauth_display_name", "Android Device")
-                .appendQueryParameter("lang", locale.getLanguage())
-                .appendQueryParameter("cc", locale.getCountry().toLowerCase(Locale.US))
-                .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
-                .appendQueryParameter("hl", locale.toString().replace("_", "-"))
-                .appendQueryParameter("tmpl", tmpl)
-                .build().toString();
     }
 
     @SuppressLint("AddJavascriptInterface")

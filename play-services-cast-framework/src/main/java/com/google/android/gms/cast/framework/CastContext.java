@@ -46,6 +46,7 @@ public class CastContext {
     private ICastContext delegate;
     private SessionManager sessionManager;
     private DiscoveryManager discoveryManager;
+
     private CastContext(Context appContext, CastOptions castOptions, @Nullable List<SessionProvider> additionalSessionProviders) throws ModuleUnavailableException {
         this.appContext = appContext;
         this.castOptions = castOptions;

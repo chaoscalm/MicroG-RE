@@ -26,7 +26,7 @@
         android:layout_marginLeft="72dp"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:text="@string/v7_preference_on"
         android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse" />
 

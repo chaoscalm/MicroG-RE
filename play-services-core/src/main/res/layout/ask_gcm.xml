@@ -43,15 +43,10 @@
                 android:layout_marginBottom="12dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_cloud_bell"
-                app:tint="?attr/colorAccent"></ImageView>
+                app:tint="?attr/colorAccent">
 
-            <TextView
-                android:id="@+id/permission_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/gcm_allow_app_popup"
-                android:textSize="18sp"></TextView>
+            </ImageView>
+
 
         </LinearLayout>
 
@@ -62,22 +57,26 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
-                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/permission_allow_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text="@string/allow"></com.google.android.material.button.MaterialButton>
+                android:text="@string/allow">
+
+            </com.google.android.material.button.MaterialButton>
 
             <com.google.android.material.button.MaterialButton
-                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/permission_deny_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text="@string/deny"></com.google.android.material.button.MaterialButton>
+                android:text="@string/deny">
+
+            </com.google.android.material.button.MaterialButton>
 
         </LinearLayout>
 

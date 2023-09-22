@@ -19,10 +19,9 @@ package org.microg.gms.common.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
-
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;

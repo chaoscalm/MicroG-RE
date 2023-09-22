@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.Looper;
 
 import com.google.android.gms.cast.Cast;
-
 import com.google.android.gms.common.api.Api;
 
 import org.microg.gms.common.api.ApiClientBuilder;

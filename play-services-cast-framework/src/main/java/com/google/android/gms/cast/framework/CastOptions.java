@@ -10,11 +10,10 @@ package com.google.android.gms.cast.framework;
 
 import androidx.annotation.NonNull;
 
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
-
-import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.LaunchOptions;
+import com.google.android.gms.cast.framework.media.CastMediaOptions;
+
+import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.List;
  * {@link CastOptions}, and so contains the corresponding setter methods.
  */
 public class CastOptions extends AutoSafeParcelable {
+    public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);
     @Field(1)
     private int versionCode = 1;
     @Field(2)
@@ -120,6 +120,4 @@ public class CastOptions extends AutoSafeParcelable {
     public double getVolumeDeltaBeforeIceCreamSandwich() {
         return volumeDeltaBeforeIceCreamSandwich;
     }
-
-    public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);
 }

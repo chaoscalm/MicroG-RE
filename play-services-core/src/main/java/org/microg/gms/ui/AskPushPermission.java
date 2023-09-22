@@ -65,7 +65,7 @@ public class AskPushPermission extends FragmentActivity {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setCancelable(false); // Disable canceling the dialog by tapping outside or pressing the back button
             alertDialogBuilder.setView(gcmView);
-            ((TextView) gcmView.findViewById(R.id.permission_message)).setText(s);
+            ((TextView) gcmView.findViewById(R.id.permissions)).setText(s);
             gcmView.findViewById(R.id.permission_allow_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

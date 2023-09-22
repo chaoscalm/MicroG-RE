@@ -37,7 +37,6 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 

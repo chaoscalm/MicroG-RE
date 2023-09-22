@@ -6,13 +6,11 @@
 
 ![alt text](https://raw.githubusercontent.com/WSTxda/MicroG-RE/main/Images/Banner.png)
 
-**Download MicroG**
+**Download MicroG RE**
 
 [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/GitHub.svg"
 alt='Get it on GitHub'
-height="80">](https://github.com/WSTxda/MicroG-RE/releases) [<img src="https://raw.githubusercontent.com/WSTxda/QP-Gallery-Releases/master/Images/Telegram.svg"
-alt='Get it on Telegram'
-height="80">](https://t.me/WSTprojects)
+height="80">](https://github.com/WSTxda/MicroG-RE/releases)
 
 **Support list**
 
@@ -21,6 +19,8 @@ height="80">](https://t.me/WSTprojects)
 [ReVanced Extended (RVX)](https://github.com/inotia00/revanced-patches)
 
 [YT Advanced (REX)](https://github.com/YT-Advanced/ReX-patches)
+
+[ReVanced (Android6-7)](https://github.com/kitadai31/revanced-patches-android6-7)
 
 **Donate**
 

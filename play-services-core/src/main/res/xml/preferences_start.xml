@@ -50,7 +50,7 @@
                 android:targetPackage="com.mgoogle.android.gms" />
         </Preference>
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:icon="@drawable/ic_hide_launcher_icon"
             android:key="pref_hide_launcher_icon"
             android:title="@string/pref_hide_launcher_icon" />

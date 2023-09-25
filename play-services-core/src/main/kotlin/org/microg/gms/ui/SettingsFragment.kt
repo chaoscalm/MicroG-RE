@@ -36,24 +36,21 @@ class SettingsFragment : ResourceSettingsFragment() {
             }
         findPreference<SwitchPreference>(PREF_CAST_HIDE_LAUNCHER_ICON)?.apply {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                setDefaultValue(false)
                 setOnPreferenceChangeListener { _, newValue ->
                     pm.setComponentEnabledSetting(
                         ComponentName.createRelative(
-                            requireActivity(),
-                            "org.microg.gms.ui.SettingsActivityLauncher"
-                        ),
-                        when (newValue) {
+                            requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"
+                        ), when (newValue) {
                             true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
                             else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        },
-                        PackageManager.DONT_KILL_APP
+                        }, PackageManager.DONT_KILL_APP
                     )
                     true
                 }
             } else {
                 preferenceScreen.removePreference(this)
             }
-
         }
 //        findPreference<Preference>(PREF_SNET)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 //            findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
@@ -85,9 +82,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             database.close()
             findPreference<Preference>(PREF_GCM)!!.summary =
                 context.getString(R.string.service_status_enabled_short) + " - " + context.resources.getQuantityString(
-                    R.plurals.gcm_registered_apps_counter,
-                    regCount,
-                    regCount
+                    R.plurals.gcm_registered_apps_counter, regCount, regCount
                 )
         } else {
             findPreference<Preference>(PREF_GCM)!!.setSummary(R.string.service_status_disabled_short)

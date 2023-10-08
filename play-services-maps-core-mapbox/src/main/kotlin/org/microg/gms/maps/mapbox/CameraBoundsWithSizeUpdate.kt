@@ -22,7 +22,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import java.util.*
+import java.util.Arrays
 
 internal class CameraBoundsWithSizeUpdate(
     val bounds: LatLngBounds,

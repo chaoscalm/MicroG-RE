@@ -35,21 +35,17 @@ class SettingsFragment : ResourceSettingsFragment() {
                 true
             }
         findPreference<SwitchPreference>(PREF_CAST_HIDE_LAUNCHER_ICON)?.apply {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                setDefaultValue(false)
-                setOnPreferenceChangeListener { _, newValue ->
-                    pm.setComponentEnabledSetting(
-                        ComponentName.createRelative(
-                            requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"
-                        ), when (newValue) {
-                            true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                            else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        }, PackageManager.DONT_KILL_APP
-                    )
-                    true
-                }
-            } else {
-                preferenceScreen.removePreference(this)
+            setDefaultValue(false)
+            setOnPreferenceChangeListener { _, newValue ->
+                pm.setComponentEnabledSetting(
+                    ComponentName.createRelative(
+                        requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"
+                    ), when (newValue) {
+                        true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                        else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                    }, PackageManager.DONT_KILL_APP
+                )
+                true
             }
         }
 //        findPreference<Preference>(PREF_SNET)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {

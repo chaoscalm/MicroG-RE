@@ -12,9 +12,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingStart="?attr/listPreferredItemPaddingStart"
-    android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-    android:paddingEnd="?attr/listPreferredItemPaddingEnd"
-    android:paddingRight="?attr/listPreferredItemPaddingRight">
+    android:paddingEnd="?attr/listPreferredItemPaddingEnd">
 
     <TextView
         android:id="@android:id/title"

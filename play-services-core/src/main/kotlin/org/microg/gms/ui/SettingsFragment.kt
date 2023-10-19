@@ -36,18 +36,22 @@ class SettingsFragment : ResourceSettingsFragment() {
             }
         findPreference<SwitchPreference>(PREF_CAST_HIDE_LAUNCHER_ICON)?.apply {
             setDefaultValue(false)
+
             setOnPreferenceChangeListener { _, newValue ->
-                pm.setComponentEnabledSetting(
-                    ComponentName.createRelative(
-                        requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"
-                    ), when (newValue) {
-                        true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                        else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                    }, PackageManager.DONT_KILL_APP
+                val componentName = ComponentName.createRelative(
+                    requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"
                 )
+
+                val newState =
+                    if (newValue as? Boolean == true) PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                    else PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+
+                pm.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP)
+
                 true
             }
         }
+
 //        findPreference<Preference>(PREF_SNET)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 //            findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
 //            true

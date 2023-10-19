@@ -330,7 +330,7 @@
         <!-- microG Settings shown in Launcher -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLauncher"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:targetActivity="org.microg.gms.ui.SettingsActivity">
 
